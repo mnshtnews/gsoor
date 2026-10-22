@@ -78,7 +78,6 @@ export function buildArticleJsonLd(article: NewsDetail): JsonLdObject | null {
     description: article.seoDescription || articleDescription(article) || undefined,
     inLanguage: SITE_LANGUAGE,
     datePublished: toIsoDate(article.publishedAtUtc),
-    dateModified: toIsoDate(article.updatedAtUtc),
     author: {
       "@type": article.authorName ? "Person" : "Organization",
       name: article.authorName || EDITORIAL_BYLINE,

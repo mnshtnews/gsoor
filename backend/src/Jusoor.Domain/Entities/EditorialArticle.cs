@@ -51,6 +51,12 @@ public class EditorialArticle : AuditableEntity
     public List<string> SecondaryTags { get; private set; } = new();
     /// <summary>Final Demo presentation desks; intentionally separate from topical categories and SEO tags.</summary>
     public List<string> PresentationDesks { get; private set; } = new();
+    /// <summary>Sports-specific editorial metadata; populated only for sports desk coverage.</summary>
+    public string? SportsCoverageType { get; private set; }
+    public List<string> SportsPlayerNames { get; private set; } = new();
+    public string? SportsTeamName { get; private set; }
+    public string? SportsCompetitionName { get; private set; }
+    public string? SportsCountryName { get; private set; }
     /// <summary>The uploaded video selected for the public video hub; mutually exclusive with an approved embed.</summary>
     public Guid? FeaturedVideoMediaAssetId { get; private set; }
     /// <summary>Provider-approved iframe URL selected for the public video hub; mutually exclusive with a media asset.</summary>
@@ -205,13 +211,44 @@ public class EditorialArticle : AuditableEntity
     public void SetPresentationDesks(IEnumerable<string>? deskSlugs)
     {
         var desks = (deskSlugs ?? Array.Empty<string>())
-            .Select(slug => slug?.Trim() ?? string.Empty)
+            .Select(slug => EditorialDesk.Normalize(slug?.Trim() ?? string.Empty))
             .Where(slug => slug.Length > 0)
             .Distinct(StringComparer.Ordinal)
             .ToList();
         if (desks.Count > 13 || desks.Any(slug => !EditorialDesk.IsValid(slug)))
             throw new ArgumentException("Select up to 13 valid presentation desks.", nameof(deskSlugs));
         PresentationDesks = EditorialDesk.Catalog.Keys.Where(desks.Contains).ToList();
+        if (!PresentationDesks.Contains("sports", StringComparer.Ordinal)) SetSportsCoverage(null, null, null, null, null);
+    }
+
+    public void SetSportsCoverage(string? coverageType, IEnumerable<string>? playerNames, string? teamName, string? competitionName, string? countryName)
+    {
+        if (!PresentationDesks.Contains("sports", StringComparer.Ordinal))
+        {
+            SportsCoverageType = null;
+            SportsPlayerNames = [];
+            SportsTeamName = null;
+            SportsCompetitionName = null;
+            SportsCountryName = null;
+            return;
+        }
+
+        var players = (playerNames ?? []).Select(name => name.Trim()).Where(name => name.Length > 0).Distinct(StringComparer.OrdinalIgnoreCase).ToList();
+        if (coverageType is not null && coverageType is not ("EgyptianProfessionalsAbroad" or "NaturalizedEgyptians" or "EgyptianLeague" or "EgyptNationalTeam" or "General"))
+            throw new ArgumentException("Unsupported sports coverage type.", nameof(coverageType));
+        if (players.Count > 10 || players.Any(name => name.Length > 100)) throw new ArgumentException("Use up to 10 player names, each no longer than 100 characters.", nameof(playerNames));
+        SportsCoverageType = coverageType;
+        SportsPlayerNames = players;
+        SportsTeamName = NormalizeSportsValue(teamName, 120, nameof(teamName));
+        SportsCompetitionName = NormalizeSportsValue(competitionName, 120, nameof(competitionName));
+        SportsCountryName = NormalizeSportsValue(countryName, 120, nameof(countryName));
+    }
+
+    private static string? NormalizeSportsValue(string? value, int maxLength, string parameterName)
+    {
+        var normalized = string.IsNullOrWhiteSpace(value) ? null : value.Trim();
+        if (normalized is not null && normalized.Length > maxLength) throw new ArgumentException($"Sports metadata cannot exceed {maxLength} characters.", parameterName);
+        return normalized;
     }
 
     public void SetFeaturedVideoMediaAsset(Guid? mediaAssetId)

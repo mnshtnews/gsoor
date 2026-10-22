@@ -65,5 +65,6 @@ export async function DELETE(request: Request) {
 
   const response = NextResponse.json({ ok: true });
   response.cookies.delete(CMS_COOKIE);
+  response.cookies.delete("jusoor_user_token");
   return response;
 }

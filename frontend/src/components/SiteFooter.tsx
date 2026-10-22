@@ -41,7 +41,7 @@ export function SiteFooter() {
         <div className="foot-v2-grid">
           <div className="foot-v2-brand">
             <Link href="/">
-              <Image className="logo-img" src="/assets/josour-brand.png" alt="جسور" width={1176} height={847} />
+              <Image className="logo-img" src="/assets/josour-logo-transparent.png" alt="جسور" width={1104} height={974} />
             </Link>
             <p>منصة المصريين بالمهجر — إخبار، ذكاء استخباراتي جغرافي، وشبكة اطمئنان الأسرة.</p>
 

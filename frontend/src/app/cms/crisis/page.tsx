@@ -5,6 +5,7 @@ import { cms, type CmsSession } from "@/lib/cms-client";
 
 type Country = { id: string; nameAr: string; nameEn: string; isoCode2: string };
 type CrisisConfig = { isActive: boolean; title: string; summary: string; sourceName: string; sourceUrl: string; severity: "advisory" | "urgent" | "emergency"; affectedCountryIds: string[]; lastModifiedAtUtc: string | null };
+type SubscriptionSettings = { enabled: boolean; activeSubscriptions: number; updatedAtUtc: string | null };
 const EMPTY: CrisisConfig = { isActive: false, title: "", summary: "", sourceName: "", sourceUrl: "", severity: "urgent", affectedCountryIds: [], lastModifiedAtUtc: null };
 const SEVERITY: Record<CrisisConfig["severity"], string> = { advisory: "تنبيه", urgent: "عاجل", emergency: "طوارئ" };
 
@@ -21,6 +22,7 @@ export default function CmsCrisisModePage() {
   const [session, setSession] = useState<CmsSession | null>(null);
   const [countries, setCountries] = useState<Country[]>([]);
   const [config, setConfig] = useState<CrisisConfig>(EMPTY);
+  const [subscriptions, setSubscriptions] = useState<SubscriptionSettings | null>(null);
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
   const [error, setError] = useState("");
@@ -38,7 +40,7 @@ export default function CmsCrisisModePage() {
         return;
       }
 
-      const [countryResult, configResult] = await Promise.allSettled([
+      const [countryResult, configResult, subscriptionResult] = await Promise.allSettled([
         fetch("/cms-api/crisis/countries", { credentials: "same-origin", cache: "no-store" }).then(async (response) => {
           if (!response.ok) throw new Error(await responseError(response));
           return response.json() as Promise<Country[]>;
@@ -47,12 +49,18 @@ export default function CmsCrisisModePage() {
           if (!response.ok) throw new Error(await responseError(response));
           return response.json() as Promise<CrisisConfig>;
         }),
+        fetch("/cms-api/alert-subscriptions/settings", { credentials: "same-origin", cache: "no-store" }).then(async (response) => {
+          if (!response.ok) throw new Error(await responseError(response));
+          return response.json() as Promise<SubscriptionSettings>;
+        }),
       ]);
       const loadErrors: string[] = [];
       if (countryResult.status === "fulfilled") setCountries(countryResult.value);
       else loadErrors.push(countryResult.reason instanceof Error ? `تعذّر تحميل دليل الدول: ${countryResult.reason.message}` : "تعذّر تحميل دليل الدول.");
       if (configResult.status === "fulfilled") setConfig(configResult.value);
       else loadErrors.push(configResult.reason instanceof Error ? configResult.reason.message : "تعذّر تحميل إعدادات الأزمة.");
+      if (subscriptionResult.status === "fulfilled") setSubscriptions(subscriptionResult.value);
+      else loadErrors.push(subscriptionResult.reason instanceof Error ? `تعذّر تحميل إعدادات الاشتراك: ${subscriptionResult.reason.message}` : "تعذّر تحميل إعدادات الاشتراك.");
       setError(loadErrors.join(" "));
     } catch (cause) {
       setError(cause instanceof Error ? cause.message : "تعذّر التحقق من جلسة التحرير.");
@@ -71,6 +79,18 @@ export default function CmsCrisisModePage() {
       if (!response.ok) throw new Error(await responseError(response));
       setConfig(await response.json() as CrisisConfig); setNotice("تم حفظ إعدادات وضع الأزمة.");
     } catch (cause) { setError(cause instanceof Error ? cause.message : "تعذّر حفظ الإعدادات."); }
+    finally { setSaving(false); }
+  }
+
+  async function saveSubscriptionSettings(enabled: boolean) {
+    if (!canManage || !subscriptions) return;
+    setSaving(true); setError(""); setNotice("");
+    try {
+      const response = await fetch("/cms-api/alert-subscriptions/settings", { method: "PUT", credentials: "same-origin", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ enabled }) });
+      if (!response.ok) throw new Error(await responseError(response));
+      setSubscriptions(await response.json() as SubscriptionSettings);
+      setNotice(enabled ? "تم فتح استقبال اشتراكات التنبيهات." : "تم إيقاف استقبال اشتراكات جديدة. ستظل الاشتراكات المحفوظة كما هي.");
+    } catch (cause) { setError(cause instanceof Error ? cause.message : "تعذّر حفظ إعداد الاشتراك."); }
     finally { setSaving(false); }
   }
 
@@ -97,6 +117,11 @@ export default function CmsCrisisModePage() {
       <div className="cms-crisis-country-header"><div><h3>الدول المتأثرة</h3><p className="cms-hint">يظهر التنبيه مع إشارة البلد للزوار. اختر الدول التي تشملها الرسالة فقط.</p></div><span>{config.affectedCountryIds.length} دولة</span></div>
       {countries.length ? <div className="cms-crisis-countries">{countries.map((country) => <label className={config.affectedCountryIds.includes(country.id) ? "selected" : ""} key={country.id}><input type="checkbox" checked={config.affectedCountryIds.includes(country.id)} onChange={() => toggleCountry(country.id)} disabled={!canManage} /><span>{country.nameAr}</span><small dir="ltr">{country.isoCode2}</small></label>)}</div> : error.includes("دليل الدول") ? <p className="cms-news-empty">تعذّر تحميل دليل الدول. أعد المحاولة، وإذا استمر العطل فتحقق من اتصال خدمة الـAPI.</p> : <p className="cms-news-empty">لا توجد دول في قاعدة البيانات. أضف بيانات الدول أولًا قبل تفعيل وضع الأزمة.</p>}
       <div className="cms-crisis-footer"><p className="cms-hint">آخر تحديث: {config.lastModifiedAtUtc ? new Intl.DateTimeFormat("ar-EG", { dateStyle: "medium", timeStyle: "short" }).format(new Date(config.lastModifiedAtUtc)) : "لم يُحفظ بعد"}</p><div className="cms-actions"><button className="cms-btn danger" type="button" disabled={!canManage || saving || !config.isActive} onClick={() => void save({ ...config, isActive: false })}>{saving ? "جارٍ الحفظ…" : "إيقاف التنبيه"}</button><button className="cms-btn primary" type="button" disabled={!canManage || saving || countries.length === 0} onClick={() => void save({ ...config, isActive: true })}>{saving ? "جارٍ الحفظ…" : config.isActive ? "حفظ التعديلات" : "حفظ وتفعيل"}</button></div></div>
+    </section>
+    <section className="cms-card cms-alert-subscription-settings">
+      <div className="cms-section-title"><div><h2>اشتراكات تنبيهات البريد</h2><p className="cms-hint">تحكم في استقبال اشتراكات جديدة. إيقاف الاستقبال لا يحذف العناوين المسجلة.</p></div><span className={`cms-crisis-state${subscriptions?.enabled ? " is-active" : ""}`}><i />{subscriptions?.enabled ? "الاستقبال مفتوح" : "الاستقبال مغلق"}</span></div>
+      <p className="cms-hint">العناوين المسجلة حاليًا: <strong>{subscriptions?.activeSubscriptions ?? "—"}</strong>. تُحفظ البيانات مشفرة في قاعدة البيانات. ربط مزود البريد مطلوب قبل إرسال رسائل فعلية.</p>
+      <div className="cms-actions"><button className={`cms-btn ${subscriptions?.enabled ? "danger" : "primary"}`} type="button" disabled={!canManage || saving || !subscriptions} onClick={() => void saveSubscriptionSettings(!subscriptions?.enabled)}>{saving ? "جارٍ الحفظ…" : subscriptions?.enabled ? "إيقاف استقبال الاشتراكات" : "فتح استقبال الاشتراكات"}</button></div>
     </section>
     <aside className="cms-crisis-guidance"><strong>حدود مهمة</strong><p>هذه الرسالة لا تمثل جهة طوارئ رسمية. بيانات حالات «اطمّن» سرية ولا تدخل في ملخص الأزمة العام. اربط أي تحديث صحفي بخبر منشور ومعتمد من سير العمل التحريري.</p></aside>
   </div>;

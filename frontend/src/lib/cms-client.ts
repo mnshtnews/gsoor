@@ -35,6 +35,11 @@ export interface CmsArticle extends CmsArticleSummary {
   cityId: string | null;
   slug?: string;
   presentationDesks: string[];
+  sportsCoverageType?: string | null;
+  sportsPlayerNames?: string[];
+  sportsTeamName?: string | null;
+  sportsCompetitionName?: string | null;
+  sportsCountryName?: string | null;
   featuredVideoMediaAssetId: string | null;
   featuredVideoEmbedUrl?: string | null;
   socialImageUrl?: string | null;
@@ -171,6 +176,42 @@ async function call<T>(path: string, init?: RequestInit): Promise<T> {
 }
 
 export interface CmsHomeVideo { articleId: string; title: string; publishedAtUtc: string; thumbnailUrl: string | null; homeVideoOrder: number | null; isEmbedded: boolean; }
+
+export type CmsSiteNavigationItem = { key: string; label: string; href: string; isVisible: boolean; displayOrder: number; group: "primary" | "more" };
+export type CmsHomepageSection = { key: string; title: string; deskSlug: string; layout: "cards" | "lead" | "columns"; isEnabled: boolean; showOnWeb: boolean; showOnMobile: boolean; displayOrder: number };
+export type CmsSiteStructure = { navigation: CmsSiteNavigationItem[]; homepageSections: CmsHomepageSection[]; leadership: { boardChairman: string; editorInChief: string; executiveEditor: string }; lastModifiedAtUtc: string | null };
+
+export const cmsSiteStructure = {
+  async get(): Promise<CmsSiteStructure> {
+    const response = await fetch("/cms-api/site-structure", { credentials: "same-origin", cache: "no-store" });
+    if (!response.ok) throw new CmsError(await readError(response), response.status);
+    return response.json() as Promise<CmsSiteStructure>;
+  },
+  async save(input: Pick<CmsSiteStructure, "navigation" | "homepageSections" | "leadership">): Promise<CmsSiteStructure> {
+    const response = await fetch("/cms-api/site-structure", { method: "PUT", credentials: "same-origin", cache: "no-store", headers: { "Content-Type": "application/json" }, body: JSON.stringify(input) });
+    if (!response.ok) throw new CmsError(await readError(response), response.status);
+    return response.json() as Promise<CmsSiteStructure>;
+  },
+};
+
+export interface CmsHomepagePoll { id: string; question: string; options: string[]; isActive: boolean; startsAtUtc: string | null; endsAtUtc: string | null; totalVotes: number; }
+export const cmsHomepagePolls = {
+  async list(): Promise<CmsHomepagePoll[]> {
+    const response = await fetch("/cms-api/polls", { credentials: "same-origin", cache: "no-store" });
+    if (!response.ok) throw new CmsError(await readError(response), response.status);
+    return response.json() as Promise<CmsHomepagePoll[]>;
+  },
+  async save(input: { id?: string; question: string; options: string[]; isActive: boolean; startsAtUtc: string | null; endsAtUtc: string | null }): Promise<CmsHomepagePoll> {
+    const path = input.id ? "/cms-api/polls/" + input.id : "/cms-api/polls";
+    const response = await fetch(path, { method: input.id ? "PUT" : "POST", credentials: "same-origin", headers: { "Content-Type": "application/json" }, body: JSON.stringify(input) });
+    if (!response.ok) throw new CmsError(await readError(response), response.status);
+    return response.json() as Promise<CmsHomepagePoll>;
+  },
+  async deactivate(id: string): Promise<void> {
+    const response = await fetch("/cms-api/polls/" + id, { method: "DELETE", credentials: "same-origin" });
+    if (!response.ok) throw new CmsError(await readError(response), response.status);
+  },
+};
 
 export interface CmsAdPlacement {
   slotKey: string;
@@ -328,6 +369,11 @@ export interface ArticleInput {
   /** Optional note stored with the revision when a PUBLISHED article is edited (decision D4). */
   editReason?: string | null;
   presentationDesks: string[];
+  sportsCoverageType?: string | null;
+  sportsPlayerNames?: string[];
+  sportsTeamName?: string | null;
+  sportsCompetitionName?: string | null;
+  sportsCountryName?: string | null;
   featuredVideoMediaAssetId: string | null;
   featuredVideoEmbedUrl?: string | null;
   /** Cover image URL. "" removes it; omitted leaves it unchanged. Saved with the article itself (no SEO role needed). */
@@ -347,7 +393,7 @@ export const PRESENTATION_DESKS = [
   { slug: "sports", label: "رياضة" },
   { slug: "arts", label: "فنون" },
   { slug: "articles", label: "مقالات رأي" },
-  { slug: "various", label: "منوعات" },
+  { slug: "fatwas", label: "الفتاوى" },
 ] as const;
 
 export type WorkflowAction = "submit" | "requestRevision" | "approve" | "publish" | "schedule" | "cancelSchedule" | "unpublish" | "retract" | "archive" | "restoreArchive" | "reinstate";

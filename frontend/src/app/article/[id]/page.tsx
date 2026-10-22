@@ -11,6 +11,7 @@ import { articleDescription, articleUrl, buildArticleJsonLd, buildBreadcrumbJson
 import { EDITORIAL_BYLINE, SITE_NAME, absoluteUrl } from "@/lib/site";
 import { StoryGridCard } from "@/components/StoryGridCard";
 import { ArticleShareActions } from "@/components/ArticleShareActions";
+import { ArticleStaffToolbar } from "@/components/ArticleStaffToolbar";
 
 // Always fresh: an unpublished article must stop resolving immediately.
 export const dynamic = "force-dynamic";
@@ -69,7 +70,6 @@ export async function generateMetadata({ params }: { params: Promise<{ id: strin
       ...(article.socialImageUrl ? { images: [article.socialImageUrl] } : {}),
       ...(canonical ? { url: canonical } : {}),
       publishedTime: toIsoDate(article.publishedAtUtc),
-      modifiedTime: toIsoDate(article.updatedAtUtc),
     },
     twitter: { card: (article.twitterImageUrl || article.socialImageUrl) ? "summary_large_image" : "summary", title: article.twitterTitle || article.socialTitle || title, description: article.twitterDescription || article.socialDescription || description,
       ...((article.twitterImageUrl || article.socialImageUrl) ? { images: [article.twitterImageUrl || article.socialImageUrl!] } : {}) },
@@ -140,7 +140,7 @@ export default async function ArticlePage({ params }: { params: Promise<{ id: st
   const deskLabels: Record<string, string> = {
     mughtarib: "أخبار المغتربين", success: "قصة نجاح", egypt: "أخبار مصر", opportunities: "فرص استثمارية",
     official: "مع مسؤول", events: "فعاليات", red: "خط أحمر", lamma: "اللمة الحلوة", secondgen: "الجيل الثاني",
-    sports: "رياضة", arts: "فنون", articles: "مقالات رأي", various: "منوعات",
+    sports: "رياضة", arts: "فنون", articles: "مقالات رأي", fatwas: "الفتاوى",
   };
 
   return (
@@ -163,6 +163,7 @@ export default async function ArticlePage({ params }: { params: Promise<{ id: st
           </Link>
         </nav>
       </div>
+      <ArticleStaffToolbar articleId={story.id} />
 
       <div className="article-head wrap">
         {story.isArchived && (
@@ -223,6 +224,12 @@ export default async function ArticlePage({ params }: { params: Promise<{ id: st
 
       <div className="wrap">
         <CorrectionsBox corrections={story.corrections.filter((c) => c.isMajor)} major />
+        {story.presentationDesks.includes("sports") && (story.sportsCoverageType || story.sportsPlayerNames.length > 0 || story.sportsTeamName || story.sportsCompetitionName || story.sportsCountryName) && <aside className="article-sports-facts" aria-label="بيانات التغطية الرياضية">
+          <strong>التغطية الرياضية</strong>
+          {story.sportsCoverageType && <span>{({ EgyptianProfessionalsAbroad: "محترفون مصريون بالخارج", NaturalizedEgyptians: "لاعبون مصريون مجنسون", EgyptianLeague: "الدوري المصري", EgyptNationalTeam: "المنتخب المصري", General: "رياضة عامة" } as Record<string, string>)[story.sportsCoverageType] ?? "رياضة"}</span>}
+          {story.sportsPlayerNames.length > 0 && <span>اللاعبون: {story.sportsPlayerNames.join("، ")}</span>}
+          {(story.sportsTeamName || story.sportsCompetitionName || story.sportsCountryName) && <span>{[story.sportsTeamName, story.sportsCompetitionName, story.sportsCountryName].filter(Boolean).join(" · ")}</span>}
+        </aside>}
         {/* story.body is HTML that the API sanitized against an allow-list BEFORE storing it
             (Slice 21, decision D2); legacy plain-text articles arrive HTML-encoded. Rendering
             it as markup is safe only because of that server-side boundary — never feed this

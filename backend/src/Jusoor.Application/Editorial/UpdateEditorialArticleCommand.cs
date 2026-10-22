@@ -24,7 +24,12 @@ public sealed record UpdateEditorialArticleCommand(
     string? FeaturedVideoEmbedUrl = null,
     string? CoverImageUrl = null,
     string? AuthorName = null,
-    string? AuthorImageUrl = null) : IRequest<EditorialArticleResult>;
+    string? AuthorImageUrl = null,
+    string? SportsCoverageType = null,
+    string[]? SportsPlayerNames = null,
+    string? SportsTeamName = null,
+    string? SportsCompetitionName = null,
+    string? SportsCountryName = null) : IRequest<EditorialArticleResult>;
 
 public class UpdateEditorialArticleCommandValidator : AbstractValidator<UpdateEditorialArticleCommand>
 {
@@ -44,6 +49,11 @@ public class UpdateEditorialArticleCommandValidator : AbstractValidator<UpdateEd
         RuleFor(x => x.EditReason).MaximumLength(EditorialArticleRevision.ReasonMaxLength);
         RuleFor(x => x.PresentationDesks).Must(desks => desks is null ||
             (desks.Length <= 13 && desks.All(EditorialDesk.IsValid) && desks.Distinct(StringComparer.Ordinal).Count() == desks.Length));
+        RuleFor(x => x.SportsCoverageType).Must(value => value is null or "EgyptianProfessionalsAbroad" or "NaturalizedEgyptians" or "EgyptianLeague" or "EgyptNationalTeam" or "General");
+        RuleFor(x => x.SportsPlayerNames).Must(names => names is null || (names.Length <= 10 && names.All(name => !string.IsNullOrWhiteSpace(name) && name.Trim().Length <= 100)));
+        RuleFor(x => x.SportsTeamName).MaximumLength(120);
+        RuleFor(x => x.SportsCompetitionName).MaximumLength(120);
+        RuleFor(x => x.SportsCountryName).MaximumLength(120);
     }
 
     private static bool IsHttpUrl(string? value) => Uri.TryCreate(value, UriKind.Absolute, out var uri) && (uri.Scheme is "http" or "https");
@@ -117,11 +127,6 @@ public class UpdateEditorialArticleCommandHandler : IRequestHandler<UpdateEditor
             return new EditorialArticleResult(EditorialOutcome.InvalidGeography, null);
         }
 
-        if (article.Status == EditorialArticleStatus.Published && (request.EditReason?.Trim().Length ?? 0) < 5)
-        {
-            return new EditorialArticleResult(EditorialOutcome.InvalidEditReason, null);
-        }
-
         var requestedDesks = request.PresentationDesks ?? article.PresentationDesks.ToArray();
         var desksChanged = !article.PresentationDesks.SequenceEqual(
             Jusoor.Domain.Editorial.EditorialDesk.Catalog.Keys.Where(requestedDesks.Contains));
@@ -176,6 +181,8 @@ public class UpdateEditorialArticleCommandHandler : IRequestHandler<UpdateEditor
         article.SetAuthorName(request.AuthorName);
         article.SetAuthorImageUrl(request.AuthorImageUrl);
         article.SetPresentationDesks(requestedDesks);
+        try { article.SetSportsCoverage(request.SportsCoverageType, request.SportsPlayerNames, request.SportsTeamName, request.SportsCompetitionName, request.SportsCountryName); }
+        catch (ArgumentException) { return new EditorialArticleResult(EditorialOutcome.InvalidBody, null); }
         article.SetFeaturedVideoMediaAsset(request.FeaturedVideoMediaAssetId);
         article.SetFeaturedVideoEmbedUrl(request.FeaturedVideoEmbedUrl);
         if (coverChanged) article.SetCoverImage(newCover);

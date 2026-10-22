@@ -35,6 +35,11 @@ public interface IApplicationDbContext
     DbSet<EditorialAdPlacement> EditorialAdPlacements { get; }
     DbSet<CrisisMode> CrisisModes { get; }
     DbSet<DiasporaEstimate> DiasporaEstimates { get; }
+    DbSet<SiteStructureSettings> SiteStructureSettings { get; }
+    DbSet<HomepagePoll> HomepagePolls { get; }
+    DbSet<HomepagePollVote> HomepagePollVotes { get; }
+    DbSet<AlertEmailSubscription> AlertEmailSubscriptions { get; }
+    DbSet<AlertSubscriptionSettings> AlertSubscriptionSettings { get; }
 
     /// <summary>Detaches an entity from change tracking. Used by
     /// IngestSourceCommandHandler to recover from a per-item duplicate-key

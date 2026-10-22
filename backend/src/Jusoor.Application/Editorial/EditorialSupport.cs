@@ -39,6 +39,11 @@ internal static class EditorialSupport
         NoIndex = a.NoIndex, NoFollow = a.NoFollow, PrimaryCategoryId = a.PrimaryCategoryId,
         SecondaryTags = a.SecondaryTags.ToArray(),
         PresentationDesks = a.PresentationDesks.ToArray(),
+        SportsCoverageType = a.SportsCoverageType,
+        SportsPlayerNames = a.SportsPlayerNames.ToArray(),
+        SportsTeamName = a.SportsTeamName,
+        SportsCompetitionName = a.SportsCompetitionName,
+        SportsCountryName = a.SportsCountryName,
         FeaturedVideoMediaAssetId = a.FeaturedVideoMediaAssetId,
         FeaturedVideoEmbedUrl = a.FeaturedVideoEmbedUrl,
         TwitterTitle = a.TwitterTitle, TwitterDescription = a.TwitterDescription, TwitterImageUrl = a.TwitterImageUrl

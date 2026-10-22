@@ -5,34 +5,45 @@ import Image from "next/image";
 import Link from "next/link";
 import { TopbarClock } from "./TopbarClock";
 import { ConfiguredAd } from "./home/ConfiguredAd";
-import type { PublicAdPlacement } from "@/lib/news-api";
+import type { PublicAdPlacement, PublicSiteNavigationItem } from "@/lib/news-api";
 
 const SOCIAL_LINKS = [
   { name: "facebook" as const, label: "فيسبوك", path: "M14 8h3V4h-3c-3.31 0-5 1.69-5 5v3H6v4h3v4h4v-4h3l1-4h-4V9c0-.66.34-1 1-1z" },
   { name: "x-twitter" as const, label: "X", path: "M18.9 2H22l-6.77 7.74L23.2 22h-6.24l-4.89-6.39L6.48 22H3.37l7.24-8.28L2.8 2h6.4l4.42 5.84L18.9 2zm-1.1 17.7h1.73L8.27 4.2H6.42L17.8 19.7z" },
 ];
 
-const NAV_LINKS = [
-  { href: "/", label: "الرئيسية" },
-  { href: "/category?cat=mughtarib", label: "أخبار المغتربين" },
-  { href: "/category?cat=success", label: "قصة نجاح" },
-  { href: "/category?cat=egypt", label: "أخبار مصر" },
-  { href: "/category?cat=opportunities", label: "فرص استثمارية" },
-  { href: "/category?cat=official", label: "مع مسئول" },
-  { href: "/category?cat=red", label: "خط أحمر" },
-];
+const DEFAULT_NAVIGATION: PublicSiteNavigationItem[] = [
+  ["home", "الرئيسية", "/", "primary"], ["mughtarib", "أخبار المغتربين", "/category?cat=mughtarib", "primary"],
+  ["success", "قصة نجاح", "/category?cat=success", "primary"], ["egypt", "أخبار مصر", "/category?cat=egypt", "primary"],
+  ["opportunities", "فرص استثمارية", "/category?cat=opportunities", "primary"], ["official", "مع مسئول", "/category?cat=official", "primary"],
+  ["red", "خط أحمر", "/category?cat=red", "primary"], ["map", "خريطة المهجر", "/diaspora-map", "more"],
+  ["events", "فعاليات", "/category?cat=events", "more"], ["lamma", "اللمة الحلوة", "/category?cat=lamma", "more"],
+  ["secondgen", "الجيل الثاني", "/category?cat=secondgen", "more"], ["sports", "رياضة", "/category?cat=sports", "more"],
+  ["arts", "فنون", "/category?cat=arts", "more"], ["articles", "مقالات رأي", "/category?cat=articles", "more"],
+  ["fatwas", "الفتاوى", "/category?cat=fatwas", "more"], ["videos", "فيديو", "/videos", "more"],
+].map(([key, label, href, group], displayOrder) => ({ key, label, href, group: group as "primary" | "more", displayOrder, isVisible: true }));
 
-const MORE_LINKS = [
-  { href: "/diaspora-map", label: "خريطة المهجر" },
-  { href: "/category?cat=events", label: "فعاليات" },
-  { href: "/category?cat=lamma", label: "اللمة الحلوة" },
-  { href: "/category?cat=secondgen", label: "الجيل الثاني" },
-  { href: "/category?cat=sports", label: "رياضة" },
-  { href: "/category?cat=arts", label: "فنون" },
-  { href: "/category?cat=articles", label: "مقالات رأي" },
-  { href: "/category?cat=various", label: "منوعات" },
-  { href: "/videos", label: "فيديو" },
-];
+type Leadership = { boardChairman: string; editorInChief: string; executiveEditor: string };
+
+function LeadershipCredits({ leadership, className = "header-leadership" }: { leadership?: Leadership; className?: string }) {
+  const chairman = leadership?.boardChairman.trim() ?? "";
+  const editor = leadership?.editorInChief.trim() ?? "";
+  const executive = leadership?.executiveEditor.trim() ?? "";
+  const sameFirstLeader = chairman && editor && chairman === editor;
+
+  if (!chairman && !editor && !executive) return null;
+
+  return <div className={className} aria-label="هيئة الإدارة والتحرير">
+    {sameFirstLeader ? <div className="leadership-credit-group">
+      <div className="leadership-credit-roles"><span>رئيس مجلس الإدارة</span><span>رئيس التحرير</span></div>
+      <strong>{editor}</strong>
+    </div> : <>
+      {chairman && <div className="leadership-credit-group"><span className="leadership-credit-role">رئيس مجلس الإدارة</span><strong>{chairman}</strong></div>}
+      {editor && <div className="leadership-credit-group"><span className="leadership-credit-role">رئيس التحرير</span><strong>{editor}</strong></div>}
+    </>}
+    {executive && <div className="leadership-credit-group"><span className="leadership-credit-role">رئيس التحرير التنفيذي</span><strong>{executive}</strong></div>}
+  </div>;
+}
 
 /**
  * The demo's header/nav/topbar/ticker/drawer/search-overlay, reimplemented
@@ -46,12 +57,26 @@ const MORE_LINKS = [
  * titles) — this component never fetches data itself, matching the
  * project's "Server Components fetch, Client Components render" split.
  */
-export function HeaderInteractive({ tickerHeadlines, navbarAd }: { tickerHeadlines: string[]; navbarAd?: PublicAdPlacement }) {
+export function HeaderInteractive({ tickerHeadlines, navbarAd, navigation, leadership }: { tickerHeadlines: string[]; navbarAd?: PublicAdPlacement; navigation?: PublicSiteNavigationItem[]; leadership?: { boardChairman: string; editorInChief: string; executiveEditor: string } }) {
   const [drawerOpen, setDrawerOpen] = useState(false);
   const [searchOpen, setSearchOpen] = useState(false);
   const [searchQuery, setSearchQuery] = useState("");
   const [suggestions, setSuggestions] = useState<Array<{ id: string; title: string; slug: string }>>([]);
   const [suggestionsLoading, setSuggestionsLoading] = useState(false);
+  const [staffRoles, setStaffRoles] = useState<string[]>([]);
+  const [signedIn, setSignedIn] = useState(false);
+
+  useEffect(() => {
+    let active = true;
+    const syncSession = () => {
+      fetch("/account-api/session", { cache: "no-store" }).then(async (response) => response.ok ? response.json() as Promise<{ authenticated?: boolean; roles?: string[]; staff?: boolean }> : null)
+        .then((session) => { if (active) { setSignedIn(!!session?.authenticated); setStaffRoles(session?.staff ? session.roles ?? [] : []); } })
+        .catch(() => { if (active) { setStaffRoles([]); setSignedIn(false); } });
+    };
+    syncSession();
+    window.addEventListener("jusoor:session-change", syncSession);
+    return () => { active = false; window.removeEventListener("jusoor:session-change", syncSession); };
+  }, []);
 
   useEffect(() => {
     const nav = document.querySelector<HTMLElement>(".bluebarr");
@@ -111,6 +136,15 @@ export function HeaderInteractive({ tickerHeadlines, navbarAd }: { tickerHeadlin
   // seamless CSS marquee loop — same technique, applied to real headlines
   // instead of the demo's fixed sample list.
   const tickerGroups = tickerHeadlines.length > 0 ? [0, 1, 2] : [];
+  const visibleNavigation = (navigation?.length ? navigation : DEFAULT_NAVIGATION).filter((item) => item.isVisible);
+  const primaryLinks = visibleNavigation.filter((item) => item.group === "primary").sort((a, b) => a.displayOrder - b.displayOrder);
+  const moreLinks = visibleNavigation.filter((item) => item.group === "more").sort((a, b) => a.displayOrder - b.displayOrder);
+  const drawerLinks = [...primaryLinks, ...moreLinks];
+  const renderAccountLinks = (className: string) => <div className={className}>
+    {staffRoles.length > 0 ? <Link href="/cms" className="btn-nav btn-ghostt">لوحة التحرير</Link>
+      : signedIn ? <Link href="/auth" className="btn-nav btn-ghostt">صفحتي</Link>
+      : <><Link href="/auth?tab=login" className="btn-nav btn-ghostt">دخول</Link><Link href="/auth?tab=signup" className="btn-nav btn-accent">إنشاء حساب</Link></>}
+  </div>;
 
   return (
     <>
@@ -142,17 +176,21 @@ export function HeaderInteractive({ tickerHeadlines, navbarAd }: { tickerHeadlin
             ☰
           </button>
 
-          <Link className="logo" href="/">
-            <Image className="logo-img" src="/assets/josour-brand.png" alt="جسور" width={1176} height={847} priority />
-            <span className="logo-slogan">صوت المصريين في الخارج</span>
-          </Link>
+          <div className="header-branding">
+            <Link className="logo" href="/">
+              <Image className="logo-img" src="/assets/josour-logo-transparent.png" alt="جسور" width={1104} height={974} priority />
+              <span className="logo-slogan">المصريون بالخارج سفراء الوطن</span>
+            </Link>
+            <LeadershipCredits leadership={leadership} />
+          </div>
 
           <ConfiguredAd placement={navbarAd} className="header-ad-banner" label={false} naturalSize />
 
           <div className="header-actions">
-            <button type="button" className="icon-btn" aria-label="بحث" onClick={() => { setDrawerOpen(false); setSearchOpen(true); }}>
+            <button type="button" className="icon-btn" data-open-search aria-label="بحث" onClick={() => { setDrawerOpen(false); setSearchOpen(true); }}>
               🔍
             </button>
+            {renderAccountLinks("auth-group mobile-header-account")}
           </div>
         </div>
       </header>
@@ -170,26 +208,26 @@ export function HeaderInteractive({ tickerHeadlines, navbarAd }: { tickerHeadlin
             </button>
             <div className="nav-sticky-logo">
               <Link href="/" aria-label="الرئيسية">
-                <Image src="/assets/josour-brand.png" alt="جسور" width={1176} height={847} />
+                <Image src="/assets/josour-logo-transparent.png" alt="جسور" width={1104} height={974} />
               </Link>
             </div>
 
             <ul className="nav-links">
-              {NAV_LINKS.map((link) => (
-                <li key={link.href}>
+              {primaryLinks.map((link) => (
+                <li key={link.key}>
                   <Link href={link.href} className="nav-link">
                     {link.label}
                   </Link>
                 </li>
               ))}
-              <li className="dropdown">
+              {moreLinks.length > 0 && <li className="dropdown">
                 <button type="button" className="nav-link dropdown-btn">المزيد</button>
                 <ul className="dropdown-menu">
-                  {MORE_LINKS.map((link) => (
-                    <li key={link.href}><Link href={link.href}>{link.label}</Link></li>
+                  {moreLinks.map((link) => (
+                    <li key={link.key}><Link href={link.href}>{link.label}</Link></li>
                   ))}
                 </ul>
-              </li>
+              </li>}
             </ul>
           </div>
 
@@ -205,9 +243,7 @@ export function HeaderInteractive({ tickerHeadlines, navbarAd }: { tickerHeadlin
                 <line x1="21" y1="21" x2="16.65" y2="16.65" />
               </svg>
             </button>
-            <div className="auth-group">
-              <Link href="/cms/login" className="btn-nav btn-ghostt">دخول هيئة التحرير</Link>
-            </div>
+            {renderAccountLinks("auth-group")}
           </div>
         </div>
       </nav>
@@ -234,14 +270,13 @@ export function HeaderInteractive({ tickerHeadlines, navbarAd }: { tickerHeadlin
       >
         <div className="drawer">
           <div className="flex" style={{ justifyContent: "space-between", alignItems: "center", marginBottom: 20 }}>
-            <Image className="logo-img" src="/assets/josour-brand.png" alt="جسور" width={1176} height={847} />
+            <Image className="logo-img" src="/assets/josour-logo-transparent.png" alt="جسور" width={1104} height={974} />
             <button type="button" className="drawer-close icon-btn" onClick={() => setDrawerOpen(false)}>✕</button>
           </div>
+          <LeadershipCredits leadership={leadership} className="drawer-leadership" />
           <nav>
-            <Link href="/" onClick={() => setDrawerOpen(false)}>الرئيسية</Link>
-            {NAV_LINKS.slice(1).map((link) => <Link key={link.href} href={link.href} onClick={() => setDrawerOpen(false)}>{link.label}</Link>)}
-            {MORE_LINKS.map((link) => <Link key={link.href} href={link.href} onClick={() => setDrawerOpen(false)}>{link.label}</Link>)}
-            <Link href="/cms/login" onClick={() => setDrawerOpen(false)}>دخول هيئة التحرير</Link>
+            {drawerLinks.map((link) => <Link key={link.key} href={link.href} onClick={() => setDrawerOpen(false)}>{link.label}</Link>)}
+            {staffRoles.length > 0 ? <Link href="/cms" onClick={() => setDrawerOpen(false)}>لوحة التحرير</Link> : signedIn ? <Link href="/auth" onClick={() => setDrawerOpen(false)}>صفحتي</Link> : <><Link href="/auth?tab=login" onClick={() => setDrawerOpen(false)}>دخول</Link><Link href="/auth?tab=signup" onClick={() => setDrawerOpen(false)}>إنشاء حساب</Link></>}
           </nav>
         </div>
       </div>

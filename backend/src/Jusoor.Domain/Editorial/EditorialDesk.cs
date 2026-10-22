@@ -18,8 +18,10 @@ public static class EditorialDesk
         ["sports"] = "رياضة",
         ["arts"] = "فنون",
         ["articles"] = "مقالات رأي",
-        ["various"] = "منوعات",
+        ["fatwas"] = "الفتاوى",
     };
 
-    public static bool IsValid(string? slug) => slug is not null && Catalog.ContainsKey(slug);
+    public static bool IsValid(string? slug) => slug is not null && (Catalog.ContainsKey(slug) || slug == "various");
+
+    public static string Normalize(string slug) => slug == "various" ? "fatwas" : slug;
 }

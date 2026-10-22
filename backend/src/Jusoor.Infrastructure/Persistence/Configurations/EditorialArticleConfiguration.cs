@@ -38,6 +38,11 @@ public class EditorialArticleConfiguration : IEntityTypeConfiguration<EditorialA
         builder.Property(a => a.TwitterImageUrl).HasMaxLength(2048);
         builder.Property(a => a.SecondaryTags).HasColumnType("text[]").IsRequired();
         builder.Property(a => a.PresentationDesks).HasColumnType("text[]").IsRequired();
+        builder.Property(a => a.SportsPlayerNames).HasColumnType("text[]").IsRequired();
+        builder.Property(a => a.SportsCoverageType).HasMaxLength(32);
+        builder.Property(a => a.SportsTeamName).HasMaxLength(120);
+        builder.Property(a => a.SportsCompetitionName).HasMaxLength(120);
+        builder.Property(a => a.SportsCountryName).HasMaxLength(120);
         builder.HasOne(a => a.FeaturedVideoMediaAsset).WithMany().HasForeignKey(a => a.FeaturedVideoMediaAssetId)
             .OnDelete(DeleteBehavior.SetNull);
         builder.HasIndex(a => a.FeaturedVideoMediaAssetId);

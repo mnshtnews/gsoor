@@ -47,6 +47,11 @@ public sealed record EditorialArticleDto(
     public Guid? PrimaryCategoryId { get; init; }
     public string[] SecondaryTags { get; init; } = Array.Empty<string>();
     public string[] PresentationDesks { get; init; } = Array.Empty<string>();
+    public string? SportsCoverageType { get; init; }
+    public string[] SportsPlayerNames { get; init; } = Array.Empty<string>();
+    public string? SportsTeamName { get; init; }
+    public string? SportsCompetitionName { get; init; }
+    public string? SportsCountryName { get; init; }
     public Guid? FeaturedVideoMediaAssetId { get; init; }
     public string? FeaturedVideoEmbedUrl { get; init; }
     public string? TwitterTitle { get; init; }
@@ -81,6 +86,11 @@ public sealed record PublicNewsSummaryDto(
 {
     public string Slug { get; init; } = "";
     public string[] PresentationDesks { get; init; } = Array.Empty<string>();
+    public string? SportsCoverageType { get; init; }
+    public string[] SportsPlayerNames { get; init; } = Array.Empty<string>();
+    public string? SportsTeamName { get; init; }
+    public string? SportsCompetitionName { get; init; }
+    public string? SportsCountryName { get; init; }
     /// <summary>Public editorial cover image, sourced from the article's social image setting.</summary>
     public string? ImageUrl { get; init; }
     public string? AuthorName { get; init; }
@@ -133,6 +143,11 @@ public sealed record PublicNewsDetailDto(
     public string? PrimaryCategoryNameAr { get; init; }
     public string[] SecondaryTags { get; init; } = Array.Empty<string>();
     public string[] PresentationDesks { get; init; } = Array.Empty<string>();
+    public string? SportsCoverageType { get; init; }
+    public string[] SportsPlayerNames { get; init; } = Array.Empty<string>();
+    public string? SportsTeamName { get; init; }
+    public string? SportsCompetitionName { get; init; }
+    public string? SportsCountryName { get; init; }
     public string? TwitterTitle { get; init; }
     public string? TwitterDescription { get; init; }
     public string? TwitterImageUrl { get; init; }

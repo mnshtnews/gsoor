@@ -8,6 +8,7 @@ import { Table, TableCell, TableHeader, TableRow } from "@tiptap/extension-table
 import { countWords, htmlToPlainText } from "@/lib/html";
 import { estimateReadMinutes } from "@/lib/format";
 import { cmsMedia, type CmsMediaAsset } from "@/lib/cms-media-client";
+import { useImageCropper } from "@/components/cms/ImageCropper";
 
 /** Mirrors EditorialArticle.BodyMaxLength on the API (characters of stored HTML). */
 export const BODY_HTML_MAX = 100_000;
@@ -35,6 +36,7 @@ export function RichTextEditor({
   onChange: (html: string) => void;
   disabled?: boolean;
 }) {
+  const { cropImage, cropper } = useImageCropper();
   const [linkError, setLinkError] = useState<string | null>(null);
   const [mediaOpen, setMediaOpen] = useState(false);
   const [mediaBusy, setMediaBusy] = useState(false);
@@ -239,7 +241,9 @@ export function RichTextEditor({
     }
     setMediaBusy(true); setMediaError(null); setMediaProgress(0);
     try {
-      const asset = await cmsMedia.upload(file, { altText: nextAlt || caption.trim() || file.name, credit: nextCredit,
+      const uploadFile = isImage ? await cropImage(file, null) : file;
+      if (!uploadFile) return;
+      const asset = await cmsMedia.upload(uploadFile, { altText: nextAlt || caption.trim() || file.name, credit: nextCredit,
         caption: caption.trim(), focalPointX: focalX === "" ? null : Number(focalX), focalPointY: focalY === "" ? null : Number(focalY) }, setMediaProgress);
       insertMedia(asset);
     } catch (error) { setMediaError(error instanceof Error ? error.message : "فشل رفع الوسيط."); }
@@ -328,6 +332,7 @@ export function RichTextEditor({
       </section>}
 
       <EditorContent editor={editor} />
+      {cropper}
 
       <div className="rte-counters cms-hint" aria-live="off">
         <span>{state.words} كلمة</span>

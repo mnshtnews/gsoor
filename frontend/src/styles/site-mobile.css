@@ -388,10 +388,7 @@
     display: none;
   }
 
-  /* header-actions كان بيلف زرار البحث + دخول/إنشاء حساب مع بعض في
-     نفس الصف. display:contents بيشيل "صندوقه" هو بس (زي نفس الحيلة
-     المستخدمة مع hero-slider) عشان زرار البحث يبقى أخ مباشر لباقي
-     عناصر header-inner. */
+  /* اعرض روابط الحساب بجوار البحث ضمن صف الهيدر على الشاشات الصغيرة. */
   .header-actions {
     display: contents;
   }
@@ -403,13 +400,6 @@
     min-height: 42px;
   }
 
-  /* نسخة الهيدر من [data-auth-slot] اتخفت خالص على الموبايل/التابلت —
-     زرار دخول/إنشاء حساب بقوا يظهروا بس من جوه التوب بار الكهرماني
-     (النسخة التانية .topbar-auth-slot، محقونة بـ mobile.js قسم 7)،
-     عشان ما يبقاش فيه تكرار لنفس الزرارين مرتين في الصفحة. */
-  .header-actions > [data-auth-slot] {
-    display: none;
-  }
 }
 @media (max-width: 480px) and (hover: none) and (pointer: coarse) {
   .logo {

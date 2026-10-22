@@ -69,7 +69,9 @@ The following requirements were explicitly requested during the CMS design discu
 - CMS-managed navigation order/visibility for desktop and mobile, with permission checks, safe route validation and public rendering from the saved configuration.
 - Structured sports coverage tailored to Egyptian professionals abroad, naturalized Egyptian players and the Egyptian league. The current `sports` presentation desk is only an article label/feed; it is not a sports data model or tailored sports CMS.
 
-These need their own implementation slices, persistence/API contracts and CMS acceptance. No UI-only control should be added until its saved configuration actually controls both the website and mobile layout.
+**Source implementation delivered:** role-gated CMS route `/cms/site-structure` edits the saved navigation and additional section layout/order/surface settings; a public API drives the header, mobile drawer and the added homepage collection block. The configured order applies among these additional blocks; the established editorial modules keep their current positions. Links are restricted to an allow-list, the home link remains visible, desk mappings are validated, and settings are audited. Sports articles now have structured coverage type, player names, team, competition and country metadata; the CMS exposes these only when the sports desk is selected and the public article renders them when present. Migrations `AddSiteStructureSettings` and `AddSportsEditorialMetadata` are applied by Development startup or need to be applied to the isolated trial database.
+
+**Acceptance remains:** configure and save the CMS settings as Editor-in-Chief, confirm changes persist after restart and affect web/mobile, ensure other roles receive 403, exercise all layout variants and surfaces, and publish each sports coverage type to confirm CMS round-trip and public article display. The user should not apply these migrations to production during trial hardening.
 
 ## Slice 26 — CMS-selected video publishing and video hub
 

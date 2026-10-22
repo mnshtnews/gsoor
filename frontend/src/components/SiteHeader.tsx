@@ -1,6 +1,6 @@
 import { HeaderInteractive } from "./HeaderInteractive";
-import { getPublishedNews, getPublicAdPlacements } from "@/lib/news-api";
-import type { PublicAdPlacement } from "@/lib/news-api";
+import { getPublishedNews, getPublicAdPlacements, getPublicSiteStructure } from "@/lib/news-api";
+import type { PublicAdPlacement, PublicSiteNavigationItem } from "@/lib/news-api";
 
 /**
  * Server Component so the ticker's headlines are real titles of
@@ -15,13 +15,17 @@ import type { PublicAdPlacement } from "@/lib/news-api";
 export async function SiteHeader() {
   let tickerHeadlines: string[] = [];
   let navbarAd: PublicAdPlacement | undefined;
+  let navigation: PublicSiteNavigationItem[] | undefined;
+  let leadership: { boardChairman: string; editorInChief: string; executiveEditor: string } | undefined;
 
-  const [newsResult, adsResult] = await Promise.allSettled([
+  const [newsResult, adsResult, structureResult] = await Promise.allSettled([
     getPublishedNews(1, 6),
     getPublicAdPlacements("web"),
+    getPublicSiteStructure(),
   ]);
   if (newsResult.status === "fulfilled") tickerHeadlines = newsResult.value.items.map((s) => s.title);
   if (adsResult.status === "fulfilled") navbarAd = adsResult.value.find((placement) => placement.slotKey === "navbar-banner");
+  if (structureResult.status === "fulfilled") { navigation = structureResult.value.navigation; leadership = structureResult.value.leadership; }
 
-  return <HeaderInteractive tickerHeadlines={tickerHeadlines} navbarAd={navbarAd} />;
+  return <HeaderInteractive tickerHeadlines={tickerHeadlines} navbarAd={navbarAd} navigation={navigation} leadership={leadership} />;
 }

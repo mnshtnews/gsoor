@@ -76,8 +76,8 @@ Statuses below combine the source code, migrations/tests present in the reposito
 - [ ] Add CMS e2e coverage for article draft → review → approval → publish, scheduling, media/video, SEO and ad placement authorization.
 - [ ] Verify ad CRUD end to end for each allow-listed slot and each supported surface, including creative upload, target-link validation, preview, and public render. Fixed the CMS save validation to validate both surfaces, because the API persists the complete web/mobile assignment set in one request.
 - [ ] Complete isolated client-trial hardening (Slice 30); keep staging private until Stage B's CSP/security gates pass.
-- [ ] Implement the separately requested CMS-controlled homepage section manager (create/enable/layout/desk/order for web and mobile) and navigation order/visibility manager. The current presentation desk catalog is not a CMS-managed layout or navigation configuration.
-- [ ] Implement tailored sports content modeling and CMS fields for Egyptian professional players abroad, naturalized Egyptian players and the Egyptian league. The current `sports` desk only tags and feeds articles.
+- [x] Implement the CMS-controlled homepage section manager (create/enable/layout/desk/order for web and mobile) and navigation order/visibility manager; persist and apply the settings to public web navigation, mobile drawer and configured homepage modules. Migrations are generated; client-role/browser/database acceptance remains.
+- [x] Implement tailored sports content fields for Egyptian professionals abroad, naturalized Egyptian players, Egyptian league, national team and general coverage; persist bounded player/team/competition/country metadata through the newsroom workflow and expose it on public article detail. Migration generated; editor and published-article acceptance remains.
 
 ### Stage D — Phase 2 and later roadmap, only where decisions unblock it
 

@@ -53,6 +53,11 @@ public class ApplicationDbContext : IdentityDbContext<ApplicationUser>, IApplica
     public DbSet<EditorialAdPlacement> EditorialAdPlacements => Set<EditorialAdPlacement>();
     public DbSet<CrisisMode> CrisisModes => Set<CrisisMode>();
     public DbSet<DiasporaEstimate> DiasporaEstimates => Set<DiasporaEstimate>();
+    public DbSet<SiteStructureSettings> SiteStructureSettings => Set<SiteStructureSettings>();
+    public DbSet<HomepagePoll> HomepagePolls => Set<HomepagePoll>();
+    public DbSet<HomepagePollVote> HomepagePollVotes => Set<HomepagePollVote>();
+    public DbSet<AlertEmailSubscription> AlertEmailSubscriptions => Set<AlertEmailSubscription>();
+    public DbSet<AlertSubscriptionSettings> AlertSubscriptionSettings => Set<AlertSubscriptionSettings>();
 
     public void Detach<TEntity>(TEntity entity) where TEntity : class => Entry(entity).State = EntityState.Detached;
 
@@ -98,6 +103,10 @@ public class ApplicationDbContext : IdentityDbContext<ApplicationUser>, IApplica
             b.Property(c => c.ApplicantPhoneE164).HasConversion(stringConverter);
             b.Property(c => c.SubjectContactPhone).HasConversion(nullableStringConverter);
         });
+
+        builder.Entity<AlertEmailSubscription>()
+            .Property(subscription => subscription.Email)
+            .HasConversion(stringConverter);
     }
 
     /// <summary>

@@ -11,7 +11,7 @@
 
 export const SITE_NAME = "جسور";
 export const SITE_LANGUAGE = "ar";
-export const LOGO_PATH = "/assets/josour-brand.png";
+export const LOGO_PATH = "/assets/josour-logo-transparent.png";
 
 /** Public byline — the same text the article page displays. No individual author profiles exist yet. */
 export const EDITORIAL_BYLINE = "هيئة تحرير جسور";

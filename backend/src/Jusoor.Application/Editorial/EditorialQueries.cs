@@ -189,7 +189,9 @@ public class GetPublishedNewsQueryHandler : IRequestHandler<GetPublishedNewsQuer
             return new PublicNewsSummaryDto(
                 a.Id, a.Title, excerpt, a.PublishedAtUtc!.Value,
                 country?.NameAr, country?.NameEn, city?.NameAr, city?.NameEn)
-                { Slug = a.Slug, PresentationDesks = a.PresentationDesks.ToArray(), ImageUrl = a.SocialImageUrl, AuthorName = a.AuthorName, AuthorImageUrl = a.AuthorImageUrl };
+                { Slug = a.Slug, PresentationDesks = a.PresentationDesks.ToArray(), ImageUrl = a.SocialImageUrl, AuthorName = a.AuthorName, AuthorImageUrl = a.AuthorImageUrl,
+                    SportsCoverageType = a.SportsCoverageType, SportsPlayerNames = a.SportsPlayerNames.ToArray(), SportsTeamName = a.SportsTeamName,
+                    SportsCompetitionName = a.SportsCompetitionName, SportsCountryName = a.SportsCountryName };
         }).ToList();
 
         return new PagedResult<PublicNewsSummaryDto>(items, request.Page, request.PageSize, totalCount);
@@ -349,6 +351,11 @@ public class GetPublishedNewsByIdQueryHandler : IRequestHandler<GetPublishedNews
             NoIndex = article.NoIndex, NoFollow = article.NoFollow,
             PrimaryCategoryNameAr = category?.NameAr, SecondaryTags = article.SecondaryTags.ToArray(),
             PresentationDesks = article.PresentationDesks.ToArray(),
+            SportsCoverageType = article.SportsCoverageType,
+            SportsPlayerNames = article.SportsPlayerNames.ToArray(),
+            SportsTeamName = article.SportsTeamName,
+            SportsCompetitionName = article.SportsCompetitionName,
+            SportsCountryName = article.SportsCountryName,
             TwitterTitle = article.TwitterTitle, TwitterDescription = article.TwitterDescription, TwitterImageUrl = article.TwitterImageUrl
         });
     }

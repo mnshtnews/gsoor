@@ -58,6 +58,11 @@ export interface NewsDetail {
   primaryCategoryNameAr: string | null;
   secondaryTags: string[];
   presentationDesks: string[];
+  sportsCoverageType: string | null;
+  sportsPlayerNames: string[];
+  sportsTeamName: string | null;
+  sportsCompetitionName: string | null;
+  sportsCountryName: string | null;
   twitterTitle: string | null;
   twitterDescription: string | null;
   twitterImageUrl: string | null;
@@ -96,7 +101,7 @@ export type PublicNewsDetail = { outcome: "found"; article: NewsDetail } | { out
  */
 export async function getPublishedNews(page = 1, pageSize = 20, desk?: string, searchTerm?: string, authorName?: string, countryId?: string): Promise<PagedResult<StorySummary>> {
   const query = new URLSearchParams({ page: String(page), pageSize: String(pageSize) });
-  if (desk) query.set("desk", desk);
+  if (desk) query.set("desk", desk === "various" ? "fatwas" : desk);
   if (searchTerm?.trim()) query.set("q", searchTerm.trim());
   if (authorName?.trim()) query.set("author", authorName.trim());
   if (countryId) query.set("countryId", countryId);
@@ -151,6 +156,37 @@ export interface PublicDiasporaMapItem {
   sourceName: string;
   sourceUrl: string;
   sourcePublishedOn: string;
+}
+
+export interface PublicSiteNavigationItem {
+  key: string;
+  label: string;
+  href: string;
+  isVisible: boolean;
+  displayOrder: number;
+  group: "primary" | "more";
+}
+
+export interface PublicHomepageSection {
+  key: string;
+  title: string;
+  deskSlug: string;
+  layout: "cards" | "lead" | "columns";
+  isEnabled: boolean;
+  showOnWeb: boolean;
+  showOnMobile: boolean;
+  displayOrder: number;
+}
+
+export interface PublicSiteStructure {
+  navigation: PublicSiteNavigationItem[];
+  homepageSections: PublicHomepageSection[];
+  leadership: { boardChairman: string; editorInChief: string; executiveEditor: string };
+  lastModifiedAtUtc: string | null;
+}
+
+export function getPublicSiteStructure(): Promise<PublicSiteStructure> {
+  return apiFetch<PublicSiteStructure>("/api/v1/site-structure", { cache: "no-store" });
 }
 
 export function getPublicCrisisMode(): Promise<PublicCrisisMode> {

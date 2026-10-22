@@ -23,6 +23,8 @@ const GROUPS: NavGroup[] = [
     { label: "تحسين SEO", href: "/cms/seo", roles: ["SeoEditor", ...SENIOR] },
   ] },
   { title: "الرئيسية والإعلانات", items: [
+    { label: "الرئيسية والقائمة", href: "/cms/site-structure", roles: ["EditorInChief"] },
+    { label: "استبيانات الرئيسية", href: "/cms/polls", roles: SENIOR },
     { label: "فيديوهات الرئيسية", href: "/cms/home-videos", roles: SENIOR },
     { label: "إدارة الإعلانات", href: "/cms/advertisements", roles: SENIOR },
   ] },
@@ -89,7 +91,7 @@ export default function CmsWorkspace({ children }: Readonly<{ children: React.Re
     <div className="cms-workspace" dir="rtl">
       <header className="cms-topbar">
         <button className="cms-menu-toggle" type="button" onClick={() => setMenuOpen((open) => !open)} aria-expanded={menuOpen} aria-controls="cms-sidebar" aria-label={menuOpen ? "إغلاق القائمة" : "فتح القائمة"}><span aria-hidden="true">☰</span></button>
-        <Link className="cms-brand" href="/cms" aria-label="جسور، لوحة التحرير"><Image className="cms-brand-img" src="/assets/josour-brand.png" alt="" width={1176} height={847} priority /><span><strong>جسور</strong><small>غرفة الأخبار الرقمية</small></span></Link>
+        <Link className="cms-brand" href="/cms" aria-label="جسور، لوحة التحرير"><Image className="cms-brand-img" src="/assets/josour-logo-transparent.png" alt="" width={1104} height={974} priority /><span><strong>جسور</strong><small>غرفة الأخبار الرقمية</small></span></Link>
         <div className="cms-topbar-meta"><span className="cms-live-indicator"><i /> مساحة التحرير</span><span className="cms-topbar-user">{session?.email ?? "جارٍ التحقق من الجلسة…"}</span><button className="cms-logout" type="button" onClick={() => void logout()}>خروج</button></div>
       </header>
       {menuOpen && <button className="cms-sidebar-scrim" type="button" onClick={() => setMenuOpen(false)} aria-label="إغلاق القائمة" />}

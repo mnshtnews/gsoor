@@ -23,6 +23,57 @@ namespace Jusoor.Infrastructure.Persistence.Migrations
 
             NpgsqlModelBuilderExtensions.UseIdentityByDefaultColumns(modelBuilder);
 
+            modelBuilder.Entity("Jusoor.Domain.Entities.AlertEmailSubscription", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uuid");
+
+                    b.Property<DateTimeOffset>("ConsentedAtUtc")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<string>("Email")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<string>("EmailHash")
+                        .IsRequired()
+                        .HasMaxLength(64)
+                        .HasColumnType("character varying(64)");
+
+                    b.Property<bool>("IsActive")
+                        .HasColumnType("boolean");
+
+                    b.Property<DateTimeOffset?>("UnsubscribedAtUtc")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("EmailHash")
+                        .IsUnique();
+
+                    b.HasIndex("IsActive");
+
+                    b.ToTable("AlertEmailSubscriptions", (string)null);
+                });
+
+            modelBuilder.Entity("Jusoor.Domain.Entities.AlertSubscriptionSettings", b =>
+                {
+                    b.Property<string>("Key")
+                        .HasMaxLength(32)
+                        .HasColumnType("character varying(32)");
+
+                    b.Property<bool>("IsEnabled")
+                        .HasColumnType("boolean");
+
+                    b.Property<DateTimeOffset>("UpdatedAtUtc")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.HasKey("Key");
+
+                    b.ToTable("AlertSubscriptionSettings", (string)null);
+                });
+
             modelBuilder.Entity("Jusoor.Domain.Entities.Article", b =>
                 {
                     b.Property<Guid>("Id")
@@ -588,6 +639,26 @@ namespace Jusoor.Infrastructure.Persistence.Migrations
                         .HasMaxLength(300)
                         .HasColumnType("character varying(300)");
 
+                    b.Property<string>("SportsCompetitionName")
+                        .HasMaxLength(120)
+                        .HasColumnType("character varying(120)");
+
+                    b.Property<string>("SportsCountryName")
+                        .HasMaxLength(120)
+                        .HasColumnType("character varying(120)");
+
+                    b.Property<string>("SportsCoverageType")
+                        .HasMaxLength(32)
+                        .HasColumnType("character varying(32)");
+
+                    b.PrimitiveCollection<List<string>>("SportsPlayerNames")
+                        .IsRequired()
+                        .HasColumnType("text[]");
+
+                    b.Property<string>("SportsTeamName")
+                        .HasMaxLength(120)
+                        .HasColumnType("character varying(120)");
+
                     b.Property<int>("Status")
                         .IsConcurrencyToken()
                         .HasColumnType("integer");
@@ -922,6 +993,83 @@ namespace Jusoor.Infrastructure.Persistence.Migrations
                         });
                 });
 
+            modelBuilder.Entity("Jusoor.Domain.Entities.HomepagePoll", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uuid");
+
+                    b.Property<DateTimeOffset>("CreatedAtUtc")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<string>("CreatedByUserId")
+                        .HasMaxLength(450)
+                        .HasColumnType("character varying(450)");
+
+                    b.Property<DateTimeOffset?>("EndsAtUtc")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<bool>("IsActive")
+                        .HasColumnType("boolean");
+
+                    b.Property<DateTimeOffset?>("LastModifiedAtUtc")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<string>("LastModifiedByUserId")
+                        .HasMaxLength(450)
+                        .HasColumnType("character varying(450)");
+
+                    b.PrimitiveCollection<List<string>>("Options")
+                        .IsRequired()
+                        .HasColumnType("text[]");
+
+                    b.Property<string>("Question")
+                        .IsRequired()
+                        .HasMaxLength(240)
+                        .HasColumnType("character varying(240)");
+
+                    b.Property<DateTimeOffset?>("StartsAtUtc")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("IsActive")
+                        .IsUnique()
+                        .HasFilter("\"IsActive\" = TRUE");
+
+                    b.ToTable("HomepagePolls", (string)null);
+                });
+
+            modelBuilder.Entity("Jusoor.Domain.Entities.HomepagePollVote", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uuid");
+
+                    b.Property<int>("OptionIndex")
+                        .HasColumnType("integer");
+
+                    b.Property<Guid>("PollId")
+                        .HasColumnType("uuid");
+
+                    b.Property<DateTimeOffset>("VotedAtUtc")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<string>("VoterHash")
+                        .IsRequired()
+                        .HasMaxLength(64)
+                        .HasColumnType("character varying(64)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("PollId", "OptionIndex");
+
+                    b.HasIndex("PollId", "VoterHash")
+                        .IsUnique();
+
+                    b.ToTable("HomepagePollVotes", (string)null);
+                });
+
             modelBuilder.Entity("Jusoor.Domain.Entities.HumanReviewDecision", b =>
                 {
                     b.Property<Guid>("Id")
@@ -1131,6 +1279,56 @@ namespace Jusoor.Infrastructure.Persistence.Migrations
                     b.HasIndex("TargetUserId", "OccurredAtUtc");
 
                     b.ToTable("RoleChangeAudits", (string)null);
+                });
+
+            modelBuilder.Entity("Jusoor.Domain.Entities.SiteStructureSettings", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uuid");
+
+                    b.Property<DateTimeOffset>("CreatedAtUtc")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<string>("CreatedByUserId")
+                        .HasMaxLength(450)
+                        .HasColumnType("character varying(450)");
+
+                    b.Property<string>("HomepageSectionsJson")
+                        .IsRequired()
+                        .HasMaxLength(30000)
+                        .HasColumnType("character varying(30000)");
+
+                    b.Property<string>("Key")
+                        .IsRequired()
+                        .HasMaxLength(16)
+                        .HasColumnType("character varying(16)");
+
+                    b.Property<DateTimeOffset?>("LastModifiedAtUtc")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<string>("LastModifiedByUserId")
+                        .HasMaxLength(450)
+                        .HasColumnType("character varying(450)");
+
+                    b.Property<string>("LeadershipJson")
+                        .IsRequired()
+                        .ValueGeneratedOnAdd()
+                        .HasMaxLength(4000)
+                        .HasColumnType("character varying(4000)")
+                        .HasDefaultValue("{}");
+
+                    b.Property<string>("NavigationJson")
+                        .IsRequired()
+                        .HasMaxLength(30000)
+                        .HasColumnType("character varying(30000)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("Key")
+                        .IsUnique();
+
+                    b.ToTable("SiteStructureSettings", (string)null);
                 });
 
             modelBuilder.Entity("Jusoor.Domain.Entities.Source", b =>
@@ -1592,6 +1790,15 @@ namespace Jusoor.Infrastructure.Persistence.Migrations
                     b.Navigation("FeaturedVideoMediaAsset");
 
                     b.Navigation("PrimaryCategory");
+                });
+
+            modelBuilder.Entity("Jusoor.Domain.Entities.HomepagePollVote", b =>
+                {
+                    b.HasOne("Jusoor.Domain.Entities.HomepagePoll", null)
+                        .WithMany()
+                        .HasForeignKey("PollId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
                 });
 
             modelBuilder.Entity("Jusoor.Domain.Entities.HumanReviewDecision", b =>

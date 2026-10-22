@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import Image from "next/image";
-import { getPublishedNews, getPublishedVideos, getPublicAdPlacements, getPublicCrisisMode, type PublicAdPlacement } from "@/lib/news-api";
+import { getPublishedNews, getPublishedVideos, getPublicAdPlacements, getPublicCrisisMode, getPublicSiteStructure, type PublicAdPlacement, type PublicHomepageSection } from "@/lib/news-api";
 import type { StorySummary } from "@/lib/stories-api";
 import { JsonLd } from "@/components/JsonLd";
 import { buildOrganizationJsonLd } from "@/lib/seo";
@@ -12,6 +12,8 @@ import { ConfiguredAd } from "@/components/home/ConfiguredAd";
 import { AdBox } from "@/components/home/AdBox";
 import { ServicesBand } from "@/components/home/ServicesBand";
 import { formatArabicDate } from "@/lib/format";
+import { HomepagePollWidget } from "@/components/HomepagePollWidget";
+import { AlertSubscriptionForm } from "@/components/AlertSubscriptionForm";
 
 // The homepage is rendered per request so a newly published article (and a
 // deleted one) is reflected immediately — no stale cache during the client trial.
@@ -30,7 +32,7 @@ export function generateMetadata(): Metadata {
 const deskLabels: Record<string, string> = {
   mughtarib: "أخبار المغتربين", success: "قصص نجاح", egypt: "أخبار مصر", opportunities: "فرص استثمارية",
   official: "مع مسئول", events: "فعاليات", red: "خط أحمر", lamma: "اللمة الحلوة", secondgen: "الجيل الثاني",
-  sports: "رياضة", arts: "فنون", articles: "مقالات رأي", various: "منوعات",
+  sports: "رياضة", arts: "فنون", articles: "مقالات رأي", fatwas: "الفتاوى",
 };
 
 function articleHref(story: StorySummary) {
@@ -187,7 +189,7 @@ function AtmaenFeature({ webAd, mobileAd }: { webAd?: PublicAdPlacement; mobileA
 }
 
 function NewsRecirculation({ desks }: { desks: Record<string, StorySummary[]> }) {
-  const sections = [{ slug: "arts", variant: "lead" }, { slug: "sports", variant: "compact" }, { slug: "various", variant: "lead" }] as const;
+  const sections = [{ slug: "arts", variant: "lead" }, { slug: "sports", variant: "compact" }, { slug: "fatwas", variant: "lead" }] as const;
   return (
     <section className="section tight recirc-section"><div className="wrap"><div className="recirc-cols">{sections.map(({ slug, variant }) => {
       const label = deskLabels[slug];
@@ -201,15 +203,28 @@ function NewsRecirculation({ desks }: { desks: Record<string, StorySummary[]> })
   );
 }
 
+function ConfiguredHomepageSections({ sections, desks }: { sections: PublicHomepageSection[]; desks: Record<string, StorySummary[]> }) {
+  return <>{sections.filter((section) => section.isEnabled && (section.showOnWeb || section.showOnMobile)).sort((a, b) => a.displayOrder - b.displayOrder).map((section) => {
+    const stories = desks[section.deskSlug] ?? [];
+    const className = `section tight home-config-section${section.showOnWeb && !section.showOnMobile ? " home-config-section--web" : ""}${!section.showOnWeb && section.showOnMobile ? " home-config-section--mobile" : ""}`;
+    const columns = section.layout === "columns" ? 2 : section.layout === "lead" ? 2 : 3;
+    return <section className={className} id={`home-${section.key}`} key={section.key}><div className="wrap">
+      <Head label={section.title} slug={section.deskSlug} more={`كل ${section.title} ←`} />
+      <DeskGrid stories={stories.slice(0, 6)} label={section.title} columns={columns} mobileVariant={section.layout === "lead" ? "lead" : "compact"} />
+    </div></section>;
+  })}</>;
+}
+
 export default async function HomePage() {
   const deskSlugs = Object.keys(deskLabels);
-  const [[newsResult, videoResult, webAdsResult, mobileAdsResult, crisisResult], deskResults] = await Promise.all([
+  const [[newsResult, videoResult, webAdsResult, mobileAdsResult, crisisResult, structureResult], deskResults] = await Promise.all([
     Promise.allSettled([
       getPublishedNews(1, 50),
       getPublishedVideos(1, 7, true), // Only the editor-curated seven videos belong in the hero.
       getPublicAdPlacements("web"),
       getPublicAdPlacements("mobile"),
       getPublicCrisisMode(),
+      getPublicSiteStructure(),
     ] as const),
     Promise.allSettled(deskSlugs.map((slug) => getPublishedNews(1, 10, slug))),
   ]);
@@ -218,6 +233,7 @@ export default async function HomePage() {
   const webAds = webAdsResult.status === "fulfilled" ? webAdsResult.value : [];
   const mobileAds = mobileAdsResult.status === "fulfilled" ? mobileAdsResult.value : [];
   const crisis = crisisResult.status === "fulfilled" && crisisResult.value.isActive ? crisisResult.value : null;
+  const homepageSections = structureResult.status === "fulfilled" ? structureResult.value.homepageSections : [];
   const ad = (surface: "web" | "mobile", slotKey: string) =>
     (surface === "web" ? webAds : mobileAds).find((placement) => placement.slotKey === slotKey);
   const desks: Record<string, StorySummary[]> = Object.fromEntries(deskSlugs.map((slug, index) => {
@@ -341,16 +357,19 @@ export default async function HomePage() {
 
       <LammaSection lamma={desks.lamma} events={desks.events} topAd={ad("web", "lamma-top")} sideAd={ad("web", "lamma-events-square")} />
 
+      <ConfiguredHomepageSections sections={homepageSections} desks={desks} />
+
       <section className="section on-surface" id="city-alerts" style={{ paddingTop: 0 }}>
         <div className="wrap">
           <div className="cta-banner">
-            <div><h2>تابع المستجدات التي تهمك</h2><p>تابع التنبيهات العامة التي تعتمدها جسور، أو أرسل طلبًا خاصًا لفريق «اطمّن». لن نطلب بريدك لاشتراك غير مفعّل.</p></div>
-            <div className="cta-form cta-form--links"><Link className="cta-form__link" href="/crisis">مركز التنبيهات</Link><Link className="cta-form__link cta-form__link--secondary" href="/atmaen">اطمّن على مغتربك</Link></div>
+            <div><h2>ما تفوّتش أي تحديث يخص بلدك</h2><p>اشترك في تنبيهات المدينة اللي إنت أو أهلك فيها — إشعار لحظي وقت الأزمات فقط، مفيش إزعاج يومي.</p></div>
+            <AlertSubscriptionForm />
           </div>
         </div>
       </section>
 
       <NewsRecirculation desks={desks} />
+      <HomepagePollWidget />
     </main>
   );
 }

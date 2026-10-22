@@ -5,6 +5,7 @@ import Link from "next/link";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
 import { ArticleHistory } from "@/components/cms/ArticleHistory";
+import { useImageCropper } from "@/components/cms/ImageCropper";
 import { BODY_HTML_MAX, RichTextEditor } from "@/components/cms/RichTextEditor";
 import { cms, workflowHints, STATUS_META, CmsError, PRESENTATION_DESKS, type CmsArticle, type WorkflowAction } from "@/lib/cms-client";
 import { cmsMedia, type CmsMediaAsset } from "@/lib/cms-media-client";
@@ -25,6 +26,7 @@ const embeddedVideoUrls = (html: string) => Array.from(
 );
 
 export function ArticleEditor({ articleId }: { articleId: string | null }) {
+  const { cropImage, cropper } = useImageCropper();
   const router = useRouter();
   const [article, setArticle] = useState<CmsArticle | null>(null);
   const [roles, setRoles] = useState<string[] | undefined>(undefined);
@@ -47,6 +49,11 @@ export function ArticleEditor({ articleId }: { articleId: string | null }) {
   const [summary, setSummary] = useState("");
   const [body, setBody] = useState("");
   const [presentationDesks, setPresentationDesks] = useState<string[]>([]);
+  const [sportsCoverageType, setSportsCoverageType] = useState("");
+  const [sportsPlayerNames, setSportsPlayerNames] = useState("");
+  const [sportsTeamName, setSportsTeamName] = useState("");
+  const [sportsCompetitionName, setSportsCompetitionName] = useState("");
+  const [sportsCountryName, setSportsCountryName] = useState("");
   const [featuredVideoMediaAssetId, setFeaturedVideoMediaAssetId] = useState("");
   const [featuredVideoEmbedUrl, setFeaturedVideoEmbedUrl] = useState("");
   const [coverImageUrl, setCoverImageUrl] = useState("");
@@ -76,6 +83,11 @@ export function ArticleEditor({ articleId }: { articleId: string | null }) {
     setSummary(a.summary ?? "");
     setBody(a.body);
     setPresentationDesks(a.presentationDesks ?? []);
+    setSportsCoverageType(a.sportsCoverageType ?? "");
+    setSportsPlayerNames((a.sportsPlayerNames ?? []).join("، "));
+    setSportsTeamName(a.sportsTeamName ?? "");
+    setSportsCompetitionName(a.sportsCompetitionName ?? "");
+    setSportsCountryName(a.sportsCountryName ?? "");
     setFeaturedVideoMediaAssetId(a.featuredVideoMediaAssetId ?? "");
     setFeaturedVideoEmbedUrl(a.featuredVideoEmbedUrl ?? "");
     setCoverImageUrl(a.socialImageUrl ?? "");
@@ -99,6 +111,11 @@ export function ArticleEditor({ articleId }: { articleId: string | null }) {
         if (typeof draft.summary === "string") setSummary(draft.summary);
         if (typeof draft.body === "string") setBody(draft.body);
         if (Array.isArray(draft.presentationDesks) && draft.presentationDesks.every((item) => typeof item === "string")) setPresentationDesks(draft.presentationDesks as string[]);
+        if (typeof draft.sportsCoverageType === "string") setSportsCoverageType(draft.sportsCoverageType);
+        if (typeof draft.sportsPlayerNames === "string") setSportsPlayerNames(draft.sportsPlayerNames);
+        if (typeof draft.sportsTeamName === "string") setSportsTeamName(draft.sportsTeamName);
+        if (typeof draft.sportsCompetitionName === "string") setSportsCompetitionName(draft.sportsCompetitionName);
+        if (typeof draft.sportsCountryName === "string") setSportsCountryName(draft.sportsCountryName);
         if (typeof draft.featuredVideoMediaAssetId === "string") setFeaturedVideoMediaAssetId(draft.featuredVideoMediaAssetId);
         if (typeof draft.featuredVideoEmbedUrl === "string") setFeaturedVideoEmbedUrl(draft.featuredVideoEmbedUrl);
         if (typeof draft.coverImageUrl === "string") setCoverImageUrl(draft.coverImageUrl);
@@ -131,13 +148,13 @@ export function ArticleEditor({ articleId }: { articleId: string | null }) {
   useEffect(() => {
     if (!draftHydrated) return;
     try {
-      const draft = { title, authorName, authorImageUrl, summary, body, presentationDesks, featuredVideoMediaAssetId, featuredVideoEmbedUrl, coverImageUrl };
-      if (title || authorName || authorImageUrl || summary || body || coverImageUrl || presentationDesks.length || featuredVideoMediaAssetId || featuredVideoEmbedUrl) sessionStorage.setItem(draftKey, JSON.stringify(draft));
+      const draft = { title, authorName, authorImageUrl, summary, body, presentationDesks, sportsCoverageType, sportsPlayerNames, sportsTeamName, sportsCompetitionName, sportsCountryName, featuredVideoMediaAssetId, featuredVideoEmbedUrl, coverImageUrl };
+      if (title || authorName || authorImageUrl || summary || body || coverImageUrl || presentationDesks.length || sportsCoverageType || sportsPlayerNames || sportsTeamName || sportsCompetitionName || sportsCountryName || featuredVideoMediaAssetId || featuredVideoEmbedUrl) sessionStorage.setItem(draftKey, JSON.stringify(draft));
       else sessionStorage.removeItem(draftKey);
     } catch {
       // Storage can be disabled or full; editing and server-side saves still work.
     }
-  }, [draftHydrated, draftKey, title, authorName, authorImageUrl, summary, body, presentationDesks, featuredVideoMediaAssetId, featuredVideoEmbedUrl, coverImageUrl]);
+  }, [draftHydrated, draftKey, title, authorName, authorImageUrl, summary, body, presentationDesks, sportsCoverageType, sportsPlayerNames, sportsTeamName, sportsCompetitionName, sportsCountryName, featuredVideoMediaAssetId, featuredVideoEmbedUrl, coverImageUrl]);
 
   async function run(action: () => Promise<void>) {
     setBusy(true);
@@ -170,6 +187,11 @@ export function ArticleEditor({ articleId }: { articleId: string | null }) {
     // Decision D4: recorded with the revision, only meaningful while the article is live.
     editReason: article?.status === "Published" ? editReason.trim() || null : null,
     presentationDesks,
+    sportsCoverageType: presentationDesks.includes("sports") ? sportsCoverageType || null : null,
+    sportsPlayerNames: presentationDesks.includes("sports") ? sportsPlayerNames.split(/[،,\n]/).map((name) => name.trim()).filter(Boolean) : [],
+    sportsTeamName: presentationDesks.includes("sports") ? sportsTeamName.trim() || null : null,
+    sportsCompetitionName: presentationDesks.includes("sports") ? sportsCompetitionName.trim() || null : null,
+    sportsCountryName: presentationDesks.includes("sports") ? sportsCountryName.trim() || null : null,
     featuredVideoMediaAssetId: featuredVideoMediaAssetId || null,
     featuredVideoEmbedUrl: featuredVideoEmbedUrl || null,
     // Saved together with the article so the cover can never be lost to a separate (SEO) call.
@@ -198,7 +220,9 @@ export function ArticleEditor({ articleId }: { articleId: string | null }) {
     setAuthorImageUploadBusy(true);
     setError(null);
     try {
-      const asset = await cmsMedia.upload(file, {
+      const cropped = await cropImage(file, 1);
+      if (!cropped) return;
+      const asset = await cmsMedia.upload(cropped, {
         altText: `صورة الكاتب ${authorName.trim() || "كاتب جسور"}`,
         credit: authorName.trim() || "جسور",
         caption: "",
@@ -287,7 +311,9 @@ export function ArticleEditor({ articleId }: { articleId: string | null }) {
     setError(null);
     setCoverUploadProgress(0);
     try {
-      const asset = await cmsMedia.upload(file, {
+      const cropped = await cropImage(file, 16 / 9);
+      if (!cropped) return;
+      const asset = await cmsMedia.upload(cropped, {
         altText: coverAltText.trim(), credit: coverCredit.trim(), caption: "",
         focalPointX: null, focalPointY: null,
       }, setCoverUploadProgress);
@@ -384,7 +410,7 @@ export function ArticleEditor({ articleId }: { articleId: string | null }) {
   const isPublished = article?.status === "Published";
   const canEditContent = !article || (article.status !== "Archived" && article.status !== "Retracted" && article.status !== "Scheduled");
   const missing = !title.trim() || !body.trim() || body.length > BODY_HTML_MAX;
-  const canSave = canEditContent && !missing && (!isPublished || editReason.trim().length >= 5);
+  const canSave = canEditContent && !missing;
   const hints: WorkflowAction[] = roles?.length ? workflowHints(roles, article?.status ?? "Draft") : [];
   const meta = article ? STATUS_META[article.status] : null;
 
@@ -471,6 +497,14 @@ export function ArticleEditor({ articleId }: { articleId: string | null }) {
         </div>
       </fieldset>
 
+      {presentationDesks.includes("sports") && <fieldset className="cms-field cms-sports-fields" disabled={!canEditContent || isPublished || busy}>
+        <legend>بيانات التغطية الرياضية</legend>
+        <p className="cms-hint">حقول تحريرية خاصة باهتمامات جسور: المحترفون المصريون بالخارج، اللاعبون المجنسون، والدوري المصري.</p>
+        <label className="cms-field"><span>مسار التغطية</span><select value={sportsCoverageType} onChange={(event) => setSportsCoverageType(event.target.value)}><option value="">غير محدد</option><option value="EgyptianProfessionalsAbroad">محترفون مصريون بالخارج</option><option value="NaturalizedEgyptians">لاعبون مصريون مجنسون</option><option value="EgyptianLeague">الدوري المصري</option><option value="EgyptNationalTeam">المنتخب المصري</option><option value="General">رياضة عامة</option></select></label>
+        <label className="cms-field"><span>أسماء اللاعبين</span><input value={sportsPlayerNames} maxLength={1000} onChange={(event) => setSportsPlayerNames(event.target.value)} placeholder="افصل بين الأسماء بفاصلة" /><small>حتى 10 أسماء، تفصل بينها فاصلة عربية أو إنجليزية.</small></label>
+        <div className="cms-sports-grid"><label className="cms-field"><span>النادي أو الفريق</span><input value={sportsTeamName} maxLength={120} onChange={(event) => setSportsTeamName(event.target.value)} /></label><label className="cms-field"><span>الدوري أو البطولة</span><input value={sportsCompetitionName} maxLength={120} onChange={(event) => setSportsCompetitionName(event.target.value)} /></label><label className="cms-field"><span>الدولة / وجهة الاحتراف</span><input value={sportsCountryName} maxLength={120} onChange={(event) => setSportsCountryName(event.target.value)} /></label></div>
+      </fieldset>}
+
       {roles?.some((role) => ["SeoEditor", "SeniorEditor", "ManagingEditor", "EditorInChief"].includes(role)) && (
         <section className="cms-field" aria-labelledby="cover-image-label">
           <label id="cover-image-label">صورة غلاف الخبر</label>
@@ -536,10 +570,10 @@ export function ArticleEditor({ articleId }: { articleId: string | null }) {
 
       {isPublished && (
         <div className="cms-field">
-        <label htmlFor="edit-reason">سبب التعديل (إلزامي، 5–1000 أحرف)</label>
+        <label htmlFor="edit-reason">سبب التعديل (اختياري)</label>
           <input id="edit-reason" value={editReason} maxLength={1000} onChange={(e) => setEditReason(e.target.value)} />
           <span className="cms-hint">
-            المقال منشور: اكتب سبباً لكل تعديل. تُحفَظ النسخة السابقة في السجل، ولتنبيه القراء أضف تنويهاً أو تصحيحاً.
+            تُحفَظ النسخة السابقة مع اسم المحرر ووقت التعديل في السجل الداخلي. يظل تاريخ النشر الأصلي كما هو.
           </span>
         </div>
       )}
@@ -687,6 +721,7 @@ export function ArticleEditor({ articleId }: { articleId: string | null }) {
           version={`${article.status}|${article.lastModifiedAtUtc ?? ""}`}
         />
       )}
+      {cropper}
     </div>
   );
 }

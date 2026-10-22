@@ -726,6 +726,10 @@
   .cta-banner p { margin-bottom: 0; line-height: 1.75; }
   .cta-form--links { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); flex: 1 1 100%; width: 100%; min-width: 0; gap: 8px; }
   .cta-form__link { min-width: 0; padding-inline: 10px; text-align: center; }
+  .cta-form--subscription { flex: 1 1 100%; width: 100%; min-width: 0; grid-template-columns: minmax(0, 1fr) auto; gap: 8px; }
+  .cta-form--subscription .cta-subscription-label { grid-column: 1 / -1; }
+  .cta-form--subscription input[type="email"] { min-width: 0; }
+  .cta-form--subscription button { padding-inline: 14px; }
 
   /* Strong but calm separation for the atmaen promotion. */
   .atmaen-feature-section { padding-block: 28px; }
@@ -927,7 +931,200 @@ button.hero-main-button:focus-visible { outline: 2px solid var(--amber); outline
 .account-card h2 { margin-top: 1.5rem; font-size: 1.1rem; }
 .account-card ul { padding-inline-start: 1.5rem; }
 
+/* Auth flow follows the final demo's split panel, with live account actions. */
+.account-page { min-height: 0; padding: 0; background: #f4f6f9; }
+.auth-shell { width: 100%; min-height: min(760px, calc(100vh - 208px)); }
+.auth-visual { min-width: 0; padding: clamp(2rem, 6vw, 5.5rem); background: linear-gradient(145deg, #14233b, #1c56bd); }
+.auth-visual-brand { display: inline-flex; align-items: center; gap: 18px; margin-bottom: clamp(2.5rem, 7vw, 6rem); color: #fff; text-decoration: none; }
+.auth-visual-brand img { width: 104px; height: 94px; object-fit: contain; }
+.auth-visual-brand span { max-width: 340px; padding-bottom: .35rem; border-bottom: 2px solid #f07c1c; font-size: clamp(1.05rem, 1.4vw, 1.35rem); font-weight: 800; line-height: 1.7; }
+.auth-visual h2 { max-width: 560px; font-size: clamp(1.8rem, 3.1vw, 2.65rem); line-height: 1.6; }
+.auth-visual-nowrap { white-space: nowrap; }
+.auth-form-side { width: 460px; padding: clamp(1.5rem, 4vw, 2.8rem); align-items: center; position: relative; display: flex; flex-direction: column; }
+.auth-panel-bottom { width: 100%; max-width: 370px; margin: auto auto 0; padding-top: 1.15rem; text-align: center; }
+.auth-panel-bottom a { display: inline-flex; align-items: center; gap: .45rem; padding: .55rem .9rem; border: 1px solid #dce5f2; border-radius: 8px; color: #1554ad; background: #f8faff; font-size: .9rem; font-weight: 800; text-decoration: none; transition: background-color .18s ease, border-color .18s ease, transform .18s ease; }
+.auth-panel-bottom a:hover { border-color: #b8cbea; background: #eef4ff; transform: translateY(-1px); }
+.auth-account-card { width: 100%; max-width: 370px; margin: 0 auto; padding: 0; border: 0; border-radius: 0; background: transparent; box-shadow: none; }
+.auth-account-card h1 { margin: .55rem 0 .35rem; font-size: clamp(1.8rem, 3vw, 2.2rem); }
+.auth-account-card > p { margin: 0; font-size: .9rem; line-height: 1.75; }
+.auth-account-card .auth-tabs { margin: 1.35rem 0 1.15rem; }
+.auth-tabs button { min-height: 40px; font-family: inherit; cursor: pointer; transition: color .18s ease, background-color .18s ease, box-shadow .18s ease; }
+.auth-form { display: grid; gap: .95rem; }
+.auth-field { display: grid; gap: .4rem; color: #25364d; font-size: .92rem; font-weight: 700; }
+.auth-field > input, .auth-password input { width: 100%; min-width: 0; min-height: 48px; padding: .65rem .8rem; border: 1px solid #d7dee8; border-radius: 8px; background: #fff; color: #172334; font: inherit; }
+.auth-password { display: flex; align-items: center; gap: .5rem; }
+.auth-password button { flex: none; padding: .55rem .65rem; border: 1px solid #d7dee8; border-radius: 7px; background: #fff; color: #1554ad; font: inherit; font-size: .8rem; font-weight: 700; cursor: pointer; }
+.auth-field input:focus-visible { outline: 3px solid #1d5bc144; border-color: #1d5bc1; }
+.auth-forgot-link { justify-self: start; padding: 0; border: 0; background: none; color: #1554ad; font: inherit; font-size: .83rem; font-weight: 700; cursor: pointer; }
+.auth-terms { display: flex !important; grid-template-columns: auto 1fr; align-items: center; gap: .45rem !important; font-size: .82rem !important; font-weight: 500 !important; }
+.auth-terms input { width: 16px; height: 16px; accent-color: #1c56bd; }
+.auth-terms a { color: #1554ad; }
+.auth-submit { width: 100%; margin-top: .15rem; }
+.auth-form-footer { margin: 1rem 0 0; color: #536276; font-size: .88rem; }
+.auth-form-footer button { padding: 0; border: 0; background: none; color: #1554ad; font: inherit; font-weight: 800; cursor: pointer; }
+.auth-recovery-note { padding: 1rem; border-radius: 9px; background: #f4f6f9; color: #586577; font-size: .88rem; line-height: 1.8; }
+.account-profile-card { max-width: 520px; }
+.mobile-header-account { display: none; }
+.bluebarr .nav-sticky-actions { opacity: 1; visibility: visible; transform: none; }
+@media (min-width: 1025px) {
+  .header-actions > [data-open-search] { display: none; }
+}
+
 @media (max-width: 720px) {
   .info-page-content, .info-page-content--policy { grid-template-columns: 1fr; gap: 1.5rem; padding-block: 2rem; }
   .info-page-hero { padding-block: 1.75rem; }
+}
+
+@media (max-width: 860px) {
+  .account-page { padding: 0; }
+  .auth-shell { min-height: 0; }
+  .auth-visual { display: none; }
+  .auth-form-side { width: 100%; min-height: min(640px, calc(100vh - 190px)); padding: 1.5rem clamp(1rem, 5vw, 2rem) 2.5rem; }
+  .auth-account-card { max-width: 440px; }
+  .mobile-header-account { display: flex; align-items: center; gap: 5px; order: 4; }
+  .mobile-header-account .btn-nav { min-width: 40px; min-height: 40px; padding: 5px 8px; border: 1px solid #dce3ee; border-radius: 7px; font-size: .76rem; }
+  .mobile-header-account .btn-ghostt { border-color: #d4deeb; background: #fff; color: #1c56bd; }
+  .mobile-header-account .btn-accent { border-color: #1c56bd; background: #1c56bd; color: #fff; }
+}
+
+/* CMS site structure controls */
+.header-branding { display: flex; align-items: center; gap: clamp(12px, 2vw, 28px); min-width: 0; }
+.header-branding .logo { flex: 0 0 auto; }
+.header-branding .logo-img { height: 128px; width: 145px; max-width: none; object-fit: contain; }
+.header-branding .logo-slogan { font-size: 13px; }
+.header-leadership {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 18px;
+  padding-inline-start: 22px;
+  border: 0;
+  font-family: "Cairo", sans-serif;
+  white-space: nowrap;
+}
+.leadership-credit-group { display: flex; flex-direction: column; align-items: center; text-align: center; line-height: 1.4; }
+.leadership-credit-roles { display: flex; flex-direction: column; align-items: center; }
+.leadership-credit-role, .leadership-credit-roles span { color: #444; font-size: 15px; font-weight: 600; letter-spacing: 0; }
+.leadership-credit-group strong { color: var(--text); font-size: 16px; font-weight: 800; margin-top: 1px; }
+.drawer-leadership { display: none; }
+.cms-leadership-fields { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: .8rem; }
+.home-poll-section { padding-block: 12px 32px; }
+.cta-form--subscription { flex: 0 1 620px; min-width: min(100%, 540px); display: grid; grid-template-columns: auto minmax(150px, 1fr) auto; align-items: center; gap: 8px; }
+.cta-form--subscription .cta-subscription-label { color: #fff; font-size: 13.5px; font-weight: 700; white-space: nowrap; }
+.cta-form--subscription input[type="email"] { width: 100%; min-width: 0; min-height: 44px; border-radius: 7px; }
+.cta-form--subscription button { min-height: 44px; padding: 10px 18px; cursor: pointer; }
+.cta-form--subscription button:disabled { opacity: .62; cursor: not-allowed; }
+.cta-form--subscription .cta-consent { grid-column: 1 / -1; display: flex; align-items: center; gap: 7px; color: #e4edff; font-size: 11.5px; line-height: 1.5; }
+.cta-form--subscription .cta-consent input { min-width: 15px; width: 15px; height: 15px; margin: 0; accent-color: #f3a62c; }
+.cta-form--subscription .cta-subscription-status { grid-column: 1 / -1; min-height: 1.25em; margin: 0; color: #fff; font-size: 11.5px; line-height: 1.5; }
+.cta-form--subscription .cta-subscription-status.is-error { color: #ffe1d7; }
+.cta-form--subscription .cta-honeypot { position: absolute; inset-inline-start: -10000px; width: 1px; height: 1px; overflow: hidden; }
+.home-poll-card { display: grid; grid-template-columns: minmax(220px,.7fr) minmax(0,1.3fr); gap: clamp(1.25rem,4vw,3.5rem); padding: clamp(1.25rem,3vw,2.5rem); border: 1px solid #eadccf; border-radius: 18px; background: linear-gradient(120deg,#fffaf5,#fff 72%); box-shadow: 0 16px 45px #6b3b1510; }
+.home-poll-heading h2 { margin: .4rem 0; color: #172b47; font-size: clamp(1.4rem,2.5vw,2rem); font-weight: 900; }
+.home-poll-heading p { color: #687587; line-height: 1.8; }
+.home-poll-content h3 { margin: 0 0 1rem; font-size: 1.12rem; line-height: 1.8; color: #1b2b42; }
+.home-poll-options { display: grid; gap: .55rem; }
+.home-poll-option { position: relative; display: grid; grid-template-columns: auto minmax(0,1fr); align-items: center; gap: .65rem; padding: .7rem .8rem; overflow: hidden; border: 1px solid #e1e6ec; border-radius: 9px; background: #fff; cursor: pointer; }
+.home-poll-option.is-selected { border-color: #1c56bd; background: #f4f8ff; }
+.home-poll-option input { accent-color: #1c56bd; }
+.home-poll-option-label { position: relative; z-index: 1; color: #25364c; font-size: .92rem; }
+.home-poll-result { grid-column: 2; position: relative; display: flex; justify-content: space-between; align-items: center; min-height: 5px; color: #44546a; font-size: .78rem; }
+.home-poll-result i { position: absolute; inset-block: 0; inset-inline-start: 0; z-index: 0; display: block; border-radius: 999px; background: #e7effb; transition: width .6s cubic-bezier(.2,.75,.3,1); }
+.home-poll-result b { position: relative; z-index: 1; }
+.home-poll-submit { margin-top: 1rem; min-height: 42px; padding-inline: 1.3rem; border: 0; border-radius: 8px; background: #1c56bd; color: #fff; font: inherit; font-weight: 800; cursor: pointer; }
+.home-poll-submit:disabled { opacity: .55; cursor: not-allowed; }
+.home-poll-thanks,.home-poll-closed,.home-poll-message { margin: .7rem 0 0; color: #397257; font-size: .87rem; }
+.cms-poll-form { display: grid; gap: .7rem; }
+.cms-poll-dates { display: grid; grid-template-columns: repeat(2,minmax(0,1fr)); gap: .8rem; }
+.cms-poll-active { display: flex; align-items: center; gap: .5rem; margin-block: .4rem; font-weight: 700; }
+.cms-poll-list { display: grid; gap: .65rem; }
+.cms-poll-item { display: flex; justify-content: space-between; align-items: center; gap: 1rem; padding: 1rem; border: 1px solid #e1e7ef; border-radius: 10px; background: #fff; }
+.cms-poll-item h3 { margin: .45rem 0; color: #243751; }
+.cms-poll-item p,.cms-poll-item small { color: #738092; }
+.cms-poll-item p { margin: .25rem 0; line-height: 1.6; }
+.cms-image-crop-modal { position: fixed; inset: 50% auto auto 50%; z-index: 2000; transform: translate(-50%,-50%); width: min(760px,calc(100vw - 28px)); max-height: min(92vh,900px); overflow: auto; padding: clamp(1rem,3vw,1.5rem); border: 1px solid #dce4ef; border-radius: 16px; background: #fff; box-shadow: 0 0 0 100vmax #10233f80, 0 28px 100px #10233f4a; }
+.cms-image-crop-head { display: flex; justify-content: space-between; gap: 1rem; align-items: flex-start; margin-bottom: 1rem; }
+.cms-image-crop-head h2 { margin: 0 0 .25rem; }
+.cms-image-crop-head p { margin: 0; color: #687587; }
+.cms-image-crop-frame { position: relative; width: 100%; overflow: hidden; border-radius: 10px; background: repeating-conic-gradient(#eef1f5 0% 25%,#fff 0% 50%) 50%/24px 24px; cursor: grab; touch-action: none; }
+.cms-image-crop-frame:active { cursor: grabbing; }
+.cms-image-crop-frame img { max-width: none; }
+.cms-image-crop-guides { position: absolute; inset: 0; pointer-events: none; background: linear-gradient(90deg,transparent 33.15%,#ffffffaa 33.33%,transparent 33.55%,transparent 66.45%,#ffffffaa 66.66%,transparent 66.85%),linear-gradient(0deg,transparent 33.15%,#ffffffaa 33.33%,transparent 33.55%,transparent 66.45%,#ffffffaa 66.66%,transparent 66.85%); box-shadow: inset 0 0 0 1px #ffffffba; }
+.cms-image-crop-controls { display: flex; flex-wrap: wrap; align-items: end; gap: 1rem; margin-block: .8rem; }
+.cms-image-crop-controls label { display: grid; gap: .3rem; color: #46566b; font-weight: 700; }
+.cms-image-crop-controls select { min-height: 38px; padding: .4rem; border: 1px solid #d7dee8; border-radius: 7px; background: #fff; }
+.cms-image-crop-zoom input { min-width: 220px; accent-color: #1c56bd; }
+@media (max-width: 720px) { .home-poll-card { grid-template-columns: 1fr; gap: .75rem; } .cms-poll-dates { grid-template-columns: 1fr; } .cms-poll-item { align-items: flex-start; flex-direction: column; } }
+@media (max-width: 860px) { .article-staff-toolbar { margin-block: 5px 12px; } }
+.article-staff-toolbar { display: flex; align-items: center; justify-content: space-between; gap: .75rem; margin-block: 8px 14px; padding: 9px 14px; border: 1px solid #cad9ef; border-radius: 10px; background: linear-gradient(100deg,#f4f8ff,#fff); color: #29415f; font-size: .83rem; animation: staffToolbarIn .35s ease-out both; }
+.article-staff-toolbar > span { display: inline-flex; align-items: center; gap: 8px; font-weight: 800; }
+.article-staff-toolbar i { width: 8px; height: 8px; border-radius: 50%; background: #1c9a68; box-shadow: 0 0 0 4px #1c9a6819; }
+.article-staff-toolbar div { display: flex; gap: .55rem; }
+.article-staff-toolbar a { padding: .45rem .75rem; border-radius: 7px; background: #1d56b7; color: white; font-weight: 800; text-decoration: none; }
+.article-staff-toolbar a:last-child { background: #fff; color: #1d56b7; border: 1px solid #cad9ef; }
+@keyframes staffToolbarIn { from { opacity: 0; transform: translateY(-5px); } to { opacity: 1; transform: translateY(0); } }
+@media (max-width: 860px) {
+  .header-branding { gap: 8px; }
+  .header-branding .logo { flex-direction: column; gap: 0; }
+  .header-branding .logo-img { height: 72px; width: 82px; max-width: none; }
+  .header-branding .logo-slogan { display: none; }
+  .cms-leadership-fields { grid-template-columns: 1fr; }
+}
+@media (max-width: 1180px) {
+  .header-branding .header-leadership { display: none; }
+  .drawer-leadership {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 14px 20px;
+    margin: 0 0 18px;
+    padding: 4px 0 16px;
+    border-bottom: 1px solid #e5eaf0;
+  }
+  .drawer-leadership .leadership-credit-role,
+  .drawer-leadership .leadership-credit-roles span { font-size: 14px; }
+  .drawer-leadership .leadership-credit-group strong { font-size: 15px; }
+}
+@media (prefers-reduced-motion: reduce) { .article-staff-toolbar { animation: none; } }
+.cms-structure-group { margin-top: 1.25rem; }
+.cms-structure-group h3 { margin: 0 0 .65rem; color: #526174; font-size: .88rem; }
+.cms-structure-group ol, .cms-structure-sections { display: grid; gap: .55rem; margin: 0; padding: 0; list-style: none; }
+.cms-structure-group li { display: grid; grid-template-columns: 2rem minmax(8rem, 1fr) minmax(10rem, 1.4fr) auto; align-items: center; gap: .75rem; padding: .75rem; border: 1px solid #e2e8f0; border-radius: 10px; background: #fff; }
+.cms-structure-group li.is-muted { opacity: .65; background: #f8fafc; }
+.cms-structure-order { display: inline-grid; place-items: center; width: 1.8rem; height: 1.8rem; border-radius: 50%; background: #edf3ff; color: #1b55b8; font-weight: 800; }
+.cms-structure-path { color: #718096; font-size: .78rem; overflow-wrap: anywhere; }
+.cms-structure-controls { display: flex; align-items: center; justify-content: flex-start; flex-wrap: wrap; gap: .4rem; }
+.cms-structure-controls label { display: inline-flex; align-items: center; gap: .3rem; white-space: nowrap; }
+.cms-structure-controls select { min-height: 36px; border: 1px solid #d9e1ec; border-radius: 7px; background: white; padding: .35rem; }
+.cms-structure-add { display: flex; gap: .7rem; margin-block: 1rem; }
+.cms-structure-add select { flex: 1; min-height: 44px; padding: .6rem; border: 1px solid #d9e1ec; border-radius: 8px; background: #fff; }
+.cms-structure-sections > li { padding: 1rem; border: 1px solid #e2e8f0; border-radius: 12px; background: #fbfcfe; }
+.cms-structure-section-head { display: grid; grid-template-columns: auto minmax(10rem, 1fr) minmax(10rem, .8fr); align-items: end; gap: .75rem; }
+.cms-structure-section-head .cms-field { margin: 0; }
+.cms-structure-section-head .cms-structure-controls { grid-column: 2 / -1; }
+.cms-structure-sections > li > small { display: block; margin-top: .6rem; }
+.cms-sports-fields { margin-block: 1rem; padding: 1rem; border: 1px solid #c9d8f2; border-radius: 12px; background: linear-gradient(140deg, #f8fbff, #fff); }
+.cms-sports-fields legend { padding-inline: .5rem; color: #194e9e; font-weight: 800; }
+.cms-sports-fields > .cms-field { margin-top: .8rem; }
+.cms-sports-grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: .75rem; }
+.article-sports-facts { display: flex; flex-wrap: wrap; align-items: center; gap: .5rem .75rem; margin: 1.5rem auto; padding: .85rem 1rem; max-width: 920px; border: 1px solid #d9e4f6; border-inline-start: 4px solid #1c56bd; border-radius: 10px; background: #f7faff; color: #23334d; }
+.article-sports-facts strong { color: #164b9c; }
+.article-sports-facts span { font-size: .9rem; }
+.home-config-section--web { display: block; }
+.home-config-section--mobile { display: none; }
+@media (max-width: 860px) {
+  .home-config-section--web { display: none; }
+  .home-config-section--mobile { display: block; }
+  .cms-structure-group li { grid-template-columns: 2rem minmax(0, 1fr); }
+  .cms-structure-path { grid-column: 2; }
+  .cms-structure-group .cms-structure-controls { grid-column: 1 / -1; }
+  .cms-structure-section-head { grid-template-columns: auto minmax(0, 1fr); }
+  .cms-structure-section-head .cms-field:nth-of-type(2), .cms-structure-section-head .cms-structure-controls { grid-column: 1 / -1; }
+  .cms-sports-grid { grid-template-columns: 1fr; }
+}
+@media (max-width: 720px) {
+  .cta-form--subscription { flex: 1 1 100%; width: 100%; min-width: 0; grid-template-columns: minmax(0, 1fr) auto; gap: 8px; }
+  .cta-form--subscription .cta-subscription-label { grid-column: 1 / -1; }
+  .cta-form--subscription input[type="email"] { min-width: 0; }
+  .cta-form--subscription button { padding-inline: 14px; }
 }
