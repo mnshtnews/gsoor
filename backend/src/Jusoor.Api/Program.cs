@@ -89,15 +89,15 @@ if (clientDemoMode)
         "CLIENT DEMO MODE ENABLED: use only a dedicated disposable preview database and synthetic content. Atmaen OTP verification is disabled; never store real applicant data here.");
 }
 
-// Hangfire storage is configured HERE — after Build(), reading app.Configuration
-// (fully merged: real env vars in production/dev, or WebApplicationFactory's
-// test overrides under integration tests) — not inside AddInfrastructure,
-// which runs before Build() and would hit the same eager-config-read bug
-// already fixed there for the DbContext/Jwt sections. See DependencyInjection.cs's
-// comment on the Hangfire registration for the full explanation.
-var hangfireConnectionString = app.Configuration.GetConnectionString("Postgres")
-    ?? throw new InvalidOperationException("ConnectionStrings:Postgres is missing (required for Hangfire storage).");
-GlobalConfiguration.Configuration.UsePostgreSqlStorage(options => options.UseNpgsqlConnection(hangfireConnectionString));
+// Hangfire storage is configured after Build() only when background jobs are
+// enabled. This keeps the free preview database idle between user requests.
+var backgroundJobsEnabled = app.Configuration.GetValue("BackgroundJobs:Enabled", true);
+if (backgroundJobsEnabled)
+{
+    var hangfireConnectionString = app.Configuration.GetConnectionString("Postgres")
+        ?? throw new InvalidOperationException("ConnectionStrings:Postgres is missing (required for Hangfire storage).");
+    GlobalConfiguration.Configuration.UsePostgreSqlStorage(options => options.UseNpgsqlConnection(hangfireConnectionString));
+}
 
 app.UseMiddleware<ExceptionHandlingMiddleware>();
 
@@ -107,12 +107,15 @@ if (app.Environment.IsDevelopment())
     app.UseSwaggerUI();
 }
 
+app.MapGet("/healthz", () => Results.Ok(new { status = "ok" }))
+    .AllowAnonymous();
+
 // Auto-migrate + seed roles on boot. Always in Development, so `docker compose up`
 // satisfies the Phase 0 DoD ("new dev running locally in under an hour") without
 // a manual migration step. Staging/production apply migrations explicitly during
-// deploy (CI/CD job), never automatically on boot — EXCEPT a hosted client-trial
-// environment (e.g. Railway), which has no separate deploy job and opts in
-// explicitly with Bootstrap__RunOnStartup=true. Swagger stays Development-only.
+// deploy (CI/CD job), never automatically on boot — EXCEPT a hosted trial
+// environment that has no separate deploy job and explicitly opts in with
+// Bootstrap__RunOnStartup=true. Swagger stays Development-only.
 if (app.Environment.IsDevelopment() || app.Configuration.GetValue<bool>("Bootstrap:RunOnStartup"))
 {
     using var scope = app.Services.CreateScope();
@@ -130,7 +133,11 @@ if (app.Environment.IsDevelopment() || app.Configuration.GetValue<bool>("Bootstr
         scope.ServiceProvider.GetRequiredService<ILoggerFactory>().CreateLogger("DevelopmentNewsroomSeeder"));
 }
 
-app.UseHttpsRedirection();
+// A TLS-terminating reverse proxy (for example Caddy on the VPS) forwards
+// requests to this container over HTTP. Disable in-container redirects there
+// to avoid a proxy redirect loop; local deployments keep the default behavior.
+if (app.Configuration.GetValue("HttpsRedirection:Enabled", true))
+    app.UseHttpsRedirection();
 app.UseCors("Frontend");
 app.UseAuthentication();
 app.UseAuthorization();
@@ -150,18 +157,21 @@ using (var scope = app.Services.CreateScope())
     var ingestionOptions = scope.ServiceProvider.GetRequiredService<IOptions<IngestionOptions>>().Value;
     var cronExpression = $"*/{ingestionOptions.ScheduleIntervalMinutes} * * * *";
 
-    RecurringJob.AddOrUpdate<SourceIngestionSweepJob>(
-        "source-ingestion-sweep",
-        job => job.RunAsync(JobCancellationToken.Null),
-        cronExpression);
+    if (backgroundJobsEnabled)
+    {
+        RecurringJob.AddOrUpdate<SourceIngestionSweepJob>(
+            "source-ingestion-sweep",
+            job => job.RunAsync(JobCancellationToken.Null),
+            cronExpression);
 
-    // Slice 24: the schedule timestamp on each approved article is durable in
-    // PostgreSQL. A one-minute sweep makes retries and process restarts safe;
-    // the worker performs an idempotent status-checked transition plus audit.
-    RecurringJob.AddOrUpdate<ScheduledEditorialPublicationJob>(
-        ScheduledEditorialPublicationJob.JobId,
-        job => job.RunAsync(JobCancellationToken.Null),
-        Cron.Minutely());
+        // Slice 24: the schedule timestamp on each approved article is durable in
+        // PostgreSQL. A one-minute sweep makes retries and process restarts safe;
+        // the worker performs an idempotent status-checked transition plus audit.
+        RecurringJob.AddOrUpdate<ScheduledEditorialPublicationJob>(
+            ScheduledEditorialPublicationJob.JobId,
+            job => job.RunAsync(JobCancellationToken.Null),
+            Cron.Minutely());
+    }
 }
 
 app.Run();

@@ -1,0 +1,92 @@
+services:
+  postgres:
+    image: postgres:17-alpine
+    restart: unless-stopped
+    environment:
+      POSTGRES_DB: jusoor
+      POSTGRES_USER: jusoor
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:?Set a strong POSTGRES_PASSWORD in deploy/vps/.env}
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U jusoor -d jusoor"]
+      interval: 10s
+      timeout: 5s
+      retries: 10
+    networks: [internal]
+
+  api:
+    build:
+      context: ../../backend
+      dockerfile: Dockerfile
+    restart: unless-stopped
+    depends_on:
+      postgres:
+        condition: service_healthy
+    environment:
+      ASPNETCORE_ENVIRONMENT: Production
+      ASPNETCORE_URLS: http://+:8080
+      HttpsRedirection__Enabled: "false"
+      ConnectionStrings__Postgres: Host=postgres;Port=5432;Database=jusoor;Username=jusoor;Password=${POSTGRES_PASSWORD};Include Error Detail=false
+      Jwt__SigningKey: ${JWT_SIGNING_KEY:?Set JWT_SIGNING_KEY in deploy/vps/.env}
+      Jwt__Issuer: ${JWT_ISSUER:-jusoor-api}
+      Jwt__Audience: ${JWT_AUDIENCE:-jusoor-clients}
+      Bootstrap__RunOnStartup: ${BOOTSTRAP_RUN_ON_STARTUP:-false}
+      FieldEncryption__KeyVaultUri: ${FIELD_ENCRYPTION_KEY_VAULT_URI:?Set the Azure Key Vault URI}
+      FieldEncryption__KeyEncryptionKeyName: ${FIELD_ENCRYPTION_KEY_NAME:?Set the Azure Key Vault key name}
+      AZURE_CLIENT_ID: ${AZURE_CLIENT_ID:?Set Azure workload/service principal client ID}
+      AZURE_TENANT_ID: ${AZURE_TENANT_ID:?Set Azure tenant ID}
+      AZURE_CLIENT_SECRET: ${AZURE_CLIENT_SECRET:?Set Azure client secret}
+      Twilio__AccountSid: ${TWILIO_ACCOUNT_SID:?Set Twilio Account SID}
+      Twilio__AuthToken: ${TWILIO_AUTH_TOKEN:?Set Twilio Auth Token}
+      Twilio__VerifyServiceSid: ${TWILIO_VERIFY_SERVICE_SID:?Set Twilio Verify Service SID}
+      Cors__AllowedOrigins__0: https://${SITE_DOMAIN:?Set SITE_DOMAIN, e.g. gosour.net}
+      Cors__AllowedOrigins__1: https://www.${SITE_DOMAIN:?Set SITE_DOMAIN, e.g. gosour.net}
+      BackgroundJobs__Enabled: "true"
+      SUPABASE_URL: ${SUPABASE_URL:?Set Supabase project URL}
+      SUPABASE_STORAGE_BUCKET: ${SUPABASE_STORAGE_BUCKET:-jusoor-media}
+      SUPABASE_SERVICE_ROLE_KEY: ${SUPABASE_SERVICE_ROLE_KEY:?Set Supabase service role key}
+    networks: [internal]
+
+  web:
+    build:
+      context: ../../frontend
+      dockerfile: Dockerfile
+      args:
+        NEXT_PUBLIC_API_BASE_URL: https://api.${SITE_DOMAIN:?Set SITE_DOMAIN, e.g. gosour.net}
+    restart: unless-stopped
+    depends_on: [api]
+    environment:
+      NODE_ENV: production
+      PORT: 3000
+      HOSTNAME: 0.0.0.0
+      SITE_URL: https://${SITE_DOMAIN:?Set SITE_DOMAIN, e.g. gosour.net}
+      NEXT_PUBLIC_API_BASE_URL: https://api.${SITE_DOMAIN:?Set SITE_DOMAIN, e.g. gosour.net}
+      API_INTERNAL_BASE_URL: http://api:8080
+    networks: [internal]
+
+  caddy:
+    image: caddy:2-alpine
+    restart: unless-stopped
+    depends_on: [web, api]
+    environment:
+      SITE_DOMAIN: ${SITE_DOMAIN:?Set SITE_DOMAIN, e.g. gosour.net}
+      ACME_EMAIL: ${ACME_EMAIL:?Set an email for TLS certificate notices}
+    ports:
+      - "80:80"
+      - "443:443"
+      - "443:443/udp"
+    volumes:
+      - ./Caddyfile:/etc/caddy/Caddyfile:ro
+      - caddy_data:/data
+      - caddy_config:/config
+    networks: [internal]
+
+volumes:
+  postgres_data:
+  caddy_data:
+  caddy_config:
+
+networks:
+  internal:
+    name: jusoor-production

@@ -1,6 +1,6 @@
 -- =====================================================================
 -- Jusoor — reset ALL editorial test content before handing over to the client.
--- Run against the TRIAL database only (Railway Postgres or your trial DB).
+-- Run against the isolated TRIAL database only, never production.
 -- Removes: articles, their revisions, workflow history, corrections, media records.
 -- Keeps:   users, roles, categories/tags, countries/cities, Atmaen cases, settings.
 -- =====================================================================

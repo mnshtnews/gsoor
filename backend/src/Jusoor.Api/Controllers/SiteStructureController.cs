@@ -37,7 +37,8 @@ public sealed class SiteStructureController(IApplicationDbContext context) : Con
 
     public sealed record NavigationItem(string Key, string Label, string Href, bool IsVisible, int DisplayOrder, string Group);
     public sealed record HomepageSection(string Key, string Title, string DeskSlug, string Layout, bool IsEnabled, bool ShowOnWeb, bool ShowOnMobile, int DisplayOrder);
-    public sealed record LeadershipInput(string BoardChairman, string EditorInChief, string ExecutiveEditor);
+    public sealed record LeadershipEntry(string Id, string Title, string Name);
+    public sealed record LeadershipInput(IReadOnlyList<LeadershipEntry>? Entries);
     public sealed record SiteStructureDocument(IReadOnlyList<NavigationItem> Navigation, IReadOnlyList<HomepageSection> HomepageSections, LeadershipInput Leadership, DateTimeOffset? LastModifiedAtUtc);
     public sealed record NavigationInput(string Key, string Label, bool IsVisible, int DisplayOrder, string Group);
     public sealed record HomepageSectionInput(string Key, string Title, string DeskSlug, string Layout, bool IsEnabled, bool ShowOnWeb, bool ShowOnMobile, int DisplayOrder);
@@ -62,7 +63,7 @@ public sealed class SiteStructureController(IApplicationDbContext context) : Con
 
         var navigation = input.Navigation.Select(x => new NavigationItem(x.Key, x.Label.Trim(), NavigationCatalog[x.Key].Href, x.IsVisible, x.DisplayOrder, x.Group)).OrderBy(x => x.Group == "primary" ? 0 : 1).ThenBy(x => x.DisplayOrder).ToArray();
         var sections = input.HomepageSections.Select(x => new HomepageSection(x.Key, x.Title.Trim(), x.DeskSlug, x.Layout, x.IsEnabled, x.ShowOnWeb, x.ShowOnMobile, x.DisplayOrder)).OrderBy(x => x.DisplayOrder).ToArray();
-        var leadership = input.Leadership ?? Defaults().Leadership;
+        var leadership = NormalizeLeadership(input.Leadership);
         var settings = await context.SiteStructureSettings.FirstOrDefaultAsync(x => x.Key == SiteStructureSettings.SingletonKey, ct);
         if (settings is null)
         {
@@ -86,7 +87,7 @@ public sealed class SiteStructureController(IApplicationDbContext context) : Con
         {
             var navigation = JsonSerializer.Deserialize<NavigationItem[]>(settings.NavigationJson, JsonOptions) ?? Defaults().Navigation.ToArray();
             var sections = JsonSerializer.Deserialize<HomepageSection[]>(settings.HomepageSectionsJson, JsonOptions) ?? [];
-            var leadership = JsonSerializer.Deserialize<LeadershipInput>(settings.LeadershipJson, JsonOptions) ?? Defaults().Leadership;
+            var leadership = ReadLeadership(settings.LeadershipJson);
             // Hrefs always come from this server-owned catalog; stored text can never create an external or unsafe navigation target.
             navigation = navigation.Where(x => NavigationCatalog.ContainsKey(x.Key) || x.Key == "various").Select(x => x.Key == "various" ? x with { Key = "fatwas", Label = "الفتاوى" } : x).Where(x => NavigationCatalog.ContainsKey(x.Key)).Select(x => x with { Href = NavigationCatalog[x.Key].Href }).OrderBy(x => x.Group == "primary" ? 0 : 1).ThenBy(x => x.DisplayOrder).ToArray();
             sections = sections.Where(x => EditorialDesk.IsValid(x.DeskSlug))
@@ -100,13 +101,52 @@ public sealed class SiteStructureController(IApplicationDbContext context) : Con
     private static SiteStructureDocument Defaults()
     {
         var nav = NavigationCatalog.Select((pair, index) => new NavigationItem(pair.Key, pair.Value.Label, pair.Value.Href, true, index, index <= 6 ? "primary" : "more")).ToArray();
-        return new SiteStructureDocument(nav, [], new LeadershipInput("", "أحمد سليمان", "أشرف جبريل"), null);
+        return new SiteStructureDocument(nav, [], DefaultLeadership(), null);
+    }
+
+    private static LeadershipInput DefaultLeadership() => new(new[]
+    {
+        new LeadershipEntry("board-editor", "رئيس مجلس الإدارة ورئيس التحرير", "أحمد سليمان"),
+        new LeadershipEntry("executive-editor", "رئيس التحرير التنفيذي", "أشرف جبريل")
+    });
+
+    private static LeadershipInput ReadLeadership(string json)
+    {
+        try
+        {
+            using var document = JsonDocument.Parse(json);
+            var root = document.RootElement;
+            if (root.TryGetProperty("entries", out _))
+                return NormalizeLeadership(JsonSerializer.Deserialize<LeadershipInput>(json, JsonOptions));
+
+            // Backward compatibility for persisted settings from the former fixed fields.
+            string ReadLegacy(string property) => root.TryGetProperty(property, out var value) && value.ValueKind == JsonValueKind.String
+                ? value.GetString() ?? ""
+                : "";
+            var firstName = ReadLegacy("editorInChief");
+            if (string.IsNullOrWhiteSpace(firstName)) firstName = ReadLegacy("boardChairman");
+            var executiveName = ReadLegacy("executiveEditor");
+            var migrated = DefaultLeadership().Entries!.Select(x => x.Id == "board-editor" ? x with { Name = firstName } : x with { Name = executiveName }).ToArray();
+            return new LeadershipInput(migrated);
+        }
+        catch (JsonException) { return DefaultLeadership(); }
+    }
+
+    private static LeadershipInput NormalizeLeadership(LeadershipInput? leadership)
+    {
+        if (leadership?.Entries is not { } entries) return DefaultLeadership();
+        return new LeadershipInput(entries.Select(x => new LeadershipEntry(x.Id?.Trim() ?? "", x.Title?.Trim() ?? "", x.Name?.Trim() ?? "")).ToArray());
     }
 
     private static string? Validate(SaveInput input)
     {
         if (input.Navigation is null || input.HomepageSections is null) return "أرسل إعدادات التنقل وأقسام الرئيسية.";
-        if (input.Leadership is { } leadership && new[] { leadership.BoardChairman, leadership.EditorInChief, leadership.ExecutiveEditor }.Any(name => name?.Trim().Length > 100)) return "يجب ألا يتجاوز كل اسم 100 حرف.";
+        if (input.Leadership?.Entries is not { } leaders || leaders.Count is < 2 or > 10) return "أضف الحقلين الأساسيين، ويمكن إدارة حتى 8 حقول إضافية.";
+        if (leaders.Select(x => x.Id).Distinct(StringComparer.Ordinal).Count() != leaders.Count) return "معرّفات حقول القيادة يجب أن تكون فريدة.";
+        if (leaders[0].Id != "board-editor" || leaders[0].Title != "رئيس مجلس الإدارة ورئيس التحرير" || leaders[1].Id != "executive-editor" || leaders[1].Title != "رئيس التحرير التنفيذي")
+            return "الحقلان الأساسيان للقيادة لا يمكن حذفهما أو تغيير مسماهما.";
+        if (leaders.Any(x => string.IsNullOrWhiteSpace(x.Id) || x.Id.Length > 80 || string.IsNullOrWhiteSpace(x.Title) || x.Title.Trim().Length > 80 || x.Name?.Trim().Length > 100))
+            return "تحقق من مسميات وأسماء الحقول (المسمى حتى 80 حرفًا والاسم حتى 100 حرف).";
         if (input.Navigation.Count != NavigationCatalog.Count || input.Navigation.Select(x => x.Key).Distinct(StringComparer.Ordinal).Count() != NavigationCatalog.Count || input.Navigation.Any(x => !NavigationCatalog.ContainsKey(x.Key)))
             return "يجب أن تحتوي القائمة على روابط جسور المعتمدة مرة واحدة لكل رابط.";
         if (input.Navigation.Any(x => string.IsNullOrWhiteSpace(x.Label) || x.Label.Trim().Length > 80 || x.DisplayOrder < 0 || x.Group is not ("primary" or "more")))

@@ -263,12 +263,15 @@ public static class DependencyInjection
         // DbContext/Jwt sections. Storage is configured in Program.cs instead,
         // after Build(), once configuration is guaranteed fully merged (real
         // env vars AND WebApplicationFactory test overrides alike).
-        services.AddHangfire(config => config
-            .SetDataCompatibilityLevel(CompatibilityLevel.Version_180)
-            .UseSimpleAssemblyNameTypeSerializer()
-            .UseRecommendedSerializerSettings());
+        if (configuration.GetValue("BackgroundJobs:Enabled", true))
+        {
+            services.AddHangfire(config => config
+                .SetDataCompatibilityLevel(CompatibilityLevel.Version_180)
+                .UseSimpleAssemblyNameTypeSerializer()
+                .UseRecommendedSerializerSettings());
 
-        services.AddHangfireServer();
+            services.AddHangfireServer();
+        }
         services.AddScoped<Scheduling.IngestSourceJob>();
         services.AddScoped<Scheduling.SourceIngestionSweepJob>();
         services.AddScoped<Scheduling.ScheduledEditorialPublicationJob>();

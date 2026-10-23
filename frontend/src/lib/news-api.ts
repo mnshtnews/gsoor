@@ -181,7 +181,7 @@ export interface PublicHomepageSection {
 export interface PublicSiteStructure {
   navigation: PublicSiteNavigationItem[];
   homepageSections: PublicHomepageSection[];
-  leadership: { boardChairman: string; editorInChief: string; executiveEditor: string };
+  leadership: { entries: Array<{ id: string; title: string; name: string }> };
   lastModifiedAtUtc: string | null;
 }
 

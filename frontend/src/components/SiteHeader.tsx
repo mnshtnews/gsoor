@@ -16,7 +16,7 @@ export async function SiteHeader() {
   let tickerHeadlines: string[] = [];
   let navbarAd: PublicAdPlacement | undefined;
   let navigation: PublicSiteNavigationItem[] | undefined;
-  let leadership: { boardChairman: string; editorInChief: string; executiveEditor: string } | undefined;
+  let leadership: { entries: Array<{ id: string; title: string; name: string }> } | undefined;
 
   const [newsResult, adsResult, structureResult] = await Promise.allSettled([
     getPublishedNews(1, 6),

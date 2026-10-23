@@ -4,7 +4,11 @@ import { useCallback, useEffect, useMemo, useState } from "react";
 import { useRouter } from "next/navigation";
 import { cms, cmsSiteStructure, CmsError, PRESENTATION_DESKS, type CmsHomepageSection, type CmsSiteNavigationItem, type CmsSiteStructure } from "@/lib/cms-client";
 
-const DEFAULT_STRUCTURE: CmsSiteStructure = { navigation: [], homepageSections: [], leadership: { boardChairman: "", editorInChief: "أحمد سليمان", executiveEditor: "أشرف جبريل" }, lastModifiedAtUtc: null };
+const DEFAULT_LEADERSHIP: CmsSiteStructure["leadership"] = { entries: [
+  { id: "board-editor", title: "رئيس مجلس الإدارة ورئيس التحرير", name: "أحمد سليمان" },
+  { id: "executive-editor", title: "رئيس التحرير التنفيذي", name: "أشرف جبريل" },
+] };
+const DEFAULT_STRUCTURE: CmsSiteStructure = { navigation: [], homepageSections: [], leadership: DEFAULT_LEADERSHIP, lastModifiedAtUtc: null };
 const LAYOUTS = [{ value: "cards", label: "شبكة بطاقات" }, { value: "lead", label: "بطاقة رئيسية مع شبكة" }, { value: "columns", label: "عمودان" }] as const;
 
 export default function SiteStructurePage() {
@@ -58,8 +62,17 @@ export default function SiteStructurePage() {
     setStructure((value) => ({ ...value, homepageSections: value.homepageSections.map((section) => section.key === key ? { ...section, ...patch } : section) }));
     setDirty(true); setNotice("");
   };
-  const updateLeadership = (key: keyof CmsSiteStructure["leadership"], value: string) => {
-    setStructure((current) => ({ ...current, leadership: { ...current.leadership, [key]: value } }));
+  const updateLeadership = (id: string, patch: Partial<CmsSiteStructure["leadership"]["entries"][number]>) => {
+    setStructure((current) => ({ ...current, leadership: { entries: current.leadership.entries.map((entry) => entry.id === id ? { ...entry, ...patch } : entry) } }));
+    setDirty(true); setNotice("");
+  };
+  const addLeadership = () => {
+    const id = `custom-${crypto.randomUUID()}`;
+    setStructure((current) => ({ ...current, leadership: { entries: [...current.leadership.entries, { id, title: "", name: "" }] } }));
+    setDirty(true); setNotice("");
+  };
+  const removeLeadership = (id: string) => {
+    setStructure((current) => ({ ...current, leadership: { entries: current.leadership.entries.filter((entry) => entry.id !== id) } }));
     setDirty(true); setNotice("");
   };
   const moveSection = (index: number, delta: -1 | 1) => {
@@ -81,6 +94,8 @@ export default function SiteStructurePage() {
   async function save() {
     setBusy(true); setError(""); setNotice("");
     try {
+      if (structure.leadership.entries.length < 2 || structure.leadership.entries.length > 10) throw new Error("يمكنك إدارة الحقلين الأساسيين وإضافة حتى 8 حقول أخرى.");
+      if (structure.leadership.entries.slice(2).some((entry) => !entry.title.trim())) throw new Error("اكتب مسمى لكل حقل إضافي قبل الحفظ.");
       const saved = await cmsSiteStructure.save({ navigation: structure.navigation.map((item) => ({ ...item, displayOrder: structure.navigation.filter((entry) => entry.group === item.group).sort((a, b) => a.displayOrder - b.displayOrder).findIndex((entry) => entry.key === item.key) })), homepageSections: structure.homepageSections.map((section, displayOrder) => ({ ...section, displayOrder })), leadership: structure.leadership });
       setStructure(saved); setDirty(false); setNotice("حُفظت الإعدادات وستنعكس على الموقع بعد تحديث الصفحة الرئيسية.");
     } catch (cause) { setError(cause instanceof Error ? cause.message : "تعذّر حفظ الإعدادات."); }
@@ -93,11 +108,15 @@ export default function SiteStructurePage() {
     {error && <div className="cms-msg error" role="alert">{error}<button className="cms-btn" type="button" onClick={() => void load()}>إعادة المحاولة</button></div>}
     {notice && <div className="cms-msg ok" role="status">{notice}</div>}
 
-    <section className="cms-card"><div className="cms-section-title"><div><h2>أسماء الإدارة والتحرير</h2><p className="cms-hint">تظهر بجوار شعار جسور في ترويسة الموقع، وتُحفظ مركزيًا لتعديلها عند الحاجة.</p></div></div>
+    <section className="cms-card"><div className="cms-section-title"><div><h2>أسماء الإدارة والتحرير</h2><p className="cms-hint">تظهر بجوار شعار جسور. الحقلان الأساسيان ثابتان، ويمكن إضافة حتى 8 مسميات أخرى وتعديلها أو حذفها.</p></div><button type="button" className="cms-btn" disabled={structure.leadership.entries.length >= 10} onClick={addLeadership}>＋ إضافة مسمى</button></div>
       <div className="cms-leadership-fields">
-        <label className="cms-field"><span>رئيس مجلس الإدارة</span><input maxLength={100} value={structure.leadership.boardChairman} onChange={(event) => updateLeadership("boardChairman", event.target.value)} placeholder="الاسم" /></label>
-        <label className="cms-field"><span>رئيس التحرير</span><input maxLength={100} value={structure.leadership.editorInChief} onChange={(event) => updateLeadership("editorInChief", event.target.value)} placeholder="الاسم" /></label>
-        <label className="cms-field"><span>رئيس التحرير التنفيذي</span><input maxLength={100} value={structure.leadership.executiveEditor} onChange={(event) => updateLeadership("executiveEditor", event.target.value)} placeholder="الاسم" /></label>
+        {structure.leadership.entries.map((entry, index) => <div className="cms-leadership-entry" key={entry.id}>
+          <div className="cms-leadership-entry-fields">
+            {index < 2 ? <label className="cms-field"><span>المسمى الوظيفي</span><input value={entry.title} readOnly aria-readonly="true" /></label> : <label className="cms-field"><span>مسمى الحقل الإضافي</span><input maxLength={80} value={entry.title} onChange={(event) => updateLeadership(entry.id, { title: event.target.value })} placeholder="مثال: مدير المحتوى" /> </label>}
+            <label className="cms-field"><span>الاسم</span><input maxLength={100} value={entry.name} onChange={(event) => updateLeadership(entry.id, { name: event.target.value })} placeholder="الاسم" /></label>
+          </div>
+          {index >= 2 && <button type="button" className="cms-btn cms-leadership-entry-remove" onClick={() => removeLeadership(entry.id)} aria-label={`حذف ${entry.title || "الحقل الإضافي"}`}>حذف الحقل</button>}
+        </div>)}
       </div>
     </section>
 

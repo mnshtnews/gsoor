@@ -23,25 +23,16 @@ const DEFAULT_NAVIGATION: PublicSiteNavigationItem[] = [
   ["fatwas", "الفتاوى", "/category?cat=fatwas", "more"], ["videos", "فيديو", "/videos", "more"],
 ].map(([key, label, href, group], displayOrder) => ({ key, label, href, group: group as "primary" | "more", displayOrder, isVisible: true }));
 
-type Leadership = { boardChairman: string; editorInChief: string; executiveEditor: string };
+type Leadership = { entries: Array<{ id: string; title: string; name: string }> };
 
 function LeadershipCredits({ leadership, className = "header-leadership" }: { leadership?: Leadership; className?: string }) {
-  const chairman = leadership?.boardChairman.trim() ?? "";
-  const editor = leadership?.editorInChief.trim() ?? "";
-  const executive = leadership?.executiveEditor.trim() ?? "";
-  const sameFirstLeader = chairman && editor && chairman === editor;
-
-  if (!chairman && !editor && !executive) return null;
-
+  const entries = leadership?.entries.filter((entry) => entry.title.trim() || entry.name.trim()) ?? [];
+  if (!entries.length) return null;
   return <div className={className} aria-label="هيئة الإدارة والتحرير">
-    {sameFirstLeader ? <div className="leadership-credit-group">
-      <div className="leadership-credit-roles"><span>رئيس مجلس الإدارة</span><span>رئيس التحرير</span></div>
-      <strong>{editor}</strong>
-    </div> : <>
-      {chairman && <div className="leadership-credit-group"><span className="leadership-credit-role">رئيس مجلس الإدارة</span><strong>{chairman}</strong></div>}
-      {editor && <div className="leadership-credit-group"><span className="leadership-credit-role">رئيس التحرير</span><strong>{editor}</strong></div>}
-    </>}
-    {executive && <div className="leadership-credit-group"><span className="leadership-credit-role">رئيس التحرير التنفيذي</span><strong>{executive}</strong></div>}
+    {entries.map((entry) => <div className="leadership-credit-group" key={entry.id}>
+      <span className="leadership-credit-role">{entry.title}</span>
+      {entry.name && <strong>{entry.name}</strong>}
+    </div>)}
   </div>;
 }
 
@@ -57,7 +48,7 @@ function LeadershipCredits({ leadership, className = "header-leadership" }: { le
  * titles) — this component never fetches data itself, matching the
  * project's "Server Components fetch, Client Components render" split.
  */
-export function HeaderInteractive({ tickerHeadlines, navbarAd, navigation, leadership }: { tickerHeadlines: string[]; navbarAd?: PublicAdPlacement; navigation?: PublicSiteNavigationItem[]; leadership?: { boardChairman: string; editorInChief: string; executiveEditor: string } }) {
+export function HeaderInteractive({ tickerHeadlines, navbarAd, navigation, leadership }: { tickerHeadlines: string[]; navbarAd?: PublicAdPlacement; navigation?: PublicSiteNavigationItem[]; leadership?: Leadership }) {
   const [drawerOpen, setDrawerOpen] = useState(false);
   const [searchOpen, setSearchOpen] = useState(false);
   const [searchQuery, setSearchQuery] = useState("");

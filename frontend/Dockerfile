@@ -7,8 +7,8 @@ FROM node:22-alpine AS build
 WORKDIR /app
 COPY --from=deps /app/node_modules ./node_modules
 COPY . .
-# NEXT_PUBLIC_* values are inlined at build time. Platforms such as Railway pass service
-# variables to the build as build args, so declare it here.
+# NEXT_PUBLIC_* values are inlined at build time, so declare the public API
+# origin as a build argument for Docker-based deployments.
 ARG NEXT_PUBLIC_API_BASE_URL=http://localhost:5000
 ENV NEXT_PUBLIC_API_BASE_URL=$NEXT_PUBLIC_API_BASE_URL
 RUN npm run build

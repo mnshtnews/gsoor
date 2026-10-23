@@ -179,7 +179,8 @@ export interface CmsHomeVideo { articleId: string; title: string; publishedAtUtc
 
 export type CmsSiteNavigationItem = { key: string; label: string; href: string; isVisible: boolean; displayOrder: number; group: "primary" | "more" };
 export type CmsHomepageSection = { key: string; title: string; deskSlug: string; layout: "cards" | "lead" | "columns"; isEnabled: boolean; showOnWeb: boolean; showOnMobile: boolean; displayOrder: number };
-export type CmsSiteStructure = { navigation: CmsSiteNavigationItem[]; homepageSections: CmsHomepageSection[]; leadership: { boardChairman: string; editorInChief: string; executiveEditor: string }; lastModifiedAtUtc: string | null };
+export type CmsLeadershipEntry = { id: string; title: string; name: string };
+export type CmsSiteStructure = { navigation: CmsSiteNavigationItem[]; homepageSections: CmsHomepageSection[]; leadership: { entries: CmsLeadershipEntry[] }; lastModifiedAtUtc: string | null };
 
 export const cmsSiteStructure = {
   async get(): Promise<CmsSiteStructure> {
