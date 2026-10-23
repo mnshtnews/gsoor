@@ -24,7 +24,10 @@ services:
       postgres:
         condition: service_healthy
     environment:
-      ASPNETCORE_ENVIRONMENT: Production
+      # APP_ENVIRONMENT / CLIENT_DEMO_MODE are flipped together by ./mode.sh:
+      #   demo -> Staging + ClientDemoMode (no Twilio/Azure needed)
+      #   live -> Production (Azure Key Vault + Twilio REQUIRED, API refuses to boot without them)
+      ASPNETCORE_ENVIRONMENT: ${APP_ENVIRONMENT:-Production}
       ASPNETCORE_URLS: http://+:8080
       HttpsRedirection__Enabled: "false"
       ConnectionStrings__Postgres: Host=postgres;Port=5432;Database=jusoor;Username=jusoor;Password=${POSTGRES_PASSWORD};Include Error Detail=false
@@ -32,16 +35,42 @@ services:
       Jwt__Issuer: ${JWT_ISSUER:-jusoor-api}
       Jwt__Audience: ${JWT_AUDIENCE:-jusoor-clients}
       Bootstrap__RunOnStartup: ${BOOTSTRAP_RUN_ON_STARTUP:-false}
-      FieldEncryption__KeyVaultUri: ${FIELD_ENCRYPTION_KEY_VAULT_URI:?Set the Azure Key Vault URI}
-      FieldEncryption__KeyEncryptionKeyName: ${FIELD_ENCRYPTION_KEY_NAME:?Set the Azure Key Vault key name}
-      AZURE_CLIENT_ID: ${AZURE_CLIENT_ID:?Set Azure workload/service principal client ID}
-      AZURE_TENANT_ID: ${AZURE_TENANT_ID:?Set Azure tenant ID}
-      AZURE_CLIENT_SECRET: ${AZURE_CLIENT_SECRET:?Set Azure client secret}
-      Twilio__AccountSid: ${TWILIO_ACCOUNT_SID:?Set Twilio Account SID}
-      Twilio__AuthToken: ${TWILIO_AUTH_TOKEN:?Set Twilio Auth Token}
-      Twilio__VerifyServiceSid: ${TWILIO_VERIFY_SERVICE_SID:?Set Twilio Verify Service SID}
+      ClientDemoMode: ${CLIENT_DEMO_MODE:-false}
+      UseLocalFieldEncryption: ${CLIENT_DEMO_MODE:-false}
+      UseLocalOtp: "false"
+      FieldEncryption__LocalKey: ${FIELD_ENCRYPTION_LOCAL_KEY:-}
+      FieldEncryption__KeyVaultUri: ${FIELD_ENCRYPTION_KEY_VAULT_URI:-}
+      FieldEncryption__KeyEncryptionKeyName: ${FIELD_ENCRYPTION_KEY_NAME:-}
+      AZURE_CLIENT_ID: ${AZURE_CLIENT_ID:-}
+      AZURE_TENANT_ID: ${AZURE_TENANT_ID:-}
+      AZURE_CLIENT_SECRET: ${AZURE_CLIENT_SECRET:-}
+      Twilio__AccountSid: ${TWILIO_ACCOUNT_SID:-}
+      Twilio__AuthToken: ${TWILIO_AUTH_TOKEN:-}
+      Twilio__VerifyServiceSid: ${TWILIO_VERIFY_SERVICE_SID:-}
       Cors__AllowedOrigins__0: https://${SITE_DOMAIN:?Set SITE_DOMAIN, e.g. gosour.net}
       Cors__AllowedOrigins__1: https://www.${SITE_DOMAIN:?Set SITE_DOMAIN, e.g. gosour.net}
+      # Newsroom logins created at startup when BOOTSTRAP_RUN_ON_STARTUP=true.
+      # Blank email/password slots are skipped. Existing users are never re-passworded.
+      DevSeed__Accounts__Slot1__Email: ${NEWSROOM_1_EMAIL:-}
+      DevSeed__Accounts__Slot1__Password: ${NEWSROOM_1_PASSWORD:-}
+      DevSeed__Accounts__Slot1__DisplayName: ${NEWSROOM_1_NAME:-}
+      DevSeed__Accounts__Slot1__Role: ${NEWSROOM_1_ROLE:-EditorInChief}
+      DevSeed__Accounts__Slot2__Email: ${NEWSROOM_2_EMAIL:-}
+      DevSeed__Accounts__Slot2__Password: ${NEWSROOM_2_PASSWORD:-}
+      DevSeed__Accounts__Slot2__DisplayName: ${NEWSROOM_2_NAME:-}
+      DevSeed__Accounts__Slot2__Role: ${NEWSROOM_2_ROLE:-EditorInChief}
+      DevSeed__Accounts__Slot3__Email: ${NEWSROOM_3_EMAIL:-}
+      DevSeed__Accounts__Slot3__Password: ${NEWSROOM_3_PASSWORD:-}
+      DevSeed__Accounts__Slot3__DisplayName: ${NEWSROOM_3_NAME:-}
+      DevSeed__Accounts__Slot3__Role: ${NEWSROOM_3_ROLE:-EditorInChief}
+      DevSeed__Accounts__Slot4__Email: ${NEWSROOM_4_EMAIL:-}
+      DevSeed__Accounts__Slot4__Password: ${NEWSROOM_4_PASSWORD:-}
+      DevSeed__Accounts__Slot4__DisplayName: ${NEWSROOM_4_NAME:-}
+      DevSeed__Accounts__Slot4__Role: ${NEWSROOM_4_ROLE:-EditorInChief}
+      DevSeed__Accounts__Slot5__Email: ${NEWSROOM_5_EMAIL:-}
+      DevSeed__Accounts__Slot5__Password: ${NEWSROOM_5_PASSWORD:-}
+      DevSeed__Accounts__Slot5__DisplayName: ${NEWSROOM_5_NAME:-}
+      DevSeed__Accounts__Slot5__Role: ${NEWSROOM_5_ROLE:-EditorInChief}
       BackgroundJobs__Enabled: "true"
       SUPABASE_URL: ${SUPABASE_URL:?Set Supabase project URL}
       SUPABASE_STORAGE_BUCKET: ${SUPABASE_STORAGE_BUCKET:-jusoor-media}

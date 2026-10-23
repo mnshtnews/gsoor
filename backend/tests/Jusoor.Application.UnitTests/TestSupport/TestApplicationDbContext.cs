@@ -39,7 +39,8 @@ public class TestApplicationDbContext : DbContext, IApplicationDbContext
     public DbSet<SiteStructureSettings> SiteStructureSettings => Set<SiteStructureSettings>();
     public DbSet<HomepagePoll> HomepagePolls => Set<HomepagePoll>();
     public DbSet<HomepagePollVote> HomepagePollVotes => Set<HomepagePollVote>();
-
+        public DbSet<AlertEmailSubscription> AlertEmailSubscriptions => Set<AlertEmailSubscription>();
+        public DbSet<AlertSubscriptionSettings> AlertSubscriptionSettings => Set<AlertSubscriptionSettings>();
     public void Detach<TEntity>(TEntity entity) where TEntity : class => Entry(entity).State = EntityState.Detached;
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)

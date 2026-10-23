@@ -11,9 +11,13 @@ namespace Jusoor.Infrastructure.Persistence;
 /// so each position can be tried locally after `docker compose up`.
 ///
 /// Credentials come exclusively from configuration — nothing is hard-coded or
-/// committed. Program.cs only calls this inside the IsDevelopment() block; it
-/// must never run elsewhere. Existing accounts only gain the configured role;
-/// their password is never reset.
+/// committed. Program.cs calls this inside the Development / Bootstrap:RunOnStartup
+/// block (the latter is how the hosted client-trial environment gets its logins).
+/// Existing accounts only gain the configured role; their password is never reset.
+///
+/// Each DevSeed:Accounts:&lt;Key&gt; entry uses &lt;Key&gt; as the newsroom role by default.
+/// An optional "Role" value overrides that, which allows several accounts to share
+/// one role (e.g. three EditorInChief users under keys Ashraf / Hanan / Omar).
 /// </summary>
 public static class DevelopmentNewsroomSeeder
 {
@@ -23,7 +27,8 @@ public static class DevelopmentNewsroomSeeder
         var accounts = configuration.GetSection("DevSeed:Accounts").GetChildren();
         foreach (var account in accounts)
         {
-            await SeedAccountAsync(userManager, account.Key, account["Email"], account["Password"],
+            var accountRole = string.IsNullOrWhiteSpace(account["Role"]) ? account.Key : account["Role"]!.Trim();
+            await SeedAccountAsync(userManager, accountRole, account["Email"], account["Password"],
                 account["DisplayName"], logger);
         }
 
