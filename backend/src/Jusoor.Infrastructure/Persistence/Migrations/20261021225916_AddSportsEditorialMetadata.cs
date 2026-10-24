@@ -1,4 +1,4 @@
-﻿using System.Collections.Generic;
+using System.Collections.Generic;
 using Microsoft.EntityFrameworkCore.Migrations;
 
 #nullable disable
@@ -36,7 +36,8 @@ namespace Jusoor.Infrastructure.Persistence.Migrations
                 name: "SportsPlayerNames",
                 table: "EditorialArticles",
                 type: "text[]",
-                nullable: false);
+                nullable: false,
+                defaultValueSql: "'{}'::text[]");
 
             migrationBuilder.AddColumn<string>(
                 name: "SportsTeamName",
