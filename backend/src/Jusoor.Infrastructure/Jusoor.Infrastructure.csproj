@@ -61,6 +61,10 @@
   </ItemGroup>
 
   <ItemGroup>
+    <EmbeddedResource Include="Persistence\Data\geography-catalog.json" LogicalName="Jusoor.Infrastructure.Persistence.Data.geography-catalog.json" />
+  </ItemGroup>
+
+  <ItemGroup>
     <ProjectReference Include="..\Jusoor.Application\Jusoor.Application.csproj" />
   </ItemGroup>
 

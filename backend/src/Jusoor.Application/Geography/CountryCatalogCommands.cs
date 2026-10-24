@@ -7,7 +7,7 @@ using Microsoft.EntityFrameworkCore;
 namespace Jusoor.Application.Geography;
 
 public sealed record CityCatalogItem(Guid Id, Guid CountryId, string NameAr, string NameEn, string Slug, decimal? Latitude, decimal? Longitude);
-public sealed record CountryCatalogItem(Guid Id, string NameAr, string NameEn, string IsoCode2, string Slug, int CityCount, IReadOnlyList<CityCatalogItem> Cities);
+public sealed record CountryCatalogItem(Guid Id, string NameAr, string NameEn, string IsoCode2, string Slug, decimal? Latitude, decimal? Longitude, int CityCount, IReadOnlyList<CityCatalogItem> Cities);
 public sealed record GetCountryCatalogQuery : IRequest<IReadOnlyList<CountryCatalogItem>>;
 
 public sealed class GetCountryCatalogQueryHandler(IApplicationDbContext context)
@@ -19,12 +19,12 @@ public sealed class GetCountryCatalogQueryHandler(IApplicationDbContext context)
         var ids = countries.Select(x => x.Id).ToArray();
         var cities = await context.Cities.AsNoTracking().Where(x => ids.Contains(x.CountryId)).OrderBy(x => x.NameAr).ToListAsync(cancellationToken);
         return countries.Select(country => new CountryCatalogItem(country.Id, country.NameAr, country.NameEn, country.IsoCode2,
-            country.Slug, cities.Count(city => city.CountryId == country.Id), cities.Where(city => city.CountryId == country.Id)
+            country.Slug, country.Latitude, country.Longitude, cities.Count(city => city.CountryId == country.Id), cities.Where(city => city.CountryId == country.Id)
                 .Select(city => new CityCatalogItem(city.Id, city.CountryId, city.NameAr, city.NameEn, city.Slug, city.Latitude, city.Longitude)).ToArray())).ToArray();
     }
 }
 
-public sealed record CreateCountryCommand(string NameAr, string NameEn, string IsoCode2) : IRequest<CountryCatalogItem>;
+public sealed record CreateCountryCommand(string NameAr, string NameEn, string IsoCode2, decimal? Latitude, decimal? Longitude) : IRequest<CountryCatalogItem>;
 
 public sealed class CreateCountryCommandValidator : AbstractValidator<CreateCountryCommand>
 {
@@ -33,6 +33,10 @@ public sealed class CreateCountryCommandValidator : AbstractValidator<CreateCoun
         RuleFor(x => x.NameAr).NotEmpty().MaximumLength(100);
         RuleFor(x => x.NameEn).NotEmpty().MaximumLength(100);
         RuleFor(x => x.IsoCode2).NotEmpty().Length(2).Matches("^[A-Za-z]{2}$");
+        RuleFor(x => x.Latitude).InclusiveBetween(-90, 90).When(x => x.Latitude.HasValue);
+        RuleFor(x => x.Longitude).InclusiveBetween(-180, 180).When(x => x.Longitude.HasValue);
+        RuleFor(x => x).Must(x => x.Latitude.HasValue == x.Longitude.HasValue)
+            .WithMessage("أدخل خط العرض وخط الطول معًا أو اتركهما فارغين.");
     }
 }
 
@@ -44,10 +48,10 @@ public sealed class CreateCountryCommandHandler(IApplicationDbContext context)
         var code = request.IsoCode2.Trim().ToUpperInvariant();
         var exists = await context.Countries.AnyAsync(x => x.IsoCode2 == code, cancellationToken);
         if (exists) throw new ValidationException("رمز الدولة مسجل بالفعل.");
-        var country = new Country { NameAr = request.NameAr.Trim(), NameEn = request.NameEn.Trim(), IsoCode2 = code, Slug = code.ToLowerInvariant() };
+        var country = new Country { NameAr = request.NameAr.Trim(), NameEn = request.NameEn.Trim(), IsoCode2 = code, Slug = code.ToLowerInvariant(), Latitude = request.Latitude, Longitude = request.Longitude };
         context.Countries.Add(country);
         await context.SaveChangesAsync(cancellationToken);
-        return new CountryCatalogItem(country.Id, country.NameAr, country.NameEn, country.IsoCode2, country.Slug, 0, Array.Empty<CityCatalogItem>());
+        return new CountryCatalogItem(country.Id, country.NameAr, country.NameEn, country.IsoCode2, country.Slug, country.Latitude, country.Longitude, 0, Array.Empty<CityCatalogItem>());
     }
 }
 

@@ -1,0 +1,6563 @@
+[
+  {
+    "isoCode2": "US",
+    "nameAr": "الولايات المتحدة",
+    "nameEn": "United States",
+    "slug": "us",
+    "latitude": 39.538479,
+    "longitude": -97.482602,
+    "cities": [
+      {
+        "nameAr": "نيويورك",
+        "nameEn": "New York City",
+        "slug": "new-york-city",
+        "latitude": 40.71427,
+        "longitude": -74.00597,
+        "population": 8804190,
+        "geonamesId": 5128581
+      },
+      {
+        "nameAr": "لوس أنجلوس",
+        "nameEn": "Los Angeles",
+        "slug": "los-angeles",
+        "latitude": 34.05223,
+        "longitude": -118.24368,
+        "population": 3820914,
+        "geonamesId": 5368361
+      },
+      {
+        "nameAr": "بروكلين",
+        "nameEn": "Brooklyn",
+        "slug": "brooklyn",
+        "latitude": 40.6501,
+        "longitude": -73.94958,
+        "population": 2736074,
+        "geonamesId": 5110302
+      },
+      {
+        "nameAr": "شيكاغو",
+        "nameEn": "Chicago",
+        "slug": "chicago",
+        "latitude": 41.85003,
+        "longitude": -87.65005,
+        "population": 2664452,
+        "geonamesId": 4887398
+      },
+      {
+        "nameAr": "هيوستن",
+        "nameEn": "Houston",
+        "slug": "houston",
+        "latitude": 29.76328,
+        "longitude": -95.36327,
+        "population": 2314157,
+        "geonamesId": 4699066
+      },
+      {
+        "nameAr": "فينيكس",
+        "nameEn": "Phoenix",
+        "slug": "phoenix",
+        "latitude": 33.44838,
+        "longitude": -112.07404,
+        "population": 1650070,
+        "geonamesId": 5308655
+      },
+      {
+        "nameAr": "فيلادلفيا",
+        "nameEn": "Philadelphia",
+        "slug": "philadelphia",
+        "latitude": 39.95238,
+        "longitude": -75.16362,
+        "population": 1573916,
+        "geonamesId": 4560349
+      },
+      {
+        "nameAr": "سان أنطونيو",
+        "nameEn": "San Antonio",
+        "slug": "san-antonio",
+        "latitude": 29.42412,
+        "longitude": -98.49363,
+        "population": 1526656,
+        "geonamesId": 4726206
+      }
+    ]
+  },
+  {
+    "isoCode2": "GB",
+    "nameAr": "المملكة المتحدة",
+    "nameEn": "United Kingdom",
+    "slug": "gb",
+    "latitude": 54.402739,
+    "longitude": -2.116346,
+    "cities": [
+      {
+        "nameAr": "لندن",
+        "nameEn": "London",
+        "slug": "london",
+        "latitude": 51.50853,
+        "longitude": -0.12574,
+        "population": 8961989,
+        "geonamesId": 2643743
+      },
+      {
+        "nameAr": "برمنغهام",
+        "nameEn": "Birmingham",
+        "slug": "birmingham",
+        "latitude": 52.48142,
+        "longitude": -1.89983,
+        "population": 1157603,
+        "geonamesId": 2655603
+      },
+      {
+        "nameAr": "غلاسكو",
+        "nameEn": "Glasgow",
+        "slug": "glasgow",
+        "latitude": 55.86515,
+        "longitude": -4.25763,
+        "population": 626410,
+        "geonamesId": 2648579
+      },
+      {
+        "nameAr": "مانشستر",
+        "nameEn": "Manchester",
+        "slug": "manchester",
+        "latitude": 53.48095,
+        "longitude": -2.23743,
+        "population": 568996,
+        "geonamesId": 2643123
+      },
+      {
+        "nameAr": "شيفيلد",
+        "nameEn": "Sheffield",
+        "slug": "sheffield",
+        "latitude": 53.38297,
+        "longitude": -1.4659,
+        "population": 556500,
+        "geonamesId": 2638077
+      },
+      {
+        "nameAr": "ليدز",
+        "nameEn": "Leeds",
+        "slug": "leeds",
+        "latitude": 53.79648,
+        "longitude": -1.54785,
+        "population": 536280,
+        "geonamesId": 2644688
+      },
+      {
+        "nameAr": "إدنبرة",
+        "nameEn": "Edinburgh",
+        "slug": "edinburgh",
+        "latitude": 55.95206,
+        "longitude": -3.19648,
+        "population": 514990,
+        "geonamesId": 2650225
+      },
+      {
+        "nameAr": "ليفربول",
+        "nameEn": "Liverpool",
+        "slug": "liverpool",
+        "latitude": 53.41058,
+        "longitude": -2.97794,
+        "population": 496770,
+        "geonamesId": 2644210
+      }
+    ]
+  },
+  {
+    "isoCode2": "IT",
+    "nameAr": "إيطاليا",
+    "nameEn": "Italy",
+    "slug": "it",
+    "latitude": 44.732482,
+    "longitude": 11.076907,
+    "cities": [
+      {
+        "nameAr": "روما",
+        "nameEn": "Rome",
+        "slug": "rome",
+        "latitude": 41.89193,
+        "longitude": 12.51133,
+        "population": 2318895,
+        "geonamesId": 3169070
+      },
+      {
+        "nameAr": "ميلانو",
+        "nameEn": "Milan",
+        "slug": "milan",
+        "latitude": 45.46427,
+        "longitude": 9.18951,
+        "population": 1371498,
+        "geonamesId": 3173435
+      },
+      {
+        "nameAr": "نابولي",
+        "nameEn": "Naples",
+        "slug": "naples",
+        "latitude": 40.85216,
+        "longitude": 14.26811,
+        "population": 909048,
+        "geonamesId": 3172394
+      },
+      {
+        "nameAr": "تورينو",
+        "nameEn": "Turin",
+        "slug": "turin",
+        "latitude": 45.07049,
+        "longitude": 7.68682,
+        "population": 847287,
+        "geonamesId": 3165524
+      },
+      {
+        "nameAr": "باليرمو",
+        "nameEn": "Palermo",
+        "slug": "palermo",
+        "latitude": 38.1166,
+        "longitude": 13.3636,
+        "population": 648260,
+        "geonamesId": 2523920
+      },
+      {
+        "nameAr": "جنوة",
+        "nameEn": "Genoa",
+        "slug": "genoa",
+        "latitude": 44.40478,
+        "longitude": 8.94439,
+        "population": 580097,
+        "geonamesId": 3176219
+      },
+      {
+        "nameAr": "بولونيا",
+        "nameEn": "Bologna",
+        "slug": "bologna",
+        "latitude": 44.49381,
+        "longitude": 11.33875,
+        "population": 394843,
+        "geonamesId": 3181928
+      },
+      {
+        "nameAr": "فلورنسا",
+        "nameEn": "Florence",
+        "slug": "florence",
+        "latitude": 43.77925,
+        "longitude": 11.24626,
+        "population": 367150,
+        "geonamesId": 3176959
+      }
+    ]
+  },
+  {
+    "isoCode2": "DE",
+    "nameAr": "ألمانيا",
+    "nameEn": "Germany",
+    "slug": "de",
+    "latitude": 50.961733,
+    "longitude": 9.678348,
+    "cities": [
+      {
+        "nameAr": "برلين",
+        "nameEn": "Berlin",
+        "slug": "berlin",
+        "latitude": 52.52437,
+        "longitude": 13.41053,
+        "population": 3426354,
+        "geonamesId": 2950159
+      },
+      {
+        "nameAr": "هامبورغ",
+        "nameEn": "Hamburg",
+        "slug": "hamburg",
+        "latitude": 53.55073,
+        "longitude": 9.99302,
+        "population": 1973896,
+        "geonamesId": 2911298
+      },
+      {
+        "nameAr": "ميونخ",
+        "nameEn": "Munich",
+        "slug": "munich",
+        "latitude": 48.13743,
+        "longitude": 11.57549,
+        "population": 1505005,
+        "geonamesId": 2867714
+      },
+      {
+        "nameAr": "كولونيا",
+        "nameEn": "Köln",
+        "slug": "koeln",
+        "latitude": 50.93333,
+        "longitude": 6.95,
+        "population": 1024621,
+        "geonamesId": 2886242
+      },
+      {
+        "nameAr": "فرانكفورت",
+        "nameEn": "Frankfurt am Main",
+        "slug": "frankfurt-am-main",
+        "latitude": 50.11552,
+        "longitude": 8.68417,
+        "population": 650000,
+        "geonamesId": 2925533
+      },
+      {
+        "nameAr": "دوسلدورف",
+        "nameEn": "Düsseldorf",
+        "slug": "duesseldorf",
+        "latitude": 51.22319,
+        "longitude": 6.77927,
+        "population": 618685,
+        "geonamesId": 2934246
+      },
+      {
+        "nameAr": "شتوتغارت",
+        "nameEn": "Stuttgart",
+        "slug": "stuttgart",
+        "latitude": 48.78232,
+        "longitude": 9.17702,
+        "population": 612663,
+        "geonamesId": 2825297
+      },
+      {
+        "nameAr": "إيسن",
+        "nameEn": "Essen",
+        "slug": "essen",
+        "latitude": 51.45657,
+        "longitude": 7.01228,
+        "population": 593085,
+        "geonamesId": 2928810
+      }
+    ]
+  },
+  {
+    "isoCode2": "CA",
+    "nameAr": "كندا",
+    "nameEn": "Canada",
+    "slug": "ca",
+    "latitude": 60.324287,
+    "longitude": -101.9107,
+    "cities": [
+      {
+        "nameAr": "تورونتو",
+        "nameEn": "Toronto",
+        "slug": "toronto",
+        "latitude": 43.70643,
+        "longitude": -79.39864,
+        "population": 2794356,
+        "geonamesId": 6167865
+      },
+      {
+        "nameAr": "مونتريال",
+        "nameEn": "Montréal",
+        "slug": "montreal",
+        "latitude": 45.50884,
+        "longitude": -73.58781,
+        "population": 1762949,
+        "geonamesId": 6077243
+      },
+      {
+        "nameAr": "كالغاري",
+        "nameEn": "Calgary",
+        "slug": "calgary",
+        "latitude": 51.05011,
+        "longitude": -114.08529,
+        "population": 1306784,
+        "geonamesId": 5913490
+      },
+      {
+        "nameAr": "أوتاوا",
+        "nameEn": "Ottawa",
+        "slug": "ottawa",
+        "latitude": 45.41117,
+        "longitude": -75.69812,
+        "population": 1017449,
+        "geonamesId": 6094817
+      },
+      {
+        "nameAr": "ادمونتون",
+        "nameEn": "Edmonton",
+        "slug": "edmonton",
+        "latitude": 53.55014,
+        "longitude": -113.46871,
+        "population": 1010899,
+        "geonamesId": 5946768
+      },
+      {
+        "nameAr": "وينيبيغ",
+        "nameEn": "Winnipeg",
+        "slug": "winnipeg",
+        "latitude": 49.8844,
+        "longitude": -97.14704,
+        "population": 749607,
+        "geonamesId": 6183235
+      },
+      {
+        "nameAr": "ميسيسوجا",
+        "nameEn": "Mississauga",
+        "slug": "mississauga",
+        "latitude": 43.5789,
+        "longitude": -79.6583,
+        "population": 717961,
+        "geonamesId": 6075357
+      },
+      {
+        "nameAr": "فانكوفر",
+        "nameEn": "Vancouver",
+        "slug": "vancouver",
+        "latitude": 49.24966,
+        "longitude": -123.11934,
+        "population": 662248,
+        "geonamesId": 6173331
+      }
+    ]
+  },
+  {
+    "isoCode2": "AU",
+    "nameAr": "أستراليا",
+    "nameEn": "Australia",
+    "slug": "au",
+    "latitude": -24.129522,
+    "longitude": 134.04972,
+    "cities": [
+      {
+        "nameAr": "سيدني",
+        "nameEn": "Sydney",
+        "slug": "sydney",
+        "latitude": -33.86785,
+        "longitude": 151.20732,
+        "population": 5638830,
+        "geonamesId": 2147714
+      },
+      {
+        "nameAr": "ملبورن",
+        "nameEn": "Melbourne",
+        "slug": "melbourne",
+        "latitude": -37.814,
+        "longitude": 144.96332,
+        "population": 5435590,
+        "geonamesId": 2158177
+      },
+      {
+        "nameAr": "بريزبن",
+        "nameEn": "Brisbane",
+        "slug": "brisbane",
+        "latitude": -27.46794,
+        "longitude": 153.02809,
+        "population": 2780063,
+        "geonamesId": 2174003
+      },
+      {
+        "nameAr": "بيرث",
+        "nameEn": "Perth",
+        "slug": "perth",
+        "latitude": -31.95224,
+        "longitude": 115.8614,
+        "population": 2384371,
+        "geonamesId": 2063523
+      },
+      {
+        "nameAr": "أديلايد",
+        "nameEn": "Adelaide",
+        "slug": "adelaide",
+        "latitude": -34.92866,
+        "longitude": 138.59863,
+        "population": 1469163,
+        "geonamesId": 2078025
+      },
+      {
+        "nameAr": "نيوكاسل",
+        "nameEn": "Newcastle",
+        "slug": "newcastle",
+        "latitude": -32.92953,
+        "longitude": 151.7801,
+        "population": 508437,
+        "geonamesId": 2155472
+      },
+      {
+        "nameAr": "ساحل الشمس",
+        "nameEn": "Sunshine Coast",
+        "slug": "sunshine-coast",
+        "latitude": -26.65682,
+        "longitude": 153.07955,
+        "population": 398840,
+        "geonamesId": 10630449
+      },
+      {
+        "nameAr": "كانبرا",
+        "nameEn": "Canberra",
+        "slug": "canberra",
+        "latitude": -35.28346,
+        "longitude": 149.12807,
+        "population": 367752,
+        "geonamesId": 2172517
+      }
+    ]
+  },
+  {
+    "isoCode2": "FR",
+    "nameAr": "فرنسا",
+    "nameEn": "France",
+    "slug": "fr",
+    "latitude": 46.696113,
+    "longitude": 2.552275,
+    "cities": [
+      {
+        "nameAr": "باريس",
+        "nameEn": "Paris",
+        "slug": "paris",
+        "latitude": 48.85341,
+        "longitude": 2.3488,
+        "population": 2138551,
+        "geonamesId": 2988507
+      },
+      {
+        "nameAr": "مارسيليا",
+        "nameEn": "Marseille",
+        "slug": "marseille",
+        "latitude": 43.29695,
+        "longitude": 5.38107,
+        "population": 877215,
+        "geonamesId": 2995469
+      },
+      {
+        "nameAr": "ليون",
+        "nameEn": "Lyon",
+        "slug": "lyon",
+        "latitude": 45.74906,
+        "longitude": 4.84789,
+        "population": 520774,
+        "geonamesId": 2996944
+      },
+      {
+        "nameAr": "تولوز",
+        "nameEn": "Toulouse",
+        "slug": "toulouse",
+        "latitude": 43.60426,
+        "longitude": 1.44367,
+        "population": 511684,
+        "geonamesId": 2972315
+      },
+      {
+        "nameAr": "نيس",
+        "nameEn": "Nice",
+        "slug": "nice",
+        "latitude": 43.70313,
+        "longitude": 7.26608,
+        "population": 342669,
+        "geonamesId": 2990440
+      },
+      {
+        "nameAr": "نانت",
+        "nameEn": "Nantes",
+        "slug": "nantes",
+        "latitude": 47.21725,
+        "longitude": -1.55336,
+        "population": 325070,
+        "geonamesId": 2990969
+      },
+      {
+        "nameAr": "ستراسبورغ",
+        "nameEn": "Strasbourg",
+        "slug": "strasbourg",
+        "latitude": 48.58392,
+        "longitude": 7.74553,
+        "population": 274845,
+        "geonamesId": 2973783
+      },
+      {
+        "nameAr": "بورڈو",
+        "nameEn": "Bordeaux",
+        "slug": "bordeaux",
+        "latitude": 44.84124,
+        "longitude": -0.58046,
+        "population": 265328,
+        "geonamesId": 3031582
+      }
+    ]
+  },
+  {
+    "isoCode2": "NL",
+    "nameAr": "هولندا",
+    "nameEn": "The Netherlands",
+    "slug": "nl",
+    "latitude": 52.422211,
+    "longitude": 5.61144,
+    "cities": [
+      {
+        "nameAr": "روتردام",
+        "nameEn": "Rotterdam",
+        "slug": "rotterdam",
+        "latitude": 51.9225,
+        "longitude": 4.47917,
+        "population": 868135,
+        "geonamesId": 2747891
+      },
+      {
+        "nameAr": "أمستردام",
+        "nameEn": "Amsterdam",
+        "slug": "amsterdam",
+        "latitude": 52.37403,
+        "longitude": 4.88969,
+        "population": 741636,
+        "geonamesId": 2759794
+      },
+      {
+        "nameAr": "لاهاي",
+        "nameEn": "The Hague",
+        "slug": "the-hague",
+        "latitude": 52.07667,
+        "longitude": 4.29861,
+        "population": 474292,
+        "geonamesId": 2747373
+      },
+      {
+        "nameAr": "أوتريخت",
+        "nameEn": "Utrecht",
+        "slug": "utrecht",
+        "latitude": 52.09083,
+        "longitude": 5.12222,
+        "population": 376435,
+        "geonamesId": 2745912
+      },
+      {
+        "nameAr": "غرونينغن",
+        "nameEn": "Groningen",
+        "slug": "groningen",
+        "latitude": 53.21917,
+        "longitude": 6.56667,
+        "population": 244807,
+        "geonamesId": 2755251
+      },
+      {
+        "nameAr": "آيندهوفن",
+        "nameEn": "Eindhoven",
+        "slug": "eindhoven",
+        "latitude": 51.44083,
+        "longitude": 5.47778,
+        "population": 235691,
+        "geonamesId": 2756253
+      },
+      {
+        "nameAr": "بريدا",
+        "nameEn": "Breda",
+        "slug": "breda",
+        "latitude": 51.58656,
+        "longitude": 4.77596,
+        "population": 184126,
+        "geonamesId": 2758401
+      },
+      {
+        "nameAr": "نايميخن",
+        "nameEn": "Nijmegen",
+        "slug": "nijmegen",
+        "latitude": 51.8425,
+        "longitude": 5.85278,
+        "population": 177359,
+        "geonamesId": 2750053
+      }
+    ]
+  },
+  {
+    "isoCode2": "GR",
+    "nameAr": "اليونان",
+    "nameEn": "Greece",
+    "slug": "gr",
+    "latitude": 39.492763,
+    "longitude": 21.72568,
+    "cities": [
+      {
+        "nameAr": "أثينا",
+        "nameEn": "Athens",
+        "slug": "athens",
+        "latitude": 37.98376,
+        "longitude": 23.72784,
+        "population": 664046,
+        "geonamesId": 264371
+      },
+      {
+        "nameAr": "سالونيك",
+        "nameEn": "Thessaloníki",
+        "slug": "thessaloniki",
+        "latitude": 40.64072,
+        "longitude": 22.93493,
+        "population": 317778,
+        "geonamesId": 734077
+      },
+      {
+        "nameAr": "بيرايوس",
+        "nameEn": "Piraeus",
+        "slug": "piraeus",
+        "latitude": 37.94203,
+        "longitude": 23.64619,
+        "population": 163688,
+        "geonamesId": 255274
+      },
+      {
+        "nameAr": "كاليثيا",
+        "nameEn": "Kallithéa",
+        "slug": "kallithea",
+        "latitude": 37.95,
+        "longitude": 23.7,
+        "population": 100641,
+        "geonamesId": 261414
+      },
+      {
+        "nameAr": "ترحاله",
+        "nameEn": "Tríkala",
+        "slug": "trikala",
+        "latitude": 39.55493,
+        "longitude": 21.76837,
+        "population": 61653,
+        "geonamesId": 252664
+      },
+      {
+        "nameAr": "كالاماتا",
+        "nameEn": "Kalamata",
+        "slug": "kalamata",
+        "latitude": 37.03913,
+        "longitude": 22.11265,
+        "population": 54100,
+        "geonamesId": 261604
+      },
+      {
+        "nameAr": "قولة",
+        "nameEn": "Kavála",
+        "slug": "kavala",
+        "latitude": 40.93959,
+        "longitude": 24.40687,
+        "population": 54027,
+        "geonamesId": 735861
+      },
+      {
+        "nameAr": "أليكساندروبولي",
+        "nameEn": "Alexandroupoli",
+        "slug": "alexandroupoli",
+        "latitude": 40.84995,
+        "longitude": 25.87644,
+        "population": 52979,
+        "geonamesId": 736928
+      }
+    ]
+  },
+  {
+    "isoCode2": "AT",
+    "nameAr": "النمسا",
+    "nameEn": "Austria",
+    "slug": "at",
+    "latitude": 47.518859,
+    "longitude": 14.130515,
+    "cities": [
+      {
+        "nameAr": "فيينا",
+        "nameEn": "Vienna",
+        "slug": "vienna",
+        "latitude": 48.20849,
+        "longitude": 16.37208,
+        "population": 1691468,
+        "geonamesId": 2761369
+      },
+      {
+        "nameAr": "غراتس",
+        "nameEn": "Graz",
+        "slug": "graz",
+        "latitude": 47.06733,
+        "longitude": 15.44197,
+        "population": 303270,
+        "geonamesId": 2778067
+      },
+      {
+        "nameAr": "لينتز",
+        "nameEn": "Linz",
+        "slug": "linz",
+        "latitude": 48.30639,
+        "longitude": 14.28611,
+        "population": 204846,
+        "geonamesId": 2772400
+      },
+      {
+        "nameAr": "سالزبورګ",
+        "nameEn": "Salzburg",
+        "slug": "salzburg",
+        "latitude": 47.79941,
+        "longitude": 13.04399,
+        "population": 157245,
+        "geonamesId": 2766824
+      },
+      {
+        "nameAr": "إنسبروك",
+        "nameEn": "Innsbruck",
+        "slug": "innsbruck",
+        "latitude": 47.26266,
+        "longitude": 11.39454,
+        "population": 132493,
+        "geonamesId": 2775220
+      },
+      {
+        "nameAr": "كلاغنفورت أم فيرترسي",
+        "nameEn": "Klagenfurt am Wörthersee",
+        "slug": "klagenfurt-am-woerthersee",
+        "latitude": 46.62472,
+        "longitude": 14.30528,
+        "population": 100316,
+        "geonamesId": 2774326
+      },
+      {
+        "nameAr": "فيلاخ",
+        "nameEn": "Villach",
+        "slug": "villach",
+        "latitude": 46.61028,
+        "longitude": 13.85583,
+        "population": 58882,
+        "geonamesId": 2762372
+      },
+      {
+        "nameAr": "دورنبيرن",
+        "nameEn": "Dornbirn",
+        "slug": "dornbirn",
+        "latitude": 47.41427,
+        "longitude": 9.74195,
+        "population": 49278,
+        "geonamesId": 2780741
+      }
+    ]
+  },
+  {
+    "isoCode2": "CH",
+    "nameAr": "سويسرا",
+    "nameEn": "Switzerland",
+    "slug": "ch",
+    "latitude": 46.719114,
+    "longitude": 7.463965,
+    "cities": [
+      {
+        "nameAr": "زيورخ",
+        "nameEn": "Zürich",
+        "slug": "zuerich",
+        "latitude": 47.36667,
+        "longitude": 8.55,
+        "population": 415367,
+        "geonamesId": 2657896
+      },
+      {
+        "nameAr": "جنيف",
+        "nameEn": "Geneva",
+        "slug": "geneva",
+        "latitude": 46.20222,
+        "longitude": 6.14569,
+        "population": 201741,
+        "geonamesId": 2660646
+      },
+      {
+        "nameAr": "بازل",
+        "nameEn": "Basel",
+        "slug": "basel",
+        "latitude": 47.55839,
+        "longitude": 7.57327,
+        "population": 177595,
+        "geonamesId": 2661604
+      },
+      {
+        "nameAr": "لوزان",
+        "nameEn": "Lausanne",
+        "slug": "lausanne",
+        "latitude": 46.516,
+        "longitude": 6.63282,
+        "population": 139111,
+        "geonamesId": 2659994
+      },
+      {
+        "nameAr": "بێرن",
+        "nameEn": "Bern",
+        "slug": "bern",
+        "latitude": 46.94809,
+        "longitude": 7.44744,
+        "population": 121631,
+        "geonamesId": 2661552
+      },
+      {
+        "nameAr": "فينترتور",
+        "nameEn": "Winterthur",
+        "slug": "winterthur",
+        "latitude": 47.50564,
+        "longitude": 8.72413,
+        "population": 111840,
+        "geonamesId": 2657970
+      },
+      {
+        "nameAr": "لوسرن",
+        "nameEn": "Luzern",
+        "slug": "luzern",
+        "latitude": 47.05048,
+        "longitude": 8.30635,
+        "population": 81691,
+        "geonamesId": 2659811
+      },
+      {
+        "nameAr": "سانت غالن",
+        "nameEn": "Sankt Gallen",
+        "slug": "sankt-gallen",
+        "latitude": 47.42391,
+        "longitude": 9.37477,
+        "population": 75833,
+        "geonamesId": 2658822
+      }
+    ]
+  },
+  {
+    "isoCode2": "SE",
+    "nameAr": "السويد",
+    "nameEn": "Sweden",
+    "slug": "se",
+    "latitude": 65.85918,
+    "longitude": 19.01705,
+    "cities": [
+      {
+        "nameAr": "ستوكهولم",
+        "nameEn": "Stockholm",
+        "slug": "stockholm",
+        "latitude": 59.32938,
+        "longitude": 18.06871,
+        "population": 1515017,
+        "geonamesId": 2673730
+      },
+      {
+        "nameAr": "غوتنبرغ",
+        "nameEn": "Gothenburg",
+        "slug": "gothenburg",
+        "latitude": 57.70716,
+        "longitude": 11.96679,
+        "population": 608462,
+        "geonamesId": 2711537
+      },
+      {
+        "nameAr": "مالمو",
+        "nameEn": "Malmö",
+        "slug": "malmoe",
+        "latitude": 55.60587,
+        "longitude": 13.00073,
+        "population": 362133,
+        "geonamesId": 2692969
+      },
+      {
+        "nameAr": "اوبسالا",
+        "nameEn": "Uppsala",
+        "slug": "uppsala",
+        "latitude": 59.85882,
+        "longitude": 17.63889,
+        "population": 177074,
+        "geonamesId": 2666199
+      },
+      {
+        "nameAr": "لينشوبينغ",
+        "nameEn": "Linköping",
+        "slug": "linkoeping",
+        "latitude": 58.41086,
+        "longitude": 15.62157,
+        "population": 166673,
+        "geonamesId": 2694762
+      },
+      {
+        "nameAr": "اوربرو",
+        "nameEn": "Örebro",
+        "slug": "oerebro",
+        "latitude": 59.27412,
+        "longitude": 15.2066,
+        "population": 155989,
+        "geonamesId": 2686657
+      },
+      {
+        "nameAr": "اومئو",
+        "nameEn": "Umeå",
+        "slug": "umea",
+        "latitude": 63.82842,
+        "longitude": 20.25972,
+        "population": 130224,
+        "geonamesId": 602150
+      },
+      {
+        "nameAr": "فيستيروس",
+        "nameEn": "Västerås",
+        "slug": "vaesteras",
+        "latitude": 59.61617,
+        "longitude": 16.55276,
+        "population": 127799,
+        "geonamesId": 2664454
+      }
+    ]
+  },
+  {
+    "isoCode2": "BE",
+    "nameAr": "بلجيكا",
+    "nameEn": "Belgium",
+    "slug": "be",
+    "latitude": 50.785392,
+    "longitude": 4.800448,
+    "cities": [
+      {
+        "nameAr": "بروكسل",
+        "nameEn": "Brussels",
+        "slug": "brussels",
+        "latitude": 50.85045,
+        "longitude": 4.34878,
+        "population": 1019022,
+        "geonamesId": 2800866
+      },
+      {
+        "nameAr": "أنتويرب",
+        "nameEn": "Antwerp",
+        "slug": "antwerp",
+        "latitude": 51.22047,
+        "longitude": 4.40026,
+        "population": 529247,
+        "geonamesId": 2803138
+      },
+      {
+        "nameAr": "غنت",
+        "nameEn": "Gent",
+        "slug": "gent",
+        "latitude": 51.05,
+        "longitude": 3.71667,
+        "population": 265086,
+        "geonamesId": 2797656
+      },
+      {
+        "nameAr": "شارلوروا",
+        "nameEn": "Charleroi",
+        "slug": "charleroi",
+        "latitude": 50.41136,
+        "longitude": 4.44448,
+        "population": 200132,
+        "geonamesId": 2800481
+      },
+      {
+        "nameAr": "لييج",
+        "nameEn": "Liège",
+        "slug": "liege",
+        "latitude": 50.63373,
+        "longitude": 5.56749,
+        "population": 195278,
+        "geonamesId": 2792413
+      },
+      {
+        "nameAr": "أندرلخت",
+        "nameEn": "Anderlecht",
+        "slug": "anderlecht",
+        "latitude": 50.83619,
+        "longitude": 4.31454,
+        "population": 160553,
+        "geonamesId": 2803201
+      },
+      {
+        "nameAr": "بروخه",
+        "nameEn": "Brugge",
+        "slug": "brugge",
+        "latitude": 51.20892,
+        "longitude": 3.22424,
+        "population": 118509,
+        "geonamesId": 2800931
+      },
+      {
+        "nameAr": "نامور",
+        "nameEn": "Namur",
+        "slug": "namur",
+        "latitude": 50.4669,
+        "longitude": 4.86746,
+        "population": 110939,
+        "geonamesId": 2790471
+      }
+    ]
+  },
+  {
+    "isoCode2": "IE",
+    "nameAr": "أيرلندا",
+    "nameEn": "Ireland",
+    "slug": "ie",
+    "latitude": 53.078726,
+    "longitude": -7.798588,
+    "cities": [
+      {
+        "nameAr": "دۇبلىن",
+        "nameEn": "Dublin",
+        "slug": "dublin",
+        "latitude": 53.33306,
+        "longitude": -6.24889,
+        "population": 1024027,
+        "geonamesId": 2964574
+      },
+      {
+        "nameAr": "كورك",
+        "nameEn": "Cork",
+        "slug": "cork",
+        "latitude": 51.89797,
+        "longitude": -8.47061,
+        "population": 224004,
+        "geonamesId": 2965140
+      },
+      {
+        "nameAr": "تلا",
+        "nameEn": "Tallaght",
+        "slug": "tallaght",
+        "latitude": 53.2859,
+        "longitude": -6.37344,
+        "population": 81022,
+        "geonamesId": 2961284
+      },
+      {
+        "nameAr": "واترفورد",
+        "nameEn": "Waterford",
+        "slug": "waterford",
+        "latitude": 52.25833,
+        "longitude": -7.11194,
+        "population": 60079,
+        "geonamesId": 2960992
+      },
+      {
+        "nameAr": "دروهيدا",
+        "nameEn": "Drogheda",
+        "slug": "drogheda",
+        "latitude": 53.71889,
+        "longitude": -6.34778,
+        "population": 44135,
+        "geonamesId": 2964661
+      },
+      {
+        "nameAr": "سورڈز، ڈبلن",
+        "nameEn": "Swords",
+        "slug": "swords",
+        "latitude": 53.45972,
+        "longitude": -6.21806,
+        "population": 40776,
+        "geonamesId": 2961297
+      },
+      {
+        "nameAr": "دوغلاس",
+        "nameEn": "Douglas",
+        "slug": "douglas",
+        "latitude": 51.87444,
+        "longitude": -8.435,
+        "population": 26883,
+        "geonamesId": 2964690
+      },
+      {
+        "nameAr": "آثلونه",
+        "nameEn": "Athlone",
+        "slug": "athlone",
+        "latitude": 53.42278,
+        "longitude": -7.93722,
+        "population": 22869,
+        "geonamesId": 3313472
+      }
+    ]
+  },
+  {
+    "isoCode2": "ES",
+    "nameAr": "إسبانيا",
+    "nameEn": "Spain",
+    "slug": "es",
+    "latitude": 40.090953,
+    "longitude": -3.464718,
+    "cities": [
+      {
+        "nameAr": "مدريد",
+        "nameEn": "Madrid",
+        "slug": "madrid",
+        "latitude": 40.4165,
+        "longitude": -3.70256,
+        "population": 3255944,
+        "geonamesId": 3117735
+      },
+      {
+        "nameAr": "برشلونة",
+        "nameEn": "Barcelona",
+        "slug": "barcelona",
+        "latitude": 41.38879,
+        "longitude": 2.15899,
+        "population": 1686208,
+        "geonamesId": 3128760
+      },
+      {
+        "nameAr": "فالنسيا",
+        "nameEn": "Valencia",
+        "slug": "valencia",
+        "latitude": 39.47391,
+        "longitude": -0.37966,
+        "population": 824340,
+        "geonamesId": 2509954
+      },
+      {
+        "nameAr": "ساراجوسا",
+        "nameEn": "Zaragoza",
+        "slug": "zaragoza",
+        "latitude": 41.65606,
+        "longitude": -0.87734,
+        "population": 686986,
+        "geonamesId": 3104324
+      },
+      {
+        "nameAr": "إشبيلية",
+        "nameEn": "Sevilla",
+        "slug": "sevilla",
+        "latitude": 37.38283,
+        "longitude": -5.97317,
+        "population": 686741,
+        "geonamesId": 2510911
+      },
+      {
+        "nameAr": "مالاغا",
+        "nameEn": "Málaga",
+        "slug": "malaga",
+        "latitude": 36.72016,
+        "longitude": -4.42034,
+        "population": 592346,
+        "geonamesId": 2514256
+      },
+      {
+        "nameAr": "مرسية",
+        "nameEn": "Murcia",
+        "slug": "murcia",
+        "latitude": 37.98704,
+        "longitude": -1.13004,
+        "population": 471982,
+        "geonamesId": 2513416
+      },
+      {
+        "nameAr": "ميورقة",
+        "nameEn": "Palma",
+        "slug": "palma",
+        "latitude": 39.56939,
+        "longitude": 2.65024,
+        "population": 438234,
+        "geonamesId": 2512989
+      }
+    ]
+  },
+  {
+    "isoCode2": "ZA",
+    "nameAr": "جنوب أفريقيا",
+    "nameEn": "South Africa",
+    "slug": "za",
+    "latitude": -29.708776,
+    "longitude": 23.665734,
+    "cities": [
+      {
+        "nameAr": "جوهانسبرغ",
+        "nameEn": "Johannesburg",
+        "slug": "johannesburg",
+        "latitude": -26.20227,
+        "longitude": 28.04363,
+        "population": 9418183,
+        "geonamesId": 993800
+      },
+      {
+        "nameAr": "كيب تاون",
+        "nameEn": "Cape Town",
+        "slug": "cape-town",
+        "latitude": -33.92584,
+        "longitude": 18.42322,
+        "population": 4772846,
+        "geonamesId": 3369157
+      },
+      {
+        "nameAr": "ديربان",
+        "nameEn": "Durban",
+        "slug": "durban",
+        "latitude": -29.8579,
+        "longitude": 31.0292,
+        "population": 3338026,
+        "geonamesId": 1007311
+      },
+      {
+        "nameAr": "بريتوريا",
+        "nameEn": "Pretoria",
+        "slug": "pretoria",
+        "latitude": -25.74486,
+        "longitude": 28.18783,
+        "population": 2112693,
+        "geonamesId": 964137
+      },
+      {
+        "nameAr": "سويتو",
+        "nameEn": "Soweto",
+        "slug": "soweto",
+        "latitude": -26.26781,
+        "longitude": 27.85849,
+        "population": 1695047,
+        "geonamesId": 953781
+      },
+      {
+        "nameAr": "بورت إليزابيث",
+        "nameEn": "Gqeberha",
+        "slug": "gqeberha",
+        "latitude": -33.96109,
+        "longitude": 25.61494,
+        "population": 1050078,
+        "geonamesId": 964420
+      },
+      {
+        "nameAr": "بيترماريتزبرغ",
+        "nameEn": "Pietermaritzburg",
+        "slug": "pietermaritzburg",
+        "latitude": -29.61679,
+        "longitude": 30.39278,
+        "population": 839327,
+        "geonamesId": 965301
+      },
+      {
+        "nameAr": "بينوني",
+        "nameEn": "Benoni",
+        "slug": "benoni",
+        "latitude": -26.18848,
+        "longitude": 28.32078,
+        "population": 605344,
+        "geonamesId": 1020098
+      }
+    ]
+  },
+  {
+    "isoCode2": "BR",
+    "nameAr": "البرازيل",
+    "nameEn": "Brazil",
+    "slug": "br",
+    "latitude": -12.098687,
+    "longitude": -49.55945,
+    "cities": [
+      {
+        "nameAr": "ساو باولو",
+        "nameEn": "São Paulo",
+        "slug": "sao-paulo",
+        "latitude": -23.5475,
+        "longitude": -46.63611,
+        "population": 12400232,
+        "geonamesId": 3448439
+      },
+      {
+        "nameAr": "ريو دي جانيرو",
+        "nameEn": "Rio de Janeiro",
+        "slug": "rio-de-janeiro",
+        "latitude": -22.90642,
+        "longitude": -43.18223,
+        "population": 6747815,
+        "geonamesId": 3451190
+      },
+      {
+        "nameAr": "بيلو هوريزونتي",
+        "nameEn": "Belo Horizonte",
+        "slug": "belo-horizonte",
+        "latitude": -19.92083,
+        "longitude": -43.93778,
+        "population": 2721564,
+        "geonamesId": 3470127
+      },
+      {
+        "nameAr": "سالفادور، باهيا",
+        "nameEn": "Salvador",
+        "slug": "salvador",
+        "latitude": -12.97563,
+        "longitude": -38.49096,
+        "population": 2711840,
+        "geonamesId": 3450554
+      },
+      {
+        "nameAr": "فورتاليزا",
+        "nameEn": "Fortaleza",
+        "slug": "fortaleza",
+        "latitude": -3.71722,
+        "longitude": -38.54306,
+        "population": 2400000,
+        "geonamesId": 3399415
+      },
+      {
+        "nameAr": "ماناوس",
+        "nameEn": "Manaus",
+        "slug": "manaus",
+        "latitude": -3.10194,
+        "longitude": -60.025,
+        "population": 2219580,
+        "geonamesId": 3663517
+      },
+      {
+        "nameAr": "برازيليا",
+        "nameEn": "Brasília",
+        "slug": "brasilia",
+        "latitude": -15.77972,
+        "longitude": -47.92972,
+        "population": 2207718,
+        "geonamesId": 3469058
+      },
+      {
+        "nameAr": "كوريتيبا",
+        "nameEn": "Curitiba",
+        "slug": "curitiba",
+        "latitude": -25.42778,
+        "longitude": -49.27306,
+        "population": 1948626,
+        "geonamesId": 3464975
+      }
+    ]
+  },
+  {
+    "isoCode2": "TR",
+    "nameAr": "تركيا",
+    "nameEn": "Turkey",
+    "slug": "tr",
+    "latitude": 39.345388,
+    "longitude": 34.508268,
+    "cities": [
+      {
+        "nameAr": "إسطنبول",
+        "nameEn": "Istanbul",
+        "slug": "istanbul",
+        "latitude": 41.01384,
+        "longitude": 28.94966,
+        "population": 15701602,
+        "geonamesId": 745044
+      },
+      {
+        "nameAr": "أنقرة",
+        "nameEn": "Ankara",
+        "slug": "ankara",
+        "latitude": 39.91987,
+        "longitude": 32.85427,
+        "population": 3517182,
+        "geonamesId": 323786
+      },
+      {
+        "nameAr": "بۇرسا",
+        "nameEn": "Bursa",
+        "slug": "bursa",
+        "latitude": 40.19559,
+        "longitude": 29.06013,
+        "population": 3101833,
+        "geonamesId": 750269
+      },
+      {
+        "nameAr": "ازمير",
+        "nameEn": "İzmir",
+        "slug": "izmir",
+        "latitude": 38.41273,
+        "longitude": 27.13838,
+        "population": 2938292,
+        "geonamesId": 311046
+      },
+      {
+        "nameAr": "غازي عنتاب",
+        "nameEn": "Gaziantep",
+        "slug": "gaziantep",
+        "latitude": 37.05944,
+        "longitude": 37.3825,
+        "population": 2222415,
+        "geonamesId": 314830
+      },
+      {
+        "nameAr": "ديار بكر",
+        "nameEn": "Diyarbakır",
+        "slug": "diyarbakir",
+        "latitude": 37.91363,
+        "longitude": 40.21721,
+        "population": 1833684,
+        "geonamesId": 316541
+      },
+      {
+        "nameAr": "ئادانا",
+        "nameEn": "Adana",
+        "slug": "adana",
+        "latitude": 36.98615,
+        "longitude": 35.32531,
+        "population": 1816750,
+        "geonamesId": 325363
+      },
+      {
+        "nameAr": "قيصرية",
+        "nameEn": "Kayseri",
+        "slug": "kayseri",
+        "latitude": 38.73222,
+        "longitude": 35.48528,
+        "population": 1452458,
+        "geonamesId": 308464
+      }
+    ]
+  },
+  {
+    "isoCode2": "CY",
+    "nameAr": "قبرص",
+    "nameEn": "Cyprus",
+    "slug": "cy",
+    "latitude": 34.913329,
+    "longitude": 33.084182,
+    "cities": [
+      {
+        "nameAr": "نيكوسيا",
+        "nameEn": "Nicosia",
+        "slug": "nicosia",
+        "latitude": 35.17284,
+        "longitude": 33.35397,
+        "population": 200452,
+        "geonamesId": 146268
+      },
+      {
+        "nameAr": "ليماسول",
+        "nameEn": "Limassol",
+        "slug": "limassol",
+        "latitude": 34.68406,
+        "longitude": 33.03794,
+        "population": 154000,
+        "geonamesId": 146384
+      },
+      {
+        "nameAr": "لارنكا",
+        "nameEn": "Larnaca",
+        "slug": "larnaca",
+        "latitude": 34.9221,
+        "longitude": 33.62794,
+        "population": 72000,
+        "geonamesId": 146400
+      },
+      {
+        "nameAr": "فاماغوستا",
+        "nameEn": "Famagusta",
+        "slug": "famagusta",
+        "latitude": 35.12489,
+        "longitude": 33.94135,
+        "population": 42526,
+        "geonamesId": 146617
+      },
+      {
+        "nameAr": "بافوس",
+        "nameEn": "Paphos",
+        "slug": "paphos",
+        "latitude": 34.77679,
+        "longitude": 32.42451,
+        "population": 35961,
+        "geonamesId": 146214
+      },
+      {
+        "nameAr": "غرنة",
+        "nameEn": "Kyrenia",
+        "slug": "kyrenia",
+        "latitude": 35.33634,
+        "longitude": 33.31729,
+        "population": 26701,
+        "geonamesId": 146412
+      }
+    ]
+  },
+  {
+    "isoCode2": "RU",
+    "nameAr": "روسيا",
+    "nameEn": "Russia",
+    "slug": "ru",
+    "latitude": 58.249357,
+    "longitude": 44.686469,
+    "cities": [
+      {
+        "nameAr": "موسكو",
+        "nameEn": "Moscow",
+        "slug": "moscow",
+        "latitude": 55.75204,
+        "longitude": 37.61781,
+        "population": 10381222,
+        "geonamesId": 524901
+      },
+      {
+        "nameAr": "سانت بطرسبرغ",
+        "nameEn": "Saint Petersburg",
+        "slug": "saint-petersburg",
+        "latitude": 59.93863,
+        "longitude": 30.31413,
+        "population": 5351935,
+        "geonamesId": 498817
+      },
+      {
+        "nameAr": "نوفوسيبيرسك",
+        "nameEn": "Novosibirsk",
+        "slug": "novosibirsk",
+        "latitude": 55.02259,
+        "longitude": 82.93175,
+        "population": 1612833,
+        "geonamesId": 1496747
+      },
+      {
+        "nameAr": "يكاترينبرج",
+        "nameEn": "Yekaterinburg",
+        "slug": "yekaterinburg",
+        "latitude": 56.85733,
+        "longitude": 60.61529,
+        "population": 1495066,
+        "geonamesId": 1486209
+      },
+      {
+        "nameAr": "نيجني نوفغورود",
+        "nameEn": "Nizhniy Novgorod",
+        "slug": "nizhniy-novgorod",
+        "latitude": 56.32867,
+        "longitude": 44.00205,
+        "population": 1259013,
+        "geonamesId": 520555
+      },
+      {
+        "nameAr": "كازان",
+        "nameEn": "Kazan",
+        "slug": "kazan",
+        "latitude": 55.78874,
+        "longitude": 49.12214,
+        "population": 1243500,
+        "geonamesId": 551487
+      },
+      {
+        "nameAr": "تشيليابنسك",
+        "nameEn": "Chelyabinsk",
+        "slug": "chelyabinsk",
+        "latitude": 55.1611,
+        "longitude": 61.42877,
+        "population": 1202371,
+        "geonamesId": 1508291
+      },
+      {
+        "nameAr": "أومسك",
+        "nameEn": "Omsk",
+        "slug": "omsk",
+        "latitude": 54.99244,
+        "longitude": 73.36859,
+        "population": 1172070,
+        "geonamesId": 1496153
+      }
+    ]
+  },
+  {
+    "isoCode2": "JP",
+    "nameAr": "اليابان",
+    "nameEn": "Japan",
+    "slug": "jp",
+    "latitude": 36.142538,
+    "longitude": 138.44217,
+    "cities": [
+      {
+        "nameAr": "طوكيو",
+        "nameEn": "Tokyo",
+        "slug": "tokyo",
+        "latitude": 35.6895,
+        "longitude": 139.69171,
+        "population": 9733276,
+        "geonamesId": 1850147
+      },
+      {
+        "nameAr": "يوكوهاما",
+        "nameEn": "Yokohama",
+        "slug": "yokohama",
+        "latitude": 35.43333,
+        "longitude": 139.65,
+        "population": 3777491,
+        "geonamesId": 1848354
+      },
+      {
+        "nameAr": "ئوساكا",
+        "nameEn": "Osaka",
+        "slug": "osaka",
+        "latitude": 34.69379,
+        "longitude": 135.50107,
+        "population": 2753862,
+        "geonamesId": 1853909
+      },
+      {
+        "nameAr": "ناغويا",
+        "nameEn": "Nagoya",
+        "slug": "nagoya",
+        "latitude": 35.18147,
+        "longitude": 136.90641,
+        "population": 2332176,
+        "geonamesId": 1856057
+      },
+      {
+        "nameAr": "سابورو",
+        "nameEn": "Sapporo",
+        "slug": "sapporo",
+        "latitude": 43.06667,
+        "longitude": 141.35,
+        "population": 1973832,
+        "geonamesId": 2128295
+      },
+      {
+        "nameAr": "فوكوكا",
+        "nameEn": "Fukuoka",
+        "slug": "fukuoka",
+        "latitude": 33.6,
+        "longitude": 130.41667,
+        "population": 1612392,
+        "geonamesId": 1863967
+      },
+      {
+        "nameAr": "كاواساكي",
+        "nameEn": "Kawasaki",
+        "slug": "kawasaki",
+        "latitude": 35.52056,
+        "longitude": 139.71722,
+        "population": 1538262,
+        "geonamesId": 1859642
+      },
+      {
+        "nameAr": "كوبه",
+        "nameEn": "Kobe",
+        "slug": "kobe",
+        "latitude": 34.6913,
+        "longitude": 135.183,
+        "population": 1525152,
+        "geonamesId": 1859171
+      }
+    ]
+  },
+  {
+    "isoCode2": "MY",
+    "nameAr": "ماليزيا",
+    "nameEn": "Malaysia",
+    "slug": "my",
+    "latitude": 2.528667,
+    "longitude": 113.83708,
+    "cities": [
+      {
+        "nameAr": "كوالا لامبور",
+        "nameEn": "Kuala Lumpur",
+        "slug": "kuala-lumpur",
+        "latitude": 3.1412,
+        "longitude": 101.68653,
+        "population": 1453975,
+        "geonamesId": 1735161
+      },
+      {
+        "nameAr": "جوهور بهرو",
+        "nameEn": "Johor Bahru",
+        "slug": "johor-bahru",
+        "latitude": 1.4655,
+        "longitude": 103.7578,
+        "population": 858118,
+        "geonamesId": 1732752
+      },
+      {
+        "nameAr": "بيتالينغ جايا",
+        "nameEn": "Petaling Jaya",
+        "slug": "petaling-jaya",
+        "latitude": 3.10726,
+        "longitude": 101.60671,
+        "population": 807879,
+        "geonamesId": 1735158
+      },
+      {
+        "nameAr": "ايبوه",
+        "nameEn": "Ipoh",
+        "slug": "ipoh",
+        "latitude": 4.5841,
+        "longitude": 101.0829,
+        "population": 759952,
+        "geonamesId": 1734634
+      },
+      {
+        "nameAr": "شاه عالم",
+        "nameEn": "Shah Alam",
+        "slug": "shah-alam",
+        "latitude": 3.08507,
+        "longitude": 101.53281,
+        "population": 740750,
+        "geonamesId": 1732903
+      },
+      {
+        "nameAr": "سوبانغ جايا",
+        "nameEn": "Subang Jaya",
+        "slug": "subang-jaya",
+        "latitude": 3.04384,
+        "longitude": 101.58062,
+        "population": 708296,
+        "geonamesId": 8504423
+      },
+      {
+        "nameAr": "ملقا",
+        "nameEn": "Malacca",
+        "slug": "malacca",
+        "latitude": 2.196,
+        "longitude": 102.2405,
+        "population": 579000,
+        "geonamesId": 1734759
+      },
+      {
+        "nameAr": "كوتا بهارو",
+        "nameEn": "Kota Bharu",
+        "slug": "kota-bharu",
+        "latitude": 6.12361,
+        "longitude": 102.24333,
+        "population": 568900,
+        "geonamesId": 1736376
+      }
+    ]
+  },
+  {
+    "isoCode2": "ID",
+    "nameAr": "إندونيسيا",
+    "nameEn": "Indonesia",
+    "slug": "id",
+    "latitude": -0.954404,
+    "longitude": 101.892949,
+    "cities": [
+      {
+        "nameAr": "جاكارتا",
+        "nameEn": "Jakarta",
+        "slug": "jakarta",
+        "latitude": -6.21462,
+        "longitude": 106.84513,
+        "population": 8540121,
+        "geonamesId": 1642911
+      },
+      {
+        "nameAr": "سورابايا",
+        "nameEn": "Surabaya",
+        "slug": "surabaya",
+        "latitude": -7.24917,
+        "longitude": 112.75083,
+        "population": 3018022,
+        "geonamesId": 1625822
+      },
+      {
+        "nameAr": "بيكاسي",
+        "nameEn": "Bekasi",
+        "slug": "bekasi",
+        "latitude": -6.2349,
+        "longitude": 106.9896,
+        "population": 2648272,
+        "geonamesId": 1649378
+      },
+      {
+        "nameAr": "باندونج",
+        "nameEn": "Bandung",
+        "slug": "bandung",
+        "latitude": -6.92222,
+        "longitude": 107.60694,
+        "population": 2528163,
+        "geonamesId": 1650357
+      },
+      {
+        "nameAr": "ميدان",
+        "nameEn": "Medan",
+        "slug": "medan",
+        "latitude": 3.58333,
+        "longitude": 98.66667,
+        "population": 2486283,
+        "geonamesId": 1214520
+      },
+      {
+        "nameAr": "باليمبانج",
+        "nameEn": "Palembang",
+        "slug": "palembang",
+        "latitude": -2.91673,
+        "longitude": 104.7458,
+        "population": 1801367,
+        "geonamesId": 1633070
+      },
+      {
+        "nameAr": "سيمارانج",
+        "nameEn": "Semarang",
+        "slug": "semarang",
+        "latitude": -6.99306,
+        "longitude": 110.42083,
+        "population": 1694740,
+        "geonamesId": 1627896
+      },
+      {
+        "nameAr": "باتام",
+        "nameEn": "Batam",
+        "slug": "batam",
+        "latitude": 1.14937,
+        "longitude": 104.02491,
+        "population": 1296960,
+        "geonamesId": 6295587
+      }
+    ]
+  },
+  {
+    "isoCode2": "CN",
+    "nameAr": "الصين",
+    "nameEn": "China",
+    "slug": "cn",
+    "latitude": 32.498178,
+    "longitude": 106.337289,
+    "cities": [
+      {
+        "nameAr": "شانغهاي",
+        "nameEn": "Shanghai",
+        "slug": "shanghai",
+        "latitude": 31.22222,
+        "longitude": 121.45806,
+        "population": 24874500,
+        "geonamesId": 1796236
+      },
+      {
+        "nameAr": "تشونغتشينغ",
+        "nameEn": "Chongqing",
+        "slug": "chongqing",
+        "latitude": 29.56026,
+        "longitude": 106.55771,
+        "population": 22000000,
+        "geonamesId": 1814906
+      },
+      {
+        "nameAr": "تشنغدو",
+        "nameEn": "Chengdu",
+        "slug": "chengdu",
+        "latitude": 30.66667,
+        "longitude": 104.06667,
+        "population": 20937757,
+        "geonamesId": 1815286
+      },
+      {
+        "nameAr": "بيكين",
+        "nameEn": "Beijing",
+        "slug": "beijing",
+        "latitude": 39.9075,
+        "longitude": 116.39723,
+        "population": 18960744,
+        "geonamesId": 1816670
+      },
+      {
+        "nameAr": "غوانزو",
+        "nameEn": "Guangzhou",
+        "slug": "guangzhou",
+        "latitude": 23.11667,
+        "longitude": 113.25,
+        "population": 18676605,
+        "geonamesId": 1809858
+      },
+      {
+        "nameAr": "شينزين",
+        "nameEn": "Shenzhen",
+        "slug": "shenzhen",
+        "latitude": 22.54554,
+        "longitude": 114.0683,
+        "population": 17494398,
+        "geonamesId": 1795565
+      },
+      {
+        "nameAr": "تيانجين",
+        "nameEn": "Tianjin",
+        "slug": "tianjin",
+        "latitude": 39.14222,
+        "longitude": 117.17667,
+        "population": 13866009,
+        "geonamesId": 1792947
+      },
+      {
+        "nameAr": "ووهان",
+        "nameEn": "Wuhan",
+        "slug": "wuhan",
+        "latitude": 30.58333,
+        "longitude": 114.26667,
+        "population": 13739000,
+        "geonamesId": 1791247
+      }
+    ]
+  },
+  {
+    "isoCode2": "NZ",
+    "nameAr": "نيوزيلندا",
+    "nameEn": "New Zealand",
+    "slug": "nz",
+    "latitude": -39.759,
+    "longitude": 172.787,
+    "cities": [
+      {
+        "nameAr": "أوكلاند",
+        "nameEn": "Auckland",
+        "slug": "auckland",
+        "latitude": -36.84853,
+        "longitude": 174.76349,
+        "population": 1547200,
+        "geonamesId": 2193733
+      },
+      {
+        "nameAr": "كرايستشرش",
+        "nameEn": "Christchurch",
+        "slug": "christchurch",
+        "latitude": -43.53333,
+        "longitude": 172.63333,
+        "population": 419200,
+        "geonamesId": 2192362
+      },
+      {
+        "nameAr": "ويلينغتون",
+        "nameEn": "Wellington",
+        "slug": "wellington",
+        "latitude": -41.28664,
+        "longitude": 174.77557,
+        "population": 381900,
+        "geonamesId": 2179537
+      },
+      {
+        "nameAr": "هاميلتون",
+        "nameEn": "Hamilton",
+        "slug": "hamilton",
+        "latitude": -37.78333,
+        "longitude": 175.28333,
+        "population": 192100,
+        "geonamesId": 2190324
+      },
+      {
+        "nameAr": "دنيدين",
+        "nameEn": "Dunedin",
+        "slug": "dunedin",
+        "latitude": -45.87416,
+        "longitude": 170.50361,
+        "population": 132800,
+        "geonamesId": 2191562
+      },
+      {
+        "nameAr": "لوور حوتت",
+        "nameEn": "Lower Hutt",
+        "slug": "lower-hutt",
+        "latitude": -41.21667,
+        "longitude": 174.91667,
+        "population": 114200,
+        "geonamesId": 2188164
+      },
+      {
+        "nameAr": "بالمرستون نورث",
+        "nameEn": "Palmerston North",
+        "slug": "palmerston-north",
+        "latitude": -40.35636,
+        "longitude": 175.61113,
+        "population": 90500,
+        "geonamesId": 2185018
+      },
+      {
+        "nameAr": "نيو بليموث",
+        "nameEn": "New Plymouth",
+        "slug": "new-plymouth",
+        "latitude": -39.06667,
+        "longitude": 174.08333,
+        "population": 90100,
+        "geonamesId": 2186239
+      }
+    ]
+  },
+  {
+    "isoCode2": "DK",
+    "nameAr": "الدنمارك",
+    "nameEn": "Denmark",
+    "slug": "dk",
+    "latitude": 55.966965,
+    "longitude": 9.018163,
+    "cities": [
+      {
+        "nameAr": "كوبنهاغن",
+        "nameEn": "Copenhagen",
+        "slug": "copenhagen",
+        "latitude": 55.67594,
+        "longitude": 12.56553,
+        "population": 1153615,
+        "geonamesId": 2618425
+      },
+      {
+        "nameAr": "اودنسے",
+        "nameEn": "Odense",
+        "slug": "odense",
+        "latitude": 55.39594,
+        "longitude": 10.38831,
+        "population": 180863,
+        "geonamesId": 2615876
+      },
+      {
+        "nameAr": "البورګ",
+        "nameEn": "Aalborg",
+        "slug": "aalborg",
+        "latitude": 57.048,
+        "longitude": 9.9187,
+        "population": 142937,
+        "geonamesId": 2624886
+      },
+      {
+        "nameAr": "فريدريكسبرغ",
+        "nameEn": "Frederiksberg",
+        "slug": "frederiksberg",
+        "latitude": 55.67938,
+        "longitude": 12.53463,
+        "population": 95029,
+        "geonamesId": 2621942
+      },
+      {
+        "nameAr": "إيسبيرغ",
+        "nameEn": "Esbjerg",
+        "slug": "esbjerg",
+        "latitude": 55.47028,
+        "longitude": 8.45187,
+        "population": 71698,
+        "geonamesId": 2622447
+      },
+      {
+        "nameAr": "رانڈرز",
+        "nameEn": "Randers",
+        "slug": "randers",
+        "latitude": 56.4607,
+        "longitude": 10.03639,
+        "population": 62802,
+        "geonamesId": 2615006
+      },
+      {
+        "nameAr": "كولدنغ",
+        "nameEn": "Kolding",
+        "slug": "kolding",
+        "latitude": 55.4904,
+        "longitude": 9.47216,
+        "population": 61638,
+        "geonamesId": 2618528
+      },
+      {
+        "nameAr": "هورسينس",
+        "nameEn": "Horsens",
+        "slug": "horsens",
+        "latitude": 55.86066,
+        "longitude": 9.85034,
+        "population": 61074,
+        "geonamesId": 2619771
+      }
+    ]
+  },
+  {
+    "isoCode2": "NO",
+    "nameAr": "النرويج",
+    "nameEn": "Norway",
+    "slug": "no",
+    "latitude": 61.357092,
+    "longitude": 9.679975,
+    "cities": [
+      {
+        "nameAr": "اوسلو",
+        "nameEn": "Oslo",
+        "slug": "oslo",
+        "latitude": 59.91273,
+        "longitude": 10.74609,
+        "population": 1082575,
+        "geonamesId": 3143244
+      },
+      {
+        "nameAr": "برغن",
+        "nameEn": "Bergen",
+        "slug": "bergen",
+        "latitude": 60.39299,
+        "longitude": 5.32415,
+        "population": 294029,
+        "geonamesId": 3161732
+      },
+      {
+        "nameAr": "تروندهايم",
+        "nameEn": "Trondheim",
+        "slug": "trondheim",
+        "latitude": 63.43049,
+        "longitude": 10.39506,
+        "population": 216518,
+        "geonamesId": 3133880
+      },
+      {
+        "nameAr": "ستافانجر",
+        "nameEn": "Stavanger",
+        "slug": "stavanger",
+        "latitude": 58.97005,
+        "longitude": 5.73332,
+        "population": 151669,
+        "geonamesId": 3137115
+      },
+      {
+        "nameAr": "كريستيانساند",
+        "nameEn": "Kristiansand",
+        "slug": "kristiansand",
+        "latitude": 58.14671,
+        "longitude": 7.9956,
+        "population": 117237,
+        "geonamesId": 3149318
+      },
+      {
+        "nameAr": "ڈرامن",
+        "nameEn": "Drammen",
+        "slug": "drammen",
+        "latitude": 59.74389,
+        "longitude": 10.20449,
+        "population": 106013,
+        "geonamesId": 3159016
+      },
+      {
+        "nameAr": "تونسبيرغ",
+        "nameEn": "Tønsberg",
+        "slug": "tonsberg",
+        "latitude": 59.26754,
+        "longitude": 10.40762,
+        "population": 55387,
+        "geonamesId": 3134331
+      },
+      {
+        "nameAr": "سكيان",
+        "nameEn": "Skien",
+        "slug": "skien",
+        "latitude": 59.20962,
+        "longitude": 9.60897,
+        "population": 50595,
+        "geonamesId": 3139075
+      }
+    ]
+  },
+  {
+    "isoCode2": "PT",
+    "nameAr": "البرتغال",
+    "nameEn": "Portugal",
+    "slug": "pt",
+    "latitude": 39.606675,
+    "longitude": -8.271754,
+    "cities": [
+      {
+        "nameAr": "لشبونة",
+        "nameEn": "Lisbon",
+        "slug": "lisbon",
+        "latitude": 38.72509,
+        "longitude": -9.1498,
+        "population": 517802,
+        "geonamesId": 2267057
+      },
+      {
+        "nameAr": "بورتو",
+        "nameEn": "Porto",
+        "slug": "porto",
+        "latitude": 41.1485,
+        "longitude": -8.61097,
+        "population": 252687,
+        "geonamesId": 2735943
+      },
+      {
+        "nameAr": "براغا",
+        "nameEn": "Braga",
+        "slug": "braga",
+        "latitude": 41.5514,
+        "longitude": -8.42311,
+        "population": 193324,
+        "geonamesId": 2742032
+      },
+      {
+        "nameAr": "كويمبرا",
+        "nameEn": "Coimbra",
+        "slug": "coimbra",
+        "latitude": 40.20686,
+        "longitude": -8.41996,
+        "population": 140796,
+        "geonamesId": 2740637
+      },
+      {
+        "nameAr": "لييريا",
+        "nameEn": "Leiria",
+        "slug": "leiria",
+        "latitude": 39.74362,
+        "longitude": -8.80705,
+        "population": 128640,
+        "geonamesId": 2267095
+      },
+      {
+        "nameAr": "سيتوبال",
+        "nameEn": "Setúbal",
+        "slug": "setubal",
+        "latitude": 38.5244,
+        "longitude": -8.8882,
+        "population": 118166,
+        "geonamesId": 2262963
+      },
+      {
+        "nameAr": "فونشال",
+        "nameEn": "Funchal",
+        "slug": "funchal",
+        "latitude": 32.66568,
+        "longitude": -16.92547,
+        "population": 105795,
+        "geonamesId": 2267827
+      },
+      {
+        "nameAr": "فيسيو",
+        "nameEn": "Viseu",
+        "slug": "viseu",
+        "latitude": 40.66165,
+        "longitude": -7.90905,
+        "population": 103502,
+        "geonamesId": 2732265
+      }
+    ]
+  },
+  {
+    "isoCode2": "PL",
+    "nameAr": "بولندا",
+    "nameEn": "Poland",
+    "slug": "pl",
+    "latitude": 51.990316,
+    "longitude": 19.490468,
+    "cities": [
+      {
+        "nameAr": "وارسو",
+        "nameEn": "Warsaw",
+        "slug": "warsaw",
+        "latitude": 52.22977,
+        "longitude": 21.01178,
+        "population": 1702139,
+        "geonamesId": 756135
+      },
+      {
+        "nameAr": "كراكوف",
+        "nameEn": "Kraków",
+        "slug": "krakow",
+        "latitude": 50.06143,
+        "longitude": 19.93658,
+        "population": 816614,
+        "geonamesId": 3094802
+      },
+      {
+        "nameAr": "وروتسواف",
+        "nameEn": "Wrocław",
+        "slug": "wroclaw",
+        "latitude": 51.10286,
+        "longitude": 17.03006,
+        "population": 672545,
+        "geonamesId": 3081368
+      },
+      {
+        "nameAr": "وودج",
+        "nameEn": "Łódź",
+        "slug": "lodz",
+        "latitude": 51.77058,
+        "longitude": 19.47395,
+        "population": 639890,
+        "geonamesId": 3093133
+      },
+      {
+        "nameAr": "بوزنان",
+        "nameEn": "Poznań",
+        "slug": "poznan",
+        "latitude": 52.40692,
+        "longitude": 16.92993,
+        "population": 536151,
+        "geonamesId": 3088171
+      },
+      {
+        "nameAr": "غدانسك",
+        "nameEn": "Gdańsk",
+        "slug": "gdansk",
+        "latitude": 54.35227,
+        "longitude": 18.64912,
+        "population": 487371,
+        "geonamesId": 3099434
+      },
+      {
+        "nameAr": "شتتين",
+        "nameEn": "Szczecin",
+        "slug": "szczecin",
+        "latitude": 53.42894,
+        "longitude": 14.55302,
+        "population": 395513,
+        "geonamesId": 3083829
+      },
+      {
+        "nameAr": "لوبلين",
+        "nameEn": "Lublin",
+        "slug": "lublin",
+        "latitude": 51.25058,
+        "longitude": 22.57009,
+        "population": 336339,
+        "geonamesId": 765876
+      }
+    ]
+  },
+  {
+    "isoCode2": "UA",
+    "nameAr": "أوكرانيا",
+    "nameEn": "Ukraine",
+    "slug": "ua",
+    "latitude": 49.724739,
+    "longitude": 32.140865,
+    "cities": [
+      {
+        "nameAr": "كييف",
+        "nameEn": "Kyiv",
+        "slug": "kyiv",
+        "latitude": 50.45466,
+        "longitude": 30.5238,
+        "population": 2952301,
+        "geonamesId": 703448
+      },
+      {
+        "nameAr": "خاركوف",
+        "nameEn": "Kharkiv",
+        "slug": "kharkiv",
+        "latitude": 49.98177,
+        "longitude": 36.25475,
+        "population": 1421125,
+        "geonamesId": 706483
+      },
+      {
+        "nameAr": "اوديسا",
+        "nameEn": "Odesa",
+        "slug": "odesa",
+        "latitude": 46.48572,
+        "longitude": 30.74383,
+        "population": 1010537,
+        "geonamesId": 698740
+      },
+      {
+        "nameAr": "دنيبرو",
+        "nameEn": "Dnipro",
+        "slug": "dnipro",
+        "latitude": 48.46664,
+        "longitude": 35.04066,
+        "population": 968502,
+        "geonamesId": 709930
+      },
+      {
+        "nameAr": "دونيتسك",
+        "nameEn": "Donetsk",
+        "slug": "donetsk",
+        "latitude": 48.023,
+        "longitude": 37.80224,
+        "population": 901645,
+        "geonamesId": 709717
+      },
+      {
+        "nameAr": "لووف",
+        "nameEn": "Lviv",
+        "slug": "lviv",
+        "latitude": 49.83826,
+        "longitude": 24.02324,
+        "population": 717273,
+        "geonamesId": 702550
+      },
+      {
+        "nameAr": "زاباروجيا",
+        "nameEn": "Zaporizhzhya",
+        "slug": "zaporizhzhya",
+        "latitude": 47.85167,
+        "longitude": 35.11714,
+        "population": 710052,
+        "geonamesId": 687700
+      },
+      {
+        "nameAr": "كريفي ريه",
+        "nameEn": "Kryvyy Rih",
+        "slug": "kryvyy-rih",
+        "latitude": 47.90572,
+        "longitude": 33.39404,
+        "population": 603904,
+        "geonamesId": 703845
+      }
+    ]
+  },
+  {
+    "isoCode2": "SG",
+    "nameAr": "سنغافورة",
+    "nameEn": "Singapore",
+    "slug": "sg",
+    "latitude": 1.28967,
+    "longitude": 103.85007,
+    "cities": [
+      {
+        "nameAr": "سنغافورة",
+        "nameEn": "Singapore",
+        "slug": "singapore",
+        "latitude": 1.28967,
+        "longitude": 103.85007,
+        "population": 5638700,
+        "geonamesId": 1880252
+      }
+    ]
+  },
+  {
+    "isoCode2": "KR",
+    "nameAr": "كوريا الجنوبية",
+    "nameEn": "South Korea",
+    "slug": "kr",
+    "latitude": 36.384924,
+    "longitude": 128.129504,
+    "cities": [
+      {
+        "nameAr": "سيول",
+        "nameEn": "Seoul",
+        "slug": "seoul",
+        "latitude": 37.566,
+        "longitude": 126.9784,
+        "population": 10349312,
+        "geonamesId": 1835848
+      },
+      {
+        "nameAr": "بوسان",
+        "nameEn": "Busan",
+        "slug": "busan",
+        "latitude": 35.10168,
+        "longitude": 129.03004,
+        "population": 3285147,
+        "geonamesId": 1838524
+      },
+      {
+        "nameAr": "إنتشون",
+        "nameEn": "Incheon",
+        "slug": "incheon",
+        "latitude": 37.45646,
+        "longitude": 126.70515,
+        "population": 3015482,
+        "geonamesId": 1843564
+      },
+      {
+        "nameAr": "دائجو",
+        "nameEn": "Daegu",
+        "slug": "daegu",
+        "latitude": 35.87102,
+        "longitude": 128.60121,
+        "population": 2365523,
+        "geonamesId": 1835329
+      },
+      {
+        "nameAr": "دايجيون",
+        "nameEn": "Daejeon",
+        "slug": "daejeon",
+        "latitude": 36.35022,
+        "longitude": 127.3848,
+        "population": 1441203,
+        "geonamesId": 1835235
+      },
+      {
+        "nameAr": "غوانغجو",
+        "nameEn": "Gwangju",
+        "slug": "gwangju",
+        "latitude": 35.15472,
+        "longitude": 126.91556,
+        "population": 1401235,
+        "geonamesId": 1841811
+      },
+      {
+        "nameAr": "سووون",
+        "nameEn": "Suwon",
+        "slug": "suwon",
+        "latitude": 37.27818,
+        "longitude": 127.03164,
+        "population": 1234582,
+        "geonamesId": 1835553
+      },
+      {
+        "nameAr": "اولسان",
+        "nameEn": "Ulsan",
+        "slug": "ulsan",
+        "latitude": 35.53917,
+        "longitude": 129.31239,
+        "population": 1098421,
+        "geonamesId": 1833747
+      }
+    ]
+  },
+  {
+    "isoCode2": "IN",
+    "nameAr": "الهند",
+    "nameEn": "India",
+    "slug": "in",
+    "latitude": 22.686852,
+    "longitude": 79.358105,
+    "cities": [
+      {
+        "nameAr": "مومباي",
+        "nameEn": "Mumbai",
+        "slug": "mumbai",
+        "latitude": 19.07283,
+        "longitude": 72.88261,
+        "population": 12691836,
+        "geonamesId": 1275339
+      },
+      {
+        "nameAr": "نيودلهي",
+        "nameEn": "Delhi",
+        "slug": "delhi",
+        "latitude": 28.65195,
+        "longitude": 77.23149,
+        "population": 11034555,
+        "geonamesId": 1273294
+      },
+      {
+        "nameAr": "بنغالورو",
+        "nameEn": "Bengaluru",
+        "slug": "bengaluru",
+        "latitude": 12.97194,
+        "longitude": 77.59369,
+        "population": 8495492,
+        "geonamesId": 1277333
+      },
+      {
+        "nameAr": "حيدر آباد",
+        "nameEn": "Hyderabad",
+        "slug": "hyderabad",
+        "latitude": 17.38405,
+        "longitude": 78.45636,
+        "population": 6993262,
+        "geonamesId": 1269843
+      },
+      {
+        "nameAr": "احمد آباد",
+        "nameEn": "Ahmedabad",
+        "slug": "ahmedabad",
+        "latitude": 23.02579,
+        "longitude": 72.58727,
+        "population": 6357693,
+        "geonamesId": 1279233
+      },
+      {
+        "nameAr": "تشيناي",
+        "nameEn": "Chennai",
+        "slug": "chennai",
+        "latitude": 13.08784,
+        "longitude": 80.27847,
+        "population": 4681087,
+        "geonamesId": 1264527
+      },
+      {
+        "nameAr": "كولكاتا",
+        "nameEn": "Kolkata",
+        "slug": "kolkata",
+        "latitude": 22.56263,
+        "longitude": 88.36304,
+        "population": 4631392,
+        "geonamesId": 1275004
+      },
+      {
+        "nameAr": "بونه",
+        "nameEn": "Pune",
+        "slug": "pune",
+        "latitude": 18.51957,
+        "longitude": 73.85535,
+        "population": 3124458,
+        "geonamesId": 1259229
+      }
+    ]
+  },
+  {
+    "isoCode2": "PK",
+    "nameAr": "باكستان",
+    "nameEn": "Pakistan",
+    "slug": "pk",
+    "latitude": 29.328389,
+    "longitude": 68.545632,
+    "cities": [
+      {
+        "nameAr": "لاهور",
+        "nameEn": "Lahore",
+        "slug": "lahore",
+        "latitude": 31.558,
+        "longitude": 74.35071,
+        "population": 13004135,
+        "geonamesId": 1172451
+      },
+      {
+        "nameAr": "كراتشي",
+        "nameEn": "Karachi",
+        "slug": "karachi",
+        "latitude": 24.8608,
+        "longitude": 67.0104,
+        "population": 11624219,
+        "geonamesId": 1174872
+      },
+      {
+        "nameAr": "بيشاور",
+        "nameEn": "Peshawar",
+        "slug": "peshawar",
+        "latitude": 34.008,
+        "longitude": 71.57849,
+        "population": 4758762,
+        "geonamesId": 1168197
+      },
+      {
+        "nameAr": "فيصل آباد",
+        "nameEn": "Faisalabad",
+        "slug": "faisalabad",
+        "latitude": 31.41554,
+        "longitude": 73.08969,
+        "population": 3800193,
+        "geonamesId": 1179400
+      },
+      {
+        "nameAr": "راولبندي",
+        "nameEn": "Rawalpindi",
+        "slug": "rawalpindi",
+        "latitude": 33.59733,
+        "longitude": 73.0479,
+        "population": 3357612,
+        "geonamesId": 1166993
+      },
+      {
+        "nameAr": "ملتان",
+        "nameEn": "Multan",
+        "slug": "multan",
+        "latitude": 30.19679,
+        "longitude": 71.47824,
+        "population": 2169915,
+        "geonamesId": 1169825
+      },
+      {
+        "nameAr": "حيدرآباد، سنڌ",
+        "nameEn": "Hyderabad",
+        "slug": "hyderabad",
+        "latitude": 25.39689,
+        "longitude": 68.37718,
+        "population": 1921275,
+        "geonamesId": 1176734
+      },
+      {
+        "nameAr": "كويته",
+        "nameEn": "Quetta",
+        "slug": "quetta",
+        "latitude": 30.18414,
+        "longitude": 67.00141,
+        "population": 1565546,
+        "geonamesId": 1167528
+      }
+    ]
+  },
+  {
+    "isoCode2": "NG",
+    "nameAr": "نيجيريا",
+    "nameEn": "Nigeria",
+    "slug": "ng",
+    "latitude": 9.439799,
+    "longitude": 7.50322,
+    "cities": [
+      {
+        "nameAr": "لاغوس",
+        "nameEn": "Lagos",
+        "slug": "lagos",
+        "latitude": 6.45407,
+        "longitude": 3.39467,
+        "population": 15388000,
+        "geonamesId": 2332459
+      },
+      {
+        "nameAr": "كانو",
+        "nameEn": "Kano",
+        "slug": "kano",
+        "latitude": 12.00012,
+        "longitude": 8.51672,
+        "population": 4910000,
+        "geonamesId": 2335204
+      },
+      {
+        "nameAr": "إيبادان",
+        "nameEn": "Ibadan",
+        "slug": "ibadan",
+        "latitude": 7.37756,
+        "longitude": 3.90591,
+        "population": 3649000,
+        "geonamesId": 2339354
+      },
+      {
+        "nameAr": "ابوجا",
+        "nameEn": "Abuja",
+        "slug": "abuja",
+        "latitude": 9.05785,
+        "longitude": 7.49508,
+        "population": 2690000,
+        "geonamesId": 2352778
+      },
+      {
+        "nameAr": "بورت هاركورت",
+        "nameEn": "Port Harcourt",
+        "slug": "port-harcourt",
+        "latitude": 4.77742,
+        "longitude": 7.0134,
+        "population": 2120000,
+        "geonamesId": 2324774
+      },
+      {
+        "nameAr": "كادونا",
+        "nameEn": "Kaduna",
+        "slug": "kaduna",
+        "latitude": 10.52641,
+        "longitude": 7.43879,
+        "population": 1850000,
+        "geonamesId": 2335727
+      },
+      {
+        "nameAr": "بنن ښار",
+        "nameEn": "Benin City",
+        "slug": "benin-city",
+        "latitude": 6.33815,
+        "longitude": 5.62575,
+        "population": 1782000,
+        "geonamesId": 2347283
+      },
+      {
+        "nameAr": "آبا",
+        "nameEn": "Aba",
+        "slug": "aba",
+        "latitude": 5.10658,
+        "longitude": 7.36667,
+        "population": 1160000,
+        "geonamesId": 2353151
+      }
+    ]
+  },
+  {
+    "isoCode2": "ET",
+    "nameAr": "إثيوبيا",
+    "nameEn": "Ethiopia",
+    "slug": "et",
+    "latitude": 8.032795,
+    "longitude": 39.0886,
+    "cities": [
+      {
+        "nameAr": "أديس أبابا",
+        "nameEn": "Addis Ababa",
+        "slug": "addis-ababa",
+        "latitude": 9.02497,
+        "longitude": 38.74689,
+        "population": 3860000,
+        "geonamesId": 344979
+      },
+      {
+        "nameAr": "بحر دار",
+        "nameEn": "Bahir Dar",
+        "slug": "bahir-dar",
+        "latitude": 11.59364,
+        "longitude": 37.39077,
+        "population": 350000,
+        "geonamesId": 342884
+      },
+      {
+        "nameAr": "ديرة داوا",
+        "nameEn": "Dire Dawa",
+        "slug": "dire-dawa",
+        "latitude": 9.59306,
+        "longitude": 41.86611,
+        "population": 343000,
+        "geonamesId": 338832
+      },
+      {
+        "nameAr": "ديسي",
+        "nameEn": "Dessie",
+        "slug": "dessie",
+        "latitude": 11.13333,
+        "longitude": 39.63333,
+        "population": 270400,
+        "geonamesId": 339219
+      },
+      {
+        "nameAr": "جيما",
+        "nameEn": "Jimma",
+        "slug": "jimma",
+        "latitude": 7.67344,
+        "longitude": 36.83441,
+        "population": 250900,
+        "geonamesId": 333772
+      },
+      {
+        "nameAr": "هرر",
+        "nameEn": "Harar",
+        "slug": "harar",
+        "latitude": 9.31387,
+        "longitude": 42.11815,
+        "population": 157000,
+        "geonamesId": 335035
+      },
+      {
+        "nameAr": "ديبري بيرهان",
+        "nameEn": "Debre Birhan",
+        "slug": "debre-birhan",
+        "latitude": 9.67954,
+        "longitude": 39.53262,
+        "population": 146900,
+        "geonamesId": 339734
+      },
+      {
+        "nameAr": "كومبولشا",
+        "nameEn": "Kombolcha",
+        "slug": "kombolcha",
+        "latitude": 11.08155,
+        "longitude": 39.74339,
+        "population": 132100,
+        "geonamesId": 333373
+      }
+    ]
+  },
+  {
+    "isoCode2": "KE",
+    "nameAr": "كينيا",
+    "nameEn": "Kenya",
+    "slug": "ke",
+    "latitude": 0.549043,
+    "longitude": 37.907632,
+    "cities": [
+      {
+        "nameAr": "نيروبي",
+        "nameEn": "Nairobi",
+        "slug": "nairobi",
+        "latitude": -1.28333,
+        "longitude": 36.81667,
+        "population": 4397073,
+        "geonamesId": 184745
+      },
+      {
+        "nameAr": "ممباسا",
+        "nameEn": "Mombasa",
+        "slug": "mombasa",
+        "latitude": -4.05466,
+        "longitude": 39.66359,
+        "population": 1208333,
+        "geonamesId": 186301
+      },
+      {
+        "nameAr": "الدورت",
+        "nameEn": "Eldoret",
+        "slug": "eldoret",
+        "latitude": 0.52036,
+        "longitude": 35.26993,
+        "population": 475716,
+        "geonamesId": 198629
+      },
+      {
+        "nameAr": "كيزيمو",
+        "nameEn": "Kisumu",
+        "slug": "kisumu",
+        "latitude": -0.10221,
+        "longitude": 34.76171,
+        "population": 397957,
+        "geonamesId": 191245
+      },
+      {
+        "nameAr": "نايفاشا",
+        "nameEn": "Naivasha",
+        "slug": "naivasha",
+        "latitude": -0.71383,
+        "longitude": 36.43261,
+        "population": 198444,
+        "geonamesId": 184707
+      },
+      {
+        "nameAr": "غاريسا",
+        "nameEn": "Garissa",
+        "slug": "garissa",
+        "latitude": -0.45275,
+        "longitude": 39.64601,
+        "population": 163399,
+        "geonamesId": 197745
+      },
+      {
+        "nameAr": "ماليندي",
+        "nameEn": "Malindi",
+        "slug": "malindi",
+        "latitude": -3.21799,
+        "longitude": 40.11692,
+        "population": 119859,
+        "geonamesId": 187968
+      },
+      {
+        "nameAr": "لودوار",
+        "nameEn": "Lodwar",
+        "slug": "lodwar",
+        "latitude": 3.11988,
+        "longitude": 35.59642,
+        "population": 82970,
+        "geonamesId": 189280
+      }
+    ]
+  },
+  {
+    "isoCode2": "GH",
+    "nameAr": "غانا",
+    "nameEn": "Ghana",
+    "slug": "gh",
+    "latitude": 7.717639,
+    "longitude": -1.036941,
+    "cities": [
+      {
+        "nameAr": "كوماسي",
+        "nameEn": "Kumasi",
+        "slug": "kumasi",
+        "latitude": 6.68848,
+        "longitude": -1.62443,
+        "population": 2544530,
+        "geonamesId": 2298890
+      },
+      {
+        "nameAr": "أكرا",
+        "nameEn": "Accra",
+        "slug": "accra",
+        "latitude": 5.55602,
+        "longitude": -0.1969,
+        "population": 1963264,
+        "geonamesId": 2306104
+      },
+      {
+        "nameAr": "آشيامان",
+        "nameEn": "Ashaiman",
+        "slug": "ashaiman",
+        "latitude": 5.69951,
+        "longitude": -0.03484,
+        "population": 190972,
+        "geonamesId": 2304121
+      },
+      {
+        "nameAr": "تيما",
+        "nameEn": "Tema",
+        "slug": "tema",
+        "latitude": 5.6698,
+        "longitude": -0.01657,
+        "population": 155782,
+        "geonamesId": 2294700
+      },
+      {
+        "nameAr": "سيكوندي تاكورادي",
+        "nameEn": "Sekondi-Takoradi",
+        "slug": "sekondi-takoradi",
+        "latitude": 4.92678,
+        "longitude": -1.75773,
+        "population": 138872,
+        "geonamesId": 2295458
+      },
+      {
+        "nameAr": "هو٬ غنا",
+        "nameEn": "Ho",
+        "slug": "ho",
+        "latitude": 6.60084,
+        "longitude": 0.4713,
+        "population": 130701,
+        "geonamesId": 2300379
+      },
+      {
+        "nameAr": "نساوام",
+        "nameEn": "Nsawam",
+        "slug": "nsawam",
+        "latitude": 5.80893,
+        "longitude": -0.35026,
+        "population": 48885,
+        "geonamesId": 2297141
+      },
+      {
+        "nameAr": "مانكسيم",
+        "nameEn": "Mankesim",
+        "slug": "mankesim",
+        "latitude": 5.2717,
+        "longitude": -1.0152,
+        "population": 41541,
+        "geonamesId": 2298205
+      }
+    ]
+  },
+  {
+    "isoCode2": "SN",
+    "nameAr": "السنغال",
+    "nameEn": "Senegal",
+    "slug": "sn",
+    "latitude": 15.138125,
+    "longitude": -14.778586,
+    "cities": [
+      {
+        "nameAr": "داكار",
+        "nameEn": "Dakar",
+        "slug": "dakar",
+        "latitude": 14.6937,
+        "longitude": -17.44406,
+        "population": 2646503,
+        "geonamesId": 2253354
+      },
+      {
+        "nameAr": "كاولاك",
+        "nameEn": "Kaolack",
+        "slug": "kaolack",
+        "latitude": 14.15197,
+        "longitude": -16.07259,
+        "population": 298904,
+        "geonamesId": 2250805
+      },
+      {
+        "nameAr": "روفسك",
+        "nameEn": "Rufisque",
+        "slug": "rufisque",
+        "latitude": 14.71542,
+        "longitude": -17.27334,
+        "population": 295459,
+        "geonamesId": 2246512
+      },
+      {
+        "nameAr": "سانت لويس",
+        "nameEn": "Saint-Louis",
+        "slug": "saint-louis",
+        "latitude": 16.01793,
+        "longitude": -16.48962,
+        "population": 254171,
+        "geonamesId": 2246452
+      },
+      {
+        "nameAr": "زيغنشور",
+        "nameEn": "Ziguinchor",
+        "slug": "ziguinchor",
+        "latitude": 12.56801,
+        "longitude": -16.27326,
+        "population": 214874,
+        "geonamesId": 2243940
+      },
+      {
+        "nameAr": "ديوربل",
+        "nameEn": "Diourbel",
+        "slug": "diourbel",
+        "latitude": 14.64792,
+        "longitude": -16.24363,
+        "population": 157554,
+        "geonamesId": 2252309
+      },
+      {
+        "nameAr": "تمباكوندا",
+        "nameEn": "Tambacounda",
+        "slug": "tambacounda",
+        "latitude": 13.77073,
+        "longitude": -13.66734,
+        "population": 149071,
+        "geonamesId": 2244991
+      },
+      {
+        "nameAr": "لوغا",
+        "nameEn": "Louga",
+        "slug": "louga",
+        "latitude": 15.61867,
+        "longitude": -16.22436,
+        "population": 113365,
+        "geonamesId": 2249222
+      }
+    ]
+  },
+  {
+    "isoCode2": "CI",
+    "nameAr": "ساحل العاج",
+    "nameEn": "Ivory Coast",
+    "slug": "ci",
+    "latitude": 7.49139,
+    "longitude": -5.568618,
+    "cities": [
+      {
+        "nameAr": "أبيدجان",
+        "nameEn": "Abidjan",
+        "slug": "abidjan",
+        "latitude": 5.35444,
+        "longitude": -4.00167,
+        "population": 6321017,
+        "geonamesId": 2293538
+      },
+      {
+        "nameAr": "بواكي",
+        "nameEn": "Bouaké",
+        "slug": "bouake",
+        "latitude": 7.69385,
+        "longitude": -5.03031,
+        "population": 832371,
+        "geonamesId": 2290956
+      },
+      {
+        "nameAr": "كوروغو",
+        "nameEn": "Korhogo",
+        "slug": "korhogo",
+        "latitude": 9.45803,
+        "longitude": -5.62961,
+        "population": 440926,
+        "geonamesId": 2286304
+      },
+      {
+        "nameAr": "دالوا",
+        "nameEn": "Daloa",
+        "slug": "daloa",
+        "latitude": 6.87735,
+        "longitude": -6.45022,
+        "population": 421871,
+        "geonamesId": 2290486
+      },
+      {
+        "nameAr": "سان بيدرو",
+        "nameEn": "San-Pédro",
+        "slug": "san-pedro",
+        "latitude": 4.74851,
+        "longitude": -6.6363,
+        "population": 390654,
+        "geonamesId": 2282006
+      },
+      {
+        "nameAr": "غانيوا",
+        "nameEn": "Gagnoa",
+        "slug": "gagnoa",
+        "latitude": 6.13193,
+        "longitude": -5.9506,
+        "population": 277044,
+        "geonamesId": 2288829
+      },
+      {
+        "nameAr": "يامۇسسۇكرو",
+        "nameEn": "Yamoussoukro",
+        "slug": "yamoussoukro",
+        "latitude": 6.82055,
+        "longitude": -5.27674,
+        "population": 275686,
+        "geonamesId": 2279755
+      },
+      {
+        "nameAr": "مان",
+        "nameEn": "Man",
+        "slug": "man",
+        "latitude": 7.41251,
+        "longitude": -7.55383,
+        "population": 241969,
+        "geonamesId": 2284647
+      }
+    ]
+  },
+  {
+    "isoCode2": "AR",
+    "nameAr": "الأرجنتين",
+    "nameEn": "Argentina",
+    "slug": "ar",
+    "latitude": -33.501159,
+    "longitude": -64.173331,
+    "cities": [
+      {
+        "nameAr": "بوينس آيرس",
+        "nameEn": "Buenos Aires",
+        "slug": "buenos-aires",
+        "latitude": -34.61315,
+        "longitude": -58.37723,
+        "population": 2891082,
+        "geonamesId": 3435910
+      },
+      {
+        "nameAr": "كوردوبا",
+        "nameEn": "Córdoba",
+        "slug": "cordoba",
+        "latitude": -31.40648,
+        "longitude": -64.18853,
+        "population": 2106734,
+        "geonamesId": 3860259
+      },
+      {
+        "nameAr": "روساريو",
+        "nameEn": "Rosario",
+        "slug": "rosario",
+        "latitude": -32.94682,
+        "longitude": -60.63932,
+        "population": 948312,
+        "geonamesId": 3838583
+      },
+      {
+        "nameAr": "ماريه ديل بلاتا",
+        "nameEn": "Mar del Plata",
+        "slug": "mar-del-plata",
+        "latitude": -38.00042,
+        "longitude": -57.5562,
+        "population": 593337,
+        "geonamesId": 3430863
+      },
+      {
+        "nameAr": "سان ميغيل دي توكومان",
+        "nameEn": "San Miguel de Tucumán",
+        "slug": "san-miguel-de-tucuman",
+        "latitude": -26.81601,
+        "longitude": -65.21051,
+        "population": 548866,
+        "geonamesId": 3836873
+      },
+      {
+        "nameAr": "سالتا",
+        "nameEn": "Salta",
+        "slug": "salta",
+        "latitude": -24.80645,
+        "longitude": -65.41999,
+        "population": 520683,
+        "geonamesId": 3838233
+      },
+      {
+        "nameAr": "سانتا فيه",
+        "nameEn": "Santa Fe",
+        "slug": "santa-fe",
+        "latitude": -31.64881,
+        "longitude": -60.70868,
+        "population": 391164,
+        "geonamesId": 3836277
+      },
+      {
+        "nameAr": "اويلانيدا",
+        "nameEn": "Avellaneda",
+        "slug": "avellaneda",
+        "latitude": -34.66018,
+        "longitude": -58.36744,
+        "population": 367554,
+        "geonamesId": 7535637
+      }
+    ]
+  },
+  {
+    "isoCode2": "MX",
+    "nameAr": "المكسيك",
+    "nameEn": "Mexico",
+    "slug": "mx",
+    "latitude": 23.919988,
+    "longitude": -102.289448,
+    "cities": [
+      {
+        "nameAr": "مدينة مكسيكو",
+        "nameEn": "Mexico City",
+        "slug": "mexico-city",
+        "latitude": 19.42847,
+        "longitude": -99.12766,
+        "population": 12294193,
+        "geonamesId": 3530597
+      },
+      {
+        "nameAr": "تيخوانا",
+        "nameEn": "Tijuana",
+        "slug": "tijuana",
+        "latitude": 32.5027,
+        "longitude": -117.00371,
+        "population": 1922523,
+        "geonamesId": 3981609
+      },
+      {
+        "nameAr": "بويبلا",
+        "nameEn": "Puebla",
+        "slug": "puebla",
+        "latitude": 19.04778,
+        "longitude": -98.20723,
+        "population": 1692181,
+        "geonamesId": 3521081
+      },
+      {
+        "nameAr": "سانتياغو دي كويريتارو",
+        "nameEn": "Santiago de Querétaro",
+        "slug": "santiago-de-queretaro",
+        "latitude": 20.58806,
+        "longitude": -100.38806,
+        "population": 1594212,
+        "geonamesId": 3991164
+      },
+      {
+        "nameAr": "سيوداد خواريز",
+        "nameEn": "Ciudad Juárez",
+        "slug": "ciudad-juarez",
+        "latitude": 31.72024,
+        "longitude": -106.46084,
+        "population": 1512450,
+        "geonamesId": 4013708
+      },
+      {
+        "nameAr": "سابوبان، خاليسكو",
+        "nameEn": "Zapopan",
+        "slug": "zapopan",
+        "latitude": 20.72111,
+        "longitude": -103.38742,
+        "population": 1476491,
+        "geonamesId": 3979770
+      },
+      {
+        "nameAr": "غوادالاخارا",
+        "nameEn": "Guadalajara",
+        "slug": "guadalajara",
+        "latitude": 20.67738,
+        "longitude": -103.34749,
+        "population": 1385629,
+        "geonamesId": 4005539
+      },
+      {
+        "nameAr": "ماردة",
+        "nameEn": "Mérida",
+        "slug": "merida",
+        "latitude": 20.967,
+        "longitude": -89.62318,
+        "population": 1201000,
+        "geonamesId": 3523349
+      }
+    ]
+  },
+  {
+    "isoCode2": "TH",
+    "nameAr": "تايلاند",
+    "nameEn": "Thailand",
+    "slug": "th",
+    "latitude": 15.45974,
+    "longitude": 101.073198,
+    "cities": [
+      {
+        "nameAr": "بانكوك",
+        "nameEn": "Bangkok",
+        "slug": "bangkok",
+        "latitude": 13.75398,
+        "longitude": 100.50144,
+        "population": 5104476,
+        "geonamesId": 1609350
+      },
+      {
+        "nameAr": "سامت براكان",
+        "nameEn": "Samut Prakan",
+        "slug": "samut-prakan",
+        "latitude": 13.5976,
+        "longitude": 100.5972,
+        "population": 388920,
+        "geonamesId": 1606590
+      },
+      {
+        "nameAr": "موانج نونتابوري",
+        "nameEn": "Mueang Nonthaburi",
+        "slug": "mueang-nonthaburi",
+        "latitude": 13.86075,
+        "longitude": 100.51477,
+        "population": 254375,
+        "geonamesId": 1608133
+      },
+      {
+        "nameAr": "شون بوري",
+        "nameEn": "Chon Buri",
+        "slug": "chon-buri",
+        "latitude": 13.3622,
+        "longitude": 100.98345,
+        "population": 219164,
+        "geonamesId": 1611110
+      },
+      {
+        "nameAr": "هات ياي",
+        "nameEn": "Hat Yai",
+        "slug": "hat-yai",
+        "latitude": 7.00836,
+        "longitude": 100.47668,
+        "population": 191696,
+        "geonamesId": 1610780
+      },
+      {
+        "nameAr": "سورت تاني",
+        "nameEn": "Surat Thani",
+        "slug": "surat-thani",
+        "latitude": 9.14011,
+        "longitude": 99.33311,
+        "population": 132040,
+        "geonamesId": 1150515
+      },
+      {
+        "nameAr": "ودون تاني",
+        "nameEn": "Udon Thani",
+        "slug": "udon-thani",
+        "latitude": 17.41567,
+        "longitude": 102.78589,
+        "population": 130531,
+        "geonamesId": 1605239
+      },
+      {
+        "nameAr": "ناخون راتشاسيما",
+        "nameEn": "Nakhon Ratchasima",
+        "slug": "nakhon-ratchasima",
+        "latitude": 14.97066,
+        "longitude": 102.10196,
+        "population": 126391,
+        "geonamesId": 1608529
+      }
+    ]
+  },
+  {
+    "isoCode2": "BD",
+    "nameAr": "بنغلاديش",
+    "nameEn": "Bangladesh",
+    "slug": "bd",
+    "latitude": 24.214956,
+    "longitude": 89.684963,
+    "cities": [
+      {
+        "nameAr": "دكا",
+        "nameEn": "Dhaka",
+        "slug": "dhaka",
+        "latitude": 23.7104,
+        "longitude": 90.40744,
+        "population": 10356500,
+        "geonamesId": 1185241
+      },
+      {
+        "nameAr": "شيتاغونغ",
+        "nameEn": "Chattogram",
+        "slug": "chattogram",
+        "latitude": 22.3384,
+        "longitude": 91.83168,
+        "population": 3920222,
+        "geonamesId": 1205733
+      },
+      {
+        "nameAr": "غازيبور",
+        "nameEn": "Gazipur",
+        "slug": "gazipur",
+        "latitude": 23.99844,
+        "longitude": 90.42234,
+        "population": 2674697,
+        "geonamesId": 1200109
+      },
+      {
+        "nameAr": "خولنه",
+        "nameEn": "Khulna",
+        "slug": "khulna",
+        "latitude": 22.80979,
+        "longitude": 89.56439,
+        "population": 1500689,
+        "geonamesId": 1336135
+      },
+      {
+        "nameAr": "رانجبور",
+        "nameEn": "Rangpur",
+        "slug": "rangpur",
+        "latitude": 25.74664,
+        "longitude": 89.25166,
+        "population": 1031388,
+        "geonamesId": 1185188
+      },
+      {
+        "nameAr": "راجشاهي",
+        "nameEn": "Rajshahi",
+        "slug": "rajshahi",
+        "latitude": 24.374,
+        "longitude": 88.60114,
+        "population": 763580,
+        "geonamesId": 1185128
+      },
+      {
+        "nameAr": "باغر هات",
+        "nameEn": "Bagerhat",
+        "slug": "bagerhat",
+        "latitude": 22.65657,
+        "longitude": 89.79123,
+        "population": 266388,
+        "geonamesId": 1185281
+      },
+      {
+        "nameAr": "سيلهت",
+        "nameEn": "Sylhet",
+        "slug": "sylhet",
+        "latitude": 24.89904,
+        "longitude": 91.87198,
+        "population": 237000,
+        "geonamesId": 1185099
+      }
+    ]
+  },
+  {
+    "isoCode2": "PH",
+    "nameAr": "الفلبين",
+    "nameEn": "Philippines",
+    "slug": "ph",
+    "latitude": 11.198,
+    "longitude": 122.465,
+    "cities": [
+      {
+        "nameAr": "داواو",
+        "nameEn": "Davao",
+        "slug": "davao",
+        "latitude": 7.07306,
+        "longitude": 125.61278,
+        "population": 1848947,
+        "geonamesId": 1715348
+      },
+      {
+        "nameAr": "مانيلا",
+        "nameEn": "Manila",
+        "slug": "manila",
+        "latitude": 14.6042,
+        "longitude": 120.9822,
+        "population": 1600000,
+        "geonamesId": 1701668
+      },
+      {
+        "nameAr": "سيبو",
+        "nameEn": "Cebu City",
+        "slug": "cebu-city",
+        "latitude": 10.31672,
+        "longitude": 123.89071,
+        "population": 965332,
+        "geonamesId": 1717512
+      },
+      {
+        "nameAr": "جنرال سانتوس",
+        "nameEn": "General Santos",
+        "slug": "general-santos",
+        "latitude": 6.11278,
+        "longitude": 125.17167,
+        "population": 722059,
+        "geonamesId": 1713022
+      },
+      {
+        "nameAr": "كالامبا",
+        "nameEn": "Calamba",
+        "slug": "calamba",
+        "latitude": 14.21167,
+        "longitude": 121.16528,
+        "population": 575046,
+        "geonamesId": 1720681
+      },
+      {
+        "nameAr": "اموس",
+        "nameEn": "Imus",
+        "slug": "imus",
+        "latitude": 14.42972,
+        "longitude": 120.93667,
+        "population": 481949,
+        "geonamesId": 1710914
+      },
+      {
+        "nameAr": "ماندالويونغ",
+        "nameEn": "Mandaluyong City",
+        "slug": "mandaluyong-city",
+        "latitude": 14.5832,
+        "longitude": 121.0409,
+        "population": 465902,
+        "geonamesId": 1701966
+      },
+      {
+        "nameAr": "كوتابايتو",
+        "nameEn": "Cotabato",
+        "slug": "cotabato",
+        "latitude": 7.22361,
+        "longitude": 124.24639,
+        "population": 383383,
+        "geonamesId": 1716771
+      }
+    ]
+  },
+  {
+    "isoCode2": "RO",
+    "nameAr": "رومانيا",
+    "nameEn": "Romania",
+    "slug": "ro",
+    "latitude": 45.733237,
+    "longitude": 24.972624,
+    "cities": [
+      {
+        "nameAr": "بوخارست",
+        "nameEn": "Bucharest",
+        "slug": "bucharest",
+        "latitude": 44.43225,
+        "longitude": 26.10626,
+        "population": 1877155,
+        "geonamesId": 683506
+      },
+      {
+        "nameAr": "ياش",
+        "nameEn": "Iaşi",
+        "slug": "iasi",
+        "latitude": 47.16667,
+        "longitude": 27.6,
+        "population": 378954,
+        "geonamesId": 675810
+      },
+      {
+        "nameAr": "كونستانتسا",
+        "nameEn": "Constanţa",
+        "slug": "constanta",
+        "latitude": 44.18073,
+        "longitude": 28.63432,
+        "population": 317832,
+        "geonamesId": 680963
+      },
+      {
+        "nameAr": "كلوج نابوكا",
+        "nameEn": "Cluj-Napoca",
+        "slug": "cluj-napoca",
+        "latitude": 46.76667,
+        "longitude": 23.6,
+        "population": 286598,
+        "geonamesId": 681290
+      },
+      {
+        "nameAr": "براشوف",
+        "nameEn": "Braşov",
+        "slug": "brasov",
+        "latitude": 45.64861,
+        "longitude": 25.60613,
+        "population": 253200,
+        "geonamesId": 683844
+      },
+      {
+        "nameAr": "تيميشوارا",
+        "nameEn": "Timişoara",
+        "slug": "timisoara",
+        "latitude": 45.75372,
+        "longitude": 21.22571,
+        "population": 250849,
+        "geonamesId": 665087
+      },
+      {
+        "nameAr": "كرايوفا",
+        "nameEn": "Craiova",
+        "slug": "craiova",
+        "latitude": 44.31667,
+        "longitude": 23.8,
+        "population": 234140,
+        "geonamesId": 680332
+      },
+      {
+        "nameAr": "غالاتسي",
+        "nameEn": "Galaţi",
+        "slug": "galati",
+        "latitude": 45.43687,
+        "longitude": 28.05028,
+        "population": 217851,
+        "geonamesId": 677697
+      }
+    ]
+  },
+  {
+    "isoCode2": "FI",
+    "nameAr": "فنلندا",
+    "nameEn": "Finland",
+    "slug": "fi",
+    "latitude": 63.252361,
+    "longitude": 27.276449,
+    "cities": [
+      {
+        "nameAr": "هيلسينكى",
+        "nameEn": "Helsinki",
+        "slug": "helsinki",
+        "latitude": 60.16952,
+        "longitude": 24.93545,
+        "population": 658864,
+        "geonamesId": 658225
+      },
+      {
+        "nameAr": "تامبيري",
+        "nameEn": "Tampere",
+        "slug": "tampere",
+        "latitude": 61.49911,
+        "longitude": 23.78712,
+        "population": 260646,
+        "geonamesId": 634963
+      },
+      {
+        "nameAr": "وانتا",
+        "nameEn": "Vantaa",
+        "slug": "vantaa",
+        "latitude": 60.29414,
+        "longitude": 25.04099,
+        "population": 252724,
+        "geonamesId": 632453
+      },
+      {
+        "nameAr": "اولو، فنلاند",
+        "nameEn": "Oulu",
+        "slug": "oulu",
+        "latitude": 65.01236,
+        "longitude": 25.46816,
+        "population": 216066,
+        "geonamesId": 643492
+      },
+      {
+        "nameAr": "توركو",
+        "nameEn": "Turku",
+        "slug": "turku",
+        "latitude": 60.45148,
+        "longitude": 22.26869,
+        "population": 206655,
+        "geonamesId": 633679
+      },
+      {
+        "nameAr": "يوفاسكولا",
+        "nameEn": "Jyväskylä",
+        "slug": "jyvaeskylae",
+        "latitude": 62.24147,
+        "longitude": 25.72088,
+        "population": 148744,
+        "geonamesId": 655194
+      },
+      {
+        "nameAr": "كووبيو",
+        "nameEn": "Kuopio",
+        "slug": "kuopio",
+        "latitude": 62.89238,
+        "longitude": 27.67703,
+        "population": 125462,
+        "geonamesId": 650224
+      },
+      {
+        "nameAr": "لاهتي",
+        "nameEn": "Lahti",
+        "slug": "lahti",
+        "latitude": 60.98267,
+        "longitude": 25.66151,
+        "population": 121622,
+        "geonamesId": 649360
+      }
+    ]
+  },
+  {
+    "isoCode2": "LU",
+    "nameAr": "لوكسمبورغ",
+    "nameEn": "Luxembourg",
+    "slug": "lu",
+    "latitude": 49.733732,
+    "longitude": 6.07762,
+    "cities": [
+      {
+        "nameAr": "لوكسمبورغ",
+        "nameEn": "Luxembourg",
+        "slug": "luxembourg",
+        "latitude": 49.60982,
+        "longitude": 6.13268,
+        "population": 76684,
+        "geonamesId": 2960316
+      },
+      {
+        "nameAr": "اش-سور-الزت",
+        "nameEn": "Esch-sur-Alzette",
+        "slug": "esch-sur-alzette",
+        "latitude": 49.49583,
+        "longitude": 5.98056,
+        "population": 36625,
+        "geonamesId": 2960596
+      },
+      {
+        "nameAr": "ديكيرش",
+        "nameEn": "Diekirch",
+        "slug": "diekirch",
+        "latitude": 49.86687,
+        "longitude": 6.15451,
+        "population": 7295,
+        "geonamesId": 2960657
+      },
+      {
+        "nameAr": "إيتلبروك",
+        "nameEn": "Ettelbruck",
+        "slug": "ettelbruck",
+        "latitude": 49.8475,
+        "longitude": 6.10417,
+        "population": 6364,
+        "geonamesId": 2960589
+      },
+      {
+        "nameAr": "شينجن",
+        "nameEn": "Schengen",
+        "slug": "schengen",
+        "latitude": 49.47,
+        "longitude": 6.362,
+        "population": 5196,
+        "geonamesId": 2960107
+      },
+      {
+        "nameAr": "غريفنماخر",
+        "nameEn": "Grevenmacher",
+        "slug": "grevenmacher",
+        "latitude": 49.67751,
+        "longitude": 6.44022,
+        "population": 5092,
+        "geonamesId": 2960515
+      },
+      {
+        "nameAr": "مامر",
+        "nameEn": "Mamer",
+        "slug": "mamer",
+        "latitude": 49.6275,
+        "longitude": 6.02333,
+        "population": 5017,
+        "geonamesId": 2960299
+      },
+      {
+        "nameAr": "ويلتز",
+        "nameEn": "Wiltz",
+        "slug": "wiltz",
+        "latitude": 49.96547,
+        "longitude": 5.9339,
+        "population": 4816,
+        "geonamesId": 2959977
+      }
+    ]
+  },
+  {
+    "isoCode2": "IR",
+    "nameAr": "إيران",
+    "nameEn": "Iran",
+    "slug": "ir",
+    "latitude": 32.166225,
+    "longitude": 54.931495,
+    "cities": [
+      {
+        "nameAr": "طهران",
+        "nameEn": "Tehran",
+        "slug": "tehran",
+        "latitude": 35.69439,
+        "longitude": 51.42151,
+        "population": 7153309,
+        "geonamesId": 112931
+      },
+      {
+        "nameAr": "سناباد",
+        "nameEn": "Mashhad",
+        "slug": "mashhad",
+        "latitude": 36.29807,
+        "longitude": 59.60567,
+        "population": 2307177,
+        "geonamesId": 124665
+      },
+      {
+        "nameAr": "اصفهان",
+        "nameEn": "Isfahan",
+        "slug": "isfahan",
+        "latitude": 32.65246,
+        "longitude": 51.67462,
+        "population": 1547164,
+        "geonamesId": 418863
+      },
+      {
+        "nameAr": "كرج",
+        "nameEn": "Karaj",
+        "slug": "karaj",
+        "latitude": 35.83266,
+        "longitude": 50.99155,
+        "population": 1448075,
+        "geonamesId": 128747
+      },
+      {
+        "nameAr": "تبريز",
+        "nameEn": "Tabriz",
+        "slug": "tabriz",
+        "latitude": 38.08,
+        "longitude": 46.2919,
+        "population": 1424641,
+        "geonamesId": 113646
+      },
+      {
+        "nameAr": "شيراز",
+        "nameEn": "Shiraz",
+        "slug": "shiraz",
+        "latitude": 29.61031,
+        "longitude": 52.53113,
+        "population": 1249942,
+        "geonamesId": 115019
+      },
+      {
+        "nameAr": "قوم",
+        "nameEn": "Qom",
+        "slug": "qom",
+        "latitude": 34.6401,
+        "longitude": 50.8764,
+        "population": 900000,
+        "geonamesId": 119208
+      },
+      {
+        "nameAr": "الأهواز",
+        "nameEn": "Ahvaz",
+        "slug": "ahvaz",
+        "latitude": 31.31901,
+        "longitude": 48.6842,
+        "population": 841145,
+        "geonamesId": 144448
+      }
+    ]
+  },
+  {
+    "isoCode2": "UY",
+    "nameAr": "أوروغواي",
+    "nameEn": "Uruguay",
+    "slug": "uy",
+    "latitude": -32.961127,
+    "longitude": -55.966942,
+    "cities": [
+      {
+        "nameAr": "مونتيفيديو",
+        "nameEn": "Montevideo",
+        "slug": "montevideo",
+        "latitude": -34.90328,
+        "longitude": -56.18816,
+        "population": 1270737,
+        "geonamesId": 3441575
+      },
+      {
+        "nameAr": "سالتو، أوروغواي",
+        "nameEn": "Salto",
+        "slug": "salto",
+        "latitude": -31.38811,
+        "longitude": -57.95983,
+        "population": 114084,
+        "geonamesId": 3440714
+      },
+      {
+        "nameAr": "مالدونادو",
+        "nameEn": "Maldonado",
+        "slug": "maldonado",
+        "latitude": -34.89791,
+        "longitude": -54.95021,
+        "population": 102000,
+        "geonamesId": 3441894
+      },
+      {
+        "nameAr": "ريفيرا",
+        "nameEn": "Rivera",
+        "slug": "rivera",
+        "latitude": -30.90534,
+        "longitude": -55.55076,
+        "population": 84775,
+        "geonamesId": 3440781
+      },
+      {
+        "nameAr": "بايساندو",
+        "nameEn": "Paysandú",
+        "slug": "paysandu",
+        "latitude": -32.3171,
+        "longitude": -58.08072,
+        "population": 81550,
+        "geonamesId": 3441243
+      },
+      {
+        "nameAr": "تاكواريمبو",
+        "nameEn": "Tacuarembó",
+        "slug": "tacuarembo",
+        "latitude": -31.71882,
+        "longitude": -55.97925,
+        "population": 60586,
+        "geonamesId": 3440034
+      },
+      {
+        "nameAr": "ميلو",
+        "nameEn": "Melo",
+        "slug": "melo",
+        "latitude": -32.3682,
+        "longitude": -54.16409,
+        "population": 56013,
+        "geonamesId": 3441702
+      },
+      {
+        "nameAr": "أرتيجاس",
+        "nameEn": "Artigas",
+        "slug": "artigas",
+        "latitude": -30.40431,
+        "longitude": -56.46926,
+        "population": 43897,
+        "geonamesId": 3443758
+      }
+    ]
+  },
+  {
+    "isoCode2": "DZ",
+    "nameAr": "الجزائر",
+    "nameEn": "Algeria",
+    "slug": "dz",
+    "latitude": 27.397406,
+    "longitude": 2.808241,
+    "cities": [
+      {
+        "nameAr": "الجزائر",
+        "nameEn": "Algiers",
+        "slug": "algiers",
+        "latitude": 36.73225,
+        "longitude": 3.08746,
+        "population": 2364230,
+        "geonamesId": 2507480
+      },
+      {
+        "nameAr": "وهران",
+        "nameEn": "Oran",
+        "slug": "oran",
+        "latitude": 35.69906,
+        "longitude": -0.63588,
+        "population": 803329,
+        "geonamesId": 2485926
+      },
+      {
+        "nameAr": "قسنطينة",
+        "nameEn": "Constantine",
+        "slug": "constantine",
+        "latitude": 36.365,
+        "longitude": 6.61472,
+        "population": 448028,
+        "geonamesId": 2501152
+      },
+      {
+        "nameAr": "عنابه",
+        "nameEn": "Annaba",
+        "slug": "annaba",
+        "latitude": 36.9,
+        "longitude": 7.76667,
+        "population": 342703,
+        "geonamesId": 2506999
+      },
+      {
+        "nameAr": "البليدة",
+        "nameEn": "Blida",
+        "slug": "blida",
+        "latitude": 36.47004,
+        "longitude": 2.8277,
+        "population": 331779,
+        "geonamesId": 2503769
+      },
+      {
+        "nameAr": "ولاية باتنة",
+        "nameEn": "Batna",
+        "slug": "batna",
+        "latitude": 35.55597,
+        "longitude": 6.17414,
+        "population": 289504,
+        "geonamesId": 2505572
+      },
+      {
+        "nameAr": "باب الزوار",
+        "nameEn": "Bab Ezzouar",
+        "slug": "bab-ezzouar",
+        "latitude": 36.72615,
+        "longitude": 3.18291,
+        "population": 275630,
+        "geonamesId": 2505854
+      },
+      {
+        "nameAr": "ولاية الجلفة",
+        "nameEn": "Djelfa",
+        "slug": "djelfa",
+        "latitude": 34.67279,
+        "longitude": 3.263,
+        "population": 265833,
+        "geonamesId": 2500017
+      },
+      {
+        "nameAr": "ولاية سطيف",
+        "nameEn": "Sétif",
+        "slug": "setif",
+        "latitude": 36.19112,
+        "longitude": 5.41373,
+        "population": 252127,
+        "geonamesId": 2481700
+      },
+      {
+        "nameAr": "ولاية سيدي بلعباس",
+        "nameEn": "Sidi Bel Abbes",
+        "slug": "sidi-bel-abbes",
+        "latitude": 35.18994,
+        "longitude": -0.63085,
+        "population": 210146,
+        "geonamesId": 2481007
+      },
+      {
+        "nameAr": "ولاية بسكرة",
+        "nameEn": "Biskra",
+        "slug": "biskra",
+        "latitude": 34.85038,
+        "longitude": 5.72805,
+        "population": 204661,
+        "geonamesId": 2503826
+      },
+      {
+        "nameAr": "تبسة",
+        "nameEn": "Tébessa",
+        "slug": "tebessa",
+        "latitude": 35.40417,
+        "longitude": 8.12417,
+        "population": 194461,
+        "geonamesId": 2477461
+      }
+    ]
+  },
+  {
+    "isoCode2": "BH",
+    "nameAr": "البحرين",
+    "nameEn": "Bahrain",
+    "slug": "bh",
+    "latitude": 26.25722,
+    "longitude": 50.61194,
+    "cities": [
+      {
+        "nameAr": "المحرق",
+        "nameEn": "Al Muharraq",
+        "slug": "al-muharraq",
+        "latitude": 26.25722,
+        "longitude": 50.61194,
+        "population": 176583,
+        "geonamesId": 290332
+      },
+      {
+        "nameAr": "المنامة",
+        "nameEn": "Manama",
+        "slug": "manama",
+        "latitude": 26.22787,
+        "longitude": 50.58565,
+        "population": 147074,
+        "geonamesId": 290340
+      },
+      {
+        "nameAr": "مدينة حمد",
+        "nameEn": "Madīnat Ḩamad",
+        "slug": "madinat-hamad",
+        "latitude": 26.11528,
+        "longitude": 50.50694,
+        "population": 133550,
+        "geonamesId": 290247
+      },
+      {
+        "nameAr": "الرفاع",
+        "nameEn": "Ar Rifā‘",
+        "slug": "ar-rifa",
+        "latitude": 26.13,
+        "longitude": 50.555,
+        "population": 115495,
+        "geonamesId": 385038
+      },
+      {
+        "nameAr": "ستره",
+        "nameEn": "Sitrah",
+        "slug": "sitrah",
+        "latitude": 26.15472,
+        "longitude": 50.62056,
+        "population": 72601,
+        "geonamesId": 290104
+      },
+      {
+        "nameAr": "جد حفص",
+        "nameEn": "Jidd Ḩafş",
+        "slug": "jidd-hafs",
+        "latitude": 26.21861,
+        "longitude": 50.54778,
+        "population": 66588,
+        "geonamesId": 290215
+      },
+      {
+        "nameAr": "دار كليب",
+        "nameEn": "Dār Kulayb",
+        "slug": "dar-kulayb",
+        "latitude": 26.06861,
+        "longitude": 50.50389,
+        "population": 65466,
+        "geonamesId": 290269
+      },
+      {
+        "nameAr": "مدينة عيسى",
+        "nameEn": "Madīnat ‘Īsá",
+        "slug": "madinat-isa",
+        "latitude": 26.17361,
+        "longitude": 50.54778,
+        "population": 38090,
+        "geonamesId": 290187
+      },
+      {
+        "nameAr": "الحد",
+        "nameEn": "Al Ḩadd",
+        "slug": "al-hadd",
+        "latitude": 26.24556,
+        "longitude": 50.65417,
+        "population": 12797,
+        "geonamesId": 290363
+      },
+      {
+        "nameAr": "الزلاق",
+        "nameEn": "Az Zallāq",
+        "slug": "az-zallaq",
+        "latitude": 26.0475,
+        "longitude": 50.48639,
+        "population": 9095,
+        "geonamesId": 290296
+      },
+      {
+        "nameAr": "سنابس",
+        "nameEn": "Sanābis",
+        "slug": "sanabis",
+        "latitude": 26.22722,
+        "longitude": 50.55083,
+        "population": 6564,
+        "geonamesId": 290121
+      },
+      {
+        "nameAr": "سار",
+        "nameEn": "Sār",
+        "slug": "sar",
+        "latitude": 26.19417,
+        "longitude": 50.48194,
+        "population": 6000,
+        "geonamesId": 290118
+      }
+    ]
+  },
+  {
+    "isoCode2": "KM",
+    "nameAr": "جزر القمر",
+    "nameEn": "Comoros",
+    "slug": "km",
+    "latitude": -11.70216,
+    "longitude": 43.25506,
+    "cities": [
+      {
+        "nameAr": "موروني",
+        "nameEn": "Moroni",
+        "slug": "moroni",
+        "latitude": -11.70216,
+        "longitude": 43.25506,
+        "population": 74749,
+        "geonamesId": 921772
+      },
+      {
+        "nameAr": "موتسامودو",
+        "nameEn": "Moutsamoudou",
+        "slug": "moutsamoudou",
+        "latitude": -12.16672,
+        "longitude": 44.39944,
+        "population": 26313,
+        "geonamesId": 921753
+      },
+      {
+        "nameAr": "فومبوني",
+        "nameEn": "Fomboni",
+        "slug": "fomboni",
+        "latitude": -12.28759,
+        "longitude": 43.74344,
+        "population": 17291,
+        "geonamesId": 921889
+      },
+      {
+        "nameAr": "صيمبيهو",
+        "nameEn": "Tsimbeo",
+        "slug": "tsimbeo",
+        "latitude": -12.20583,
+        "longitude": 44.46472,
+        "population": 12590,
+        "geonamesId": 921664
+      },
+      {
+        "nameAr": "دوموني",
+        "nameEn": "Domoni",
+        "slug": "domoni",
+        "latitude": -12.26067,
+        "longitude": 44.52947,
+        "population": 12262,
+        "geonamesId": 921906
+      },
+      {
+        "nameAr": "ميرونتسي",
+        "nameEn": "Mirontsi",
+        "slug": "mirontsi",
+        "latitude": -12.1604,
+        "longitude": 44.40986,
+        "population": 11955,
+        "geonamesId": 1091117
+      },
+      {
+        "nameAr": "ادا دوينى",
+        "nameEn": "Adda-Douéni",
+        "slug": "adda-doueni",
+        "latitude": -12.2925,
+        "longitude": 44.49722,
+        "population": 10858,
+        "geonamesId": 1091401
+      },
+      {
+        "nameAr": "اوانى",
+        "nameEn": "Ouani",
+        "slug": "ouani",
+        "latitude": -12.13554,
+        "longitude": 44.42493,
+        "population": 10073,
+        "geonamesId": 921721
+      },
+      {
+        "nameAr": "سيما",
+        "nameEn": "Sima",
+        "slug": "sima",
+        "latitude": -12.19556,
+        "longitude": 44.27667,
+        "population": 8737,
+        "geonamesId": 921675
+      },
+      {
+        "nameAr": "كوني جوجو",
+        "nameEn": "Koni-Djodjo",
+        "slug": "koni-djodjo",
+        "latitude": -12.22972,
+        "longitude": 44.48167,
+        "population": 8109,
+        "geonamesId": 921834
+      },
+      {
+        "nameAr": "امبينى",
+        "nameEn": "Mbéni",
+        "slug": "mbeni",
+        "latitude": -11.50139,
+        "longitude": 43.3775,
+        "population": 5128,
+        "geonamesId": 921806
+      }
+    ]
+  },
+  {
+    "isoCode2": "DJ",
+    "nameAr": "جيبوتي",
+    "nameEn": "Djibouti",
+    "slug": "dj",
+    "latitude": 11.976343,
+    "longitude": 42.498825,
+    "cities": [
+      {
+        "nameAr": "جيبوتي",
+        "nameEn": "Djibouti",
+        "slug": "djibouti",
+        "latitude": 11.58901,
+        "longitude": 43.14503,
+        "population": 626512,
+        "geonamesId": 223817
+      },
+      {
+        "nameAr": "بالبالا",
+        "nameEn": "Balbala",
+        "slug": "balbala",
+        "latitude": 11.56194,
+        "longitude": 43.10666,
+        "population": 554350,
+        "geonamesId": 7648070
+      },
+      {
+        "nameAr": "علي صبيح",
+        "nameEn": "Ali Sabih",
+        "slug": "ali-sabih",
+        "latitude": 11.15583,
+        "longitude": 42.7125,
+        "population": 50006,
+        "geonamesId": 225284
+      },
+      {
+        "nameAr": "دخيل",
+        "nameEn": "Dikhil",
+        "slug": "dikhil",
+        "latitude": 11.10454,
+        "longitude": 42.36971,
+        "population": 32801,
+        "geonamesId": 223890
+      },
+      {
+        "nameAr": "تاجوره",
+        "nameEn": "Tadjoura",
+        "slug": "tadjoura",
+        "latitude": 11.78778,
+        "longitude": 42.88222,
+        "population": 19533,
+        "geonamesId": 220782
+      },
+      {
+        "nameAr": "عرتا",
+        "nameEn": "Arta",
+        "slug": "arta",
+        "latitude": 11.52639,
+        "longitude": 42.85194,
+        "population": 17477,
+        "geonamesId": 225037
+      },
+      {
+        "nameAr": "أوبوك",
+        "nameEn": "Obock",
+        "slug": "obock",
+        "latitude": 11.96693,
+        "longitude": 43.28835,
+        "population": 15429,
+        "geonamesId": 221527
+      }
+    ]
+  },
+  {
+    "isoCode2": "EG",
+    "nameAr": "مصر",
+    "nameEn": "Egypt",
+    "slug": "eg",
+    "latitude": 26.186173,
+    "longitude": 29.445837,
+    "cities": [
+      {
+        "nameAr": "القاهرة",
+        "nameEn": "Cairo",
+        "slug": "cairo",
+        "latitude": 30.06263,
+        "longitude": 31.24967,
+        "population": 9606916,
+        "geonamesId": 360630
+      },
+      {
+        "nameAr": "الإسكندرية",
+        "nameEn": "Alexandria",
+        "slug": "alexandria",
+        "latitude": 31.20176,
+        "longitude": 29.91582,
+        "population": 5263542,
+        "geonamesId": 361058
+      },
+      {
+        "nameAr": "الجيزة",
+        "nameEn": "Giza",
+        "slug": "giza",
+        "latitude": 30.00944,
+        "longitude": 31.20861,
+        "population": 4367343,
+        "geonamesId": 360995
+      },
+      {
+        "nameAr": "شبرا الخيمة",
+        "nameEn": "Shubrā al Khaymah",
+        "slug": "shubra-al-khaymah",
+        "latitude": 30.12511,
+        "longitude": 31.25053,
+        "population": 1240289,
+        "geonamesId": 349076
+      },
+      {
+        "nameAr": "بور سعيد",
+        "nameEn": "Port Said",
+        "slug": "port-said",
+        "latitude": 31.26531,
+        "longitude": 32.3019,
+        "population": 780515,
+        "geonamesId": 358619
+      },
+      {
+        "nameAr": "السويس",
+        "nameEn": "Suez",
+        "slug": "suez",
+        "latitude": 29.97371,
+        "longitude": 32.52627,
+        "population": 699541,
+        "geonamesId": 359796
+      },
+      {
+        "nameAr": "المنصورة",
+        "nameEn": "Al Mansurah",
+        "slug": "al-mansurah",
+        "latitude": 31.03637,
+        "longitude": 31.38069,
+        "population": 621953,
+        "geonamesId": 360761
+      },
+      {
+        "nameAr": "المحلة الكبرى",
+        "nameEn": "Al Maḩallah al Kubrá",
+        "slug": "al-mahallah-al-kubra",
+        "latitude": 30.97063,
+        "longitude": 31.1669,
+        "population": 592573,
+        "geonamesId": 360829
+      },
+      {
+        "nameAr": "طنطا",
+        "nameEn": "Tanta",
+        "slug": "tanta",
+        "latitude": 30.78847,
+        "longitude": 31.00192,
+        "population": 576648,
+        "geonamesId": 347497
+      },
+      {
+        "nameAr": "أسيوط",
+        "nameEn": "Assiut",
+        "slug": "assiut",
+        "latitude": 27.18096,
+        "longitude": 31.18368,
+        "population": 528669,
+        "geonamesId": 359783
+      },
+      {
+        "nameAr": "محافظة الفيوم",
+        "nameEn": "Al Fayyum",
+        "slug": "al-fayyum",
+        "latitude": 29.30995,
+        "longitude": 30.8418,
+        "population": 519047,
+        "geonamesId": 361320
+      },
+      {
+        "nameAr": "إسنا",
+        "nameEn": "Esna",
+        "slug": "esna",
+        "latitude": 25.29336,
+        "longitude": 32.55402,
+        "population": 462787,
+        "geonamesId": 355449
+      }
+    ]
+  },
+  {
+    "isoCode2": "IQ",
+    "nameAr": "العراق",
+    "nameEn": "Iraq",
+    "slug": "iq",
+    "latitude": 33.09403,
+    "longitude": 43.26181,
+    "cities": [
+      {
+        "nameAr": "بغداد",
+        "nameEn": "Baghdad",
+        "slug": "baghdad",
+        "latitude": 33.34058,
+        "longitude": 44.40088,
+        "population": 7216000,
+        "geonamesId": 98182
+      },
+      {
+        "nameAr": "الموصل الجديدة",
+        "nameEn": "Al Mawşil al Jadīdah",
+        "slug": "al-mawsil-al-jadidah",
+        "latitude": 36.33271,
+        "longitude": 43.10555,
+        "population": 2065597,
+        "geonamesId": 99071
+      },
+      {
+        "nameAr": "الموصل",
+        "nameEn": "Mosul",
+        "slug": "mosul",
+        "latitude": 36.335,
+        "longitude": 43.11889,
+        "population": 1683000,
+        "geonamesId": 99072
+      },
+      {
+        "nameAr": "اربيل",
+        "nameEn": "Erbil",
+        "slug": "erbil",
+        "latitude": 36.19117,
+        "longitude": 44.00943,
+        "population": 1612700,
+        "geonamesId": 95446
+      },
+      {
+        "nameAr": "البصرة",
+        "nameEn": "Basrah",
+        "slug": "basrah",
+        "latitude": 30.50852,
+        "longitude": 47.7804,
+        "population": 1326564,
+        "geonamesId": 99532
+      },
+      {
+        "nameAr": "كربلاء المقدسة",
+        "nameEn": "Karbala",
+        "slug": "karbala",
+        "latitude": 32.61603,
+        "longitude": 44.02488,
+        "population": 1218732,
+        "geonamesId": 94824
+      },
+      {
+        "nameAr": "مدينة الصدر",
+        "nameEn": "Sadr City",
+        "slug": "sadr-city",
+        "latitude": 33.3889,
+        "longitude": 44.4583,
+        "population": 1211849,
+        "geonamesId": 7802746
+      },
+      {
+        "nameAr": "كركوك",
+        "nameEn": "Kirkuk",
+        "slug": "kirkuk",
+        "latitude": 35.46806,
+        "longitude": 44.39222,
+        "population": 1031000,
+        "geonamesId": 94787
+      },
+      {
+        "nameAr": "أبو غريب",
+        "nameEn": "Abū Ghurayb",
+        "slug": "abu-ghurayb",
+        "latitude": 33.30563,
+        "longitude": 44.18477,
+        "population": 900000,
+        "geonamesId": 100077
+      },
+      {
+        "nameAr": "السليمانية",
+        "nameEn": "Sulaymaniyah",
+        "slug": "sulaymaniyah",
+        "latitude": 35.56496,
+        "longitude": 45.4329,
+        "population": 878146,
+        "geonamesId": 98463
+      },
+      {
+        "nameAr": "الناصريه",
+        "nameEn": "Nasiriyah",
+        "slug": "nasiriyah",
+        "latitude": 31.05799,
+        "longitude": 46.25726,
+        "population": 558400,
+        "geonamesId": 98854
+      },
+      {
+        "nameAr": "النجف الاشرف",
+        "nameEn": "Najaf",
+        "slug": "najaf",
+        "latitude": 32.02594,
+        "longitude": 44.34625,
+        "population": 482576,
+        "geonamesId": 98860
+      }
+    ]
+  },
+  {
+    "isoCode2": "JO",
+    "nameAr": "الأردن",
+    "nameEn": "Jordan",
+    "slug": "jo",
+    "latitude": 30.805025,
+    "longitude": 36.375991,
+    "cities": [
+      {
+        "nameAr": "عمان",
+        "nameEn": "Amman",
+        "slug": "amman",
+        "latitude": 31.95522,
+        "longitude": 35.94503,
+        "population": 1275857,
+        "geonamesId": 250441
+      },
+      {
+        "nameAr": "الزرقاء",
+        "nameEn": "Zarqa",
+        "slug": "zarqa",
+        "latitude": 32.07275,
+        "longitude": 36.08796,
+        "population": 792665,
+        "geonamesId": 250090
+      },
+      {
+        "nameAr": "اربد",
+        "nameEn": "Irbid",
+        "slug": "irbid",
+        "latitude": 32.55556,
+        "longitude": 35.85,
+        "population": 569068,
+        "geonamesId": 248946
+      },
+      {
+        "nameAr": "الرصيفه",
+        "nameEn": "Russeifa",
+        "slug": "russeifa",
+        "latitude": 32.01778,
+        "longitude": 36.04639,
+        "population": 268237,
+        "geonamesId": 7838895
+      },
+      {
+        "nameAr": "حي خلدا",
+        "nameEn": "Ḩayy Khildā",
+        "slug": "hayy-khilda",
+        "latitude": 31.99202,
+        "longitude": 35.84002,
+        "population": 251000,
+        "geonamesId": 248583
+      },
+      {
+        "nameAr": "خريبة السوق",
+        "nameEn": "Khuraybat as Sūq",
+        "slug": "khuraybat-as-suq",
+        "latitude": 31.87913,
+        "longitude": 35.92098,
+        "population": 186158,
+        "geonamesId": 248460
+      },
+      {
+        "nameAr": "وادي السير",
+        "nameEn": "Wādī as Sīr",
+        "slug": "wadi-as-sir",
+        "latitude": 31.9545,
+        "longitude": 35.81831,
+        "population": 181212,
+        "geonamesId": 246013
+      },
+      {
+        "nameAr": "الرمثا",
+        "nameEn": "Ar Ramthā",
+        "slug": "ar-ramtha",
+        "latitude": 32.55873,
+        "longitude": 36.00816,
+        "population": 155693,
+        "geonamesId": 250336
+      },
+      {
+        "nameAr": "صويلح",
+        "nameEn": "Ṣuwayliḥ",
+        "slug": "suwaylih",
+        "latitude": 32.0221,
+        "longitude": 35.84394,
+        "population": 151016,
+        "geonamesId": 13286467
+      },
+      {
+        "nameAr": "عجلون",
+        "nameEn": "‘Ajlūn",
+        "slug": "ajlun",
+        "latitude": 32.33326,
+        "longitude": 35.75279,
+        "population": 125557,
+        "geonamesId": 250799
+      },
+      {
+        "nameAr": "السلط",
+        "nameEn": "As Salţ",
+        "slug": "as-salt",
+        "latitude": 32.03917,
+        "longitude": 35.72722,
+        "population": 107874,
+        "geonamesId": 250258
+      },
+      {
+        "nameAr": "العقبة",
+        "nameEn": "Aqaba",
+        "slug": "aqaba",
+        "latitude": 29.52667,
+        "longitude": 35.00778,
+        "population": 95048,
+        "geonamesId": 250774
+      }
+    ]
+  },
+  {
+    "isoCode2": "KW",
+    "nameAr": "الكويت",
+    "nameEn": "Kuwait",
+    "slug": "kw",
+    "latitude": 29.413628,
+    "longitude": 47.313999,
+    "cities": [
+      {
+        "nameAr": "الاحمدي",
+        "nameEn": "Al Aḩmadī",
+        "slug": "al-ahmadi",
+        "latitude": 29.07694,
+        "longitude": 48.08389,
+        "population": 637411,
+        "geonamesId": 285839
+      },
+      {
+        "nameAr": "حولي",
+        "nameEn": "Ḩawallī",
+        "slug": "hawalli",
+        "latitude": 29.33278,
+        "longitude": 48.02861,
+        "population": 164212,
+        "geonamesId": 285629
+      },
+      {
+        "nameAr": "السالمية",
+        "nameEn": "As Sālimīyah",
+        "slug": "as-salimiyah",
+        "latitude": 29.33389,
+        "longitude": 48.07611,
+        "population": 147649,
+        "geonamesId": 285704
+      },
+      {
+        "nameAr": "صباح السالم",
+        "nameEn": "Şabāḩ as Sālim",
+        "slug": "sabah-as-salim",
+        "latitude": 29.25722,
+        "longitude": 48.05722,
+        "population": 139163,
+        "geonamesId": 412800
+      },
+      {
+        "nameAr": "الفروانية",
+        "nameEn": "Al Farwānīyah",
+        "slug": "al-farwaniyah",
+        "latitude": 29.2775,
+        "longitude": 47.95861,
+        "population": 86525,
+        "geonamesId": 285815
+      },
+      {
+        "nameAr": "الفحاحيل",
+        "nameEn": "Al Faḩāḩīl",
+        "slug": "al-fahahil",
+        "latitude": 29.0825,
+        "longitude": 48.13028,
+        "population": 68290,
+        "geonamesId": 285811
+      },
+      {
+        "nameAr": "مدينة الكويت",
+        "nameEn": "Kuwait City",
+        "slug": "kuwait-city",
+        "latitude": 29.367,
+        "longitude": 47.97429,
+        "population": 60064,
+        "geonamesId": 285787
+      },
+      {
+        "nameAr": "الرميثية",
+        "nameEn": "Ar Rumaythīyah",
+        "slug": "ar-rumaythiyah",
+        "latitude": 29.31167,
+        "longitude": 48.07417,
+        "population": 58135,
+        "geonamesId": 285726
+      },
+      {
+        "nameAr": "الرقة",
+        "nameEn": "Ar Riqqah",
+        "slug": "ar-riqqah",
+        "latitude": 29.14583,
+        "longitude": 48.09472,
+        "population": 52068,
+        "geonamesId": 285728
+      },
+      {
+        "nameAr": "سلوى",
+        "nameEn": "Salwá",
+        "slug": "salwa",
+        "latitude": 29.29583,
+        "longitude": 48.07861,
+        "population": 40945,
+        "geonamesId": 387958
+      },
+      {
+        "nameAr": "المنقف",
+        "nameEn": "Al Manqaf",
+        "slug": "al-manqaf",
+        "latitude": 29.09611,
+        "longitude": 48.13278,
+        "population": 39025,
+        "geonamesId": 285778
+      },
+      {
+        "nameAr": "الرابية",
+        "nameEn": "Ar Rābiyah",
+        "slug": "ar-rabiyah",
+        "latitude": 29.295,
+        "longitude": 47.93306,
+        "population": 36447,
+        "geonamesId": 388065
+      }
+    ]
+  },
+  {
+    "isoCode2": "LB",
+    "nameAr": "لبنان",
+    "nameEn": "Lebanon",
+    "slug": "lb",
+    "latitude": 34.133368,
+    "longitude": 35.992892,
+    "cities": [
+      {
+        "nameAr": "بيروت",
+        "nameEn": "Beirut",
+        "slug": "beirut",
+        "latitude": 33.89332,
+        "longitude": 35.50157,
+        "population": 1916100,
+        "geonamesId": 276781
+      },
+      {
+        "nameAr": "طرابلس الشام",
+        "nameEn": "Tripoli",
+        "slug": "tripoli",
+        "latitude": 34.43352,
+        "longitude": 35.84415,
+        "population": 229398,
+        "geonamesId": 266826
+      },
+      {
+        "nameAr": "صيدا",
+        "nameEn": "Sidon",
+        "slug": "sidon",
+        "latitude": 33.55751,
+        "longitude": 35.37148,
+        "population": 163554,
+        "geonamesId": 268064
+      },
+      {
+        "nameAr": "الصور",
+        "nameEn": "Tyre",
+        "slug": "tyre",
+        "latitude": 33.27333,
+        "longitude": 35.19389,
+        "population": 135204,
+        "geonamesId": 267008
+      },
+      {
+        "nameAr": "عاليه",
+        "nameEn": "Aley",
+        "slug": "aley",
+        "latitude": 33.80528,
+        "longitude": 35.6,
+        "population": 130000,
+        "geonamesId": 280425
+      },
+      {
+        "nameAr": "النبطية والطهطا",
+        "nameEn": "Nabatîyé et Tahta",
+        "slug": "nabatiye-et-tahta",
+        "latitude": 33.37889,
+        "longitude": 35.48389,
+        "population": 120000,
+        "geonamesId": 278913
+      },
+      {
+        "nameAr": "حبوش",
+        "nameEn": "Habboûch",
+        "slug": "habbouch",
+        "latitude": 33.40753,
+        "longitude": 35.48177,
+        "population": 98433,
+        "geonamesId": 274874
+      },
+      {
+        "nameAr": "جونيه",
+        "nameEn": "Jounieh",
+        "slug": "jounieh",
+        "latitude": 33.98083,
+        "longitude": 35.61778,
+        "population": 96315,
+        "geonamesId": 273140
+      },
+      {
+        "nameAr": "زحله، لبنان",
+        "nameEn": "Zahlé",
+        "slug": "zahle",
+        "latitude": 33.84675,
+        "longitude": 35.90203,
+        "population": 78145,
+        "geonamesId": 266045
+      },
+      {
+        "nameAr": "عرسال",
+        "nameEn": "Aarsâl",
+        "slug": "aarsal",
+        "latitude": 34.17944,
+        "longitude": 36.42083,
+        "population": 50000,
+        "geonamesId": 273675
+      },
+      {
+        "nameAr": "الغازية",
+        "nameEn": "Ghazieh",
+        "slug": "ghazieh",
+        "latitude": 33.5175,
+        "longitude": 35.36889,
+        "population": 50000,
+        "geonamesId": 280155
+      },
+      {
+        "nameAr": "بعلبك",
+        "nameEn": "Baalbek",
+        "slug": "baalbek",
+        "latitude": 34.00583,
+        "longitude": 36.21806,
+        "population": 30916,
+        "geonamesId": 277130
+      }
+    ]
+  },
+  {
+    "isoCode2": "LY",
+    "nameAr": "ليبيا",
+    "nameEn": "Libya",
+    "slug": "ly",
+    "latitude": 26.638944,
+    "longitude": 18.011015,
+    "cities": [
+      {
+        "nameAr": "طرابلس",
+        "nameEn": "Tripoli",
+        "slug": "tripoli",
+        "latitude": 32.88743,
+        "longitude": 13.18733,
+        "population": 1302947,
+        "geonamesId": 2210247
+      },
+      {
+        "nameAr": "بنغازي",
+        "nameEn": "Benghazi",
+        "slug": "benghazi",
+        "latitude": 32.11486,
+        "longitude": 20.06859,
+        "population": 757490,
+        "geonamesId": 88319
+      },
+      {
+        "nameAr": "مصراته",
+        "nameEn": "Misratah",
+        "slug": "misratah",
+        "latitude": 32.37535,
+        "longitude": 15.09254,
+        "population": 355657,
+        "geonamesId": 2214846
+      },
+      {
+        "nameAr": "زليتن",
+        "nameEn": "Zliten",
+        "slug": "zliten",
+        "latitude": 32.46739,
+        "longitude": 14.56874,
+        "population": 203790,
+        "geonamesId": 2208485
+      },
+      {
+        "nameAr": "المرقب",
+        "nameEn": "Al Khums",
+        "slug": "al-khums",
+        "latitude": 32.64861,
+        "longitude": 14.26191,
+        "population": 201943,
+        "geonamesId": 2219905
+      },
+      {
+        "nameAr": "الزاوية",
+        "nameEn": "Az Zāwīyah",
+        "slug": "az-zawiyah",
+        "latitude": 32.7571,
+        "longitude": 12.72764,
+        "population": 200000,
+        "geonamesId": 2218970
+      },
+      {
+        "nameAr": "الزاوية",
+        "nameEn": "Zawiya",
+        "slug": "zawiya",
+        "latitude": 32.75222,
+        "longitude": 12.72778,
+        "population": 186123,
+        "geonamesId": 2216885
+      },
+      {
+        "nameAr": "جنزور",
+        "nameEn": "Janzūr",
+        "slug": "janzur",
+        "latitude": 32.81868,
+        "longitude": 13.01727,
+        "population": 154389,
+        "geonamesId": 2216349
+      },
+      {
+        "nameAr": "شعبية سبها",
+        "nameEn": "Sabha",
+        "slug": "sabha",
+        "latitude": 27.03766,
+        "longitude": 14.42832,
+        "population": 149329,
+        "geonamesId": 2212775
+      },
+      {
+        "nameAr": "طبرق",
+        "nameEn": "Tobruk",
+        "slug": "tobruk",
+        "latitude": 32.08963,
+        "longitude": 23.95385,
+        "population": 141499,
+        "geonamesId": 81302
+      },
+      {
+        "nameAr": "شعبية إجدابيا",
+        "nameEn": "Ajdabiya",
+        "slug": "ajdabiya",
+        "latitude": 30.75545,
+        "longitude": 20.22625,
+        "population": 131773,
+        "geonamesId": 89113
+      },
+      {
+        "nameAr": "النقاط الخمس",
+        "nameEn": "Al Ajaylat",
+        "slug": "al-ajaylat",
+        "latitude": 32.75718,
+        "longitude": 12.37633,
+        "population": 130546,
+        "geonamesId": 2219701
+      }
+    ]
+  },
+  {
+    "isoCode2": "MR",
+    "nameAr": "موريتانيا",
+    "nameEn": "Mauritania",
+    "slug": "mr",
+    "latitude": 19.587062,
+    "longitude": -9.740299,
+    "cities": [
+      {
+        "nameAr": "نواكشوط",
+        "nameEn": "Nouakchott",
+        "slug": "nouakchott",
+        "latitude": 18.08581,
+        "longitude": -15.9785,
+        "population": 1184530,
+        "geonamesId": 2377450
+      },
+      {
+        "nameAr": "نواذيبو",
+        "nameEn": "Nouadhibou",
+        "slug": "nouadhibou",
+        "latitude": 20.94188,
+        "longitude": -17.03842,
+        "population": 146048,
+        "geonamesId": 2377457
+      },
+      {
+        "nameAr": "كيفة",
+        "nameEn": "Kiffa",
+        "slug": "kiffa",
+        "latitude": 16.62073,
+        "longitude": -11.40208,
+        "population": 62051,
+        "geonamesId": 2378538
+      },
+      {
+        "nameAr": "دار النعيم",
+        "nameEn": "Dar Naim",
+        "slug": "dar-naim",
+        "latitude": 18.10808,
+        "longitude": -15.92666,
+        "population": 61089,
+        "geonamesId": 11496397
+      },
+      {
+        "nameAr": "النعمة",
+        "nameEn": "Néma",
+        "slug": "nema",
+        "latitude": 16.61702,
+        "longitude": -7.25649,
+        "population": 60000,
+        "geonamesId": 2377539
+      },
+      {
+        "nameAr": "كيهيدي",
+        "nameEn": "Kaédi",
+        "slug": "kaedi",
+        "latitude": 16.15071,
+        "longitude": -13.50582,
+        "population": 56283,
+        "geonamesId": 2378736
+      },
+      {
+        "nameAr": "الزويرات",
+        "nameEn": "Zouérat",
+        "slug": "zouerat",
+        "latitude": 22.73542,
+        "longitude": -12.47134,
+        "population": 55183,
+        "geonamesId": 2375558
+      },
+      {
+        "nameAr": "تفرغ زينه",
+        "nameEn": "Tevragh Zeina",
+        "slug": "tevragh-zeina",
+        "latitude": 18.09894,
+        "longitude": -15.98848,
+        "population": 48093,
+        "geonamesId": 11009418
+      },
+      {
+        "nameAr": "سيليبابي",
+        "nameEn": "Sélibaby",
+        "slug": "selibaby",
+        "latitude": 15.15846,
+        "longitude": -12.1843,
+        "population": 32653,
+        "geonamesId": 2376719
+      },
+      {
+        "nameAr": "اطار",
+        "nameEn": "Atar",
+        "slug": "atar",
+        "latitude": 20.51875,
+        "longitude": -13.04637,
+        "population": 31133,
+        "geonamesId": 2381334
+      },
+      {
+        "nameAr": "عيون العتروس",
+        "nameEn": "Ayoun El Atrous",
+        "slug": "ayoun-el-atrous",
+        "latitude": 16.6614,
+        "longitude": -9.6149,
+        "population": 28174,
+        "geonamesId": 2381291
+      },
+      {
+        "nameAr": "بوكي",
+        "nameEn": "Bogué",
+        "slug": "bogue",
+        "latitude": 16.59153,
+        "longitude": -14.26309,
+        "population": 20291,
+        "geonamesId": 2380954
+      }
+    ]
+  },
+  {
+    "isoCode2": "MA",
+    "nameAr": "المغرب",
+    "nameEn": "Morocco",
+    "slug": "ma",
+    "latitude": 31.650723,
+    "longitude": -7.187296,
+    "cities": [
+      {
+        "nameAr": "الدار البيضاء",
+        "nameEn": "Casablanca",
+        "slug": "casablanca",
+        "latitude": 33.58831,
+        "longitude": -7.61138,
+        "population": 3665954,
+        "geonamesId": 2553604
+      },
+      {
+        "nameAr": "الرباط",
+        "nameEn": "Rabat",
+        "slug": "rabat",
+        "latitude": 34.01325,
+        "longitude": -6.83255,
+        "population": 1655753,
+        "geonamesId": 2538475
+      },
+      {
+        "nameAr": "فاس",
+        "nameEn": "Fes",
+        "slug": "fes",
+        "latitude": 34.03313,
+        "longitude": -5.00028,
+        "population": 1191905,
+        "geonamesId": 2548885
+      },
+      {
+        "nameAr": "طنجة",
+        "nameEn": "Tangier",
+        "slug": "tangier",
+        "latitude": 35.76727,
+        "longitude": -5.79975,
+        "population": 1035141,
+        "geonamesId": 2530335
+      },
+      {
+        "nameAr": "مراكش",
+        "nameEn": "Marrakesh",
+        "slug": "marrakesh",
+        "latitude": 31.63416,
+        "longitude": -7.99994,
+        "population": 995871,
+        "geonamesId": 2542997
+      },
+      {
+        "nameAr": "سلا",
+        "nameEn": "Salé",
+        "slug": "sale",
+        "latitude": 34.0531,
+        "longitude": -6.79846,
+        "population": 972299,
+        "geonamesId": 2537763
+      },
+      {
+        "nameAr": "أكادير",
+        "nameEn": "Agadir",
+        "slug": "agadir",
+        "latitude": 30.42018,
+        "longitude": -9.59815,
+        "population": 698310,
+        "geonamesId": 2561668
+      },
+      {
+        "nameAr": "مكناس",
+        "nameEn": "Meknes",
+        "slug": "meknes",
+        "latitude": 33.89352,
+        "longitude": -5.54727,
+        "population": 568295,
+        "geonamesId": 2542715
+      },
+      {
+        "nameAr": "وجدة-أنكاد",
+        "nameEn": "Oujda",
+        "slug": "oujda",
+        "latitude": 34.68139,
+        "longitude": -1.90858,
+        "population": 539711,
+        "geonamesId": 2540483
+      },
+      {
+        "nameAr": "القنيطرة",
+        "nameEn": "Kenitra",
+        "slug": "kenitra",
+        "latitude": 34.26101,
+        "longitude": -6.5802,
+        "population": 470949,
+        "geonamesId": 2544571
+      },
+      {
+        "nameAr": "تطوان",
+        "nameEn": "Tétouan",
+        "slug": "tetouan",
+        "latitude": 35.57845,
+        "longitude": -5.36837,
+        "population": 415810,
+        "geonamesId": 2528910
+      },
+      {
+        "nameAr": "الحسيمة",
+        "nameEn": "Al Hoceïma",
+        "slug": "al-hoceima",
+        "latitude": 35.25165,
+        "longitude": -3.93723,
+        "population": 395644,
+        "geonamesId": 2558545
+      }
+    ]
+  },
+  {
+    "isoCode2": "OM",
+    "nameAr": "عُمان",
+    "nameEn": "Oman",
+    "slug": "om",
+    "latitude": 22.120427,
+    "longitude": 57.336553,
+    "cities": [
+      {
+        "nameAr": "مسقط، عمان",
+        "nameEn": "Muscat",
+        "slug": "muscat",
+        "latitude": 23.58413,
+        "longitude": 58.40778,
+        "population": 797000,
+        "geonamesId": 287286
+      },
+      {
+        "nameAr": "السيب الجديدة",
+        "nameEn": "Seeb",
+        "slug": "seeb",
+        "latitude": 23.67027,
+        "longitude": 58.18911,
+        "population": 470878,
+        "geonamesId": 288967
+      },
+      {
+        "nameAr": "بوشر",
+        "nameEn": "Bawshar",
+        "slug": "bawshar",
+        "latitude": 23.57769,
+        "longitude": 58.39982,
+        "population": 383257,
+        "geonamesId": 288764
+      },
+      {
+        "nameAr": "والاية عبري",
+        "nameEn": "‘Ibrī",
+        "slug": "ibri",
+        "latitude": 23.22573,
+        "longitude": 56.51572,
+        "population": 163473,
+        "geonamesId": 287830
+      },
+      {
+        "nameAr": "صلاله",
+        "nameEn": "Şalālah",
+        "slug": "salalah",
+        "latitude": 17.01505,
+        "longitude": 54.09237,
+        "population": 163140,
+        "geonamesId": 286621
+      },
+      {
+        "nameAr": "الرستاق",
+        "nameEn": "Rustaq",
+        "slug": "rustaq",
+        "latitude": 23.39083,
+        "longitude": 57.42444,
+        "population": 120000,
+        "geonamesId": 289011
+      },
+      {
+        "nameAr": "ولاية صحار",
+        "nameEn": "Sohar",
+        "slug": "sohar",
+        "latitude": 24.34745,
+        "longitude": 56.70937,
+        "population": 108274,
+        "geonamesId": 286282
+      },
+      {
+        "nameAr": "السويق",
+        "nameEn": "As Suwayq",
+        "slug": "as-suwayq",
+        "latitude": 23.84944,
+        "longitude": 57.43861,
+        "population": 107143,
+        "geonamesId": 288955
+      },
+      {
+        "nameAr": "بركاء",
+        "nameEn": "Barkā’",
+        "slug": "barka",
+        "latitude": 23.67872,
+        "longitude": 57.88605,
+        "population": 81647,
+        "geonamesId": 288789
+      },
+      {
+        "nameAr": "سمائل",
+        "nameEn": "Samā’il",
+        "slug": "sama-il",
+        "latitude": 23.29838,
+        "longitude": 57.9531,
+        "population": 80538,
+        "geonamesId": 286590
+      },
+      {
+        "nameAr": "البريمي",
+        "nameEn": "Al Buraymī",
+        "slug": "al-buraymi",
+        "latitude": 24.25088,
+        "longitude": 55.79312,
+        "population": 73670,
+        "geonamesId": 289317
+      },
+      {
+        "nameAr": "نزوى",
+        "nameEn": "Nizwá",
+        "slug": "nizwa",
+        "latitude": 22.93333,
+        "longitude": 57.53333,
+        "population": 72076,
+        "geonamesId": 286987
+      }
+    ]
+  },
+  {
+    "isoCode2": "PS",
+    "nameAr": "فلسطين",
+    "nameEn": "Palestinian Territory",
+    "slug": "ps",
+    "latitude": 32.047431,
+    "longitude": 35.291341,
+    "cities": [
+      {
+        "nameAr": "القدس الشرقية",
+        "nameEn": "East Jerusalem",
+        "slug": "east-jerusalem",
+        "latitude": 31.78336,
+        "longitude": 35.23388,
+        "population": 428304,
+        "geonamesId": 7303419
+      },
+      {
+        "nameAr": "غزة",
+        "nameEn": "Gaza",
+        "slug": "gaza",
+        "latitude": 31.50161,
+        "longitude": 34.46672,
+        "population": 410000,
+        "geonamesId": 281133
+      },
+      {
+        "nameAr": "خان يونس",
+        "nameEn": "Khān Yūnis",
+        "slug": "khan-yunis",
+        "latitude": 31.34018,
+        "longitude": 34.30627,
+        "population": 173183,
+        "geonamesId": 281124
+      },
+      {
+        "nameAr": "جباليا",
+        "nameEn": "Jabālyā",
+        "slug": "jabalya",
+        "latitude": 31.5272,
+        "longitude": 34.48347,
+        "population": 168568,
+        "geonamesId": 281129
+      },
+      {
+        "nameAr": "الخليل",
+        "nameEn": "Hebron",
+        "slug": "hebron",
+        "latitude": 31.52935,
+        "longitude": 35.0938,
+        "population": 160470,
+        "geonamesId": 285066
+      },
+      {
+        "nameAr": "نابلس",
+        "nameEn": "Nablus",
+        "slug": "nablus",
+        "latitude": 32.22111,
+        "longitude": 35.25444,
+        "population": 130326,
+        "geonamesId": 282615
+      },
+      {
+        "nameAr": "رفح",
+        "nameEn": "Rafaḩ",
+        "slug": "rafah",
+        "latitude": 31.29722,
+        "longitude": 34.24357,
+        "population": 126305,
+        "geonamesId": 281102
+      },
+      {
+        "nameAr": "دير البلح",
+        "nameEn": "Dayr al Balaḩ",
+        "slug": "dayr-al-balah",
+        "latitude": 31.41834,
+        "longitude": 34.34933,
+        "population": 59504,
+        "geonamesId": 281141
+      },
+      {
+        "nameAr": "بيت لاهيا",
+        "nameEn": "Bayt Lāhyā",
+        "slug": "bayt-lahya",
+        "latitude": 31.5464,
+        "longitude": 34.49514,
+        "population": 56919,
+        "geonamesId": 281145
+      },
+      {
+        "nameAr": "طولكرم",
+        "nameEn": "Ţūlkarm",
+        "slug": "tulkarm",
+        "latitude": 32.31156,
+        "longitude": 35.0269,
+        "population": 44169,
+        "geonamesId": 281577
+      },
+      {
+        "nameAr": "رام الله",
+        "nameEn": "Ramallah",
+        "slug": "ramallah",
+        "latitude": 31.89964,
+        "longitude": 35.20422,
+        "population": 43880,
+        "geonamesId": 282239
+      },
+      {
+        "nameAr": "قلقيلية",
+        "nameEn": "Qalqīlyah",
+        "slug": "qalqilyah",
+        "latitude": 32.18966,
+        "longitude": 34.97063,
+        "population": 43212,
+        "geonamesId": 282457
+      }
+    ]
+  },
+  {
+    "isoCode2": "QA",
+    "nameAr": "قطر",
+    "nameEn": "Qatar",
+    "slug": "qa",
+    "latitude": 25.237383,
+    "longitude": 51.143509,
+    "cities": [
+      {
+        "nameAr": "الدوحه",
+        "nameEn": "Doha",
+        "slug": "doha",
+        "latitude": 25.28545,
+        "longitude": 51.53096,
+        "population": 344939,
+        "geonamesId": 290030
+      },
+      {
+        "nameAr": "الريان",
+        "nameEn": "Ar Rayyān",
+        "slug": "ar-rayyan",
+        "latitude": 25.29194,
+        "longitude": 51.42444,
+        "population": 272465,
+        "geonamesId": 289888
+      },
+      {
+        "nameAr": "المطار العتيق",
+        "nameEn": "Al Maţār al ‘Atīq",
+        "slug": "al-matar-al-atiq",
+        "latitude": 25.25138,
+        "longitude": 51.55569,
+        "population": 76774,
+        "geonamesId": 12242643
+      },
+      {
+        "nameAr": "المنصورة",
+        "nameEn": "Al Manşūrah",
+        "slug": "al-mansurah",
+        "latitude": 25.26807,
+        "longitude": 51.53219,
+        "population": 65493,
+        "geonamesId": 411759
+      },
+      {
+        "nameAr": "الظعاين",
+        "nameEn": "Az̧ Z̧a‘āyin",
+        "slug": "az-za-ayin",
+        "latitude": 25.57744,
+        "longitude": 51.48306,
+        "population": 54339,
+        "geonamesId": 289847
+      },
+      {
+        "nameAr": "مدينة خليفة",
+        "nameEn": "Madīnat Khalīfah",
+        "slug": "madinat-khalifah",
+        "latitude": 25.32047,
+        "longitude": 51.47787,
+        "population": 44459,
+        "geonamesId": 289738
+      },
+      {
+        "nameAr": "النجمة",
+        "nameEn": "An Najmah",
+        "slug": "an-najmah",
+        "latitude": 25.26704,
+        "longitude": 51.54322,
+        "population": 43695,
+        "geonamesId": 411760
+      },
+      {
+        "nameAr": "العنيزة",
+        "nameEn": "Al ‘Unayzah",
+        "slug": "al-unayzah",
+        "latitude": 25.33759,
+        "longitude": 51.50953,
+        "population": 39761,
+        "geonamesId": 289511
+      },
+      {
+        "nameAr": "أم غويلينة",
+        "nameEn": "Umm Ghuwaylīnah",
+        "slug": "umm-ghuwaylinah",
+        "latitude": 25.58716,
+        "longitude": 51.14986,
+        "population": 39457,
+        "geonamesId": 289545
+      },
+      {
+        "nameAr": "السد",
+        "nameEn": "As Sadd",
+        "slug": "as-sadd",
+        "latitude": 25.28617,
+        "longitude": 51.50074,
+        "population": 36077,
+        "geonamesId": 411820
+      },
+      {
+        "nameAr": "فريج الأمير",
+        "nameEn": "Farīj al Amīr",
+        "slug": "farij-al-amir",
+        "latitude": 25.28733,
+        "longitude": 51.47136,
+        "population": 33263,
+        "geonamesId": 12242742
+      },
+      {
+        "nameAr": "فريج كليب",
+        "nameEn": "Farīj Kulayb",
+        "slug": "farij-kulayb",
+        "latitude": 25.31313,
+        "longitude": 51.4929,
+        "population": 33263,
+        "geonamesId": 12219798
+      }
+    ]
+  },
+  {
+    "isoCode2": "SA",
+    "nameAr": "السعودية",
+    "nameEn": "Saudi Arabia",
+    "slug": "sa",
+    "latitude": 23.806908,
+    "longitude": 44.6996,
+    "cities": [
+      {
+        "nameAr": "جدة",
+        "nameEn": "Jeddah",
+        "slug": "jeddah",
+        "latitude": 21.49012,
+        "longitude": 39.18624,
+        "population": 4697000,
+        "geonamesId": 105343
+      },
+      {
+        "nameAr": "الرياض",
+        "nameEn": "Riyadh",
+        "slug": "riyadh",
+        "latitude": 24.68773,
+        "longitude": 46.72185,
+        "population": 4205961,
+        "geonamesId": 108410
+      },
+      {
+        "nameAr": "مكة المكرمة",
+        "nameEn": "Makkah",
+        "slug": "makkah",
+        "latitude": 21.42664,
+        "longitude": 39.82563,
+        "population": 1578722,
+        "geonamesId": 104515
+      },
+      {
+        "nameAr": "المدينة المنورة",
+        "nameEn": "Madinah",
+        "slug": "madinah",
+        "latitude": 24.46861,
+        "longitude": 39.61417,
+        "population": 1300000,
+        "geonamesId": 109223
+      },
+      {
+        "nameAr": "الدمام",
+        "nameEn": "Dammam",
+        "slug": "dammam",
+        "latitude": 26.43442,
+        "longitude": 50.10326,
+        "population": 1252523,
+        "geonamesId": 110336
+      },
+      {
+        "nameAr": "بريده",
+        "nameEn": "Buraydah",
+        "slug": "buraydah",
+        "latitude": 26.32599,
+        "longitude": 43.97497,
+        "population": 745353,
+        "geonamesId": 107304
+      },
+      {
+        "nameAr": "الطائف",
+        "nameEn": "Ta’if",
+        "slug": "ta-if",
+        "latitude": 21.27028,
+        "longitude": 40.41583,
+        "population": 688693,
+        "geonamesId": 107968
+      },
+      {
+        "nameAr": "تبوك",
+        "nameEn": "Tabuk",
+        "slug": "tabuk",
+        "latitude": 28.3998,
+        "longitude": 36.57151,
+        "population": 667000,
+        "geonamesId": 101628
+      },
+      {
+        "nameAr": "حائل",
+        "nameEn": "Ha'il",
+        "slug": "ha-il",
+        "latitude": 27.52188,
+        "longitude": 41.69073,
+        "population": 605930,
+        "geonamesId": 106281
+      },
+      {
+        "nameAr": "نجران",
+        "nameEn": "Najrān",
+        "slug": "najran",
+        "latitude": 17.49326,
+        "longitude": 44.12766,
+        "population": 505652,
+        "geonamesId": 103630
+      },
+      {
+        "nameAr": "الخرج",
+        "nameEn": "Al Kharj",
+        "slug": "al-kharj",
+        "latitude": 24.15541,
+        "longitude": 47.33457,
+        "population": 425300,
+        "geonamesId": 109353
+      },
+      {
+        "nameAr": "خميس مشيط",
+        "nameEn": "Khamis Mushait",
+        "slug": "khamis-mushait",
+        "latitude": 18.3,
+        "longitude": 42.73333,
+        "population": 387553,
+        "geonamesId": 105072
+      }
+    ]
+  },
+  {
+    "isoCode2": "SO",
+    "nameAr": "الصومال",
+    "nameEn": "Somalia",
+    "slug": "so",
+    "latitude": 3.568925,
+    "longitude": 45.19238,
+    "cities": [
+      {
+        "nameAr": "مقديشو",
+        "nameEn": "Mogadishu",
+        "slug": "mogadishu",
+        "latitude": 2.03711,
+        "longitude": 45.34375,
+        "population": 2587183,
+        "geonamesId": 53654
+      },
+      {
+        "nameAr": "بوراما",
+        "nameEn": "Borama",
+        "slug": "borama",
+        "latitude": 9.93611,
+        "longitude": 43.18278,
+        "population": 597842,
+        "geonamesId": 64021
+      },
+      {
+        "nameAr": "هرجيسة",
+        "nameEn": "Hargeysa",
+        "slug": "hargeysa",
+        "latitude": 9.56,
+        "longitude": 44.065,
+        "population": 477876,
+        "geonamesId": 57289
+      },
+      {
+        "nameAr": "بربرة",
+        "nameEn": "Berbera",
+        "slug": "berbera",
+        "latitude": 10.43959,
+        "longitude": 45.01432,
+        "population": 242344,
+        "geonamesId": 64435
+      },
+      {
+        "nameAr": "كسمايو",
+        "nameEn": "Kismayo",
+        "slug": "kismayo",
+        "latitude": -0.35817,
+        "longitude": 42.54536,
+        "population": 234852,
+        "geonamesId": 55671
+      },
+      {
+        "nameAr": "بيدوا",
+        "nameEn": "Baidoa",
+        "slug": "baidoa",
+        "latitude": 3.11383,
+        "longitude": 43.6498,
+        "population": 129839,
+        "geonamesId": 64536
+      },
+      {
+        "nameAr": "بورائو",
+        "nameEn": "Burao",
+        "slug": "burao",
+        "latitude": 9.52213,
+        "longitude": 45.53363,
+        "population": 99270,
+        "geonamesId": 63795
+      },
+      {
+        "nameAr": "بوصاصو",
+        "nameEn": "Bosaso",
+        "slug": "bosaso",
+        "latitude": 11.28421,
+        "longitude": 49.18158,
+        "population": 74287,
+        "geonamesId": 64013
+      },
+      {
+        "nameAr": "جالكعيو",
+        "nameEn": "Gaalkacyo",
+        "slug": "gaalkacyo",
+        "latitude": 6.76972,
+        "longitude": 47.43083,
+        "population": 61200,
+        "geonamesId": 59611
+      },
+      {
+        "nameAr": "لاسكانود",
+        "nameEn": "Laascaanood",
+        "slug": "laascaanood",
+        "latitude": 8.47738,
+        "longitude": 47.35971,
+        "population": 60100,
+        "geonamesId": 400769
+      },
+      {
+        "nameAr": "غاروه",
+        "nameEn": "Garoowe",
+        "slug": "garoowe",
+        "latitude": 8.40207,
+        "longitude": 48.48284,
+        "population": 57300,
+        "geonamesId": 58933
+      },
+      {
+        "nameAr": "بلد وين",
+        "nameEn": "Beledweyne",
+        "slug": "beledweyne",
+        "latitude": 4.73583,
+        "longitude": 45.20361,
+        "population": 55410,
+        "geonamesId": 64460
+      }
+    ]
+  },
+  {
+    "isoCode2": "SD",
+    "nameAr": "السودان",
+    "nameEn": "Sudan",
+    "slug": "sd",
+    "latitude": 16.330746,
+    "longitude": 29.260657,
+    "cities": [
+      {
+        "nameAr": "الخرطوم",
+        "nameEn": "Khartoum",
+        "slug": "khartoum",
+        "latitude": 15.55177,
+        "longitude": 32.53241,
+        "population": 1974647,
+        "geonamesId": 379252
+      },
+      {
+        "nameAr": "أم درمان",
+        "nameEn": "Omdurman",
+        "slug": "omdurman",
+        "latitude": 15.64453,
+        "longitude": 32.47773,
+        "population": 1849659,
+        "geonamesId": 365137
+      },
+      {
+        "nameAr": "الخرطوم بحري",
+        "nameEn": "Khartoum North",
+        "slug": "khartoum-north",
+        "latitude": 15.64925,
+        "longitude": 32.53458,
+        "population": 1012211,
+        "geonamesId": 379251
+      },
+      {
+        "nameAr": "نيالا",
+        "nameEn": "Nyala",
+        "slug": "nyala",
+        "latitude": 12.04888,
+        "longitude": 24.88069,
+        "population": 565734,
+        "geonamesId": 369004
+      },
+      {
+        "nameAr": "بورتسودان",
+        "nameEn": "Port Sudan",
+        "slug": "port-sudan",
+        "latitude": 19.61745,
+        "longitude": 37.21644,
+        "population": 489725,
+        "geonamesId": 377039
+      },
+      {
+        "nameAr": "كسلا",
+        "nameEn": "Kassala",
+        "slug": "kassala",
+        "latitude": 15.45099,
+        "longitude": 36.39998,
+        "population": 401477,
+        "geonamesId": 372753
+      },
+      {
+        "nameAr": "الابيض",
+        "nameEn": "El Obeid",
+        "slug": "el-obeid",
+        "latitude": 13.18421,
+        "longitude": 30.21669,
+        "population": 393311,
+        "geonamesId": 379003
+      },
+      {
+        "nameAr": "القضارف",
+        "nameEn": "Al Qadarif",
+        "slug": "al-qadarif",
+        "latitude": 14.03493,
+        "longitude": 35.38344,
+        "population": 363945,
+        "geonamesId": 379062
+      },
+      {
+        "nameAr": "ربك",
+        "nameEn": "Kosti",
+        "slug": "kosti",
+        "latitude": 13.1629,
+        "longitude": 32.66347,
+        "population": 345068,
+        "geonamesId": 371760
+      },
+      {
+        "nameAr": "ود مدني",
+        "nameEn": "Wad Medani",
+        "slug": "wad-medani",
+        "latitude": 14.40118,
+        "longitude": 33.51989,
+        "population": 332714,
+        "geonamesId": 364103
+      },
+      {
+        "nameAr": "الضعين",
+        "nameEn": "El Daein",
+        "slug": "el-daein",
+        "latitude": 11.46186,
+        "longitude": 26.12583,
+        "population": 264734,
+        "geonamesId": 380148
+      },
+      {
+        "nameAr": "الفاشر",
+        "nameEn": "El Fasher",
+        "slug": "el-fasher",
+        "latitude": 13.62793,
+        "longitude": 25.34936,
+        "population": 252609,
+        "geonamesId": 379555
+      }
+    ]
+  },
+  {
+    "isoCode2": "SY",
+    "nameAr": "سوريا",
+    "nameEn": "Syria",
+    "slug": "sy",
+    "latitude": 35.006636,
+    "longitude": 38.277783,
+    "cities": [
+      {
+        "nameAr": "حلب",
+        "nameEn": "Aleppo",
+        "slug": "aleppo",
+        "latitude": 36.20124,
+        "longitude": 37.16117,
+        "population": 2098210,
+        "geonamesId": 170063
+      },
+      {
+        "nameAr": "دمشق",
+        "nameEn": "Damascus",
+        "slug": "damascus",
+        "latitude": 33.5102,
+        "longitude": 36.29128,
+        "population": 1569394,
+        "geonamesId": 170654
+      },
+      {
+        "nameAr": "حمص",
+        "nameEn": "Homs",
+        "slug": "homs",
+        "latitude": 34.72405,
+        "longitude": 36.72559,
+        "population": 775404,
+        "geonamesId": 169577
+      },
+      {
+        "nameAr": "اللاذقية",
+        "nameEn": "Latakia",
+        "slug": "latakia",
+        "latitude": 35.53125,
+        "longitude": 35.79088,
+        "population": 709000,
+        "geonamesId": 173576
+      },
+      {
+        "nameAr": "الرقة",
+        "nameEn": "Ar Raqqah",
+        "slug": "ar-raqqah",
+        "latitude": 35.95283,
+        "longitude": 39.00788,
+        "population": 531952,
+        "geonamesId": 172955
+      },
+      {
+        "nameAr": "حماه",
+        "nameEn": "Ḩamāh",
+        "slug": "hamah",
+        "latitude": 35.13179,
+        "longitude": 36.75783,
+        "population": 460602,
+        "geonamesId": 170017
+      },
+      {
+        "nameAr": "طرطوس",
+        "nameEn": "Ţarţūs",
+        "slug": "tartus",
+        "latitude": 34.88902,
+        "longitude": 35.88659,
+        "population": 458327,
+        "geonamesId": 163345
+      },
+      {
+        "nameAr": "الحسكة",
+        "nameEn": "Al Ḩasakah",
+        "slug": "al-hasakah",
+        "latitude": 36.50237,
+        "longitude": 40.74772,
+        "population": 422445,
+        "geonamesId": 173811
+      },
+      {
+        "nameAr": "دير الزور",
+        "nameEn": "Deir ez-Zor",
+        "slug": "deir-ez-zor",
+        "latitude": 35.33588,
+        "longitude": 40.14084,
+        "population": 271800,
+        "geonamesId": 170794
+      },
+      {
+        "nameAr": "القامشلي",
+        "nameEn": "Al Qāmishlī",
+        "slug": "al-qamishli",
+        "latitude": 37.05215,
+        "longitude": 41.23142,
+        "population": 184231,
+        "geonamesId": 173377
+      },
+      {
+        "nameAr": "الباب",
+        "nameEn": "Al Bāb",
+        "slug": "al-bab",
+        "latitude": 36.37051,
+        "longitude": 37.5157,
+        "population": 130745,
+        "geonamesId": 174018
+      },
+      {
+        "nameAr": "ادلب",
+        "nameEn": "Idlib",
+        "slug": "idlib",
+        "latitude": 35.93062,
+        "longitude": 36.63393,
+        "population": 128840,
+        "geonamesId": 169389
+      }
+    ]
+  },
+  {
+    "isoCode2": "TN",
+    "nameAr": "تونس",
+    "nameEn": "Tunisia",
+    "slug": "tn",
+    "latitude": 33.687263,
+    "longitude": 9.007881,
+    "cities": [
+      {
+        "nameAr": "تونس",
+        "nameEn": "Tunis",
+        "slug": "tunis",
+        "latitude": 36.81897,
+        "longitude": 10.16579,
+        "population": 693210,
+        "geonamesId": 2464470
+      },
+      {
+        "nameAr": "صفاقس",
+        "nameEn": "Sfax",
+        "slug": "sfax",
+        "latitude": 34.74056,
+        "longitude": 10.76028,
+        "population": 280566,
+        "geonamesId": 2467454
+      },
+      {
+        "nameAr": "سوسه",
+        "nameEn": "Sousse",
+        "slug": "sousse",
+        "latitude": 35.82539,
+        "longitude": 10.63699,
+        "population": 221715,
+        "geonamesId": 2464915
+      },
+      {
+        "nameAr": "سكرة",
+        "nameEn": "Sukrah",
+        "slug": "sukrah",
+        "latitude": 36.87744,
+        "longitude": 10.2468,
+        "population": 159862,
+        "geonamesId": 2464960
+      },
+      {
+        "nameAr": "القيروان",
+        "nameEn": "Kairouan",
+        "slug": "kairouan",
+        "latitude": 35.6781,
+        "longitude": 10.09633,
+        "population": 139070,
+        "geonamesId": 2473449
+      },
+      {
+        "nameAr": "بنزرت",
+        "nameEn": "Bizerte",
+        "slug": "bizerte",
+        "latitude": 37.27442,
+        "longitude": 9.87391,
+        "population": 138430,
+        "geonamesId": 2472706
+      },
+      {
+        "nameAr": "اريانة",
+        "nameEn": "Aryanah",
+        "slug": "aryanah",
+        "latitude": 36.86012,
+        "longitude": 10.19337,
+        "population": 114486,
+        "geonamesId": 2473247
+      },
+      {
+        "nameAr": "ولاية قابس",
+        "nameEn": "Gabès",
+        "slug": "gabes",
+        "latitude": 33.88146,
+        "longitude": 10.0982,
+        "population": 110075,
+        "geonamesId": 2468369
+      },
+      {
+        "nameAr": "الحمامات",
+        "nameEn": "Hammamet",
+        "slug": "hammamet",
+        "latitude": 36.4,
+        "longitude": 10.61667,
+        "population": 106326,
+        "geonamesId": 2473744
+      },
+      {
+        "nameAr": "قفصه",
+        "nameEn": "Gafsa",
+        "slug": "gafsa",
+        "latitude": 34.425,
+        "longitude": 8.78417,
+        "population": 95242,
+        "geonamesId": 2468353
+      },
+      {
+        "nameAr": "المنستير",
+        "nameEn": "Monastir",
+        "slug": "monastir",
+        "latitude": 35.77799,
+        "longitude": 10.82617,
+        "population": 93306,
+        "geonamesId": 2473493
+      },
+      {
+        "nameAr": "مساكن",
+        "nameEn": "Msaken",
+        "slug": "msaken",
+        "latitude": 35.72917,
+        "longitude": 10.58082,
+        "population": 89745,
+        "geonamesId": 2469140
+      }
+    ]
+  },
+  {
+    "isoCode2": "AE",
+    "nameAr": "الإمارات العربية المتحدة",
+    "nameEn": "United Arab Emirates",
+    "slug": "ae",
+    "latitude": 23.466285,
+    "longitude": 54.547256,
+    "cities": [
+      {
+        "nameAr": "دبي",
+        "nameEn": "Dubai",
+        "slug": "dubai",
+        "latitude": 25.07725,
+        "longitude": 55.30927,
+        "population": 3790000,
+        "geonamesId": 292223
+      },
+      {
+        "nameAr": "أبوظبي",
+        "nameEn": "Abu Dhabi",
+        "slug": "abu-dhabi",
+        "latitude": 24.45118,
+        "longitude": 54.39696,
+        "population": 1807000,
+        "geonamesId": 292968
+      },
+      {
+        "nameAr": "الشارقة",
+        "nameEn": "Sharjah",
+        "slug": "sharjah",
+        "latitude": 25.3342,
+        "longitude": 55.41221,
+        "population": 1800000,
+        "geonamesId": 292672
+      },
+      {
+        "nameAr": "مدينة العين",
+        "nameEn": "Al Ain City",
+        "slug": "al-ain-city",
+        "latitude": 24.19167,
+        "longitude": 55.76056,
+        "population": 846747,
+        "geonamesId": 292913
+      },
+      {
+        "nameAr": "عيمان",
+        "nameEn": "Ajman",
+        "slug": "ajman",
+        "latitude": 25.40177,
+        "longitude": 55.47878,
+        "population": 490035,
+        "geonamesId": 292932
+      },
+      {
+        "nameAr": "ديرة",
+        "nameEn": "Dayrah",
+        "slug": "dayrah",
+        "latitude": 25.27143,
+        "longitude": 55.30207,
+        "population": 400000,
+        "geonamesId": 292261
+      },
+      {
+        "nameAr": "راس الخيمة",
+        "nameEn": "Ras Al Khaimah",
+        "slug": "ras-al-khaimah",
+        "latitude": 25.78953,
+        "longitude": 55.9432,
+        "population": 351943,
+        "geonamesId": 291074
+      },
+      {
+        "nameAr": "مصفح",
+        "nameEn": "Musaffah",
+        "slug": "musaffah",
+        "latitude": 24.35893,
+        "longitude": 54.48267,
+        "population": 243341,
+        "geonamesId": 12042053
+      },
+      {
+        "nameAr": "جبل علي",
+        "nameEn": "Jebel Ali",
+        "slug": "jebel-ali",
+        "latitude": 25.00255,
+        "longitude": 55.10811,
+        "population": 210000,
+        "geonamesId": 11524601
+      },
+      {
+        "nameAr": "مرسى دبي",
+        "nameEn": "Dubai Marina",
+        "slug": "dubai-marina",
+        "latitude": 25.08525,
+        "longitude": 55.14646,
+        "population": 120000,
+        "geonamesId": 8469788
+      },
+      {
+        "nameAr": "مدينة الفجيرة",
+        "nameEn": "Fujairah",
+        "slug": "fujairah",
+        "latitude": 25.11641,
+        "longitude": 56.34141,
+        "population": 118933,
+        "geonamesId": 292878
+      },
+      {
+        "nameAr": "ورسان",
+        "nameEn": "Warīsān",
+        "slug": "warisan",
+        "latitude": 25.16744,
+        "longitude": 55.40708,
+        "population": 108759,
+        "geonamesId": 290503
+      }
+    ]
+  },
+  {
+    "isoCode2": "YE",
+    "nameAr": "اليمن",
+    "nameEn": "Yemen",
+    "slug": "ye",
+    "latitude": 15.328226,
+    "longitude": 45.874383,
+    "cities": [
+      {
+        "nameAr": "صنعاء",
+        "nameEn": "Sanaa",
+        "slug": "sanaa",
+        "latitude": 15.35452,
+        "longitude": 44.20646,
+        "population": 1937451,
+        "geonamesId": 71137
+      },
+      {
+        "nameAr": "عدن",
+        "nameEn": "Aden",
+        "slug": "aden",
+        "latitude": 12.77957,
+        "longitude": 45.03852,
+        "population": 1079670,
+        "geonamesId": 415189
+      },
+      {
+        "nameAr": "تعز",
+        "nameEn": "Taiz",
+        "slug": "taiz",
+        "latitude": 13.57952,
+        "longitude": 44.02091,
+        "population": 940600,
+        "geonamesId": 70225
+      },
+      {
+        "nameAr": "اب",
+        "nameEn": "Ibb",
+        "slug": "ibb",
+        "latitude": 13.96667,
+        "longitude": 44.18333,
+        "population": 771514,
+        "geonamesId": 74477
+      },
+      {
+        "nameAr": "الحديدة",
+        "nameEn": "Al Ḩudaydah",
+        "slug": "al-hudaydah",
+        "latitude": 14.79781,
+        "longitude": 42.95452,
+        "population": 734699,
+        "geonamesId": 79415
+      },
+      {
+        "nameAr": "المكلا",
+        "nameEn": "Mukalla",
+        "slug": "mukalla",
+        "latitude": 14.54248,
+        "longitude": 49.12424,
+        "population": 594951,
+        "geonamesId": 78754
+      },
+      {
+        "nameAr": "ذمار",
+        "nameEn": "Dhamār",
+        "slug": "dhamar",
+        "latitude": 14.54274,
+        "longitude": 44.40514,
+        "population": 160114,
+        "geonamesId": 76184
+      },
+      {
+        "nameAr": "عمران",
+        "nameEn": "‘Amrān",
+        "slug": "amran",
+        "latitude": 15.6594,
+        "longitude": 43.94385,
+        "population": 90792,
+        "geonamesId": 78428
+      },
+      {
+        "nameAr": "سيان",
+        "nameEn": "Sayyān",
+        "slug": "sayyan",
+        "latitude": 15.17177,
+        "longitude": 44.32442,
+        "population": 69404,
+        "geonamesId": 70979
+      },
+      {
+        "nameAr": "زبيد",
+        "nameEn": "Zabīd",
+        "slug": "zabid",
+        "latitude": 14.1951,
+        "longitude": 43.31518,
+        "population": 52590,
+        "geonamesId": 69500
+      },
+      {
+        "nameAr": "صعده",
+        "nameEn": "Sa'dah",
+        "slug": "sa-dah",
+        "latitude": 16.94021,
+        "longitude": 43.76393,
+        "population": 51870,
+        "geonamesId": 71334
+      },
+      {
+        "nameAr": "باجل",
+        "nameEn": "Bājil",
+        "slug": "bajil",
+        "latitude": 15.05898,
+        "longitude": 43.28731,
+        "population": 48218,
+        "geonamesId": 77408
+      }
+    ]
+  }
+]

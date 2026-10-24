@@ -2,6 +2,7 @@ using System.Text.Json;
 using Jusoor.Application.Common.Interfaces;
 using Jusoor.Application.Common.Security;
 using Jusoor.Domain.Editorial;
+using Jusoor.Domain.Enums;
 using Jusoor.Domain.Entities;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -11,7 +12,7 @@ namespace Jusoor.Api.Controllers;
 
 [ApiController]
 [Route("api/v1/site-structure")]
-public sealed class SiteStructureController(IApplicationDbContext context) : ControllerBase
+public sealed class SiteStructureController(IApplicationDbContext context, IEditorialMediaStorage mediaStorage) : ControllerBase
 {
     private static readonly JsonSerializerOptions JsonOptions = new(JsonSerializerDefaults.Web);
     private static readonly IReadOnlyDictionary<string, (string Label, string Href)> NavigationCatalog =
@@ -31,7 +32,7 @@ public sealed class SiteStructureController(IApplicationDbContext context) : Con
             ["sports"] = ("رياضة", "/category?cat=sports"),
             ["arts"] = ("فنون", "/category?cat=arts"),
             ["articles"] = ("مقالات رأي", "/category?cat=articles"),
-            ["fatwas"] = ("الفتاوى", "/category?cat=fatwas"),
+            ["fatwas"] = ("فتاوى", "/category?cat=fatwas"),
             ["videos"] = ("فيديو", "/videos"),
         };
 
@@ -39,10 +40,12 @@ public sealed class SiteStructureController(IApplicationDbContext context) : Con
     public sealed record HomepageSection(string Key, string Title, string DeskSlug, string Layout, bool IsEnabled, bool ShowOnWeb, bool ShowOnMobile, int DisplayOrder);
     public sealed record LeadershipEntry(string Id, string Title, string Name);
     public sealed record LeadershipInput(IReadOnlyList<LeadershipEntry>? Entries);
-    public sealed record SiteStructureDocument(IReadOnlyList<NavigationItem> Navigation, IReadOnlyList<HomepageSection> HomepageSections, LeadershipInput Leadership, DateTimeOffset? LastModifiedAtUtc);
+    public sealed record SocialLink(string Id, string Name, string Href, string Icon, bool IsVisible);
+    public sealed record WelcomeIntro(bool IsEnabled, Guid? AssetId, string? VideoUrl, string? FileName);
+    public sealed record SiteStructureDocument(IReadOnlyList<NavigationItem> Navigation, IReadOnlyList<HomepageSection> HomepageSections, LeadershipInput Leadership, IReadOnlyList<SocialLink> SocialLinks, WelcomeIntro WelcomeIntro, DateTimeOffset? LastModifiedAtUtc);
     public sealed record NavigationInput(string Key, string Label, bool IsVisible, int DisplayOrder, string Group);
     public sealed record HomepageSectionInput(string Key, string Title, string DeskSlug, string Layout, bool IsEnabled, bool ShowOnWeb, bool ShowOnMobile, int DisplayOrder);
-    public sealed record SaveInput(IReadOnlyList<NavigationInput> Navigation, IReadOnlyList<HomepageSectionInput> HomepageSections, LeadershipInput? Leadership = null);
+    public sealed record SaveInput(IReadOnlyList<NavigationInput> Navigation, IReadOnlyList<HomepageSectionInput> HomepageSections, LeadershipInput? Leadership = null, IReadOnlyList<SocialLink>? SocialLinks = null, Guid? WelcomeVideoAssetId = null, bool? WelcomeIntroEnabled = null);
 
     [HttpGet]
     [AllowAnonymous]
@@ -61,22 +64,27 @@ public sealed class SiteStructureController(IApplicationDbContext context) : Con
         var validation = Validate(input);
         if (validation is not null) return BadRequest(new { message = validation });
 
-        var navigation = input.Navigation.Select(x => new NavigationItem(x.Key, x.Label.Trim(), NavigationCatalog[x.Key].Href, x.IsVisible, x.DisplayOrder, x.Group)).OrderBy(x => x.Group == "primary" ? 0 : 1).ThenBy(x => x.DisplayOrder).ToArray();
+        var navigation = input.Navigation.Select(x => new NavigationItem(x.Key, x.Key == "fatwas" ? NavigationCatalog[x.Key].Label : x.Label.Trim(), NavigationCatalog[x.Key].Href, x.IsVisible, x.DisplayOrder, x.Group)).OrderBy(x => x.Group == "primary" ? 0 : 1).ThenBy(x => x.DisplayOrder).ToArray();
         var sections = input.HomepageSections.Select(x => new HomepageSection(x.Key, x.Title.Trim(), x.DeskSlug, x.Layout, x.IsEnabled, x.ShowOnWeb, x.ShowOnMobile, x.DisplayOrder)).OrderBy(x => x.DisplayOrder).ToArray();
         var leadership = NormalizeLeadership(input.Leadership);
         var settings = await context.SiteStructureSettings.FirstOrDefaultAsync(x => x.Key == SiteStructureSettings.SingletonKey, ct);
+        var socialLinks = input.SocialLinks is not null ? NormalizeSocialLinks(input.SocialLinks) : settings is null ? DefaultSocialLinks() : ReadSocialLinks(settings.SocialLinksJson);
+        var introEnabled = input.WelcomeIntroEnabled ?? settings?.WelcomeIntroEnabled ?? false;
+        var introVideoId = input.WelcomeVideoAssetId;
+        if (introEnabled && introVideoId is null) return BadRequest(new { message = "ارفع فيديو تعريفيًا أو اختر فيديو جاهزًا قبل تفعيل عرضه." });
+        if (introVideoId is { } selectedVideoId && !await context.EditorialMediaAssets.AnyAsync(x => x.Id == selectedVideoId && x.Kind == EditorialMediaKind.Video && x.Status == EditorialMediaStatus.Ready, ct)) return BadRequest(new { message = "الفيديو المختار غير جاهز أو ليس ملف فيديو معتمدًا." });
         if (settings is null)
         {
-            settings = SiteStructureSettings.Create(JsonSerializer.Serialize(navigation, JsonOptions), JsonSerializer.Serialize(sections, JsonOptions), JsonSerializer.Serialize(leadership, JsonOptions));
+            settings = SiteStructureSettings.Create(JsonSerializer.Serialize(navigation, JsonOptions), JsonSerializer.Serialize(sections, JsonOptions), JsonSerializer.Serialize(leadership, JsonOptions), JsonSerializer.Serialize(socialLinks, JsonOptions), introVideoId, introEnabled);
             context.SiteStructureSettings.Add(settings);
         }
         else
         {
-            settings.Update(JsonSerializer.Serialize(navigation, JsonOptions), JsonSerializer.Serialize(sections, JsonOptions), JsonSerializer.Serialize(leadership, JsonOptions));
+            settings.Update(JsonSerializer.Serialize(navigation, JsonOptions), JsonSerializer.Serialize(sections, JsonOptions), JsonSerializer.Serialize(leadership, JsonOptions), JsonSerializer.Serialize(socialLinks, JsonOptions), introVideoId, introEnabled);
         }
 
         await context.SaveChangesAsync(ct);
-        return Ok(new SiteStructureDocument(navigation, sections, leadership, settings.LastModifiedAtUtc ?? settings.CreatedAtUtc));
+        return Ok(await ToDocumentAsync(navigation, sections, leadership, socialLinks, settings, ct));
     }
 
     private async Task<SiteStructureDocument> ReadDocument(CancellationToken ct)
@@ -88,22 +96,50 @@ public sealed class SiteStructureController(IApplicationDbContext context) : Con
             var navigation = JsonSerializer.Deserialize<NavigationItem[]>(settings.NavigationJson, JsonOptions) ?? Defaults().Navigation.ToArray();
             var sections = JsonSerializer.Deserialize<HomepageSection[]>(settings.HomepageSectionsJson, JsonOptions) ?? [];
             var leadership = ReadLeadership(settings.LeadershipJson);
+            var socialLinks = ReadSocialLinks(settings.SocialLinksJson);
             // Hrefs always come from this server-owned catalog; stored text can never create an external or unsafe navigation target.
-            navigation = navigation.Where(x => NavigationCatalog.ContainsKey(x.Key) || x.Key == "various").Select(x => x.Key == "various" ? x with { Key = "fatwas", Label = "الفتاوى" } : x).Where(x => NavigationCatalog.ContainsKey(x.Key)).Select(x => x with { Href = NavigationCatalog[x.Key].Href }).OrderBy(x => x.Group == "primary" ? 0 : 1).ThenBy(x => x.DisplayOrder).ToArray();
+            navigation = navigation.Where(x => NavigationCatalog.ContainsKey(x.Key) || x.Key == "various").Select(x => x.Key == "various" ? x with { Key = "fatwas", Label = "فتاوى" } : x).Where(x => NavigationCatalog.ContainsKey(x.Key)).Select(x => x with { Label = x.Key == "fatwas" ? NavigationCatalog[x.Key].Label : x.Label, Href = NavigationCatalog[x.Key].Href }).OrderBy(x => x.Group == "primary" ? 0 : 1).ThenBy(x => x.DisplayOrder).ToArray();
             sections = sections.Where(x => EditorialDesk.IsValid(x.DeskSlug))
-                .Select(x => x.DeskSlug == "various" ? x with { Key = "fatwas", DeskSlug = "fatwas", Title = "الفتاوى" } : x)
+                .Select(x => x.DeskSlug == "various" || x.DeskSlug == "fatwas" ? x with { Key = "fatwas", DeskSlug = "fatwas", Title = "فتاوى" } : x)
                 .OrderBy(x => x.DisplayOrder).ToArray();
-            return new SiteStructureDocument(navigation, sections, leadership, settings.LastModifiedAtUtc ?? settings.CreatedAtUtc);
+            return await ToDocumentAsync(navigation, sections, leadership, socialLinks, settings, ct);
         }
         catch (JsonException) { return Defaults(); }
     }
 
+
+    private async Task<SiteStructureDocument> ToDocumentAsync(NavigationItem[] navigation, HomepageSection[] sections, LeadershipInput leadership, IReadOnlyList<SocialLink> socialLinks, SiteStructureSettings settings, CancellationToken ct)
+    {
+        var intro = new WelcomeIntro(false, null, null, null);
+        if (settings.WelcomeVideoAssetId is { } assetId)
+        {
+            var asset = await context.EditorialMediaAssets.AsNoTracking().FirstOrDefaultAsync(x => x.Id == assetId && x.Kind == EditorialMediaKind.Video && x.Status == EditorialMediaStatus.Ready, ct);
+            if (asset is not null) intro = new WelcomeIntro(settings.WelcomeIntroEnabled, asset.Id, mediaStorage.GetPublicUrl(asset.ObjectPath), asset.OriginalFileName);
+        }
+        return new SiteStructureDocument(navigation, sections, leadership, socialLinks, intro, settings.LastModifiedAtUtc ?? settings.CreatedAtUtc);
+    }
     private static SiteStructureDocument Defaults()
     {
         var nav = NavigationCatalog.Select((pair, index) => new NavigationItem(pair.Key, pair.Value.Label, pair.Value.Href, true, index, index <= 6 ? "primary" : "more")).ToArray();
-        return new SiteStructureDocument(nav, [], DefaultLeadership(), null);
+        return new SiteStructureDocument(nav, [], DefaultLeadership(), DefaultSocialLinks(), new WelcomeIntro(false, null, null, null), null);
     }
 
+    private static IReadOnlyList<SocialLink> DefaultSocialLinks() => new[]
+    {
+        new SocialLink("facebook", "فيسبوك", "https://www.facebook.com/jswr.gosour", "facebook", true),
+        new SocialLink("x", "X", "https://x.com/gosour22", "x", true),
+        new SocialLink("instagram", "إنستجرام", "https://www.instagram.com/gosour22/", "instagram", true),
+        new SocialLink("youtube", "يوتيوب", "", "youtube", false)
+    };
+
+    private static IReadOnlyList<SocialLink> NormalizeSocialLinks(IReadOnlyList<SocialLink> links)
+        => links.Select(x => new SocialLink(x.Id?.Trim() ?? "", x.Name?.Trim() ?? "", x.Href?.Trim() ?? "", x.Icon?.Trim() ?? "", x.IsVisible)).ToArray();
+
+    private static IReadOnlyList<SocialLink> ReadSocialLinks(string json)
+    {
+        try { return NormalizeSocialLinks(JsonSerializer.Deserialize<SocialLink[]>(json, JsonOptions) ?? DefaultSocialLinks()); }
+        catch (JsonException) { return DefaultSocialLinks(); }
+    }
     private static LeadershipInput DefaultLeadership() => new(new[]
     {
         new LeadershipEntry("board-editor", "رئيس مجلس الإدارة ورئيس التحرير", "أحمد سليمان"),
@@ -147,7 +183,20 @@ public sealed class SiteStructureController(IApplicationDbContext context) : Con
             return "الحقلان الأساسيان للقيادة لا يمكن حذفهما أو تغيير مسماهما.";
         if (leaders.Any(x => string.IsNullOrWhiteSpace(x.Id) || x.Id.Length > 80 || string.IsNullOrWhiteSpace(x.Title) || x.Title.Trim().Length > 80 || x.Name?.Trim().Length > 100))
             return "تحقق من مسميات وأسماء الحقول (المسمى حتى 80 حرفًا والاسم حتى 100 حرف).";
-        if (input.Navigation.Count != NavigationCatalog.Count || input.Navigation.Select(x => x.Key).Distinct(StringComparer.Ordinal).Count() != NavigationCatalog.Count || input.Navigation.Any(x => !NavigationCatalog.ContainsKey(x.Key)))
+        if (input.SocialLinks is { } links)
+        {
+            if (links.Count > 12 || links.Select(x => x.Id).Distinct(StringComparer.Ordinal).Count() != links.Count)
+                return "لا يمكن تكرار منصة التواصل أو تجاوز 12 منصة.";
+            foreach (var link in links)
+            {
+                if (string.IsNullOrWhiteSpace(link.Id) || link.Id.Length > 40 || !System.Text.RegularExpressions.Regex.IsMatch(link.Id, "^[a-z0-9-]+$") ||
+                    string.IsNullOrWhiteSpace(link.Name) || link.Name.Trim().Length > 60 || link.Icon is not ("facebook" or "x" or "instagram" or "youtube" or "globe" or "tiktok" or "linkedin"))
+                    return "تحقق من اسم المنصة ومعرّفها وأيقونتها.";
+                if (link.IsVisible && (!Uri.TryCreate(link.Href, UriKind.Absolute, out var socialUri) || socialUri.Scheme != Uri.UriSchemeHttps || !string.IsNullOrEmpty(socialUri.UserInfo)))
+                    return "أدخل رابط HTTPS صحيحًا لكل منصة ظاهرة.";
+                if (link.Href?.Length > 500) return "رابط المنصة طويل أكثر من الحد المسموح.";
+            }
+        }        if (input.Navigation.Count != NavigationCatalog.Count || input.Navigation.Select(x => x.Key).Distinct(StringComparer.Ordinal).Count() != NavigationCatalog.Count || input.Navigation.Any(x => !NavigationCatalog.ContainsKey(x.Key)))
             return "يجب أن تحتوي القائمة على روابط جسور المعتمدة مرة واحدة لكل رابط.";
         if (input.Navigation.Any(x => string.IsNullOrWhiteSpace(x.Label) || x.Label.Trim().Length > 80 || x.DisplayOrder < 0 || x.Group is not ("primary" or "more")))
             return "تحقق من أسماء الروابط وترتيبها ومجموعة العرض.";

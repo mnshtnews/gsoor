@@ -8278,7 +8278,7 @@ footer.foot-v2 {
 /* ---------- الشريط العلوي (كل الصفحات) ---------- */
 .crisis-bar {
   position: relative;
-  z-index: 1500;
+  z-index: 70;
   background: linear-gradient(90deg, var(--crisis-red-1), var(--crisis-red-2));
   color: #fff;
   direction: rtl;
@@ -10568,3 +10568,5 @@ body.crisis-mode-active #heroSliderSection .hero-thumb.active {
     height: 66px;
   }
 }
+
+.ui-localized-content { display: contents; }

@@ -1,5 +1,7 @@
 "use client";
 
+import { LocalizedContent } from "@/components/LocalizedContent";
+
 import { useCallback, useEffect, useState } from "react";
 import Link from "next/link";
 import Image from "next/image";
@@ -88,7 +90,7 @@ export default function HomeVideosPage() {
     </li>
   );
 
-  return (
+  return <LocalizedContent>{(
     <main className="cms-card" dir="rtl">
       <div className="cms-head"><h1>فيديوهات الصفحة الرئيسية</h1><Link className="cms-btn" href="/cms">لوحة الأخبار</Link></div>
       <p className="cms-hint">اختر الفيديوهات التي تظهر في أول الصفحة الرئيسية ورتّبها. لا يُضاف شيء تلقائيًا، ولو لم تختر أي فيديو يختفي هذا القسم من الموقع. تظهر هنا الأخبار المنشورة التي اختير لها ملف فيديو مرفوع أو فيديو مضمّن.</p>
@@ -122,5 +124,5 @@ export default function HomeVideosPage() {
         </div>
       </>}
     </main>
-  );
+  )}</LocalizedContent>;
 }

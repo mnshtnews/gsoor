@@ -16,7 +16,9 @@ export async function GET() {
     return NextResponse.json({ authenticated: false }, { status: 401 });
   }
 
-  return NextResponse.json({ authenticated: true, email, roles });
+  const access = await fetch(backendUrl("/api/v1/admin/users/current-permissions"), { headers: { Authorization: `Bearer ${token}` }, cache: "no-store" }).catch(() => null);
+  const accessData = access?.ok ? (await access.json().catch(() => ({ permissions: [] })) as { permissions?: string[] }) : { permissions: [] };
+  return NextResponse.json({ authenticated: true, email, roles, permissions: accessData.permissions ?? [] });
 }
 
 /** Login: exchanges credentials for the API's JWT and keeps it in an httpOnly cookie. */

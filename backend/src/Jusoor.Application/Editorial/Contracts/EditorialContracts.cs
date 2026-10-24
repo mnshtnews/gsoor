@@ -73,6 +73,9 @@ public sealed record EditorialArticleSummaryDto(
     public DateTimeOffset? ScheduledPublishAtUtc { get; init; }
 }
 
+public sealed record PublicNewsTranslationSummaryDto(string Locale, string Title, string? Summary);
+public sealed record PublicNewsTranslationDto(string Locale, string Title, string? Summary, string Body);
+
 /// <summary>Public list row. Contains no internal user ids and no draft data.</summary>
 public sealed record PublicNewsSummaryDto(
     Guid Id,
@@ -95,6 +98,7 @@ public sealed record PublicNewsSummaryDto(
     public string? ImageUrl { get; init; }
     public string? AuthorName { get; init; }
     public string? AuthorImageUrl { get; init; }
+    public IReadOnlyList<PublicNewsTranslationSummaryDto> Translations { get; init; } = Array.Empty<PublicNewsTranslationSummaryDto>();
 }
 
 /// <summary>Published article with a CMS-selected, verified uploaded or embedded video for the public video hub.</summary>
@@ -151,6 +155,7 @@ public sealed record PublicNewsDetailDto(
     public string? TwitterTitle { get; init; }
     public string? TwitterDescription { get; init; }
     public string? TwitterImageUrl { get; init; }
+    public IReadOnlyList<PublicNewsTranslationDto> Translations { get; init; } = Array.Empty<PublicNewsTranslationDto>();
 }
 
 /// <summary>

@@ -8,6 +8,7 @@ public static class EditorialMediaPolicy
     public const long ImageMaxBytes = 10 * 1024 * 1024;
     public const long VideoMaxBytes = 100 * 1024 * 1024;
     public const long PdfMaxBytes = 20 * 1024 * 1024;
+    public const long AudioMaxBytes = 10 * 1024 * 1024;
 
     public static bool TryGetKind(string fileName, string contentType, long sizeBytes, out EditorialMediaKind kind)
     {
@@ -24,6 +25,9 @@ public static class EditorialMediaPolicy
             "image/avif" => (EditorialMediaKind.Image, ImageMaxBytes, new[] { ".avif" }, new[] { "image/avif" }),
             "video/mp4" => (EditorialMediaKind.Video, VideoMaxBytes, new[] { ".mp4" }, new[] { "video/mp4" }),
             "video/webm" => (EditorialMediaKind.Video, VideoMaxBytes, new[] { ".webm" }, new[] { "video/webm" }),
+            "audio/mpeg" => (EditorialMediaKind.Audio, AudioMaxBytes, new[] { ".mp3" }, new[] { "audio/mpeg" }),
+            "audio/ogg" => (EditorialMediaKind.Audio, AudioMaxBytes, new[] { ".ogg", ".oga" }, new[] { "audio/ogg" }),
+            "audio/wav" or "audio/x-wav" => (EditorialMediaKind.Audio, AudioMaxBytes, new[] { ".wav" }, new[] { "audio/wav", "audio/x-wav" }),
             "application/pdf" => (EditorialMediaKind.Document, PdfMaxBytes, new[] { ".pdf" }, new[] { "application/pdf" }),
             _ => (default, 0L, Array.Empty<string>(), Array.Empty<string>())
         };
@@ -45,6 +49,9 @@ public static class EditorialMediaPolicy
                 && (bytes[8..12].SequenceEqual("avif"u8) || bytes[8..12].SequenceEqual("avis"u8)),
             (EditorialMediaKind.Video, "video/mp4") => bytes[4..8].SequenceEqual("ftyp"u8),
             (EditorialMediaKind.Video, "video/webm") => bytes[..4].SequenceEqual(new byte[] { 0x1A, 0x45, 0xDF, 0xA3 }),
+            (EditorialMediaKind.Audio, "audio/mpeg") => bytes[..3].SequenceEqual("ID3"u8) || (bytes[0] == 0xFF && (bytes[1] & 0xE0) == 0xE0),
+            (EditorialMediaKind.Audio, "audio/ogg") => bytes[..4].SequenceEqual("OggS"u8),
+            (EditorialMediaKind.Audio, "audio/wav") or (EditorialMediaKind.Audio, "audio/x-wav") => bytes[..4].SequenceEqual("RIFF"u8) && bytes[8..12].SequenceEqual("WAVE"u8),
             (EditorialMediaKind.Document, "application/pdf") => bytes[..5].SequenceEqual("%PDF-"u8),
             _ => false
         };

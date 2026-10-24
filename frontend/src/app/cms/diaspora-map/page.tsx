@@ -1,5 +1,7 @@
 "use client";
 
+import { LocalizedContent } from "@/components/LocalizedContent";
+
 import { useCallback, useEffect, useMemo, useState } from "react";
 import { cms, type CmsSession } from "@/lib/cms-client";
 
@@ -72,7 +74,7 @@ export default function CmsDiasporaMapPage() {
     finally { setBusy(false); }
   }
 
-  return <div className="cms-page-stack">
+  return <LocalizedContent>{<div className="cms-page-stack">
     <section className="cms-page-heading"><div><span className="cms-eyebrow">بيانات جاليات موثقة</span><h1>خريطة المهجر</h1><p>أضف تقديرات منشورة مع مصدرها وتاريخها. لا تظهر التقديرات للعامة قبل اعتمادها.</p></div><button className="cms-btn" type="button" disabled={loading || busy} onClick={() => void load()}>تحديث</button></section>
     <div className="cms-map-privacy-note"><strong>الخصوصية والمصدر</strong><p>تُعرض الأرقام التقديرية منفصلة عن مؤشرات مستخدمي جسور. المؤشر المجتمعي لا يظهر إلا عند بلوغ 25 مشاركة موقع على الأقل، ولا تُعرض مواقع الأفراد. الأرقام المنشورة هنا تقديرية وليست إحصاءً حكوميًا.</p></div>
     {error && <div className="cms-msg error" role="alert">{error}</div>}{notice && <div className="cms-msg ok" role="status">{notice}</div>}
@@ -93,5 +95,5 @@ export default function CmsDiasporaMapPage() {
     <section className="cms-card"><div className="cms-section-title"><div><h2>التقديرات المسجلة</h2><p className="cms-hint">المسودات لا تظهر في الموقع، وكل رقم منشور يحمل مصدره.</p></div><span className="cms-count-pill">{items.length} موقع</span></div>
       {loading ? <p>جارٍ تحميل البيانات…</p> : items.length ? <div className="cms-table-scroll"><table className="cms-table"><thead><tr><th>الموقع</th><th>التقدير</th><th>المصدر وتاريخه</th><th>الحالة</th><th>إجراءات</th></tr></thead><tbody>{items.map((item) => <tr key={item.id}><td data-label="الموقع"><strong>{item.cityNameAr ?? item.countryNameAr}</strong>{item.cityNameAr && <small className="cms-hint">{item.countryNameAr}</small>}</td><td data-label="التقدير">{item.estimatedPopulation.toLocaleString("ar-EG")}</td><td data-label="المصدر"><a href={item.sourceUrl} target="_blank" rel="noopener noreferrer">{item.sourceName} ↗</a><small>{item.sourcePublishedOn}</small></td><td data-label="الحالة"><span className={`cms-badge ${item.isPublished ? "published" : "draft"}`}>{item.isPublished ? "منشور" : "مسودة"}</span></td><td data-label="إجراءات"><div className="cms-actions"><button className="cms-btn" type="button" disabled={busy} onClick={() => startEdit(item)}>تعديل</button><button className="cms-btn danger" type="button" disabled={busy} onClick={() => void remove(item)}>حذف</button></div></td></tr>)}</tbody></table></div> : <div className="cms-news-empty">لا توجد تقديرات بعد. أضف أرقامًا منشورة مع مصدرها وتاريخها، أو اترك الخريطة فارغة إلى أن تتوفر بيانات موثوقة.</div>}
     </section>
-  </div>;
+  </div>}</LocalizedContent>;
 }

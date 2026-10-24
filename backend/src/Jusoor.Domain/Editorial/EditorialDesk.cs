@@ -18,7 +18,7 @@ public static class EditorialDesk
         ["sports"] = "رياضة",
         ["arts"] = "فنون",
         ["articles"] = "مقالات رأي",
-        ["fatwas"] = "الفتاوى",
+        ["fatwas"] = "فتاوى",
     };
 
     public static bool IsValid(string? slug) => slug is not null && (Catalog.ContainsKey(slug) || slug == "various");

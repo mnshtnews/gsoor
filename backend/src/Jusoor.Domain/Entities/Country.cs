@@ -18,6 +18,10 @@ public class Country : BaseEntity
     public required string IsoCode2 { get; set; } // e.g. "AE", "US", "GB"
     public required string Slug { get; set; }      // used in /{country}/ routes
 
+    // Country label point for maps; nullable to keep manually added records valid.
+    public decimal? Latitude { get; set; }
+    public decimal? Longitude { get; set;}
+
     public ICollection<City> Cities { get; set; } = new List<City>();
     public ICollection<Region> Regions { get; set; } = new List<Region>();
 }

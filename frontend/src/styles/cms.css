@@ -369,3 +369,29 @@
 
 @media(max-width:900px){.cms-report-kpis{grid-template-columns:repeat(2,minmax(0,1fr))}.cms-report-table{min-width:760px}}
 @media(max-width:540px){.cms-report-kpis{grid-template-columns:1fr 1fr;gap:10px}.cms-report-kpi{padding:15px}.cms-report-kpi strong{font-size:1.55rem}.cms-report-section{padding:15px}.cms-page-heading:has(.cms-report-range){align-items:stretch;flex-direction:column}.cms-report-range select{width:100%}}
+
+.cms-create-newsroom-user { display: grid; gap: 14px; }
+.cms-create-newsroom-user h2 { margin: 0; }
+.cms-users-create-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 14px; }
+@media (max-width: 680px) { .cms-users-create-grid { grid-template-columns: 1fr; } }
+
+.cms-welcome-intro-settings { display: grid; gap: 14px; }
+.cms-welcome-intro-preview { display: grid; grid-template-columns: minmax(0, 1fr) minmax(180px, .5fr); align-items: center; gap: 14px; }
+.cms-welcome-intro-preview video { display: block; width: 100%; max-height: 280px; background: #101828; border-radius: 10px; }
+.cms-welcome-intro-preview > div { display: flex; flex-direction: column; align-items: start; gap: 12px; }
+@media(max-width:640px){.cms-welcome-intro-preview{grid-template-columns:1fr}}
+
+.article-translations { margin-block: 24px; }
+.cms-card-header { display: flex; align-items: flex-start; justify-content: space-between; gap: 16px; margin-bottom: 18px; }
+.cms-card-header h2 { margin: 0 0 6px; }
+.cms-card-header p { margin: 0; color: var(--text-mute); }
+.article-translation-tabs { display: flex; gap: 8px; border-bottom: 1px solid var(--line); margin-bottom: 18px; }
+.article-translation-tabs button { border: 0; border-bottom: 3px solid transparent; padding: 10px 16px; background: transparent; color: inherit; cursor: pointer; }
+.article-translation-tabs button[aria-selected="true"] { border-bottom-color: var(--primary, #1f5ac6); color: var(--primary, #1f5ac6); font-weight: 700; }
+.article-translation-actions { display: flex; align-items: center; flex-wrap: wrap; gap: 10px; }
+.article-translation-actions .cms-hint { flex-basis: 100%; }
+@media (max-width: 640px) { .cms-card-header { flex-direction: column; } .cms-card-header > button { width: 100%; } .article-translation-tabs button { flex: 1; } }
+
+.cms-localized-content { display: contents; }
+
+.ui-localized-content { display: contents; }

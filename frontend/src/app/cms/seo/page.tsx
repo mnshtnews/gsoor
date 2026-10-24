@@ -1,5 +1,7 @@
 "use client";
 
+import { LocalizedContent } from "@/components/LocalizedContent";
+
 import { useCallback, useEffect, useState } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
@@ -16,7 +18,7 @@ export default function SeoArticlesPage() {
     else setError(e instanceof Error ? e.message : "تعذر تحميل قائمة المقالات.");
   }); }, [page, router]);
   useEffect(() => { load(); }, [load]);
-  return <main className="cms-card" dir="rtl"><div className="cms-head"><h1>تحسين ظهور المقالات</h1><Link className="cms-btn" href="/cms">لوحة الأخبار</Link></div>
+  return <LocalizedContent>{<main className="cms-card" dir="rtl"><div className="cms-head"><h1>تحسين ظهور المقالات</h1><Link className="cms-btn" href="/cms">لوحة الأخبار</Link></div>
     {error && <div className="cms-msg error" role="alert">{error}</div>}
     {!items.length && !error ? <p>جارٍ تحميل المقالات…</p> : <ul>{items.map(article => <li key={article.id}>
       <Link href={`/cms/seo/articles/${article.id}`}>{article.title}</Link> — {article.status}
@@ -26,5 +28,5 @@ export default function SeoArticlesPage() {
     <div className="cms-actions"><button type="button" className="cms-btn" disabled={page <= 1} onClick={() => setPage(p => p - 1)}>السابق</button>
       <span>{page} / {Math.max(1, Math.ceil(totalCount / 50))} — {totalCount} مقالًا</span>
       <button type="button" className="cms-btn" disabled={page >= Math.ceil(totalCount / 50)} onClick={() => setPage(p => p + 1)}>التالي</button></div>
-  </main>;
+  </main>}</LocalizedContent>;
 }

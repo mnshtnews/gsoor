@@ -18,6 +18,7 @@ public sealed class CrisisModeConfiguration : IEntityTypeConfiguration<CrisisMod
         builder.Property(x => x.SourceUrl).IsRequired().HasMaxLength(CrisisMode.SourceUrlMaxLength);
         builder.Property(x => x.Severity).IsRequired().HasMaxLength(16);
         builder.Property(x => x.AffectedCountryIdsJson).IsRequired().HasMaxLength(20_000);
+        builder.Property(x => x.SoundRepeatIntervalSeconds).IsRequired().HasDefaultValue(60);
         builder.Property(x => x.CreatedByUserId).HasMaxLength(450);
         builder.Property(x => x.LastModifiedByUserId).HasMaxLength(450);
     }

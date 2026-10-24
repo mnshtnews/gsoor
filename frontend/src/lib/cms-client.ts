@@ -45,6 +45,8 @@ export interface CmsArticle extends CmsArticleSummary {
   socialImageUrl?: string | null;
 }
 
+export interface CmsArticleTranslation { locale: "en" | "fr"; title: string; summary: string | null; body: string; status: "MachineDraft" | "Reviewed" | "Manual"; provider: string; reviewedAtUtc: string | null; isStale: boolean; }
+
 export interface CmsCategory { id: string; nameAr: string; slug: string; displayOrder: number; }
 export interface CmsSeoArticleSummary { id: string; title: string; slug: string; status: ArticleStatus; noIndex: boolean; primaryCategoryId: string | null; }
 export interface CmsArticleSeo {
@@ -126,6 +128,7 @@ export interface CmsSession {
   authenticated: boolean;
   email?: string | null;
   roles?: string[];
+  permissions?: string[];
 }
 
 export class CmsError extends Error {
@@ -180,7 +183,9 @@ export interface CmsHomeVideo { articleId: string; title: string; publishedAtUtc
 export type CmsSiteNavigationItem = { key: string; label: string; href: string; isVisible: boolean; displayOrder: number; group: "primary" | "more" };
 export type CmsHomepageSection = { key: string; title: string; deskSlug: string; layout: "cards" | "lead" | "columns"; isEnabled: boolean; showOnWeb: boolean; showOnMobile: boolean; displayOrder: number };
 export type CmsLeadershipEntry = { id: string; title: string; name: string };
-export type CmsSiteStructure = { navigation: CmsSiteNavigationItem[]; homepageSections: CmsHomepageSection[]; leadership: { entries: CmsLeadershipEntry[] }; lastModifiedAtUtc: string | null };
+export type CmsSocialLink = { id: string; name: string; href: string; icon: "facebook" | "x" | "instagram" | "youtube" | "globe" | "tiktok" | "linkedin"; isVisible: boolean };
+export type CmsWelcomeIntro = { isEnabled: boolean; assetId: string | null; videoUrl: string | null; fileName: string | null };
+export type CmsSiteStructure = { navigation: CmsSiteNavigationItem[]; homepageSections: CmsHomepageSection[]; leadership: { entries: CmsLeadershipEntry[] }; socialLinks: CmsSocialLink[]; welcomeIntro: CmsWelcomeIntro; lastModifiedAtUtc: string | null };
 
 export const cmsSiteStructure = {
   async get(): Promise<CmsSiteStructure> {
@@ -188,7 +193,7 @@ export const cmsSiteStructure = {
     if (!response.ok) throw new CmsError(await readError(response), response.status);
     return response.json() as Promise<CmsSiteStructure>;
   },
-  async save(input: Pick<CmsSiteStructure, "navigation" | "homepageSections" | "leadership">): Promise<CmsSiteStructure> {
+  async save(input: Pick<CmsSiteStructure, "navigation" | "homepageSections" | "leadership" | "socialLinks"> & { welcomeVideoAssetId: string | null; welcomeIntroEnabled: boolean }): Promise<CmsSiteStructure> {
     const response = await fetch("/cms-api/site-structure", { method: "PUT", credentials: "same-origin", cache: "no-store", headers: { "Content-Type": "application/json" }, body: JSON.stringify(input) });
     if (!response.ok) throw new CmsError(await readError(response), response.status);
     return response.json() as Promise<CmsSiteStructure>;
@@ -302,6 +307,11 @@ export const cms = {
 
   get: (id: string) => call<CmsArticle>(`/${id}`),
 
+  translations: (id: string) => call<CmsArticleTranslation[]>(`/${id}/translations`),
+  generateTranslations: (id: string) => call<CmsArticleTranslation[]>(`/${id}/translations/generate`, { method: "POST" }),
+  saveTranslation: (id: string, locale: "en" | "fr", input: { title: string; summary: string | null; body: string }) => call<CmsArticleTranslation>(`/${id}/translations/${locale}`, { method: "PUT", body: JSON.stringify(input) }),
+  reviewTranslation: (id: string, locale: "en" | "fr") => call<CmsArticleTranslation>(`/${id}/translations/${locale}/review`, { method: "POST" }),
+
   create: (input: ArticleInput) => call<CmsArticle>("", { method: "POST", body: JSON.stringify(input) }),
 
   update: (id: string, input: ArticleInput) =>
@@ -394,7 +404,7 @@ export const PRESENTATION_DESKS = [
   { slug: "sports", label: "رياضة" },
   { slug: "arts", label: "فنون" },
   { slug: "articles", label: "مقالات رأي" },
-  { slug: "fatwas", label: "الفتاوى" },
+  { slug: "fatwas", label: "فتاوى" },
 ] as const;
 
 export type WorkflowAction = "submit" | "requestRevision" | "approve" | "publish" | "schedule" | "cancelSchedule" | "unpublish" | "retract" | "archive" | "restoreArchive" | "reinstate";

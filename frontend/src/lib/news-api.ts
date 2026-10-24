@@ -1,9 +1,14 @@
 import { apiFetch, ApiError } from "./api-client";
 import type { PagedResult, StorySummary } from "./stories-api";
+import { cookies } from "next/headers";
+import { parseLocale } from "./site-copy";
 
 // Mirrors Jusoor.Application.Editorial.Contracts.PublicNewsSummaryDto /
 // PublicNewsDetailDto. The public news API returns ONLY articles a newsroom
 // user has explicitly published (Slice 15) — drafts never appear here.
+interface NewsTranslationDto { locale: "en" | "fr"; title: string; summary: string | null; body: string; }
+interface NewsTranslationSummaryDto { locale: "en" | "fr"; title: string; summary: string | null; }
+
 interface NewsSummaryDto {
   id: string;
   title: string;
@@ -18,6 +23,7 @@ interface NewsSummaryDto {
   slug: string;
   presentationDesks: string[];
   imageUrl: string | null;
+  translations: NewsTranslationSummaryDto[];
 }
 
 /** Mirrors PublicCorrectionDto — never carries the issuer (decision D4). */
@@ -29,6 +35,8 @@ export interface NewsCorrection {
 }
 
 export interface NewsDetail {
+  translations: NewsTranslationDto[];
+  contentLocale: "ar" | "en" | "fr";
   id: string;
   title: string;
   authorName: string | null;
@@ -106,11 +114,11 @@ export async function getPublishedNews(page = 1, pageSize = 20, desk?: string, s
   if (authorName?.trim()) query.set("author", authorName.trim());
   if (countryId) query.set("countryId", countryId);
   const result = await apiFetch<PagedResult<NewsSummaryDto>>(`/api/v1/news?${query.toString()}`);
-
-  return {
-    ...result,
-    items: result.items.map((n) => ({ ...n, sourceNames: [] })),
-  };
+  const locale = parseLocale((await cookies()).get("jusoor_locale")?.value);
+  return { ...result, items: result.items.map((n) => {
+    const translated = locale === "ar" ? undefined : n.translations?.find((item) => item.locale === locale);
+    return { ...n, title: translated?.title ?? n.title, excerpt: translated?.summary ?? n.excerpt, sourceNames: [] };
+  }) };
 }
 
 /** `homeOnly`: just the videos an editor placed in the homepage hero, in the editor's order. */
@@ -138,10 +146,13 @@ export interface PublicCrisisMode {
   sourceUrl: string;
   severity: "advisory" | "urgent" | "emergency";
   affectedCountryIds: string[];
+  soundAssetId: string | null;
+  soundUrl: string | null;
+  soundRepeatIntervalSeconds: number;
   lastModifiedAtUtc: string | null;
 }
 
-export interface PublicCountry { id: string; nameAr: string; nameEn: string; isoCode2: string; }
+export interface PublicCountry { id: string; nameAr: string; nameEn: string; isoCode2: string; latitude: number | null; longitude: number | null; }
 
 export interface PublicDiasporaMapItem {
   id: string;
@@ -178,10 +189,14 @@ export interface PublicHomepageSection {
   displayOrder: number;
 }
 
+export interface PublicSocialLink { id: string; name: string; href: string; icon: string; isVisible: boolean; }
+
 export interface PublicSiteStructure {
   navigation: PublicSiteNavigationItem[];
   homepageSections: PublicHomepageSection[];
   leadership: { entries: Array<{ id: string; title: string; name: string }> };
+  socialLinks: PublicSocialLink[];
+  welcomeIntro: { isEnabled: boolean; assetId: string | null; videoUrl: string | null; fileName: string | null };
   lastModifiedAtUtc: string | null;
 }
 
@@ -208,7 +223,9 @@ export async function getPublicAdPlacements(surface: "web" | "mobile"): Promise<
 export async function getPublishedNewsById(id: string): Promise<PublicNewsDetail> {
   try {
     const article = await apiFetch<NewsDetail>(`/api/v1/news/${id}`);
-    return { outcome: "found", article };
+    const locale = parseLocale((await cookies()).get("jusoor_locale")?.value);
+    const translated = locale === "ar" ? undefined : article.translations?.find((item) => item.locale === locale);
+    return { outcome: "found", article: translated ? { ...article, title: translated.title, summary: translated.summary, body: translated.body, contentLocale: locale, seoTitle: null, seoDescription: translated.summary, socialTitle: translated.title, socialDescription: translated.summary, twitterTitle: translated.title, twitterDescription: translated.summary } : { ...article, contentLocale: "ar" } };
   } catch (error) {
     if (error instanceof ApiError && error.status === 404) {
       return null;

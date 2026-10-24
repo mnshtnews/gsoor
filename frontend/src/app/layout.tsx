@@ -5,18 +5,24 @@ import "@/styles/site-overrides.css";
 import { SiteHeader } from "@/components/SiteHeader";
 import { SiteFooter } from "@/components/SiteFooter";
 import { CrisisStatusBar } from "@/components/CrisisStatusBar";
+import { WelcomeIntro } from "@/components/WelcomeIntro";
+import { getPublicSiteStructure } from "@/lib/news-api";
+import { cookies } from "next/headers";
+import { parseLocale } from "@/lib/site-copy";
 
 export const viewport: Viewport = { width: "device-width", initialScale: 1 };
 
-export const metadata: Metadata = {
-  title: "جسور — أخبار المصريين بالمهجر",
-  description: "منصة المصريين بالمهجر: أخبار الجاليات، خدمة اطمّن على مغتربك وقت الأزمات، وخريطة تفاعلية لأماكن تواجد المصريين حول العالم.",
-};
+export async function generateMetadata(): Promise<Metadata> {
+  const locale = parseLocale((await cookies()).get("jusoor_locale")?.value);
+  const metadataByLocale = {
+    ar: { title: "جسور — أخبار المصريين بالمهجر", description: "منصة المصريين بالمهجر: أخبار الجاليات، خدمة اطمّن على مغتربك وقت الأزمات، وخريطة تفاعلية لأماكن تواجد المصريين حول العالم." },
+    en: { title: "Jusoor — Egyptians Abroad", description: "News, services, and community updates for Egyptians living abroad." },
+    fr: { title: "Jusoor — Égyptiens à l’étranger", description: "Actualités, services et informations pour les Égyptiens vivant à l’étranger." },
+  };
+  return metadataByLocale[locale];
+}
 
-// dir="rtl" and lang="ar" are hardcoded for now — the spec's own
-// recommendation is to launch Arabic-only in MVP and add English in V1.
-// When that happens, this becomes a per-locale value from the routing
-// segment, not a second hardcoded layout.
+// The visitor-selected locale is stored in a first-party cookie and applied to the document language and direction.
 //
 // Fonts (Cairo, IBM Plex Sans Arabic, IBM Plex Mono) are loaded via the
 // same Google Fonts CDN link the demo uses, not next/font — the demo's
@@ -24,13 +30,15 @@ export const metadata: Metadata = {
 // local-hosting rewrite only applies to its own <link>, so keeping the
 // exact CDN link is the simplest way to guarantee the same font actually
 // renders without re-deriving every weight the CSS uses.
-export default function RootLayout({
+export default async function RootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  const structure = await getPublicSiteStructure().catch(() => null);
+  const locale = parseLocale((await cookies()).get("jusoor_locale")?.value);
   return (
-    <html lang="ar" dir="rtl">
+    <html lang={locale} dir={locale === "ar" ? "rtl" : "ltr"}>
       <head>
         <link rel="icon" type="image/png" href="/assets/josour-logo-transparent.png" />
         <link rel="preconnect" href="https://fonts.googleapis.com" />
@@ -49,6 +57,7 @@ export default function RootLayout({
         <CrisisStatusBar />
         {children}
         <SiteFooter />
+        <WelcomeIntro enabled={structure?.welcomeIntro?.isEnabled ?? false} videoUrl={structure?.welcomeIntro?.videoUrl ?? null} />
       </body>
     </html>
   );

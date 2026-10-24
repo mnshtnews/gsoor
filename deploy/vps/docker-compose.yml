@@ -44,6 +44,9 @@ services:
       AZURE_CLIENT_ID: ${AZURE_CLIENT_ID:-}
       AZURE_TENANT_ID: ${AZURE_TENANT_ID:-}
       AZURE_CLIENT_SECRET: ${AZURE_CLIENT_SECRET:-}
+      AZURE_TRANSLATOR_KEY: ${AZURE_TRANSLATOR_KEY:-}
+      AZURE_TRANSLATOR_REGION: ${AZURE_TRANSLATOR_REGION:-}
+      AzureTranslator__Endpoint: ${AZURE_TRANSLATOR_ENDPOINT:-https://api.cognitive.microsofttranslator.com}
       Twilio__AccountSid: ${TWILIO_ACCOUNT_SID:-}
       Twilio__AuthToken: ${TWILIO_AUTH_TOKEN:-}
       Twilio__VerifyServiceSid: ${TWILIO_VERIFY_SERVICE_SID:-}

@@ -1,5 +1,7 @@
 "use client";
 
+import { LocalizedContent } from "@/components/LocalizedContent";
+
 import { useCallback, useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import { CmsError, cms } from "@/lib/cms-client";
@@ -63,7 +65,7 @@ export default function CmsAtmaenPage() {
     finally { setSavingStatus(false); }
   }
   const items = data?.items ?? [];
-  return <div className="cms-page-stack">
+  return <LocalizedContent>{<div className="cms-page-stack">
     <section className="cms-page-heading cms-atmaen-heading"><div><span className="cms-eyebrow">إدارة الحالات المصرح بها</span><h1>اطمّن</h1><p>قائمة الحالات المسندة إليك مرتبة بالأقدم أولًا لمتابعة عادلة.</p></div><span className="cms-heading-icon" aria-hidden="true">♥</span></section>
     <div className="cms-stat-grid"><article><span>إجمالي الحالات المسندة</span><strong>{data?.totalCount ?? "—"}</strong></article><article><span>في هذه الصفحة</span><strong>{items.length}</strong></article><article><span>صفحة العرض</span><strong>{data ? `${data.page} / ${data.totalPages}` : "—"}</strong></article></div>
     <section className="cms-card"><div className="cms-section-title"><div><h2>قائمة المتابعة</h2><p className="cms-hint">تعرض القائمة الحد الأدنى من البيانات اللازمة للفرز. افتح الحالة للوصول إلى التفاصيل بصلاحية محرر الأزمات المسندة إليه.</p></div><button className="cms-btn" type="button" disabled={loading} onClick={() => void load()}>{loading ? "جارٍ التحديث…" : "تحديث"}</button></div>
@@ -74,5 +76,5 @@ export default function CmsAtmaenPage() {
     <p className="cms-hint cms-security-note">بيانات اطمّن سرية. لا تظهر أرقام التواصل في قائمة العرض، وتبقى صلاحية الحالة محصورة في محرر الأزمات المسندة إليه.</p>
     {detailLoading && <div className="cms-dialog-backdrop"><div className="cms-card" role="status">جارٍ تحميل تفاصيل الحالة…</div></div>}
     {selectedCase && <div className="cms-dialog-backdrop" onMouseDown={(event) => { if (event.target === event.currentTarget) setSelectedCase(null); }}><section className="cms-card cms-case-dialog" role="dialog" aria-modal="true" aria-labelledby="cms-case-title"><div className="cms-section-title"><div><span className="cms-eyebrow">ملف حالة سري</span><h2 id="cms-case-title">{selectedCase.subjectName}</h2><p className="cms-hint">{[selectedCase.cityNameAr, selectedCase.countryNameAr].filter(Boolean).join("، ") || "الموقع غير محدد"}</p></div><button className="cms-btn" type="button" onClick={() => setSelectedCase(null)} aria-label="إغلاق تفاصيل الحالة">إغلاق</button></div><div className="cms-case-details"><article><span>وصف الحالة</span><p>{selectedCase.concernDescription || "لم تتم إضافة وصف."}</p></article><article><span>رقم التواصل مع صاحب البلاغ</span><b dir="ltr">{selectedCase.applicantPhoneE164}</b></article><article><span>رقم التواصل الخاص بالحالة</span><b dir="ltr">{selectedCase.subjectContactPhone || "غير متاح"}</b></article><article><span>التحقق عبر OTP</span><b>{formatArabicDate(selectedCase.otpVerifiedAtUtc)}</b></article><article><span>تاريخ إنشاء الحالة</span><b>{formatArabicDate(selectedCase.createdAtUtc)}</b></article></div><div className="cms-case-status-form"><label htmlFor="atmaen-status">حالة المتابعة</label><select id="atmaen-status" value={selectedStatus} onChange={(event) => setSelectedStatus(event.target.value)}>{Object.entries(STATUS).filter(([key]) => /^\d+$/.test(key)).map(([key, label]) => <option key={key} value={key}>{label}</option>)}</select><button className="cms-btn primary" type="button" disabled={savingStatus || selectedStatus === String(selectedCase.status)} onClick={() => void saveStatus()}>{savingStatus ? "جارٍ الحفظ…" : "حفظ الحالة"}</button></div>{notice && <div className="cms-msg ok" role="status">{notice}</div>}</section></div>}
-  </div>;
+  </div>}</LocalizedContent>;
 }

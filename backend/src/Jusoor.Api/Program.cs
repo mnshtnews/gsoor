@@ -61,6 +61,7 @@ builder.Host.UseSerilog((context, configuration) =>
 
 builder.Services.AddApplication(builder.Configuration);
 builder.Services.AddInfrastructure(builder.Configuration);
+builder.Services.AddScoped<Jusoor.Api.Services.EditorialTranslationGenerator>();
 
 builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
@@ -131,6 +132,13 @@ if (app.Environment.IsDevelopment() || app.Configuration.GetValue<bool>("Bootstr
         scope.ServiceProvider.GetRequiredService<UserManager<ApplicationUser>>(),
         app.Configuration,
         scope.ServiceProvider.GetRequiredService<ILoggerFactory>().CreateLogger("DevelopmentNewsroomSeeder"));
+}
+
+// Reference geography is application data, so it is installed idempotently after schema migrations.
+using (var geographyScope = app.Services.CreateScope())
+{
+    var db = geographyScope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
+    await GeographyCatalogSeeder.SeedAsync(db);
 }
 
 // A TLS-terminating reverse proxy (for example Caddy on the VPS) forwards

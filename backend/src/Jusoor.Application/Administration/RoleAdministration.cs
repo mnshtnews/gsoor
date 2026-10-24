@@ -17,11 +17,11 @@ namespace Jusoor.Application.Administration;
 /// </summary>
 public static class RoleAdministrationAccess
 {
-    public static bool CanView(IReadOnlyCollection<string> roles)
-        => roles.Contains(NewsroomRole.SystemAdmin) || roles.Contains(NewsroomRole.EditorInChief);
+    public static bool CanView(IReadOnlyCollection<string> roles, IReadOnlyCollection<string>? permissions = null)
+        => roles.Contains(NewsroomRole.SystemAdmin) || roles.Contains(NewsroomRole.EditorInChief) || permissions?.Contains(AdministrationPermissions.ViewUsers) == true || permissions?.Contains(AdministrationPermissions.ManageRoles) == true;
 
-    public static bool CanChange(IReadOnlyCollection<string> roles)
-        => roles.Contains(NewsroomRole.SystemAdmin);
+    public static bool CanChange(IReadOnlyCollection<string> roles, IReadOnlyCollection<string>? permissions = null)
+        => roles.Contains(NewsroomRole.SystemAdmin) || permissions?.Contains(AdministrationPermissions.ManageRoles) == true;
 }
 
 public enum RoleChangeOutcome
@@ -42,7 +42,7 @@ public sealed record RoleChangeResult(RoleChangeOutcome Outcome, NewsroomUserInf
 // ---------- list ----------
 
 public sealed record ListNewsroomUsersQuery(
-    string? Search, int Page, int PageSize, IReadOnlyList<string> ActorRoles)
+    string? Search, int Page, int PageSize, IReadOnlyList<string> ActorRoles, IReadOnlyList<string>? ActorPermissions = null)
     : IRequest<PagedResult<NewsroomUserInfo>?>;
 
 public class ListNewsroomUsersQueryValidator : AbstractValidator<ListNewsroomUsersQuery>
@@ -64,7 +64,7 @@ public class ListNewsroomUsersQueryHandler : IRequestHandler<ListNewsroomUsersQu
     /// <summary>Returns null when the caller may not view role assignments.</summary>
     public async Task<PagedResult<NewsroomUserInfo>?> Handle(ListNewsroomUsersQuery request, CancellationToken cancellationToken)
     {
-        if (!RoleAdministrationAccess.CanView(request.ActorRoles))
+        if (!RoleAdministrationAccess.CanView(request.ActorRoles, request.ActorPermissions ?? Array.Empty<string>()))
         {
             return null;
         }
@@ -77,10 +77,10 @@ public class ListNewsroomUsersQueryHandler : IRequestHandler<ListNewsroomUsersQu
 // ---------- grant / revoke ----------
 
 public sealed record GrantRoleCommand(
-    string TargetUserId, string Role, string ActorUserId, IReadOnlyList<string> ActorRoles) : IRequest<RoleChangeResult>;
+    string TargetUserId, string Role, string ActorUserId, IReadOnlyList<string> ActorRoles, IReadOnlyList<string>? ActorPermissions = null) : IRequest<RoleChangeResult>;
 
 public sealed record RevokeRoleCommand(
-    string TargetUserId, string Role, string ActorUserId, IReadOnlyList<string> ActorRoles) : IRequest<RoleChangeResult>;
+    string TargetUserId, string Role, string ActorUserId, IReadOnlyList<string> ActorRoles, IReadOnlyList<string>? ActorPermissions = null) : IRequest<RoleChangeResult>;
 
 public class GrantRoleCommandValidator : AbstractValidator<GrantRoleCommand>
 {
@@ -120,13 +120,18 @@ public class GrantRoleCommandHandler : IRequestHandler<GrantRoleCommand, RoleCha
 
     public async Task<RoleChangeResult> Handle(GrantRoleCommand request, CancellationToken cancellationToken)
     {
-        if (!RoleAdministrationAccess.CanChange(request.ActorRoles))
+        if (!RoleAdministrationAccess.CanChange(request.ActorRoles, request.ActorPermissions ?? Array.Empty<string>()))
         {
             return new RoleChangeResult(RoleChangeOutcome.Forbidden, null);
         }
 
         // Only the 11 approved newsroom roles can ever be assigned — the
         // request cannot mint an arbitrary role name.
+        if (request.Role == NewsroomRole.SystemAdmin && !request.ActorRoles.Contains(NewsroomRole.SystemAdmin))
+        {
+            return new RoleChangeResult(RoleChangeOutcome.Forbidden, null);
+        }
+
         if (!NewsroomRole.All.Contains(request.Role))
         {
             return new RoleChangeResult(RoleChangeOutcome.InvalidRole, null);
@@ -177,7 +182,12 @@ public class RevokeRoleCommandHandler : IRequestHandler<RevokeRoleCommand, RoleC
 
     public async Task<RoleChangeResult> Handle(RevokeRoleCommand request, CancellationToken cancellationToken)
     {
-        if (!RoleAdministrationAccess.CanChange(request.ActorRoles))
+        if (!RoleAdministrationAccess.CanChange(request.ActorRoles, request.ActorPermissions ?? Array.Empty<string>()))
+        {
+            return new RoleChangeResult(RoleChangeOutcome.Forbidden, null);
+        }
+
+        if (request.Role == NewsroomRole.SystemAdmin && !request.ActorRoles.Contains(NewsroomRole.SystemAdmin))
         {
             return new RoleChangeResult(RoleChangeOutcome.Forbidden, null);
         }

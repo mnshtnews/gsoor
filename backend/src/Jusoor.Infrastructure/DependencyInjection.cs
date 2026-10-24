@@ -61,6 +61,7 @@ public static class DependencyInjection
         services.AddHttpContextAccessor();
         services.AddScoped<ICurrentUserService, CurrentUserService>();
         services.AddScoped<IIdentityService, IdentityService>();
+        services.AddScoped<IUserPermissionService, UserPermissionService>();
         services.AddSingleton<IJwtTokenService, JwtTokenService>();
 
         services.Configure<JwtOptions>(configuration.GetSection(JwtOptions.SectionName));
@@ -198,10 +199,6 @@ public static class DependencyInjection
                 policy.RequireRole(NewsroomRole.All.ToArray()));
             options.AddPolicy(AuthorizationPolicies.CanManageSources, policy =>
                 policy.RequireRole(NewsroomRole.ManagingEditor, NewsroomRole.EditorInChief, NewsroomRole.SystemAdmin));
-            options.AddPolicy(AuthorizationPolicies.CanViewRoleAssignments, policy =>
-                policy.RequireRole(NewsroomRole.EditorInChief, NewsroomRole.SystemAdmin));
-            options.AddPolicy(AuthorizationPolicies.CanManageRoleAssignments, policy =>
-                policy.RequireRole(NewsroomRole.SystemAdmin));
             options.AddPolicy(AuthorizationPolicies.CanManageCrisisMode, policy =>
                 policy.RequireRole(NewsroomRole.ManagingEditor, NewsroomRole.EditorInChief));
             options.AddPolicy(AuthorizationPolicies.CanManageGeography, policy =>
@@ -240,6 +237,7 @@ public static class DependencyInjection
         // Stateless (builds a fresh Ganss.Xss sanitizer per call), so a singleton.
         services.AddSingleton<IEditorialHtmlSanitizer, Content.EditorialHtmlSanitizer>();
         services.AddScoped<IEditorialMediaReferenceValidator, Content.EditorialMediaReferenceValidator>();
+        services.AddHttpClient<Jusoor.Application.Common.Interfaces.IEditorialTextTranslator, Translation.AzureEditorialTextTranslator>(client => client.Timeout = TimeSpan.FromSeconds(60));
 
         // Slice 22: Supabase credentials are read only from server process
         // configuration. Missing values leave the rest of the API available;

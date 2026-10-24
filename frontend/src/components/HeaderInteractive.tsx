@@ -5,12 +5,10 @@ import Image from "next/image";
 import Link from "next/link";
 import { TopbarClock } from "./TopbarClock";
 import { ConfiguredAd } from "./home/ConfiguredAd";
-import type { PublicAdPlacement, PublicSiteNavigationItem } from "@/lib/news-api";
-
-const SOCIAL_LINKS = [
-  { name: "facebook" as const, label: "فيسبوك", path: "M14 8h3V4h-3c-3.31 0-5 1.69-5 5v3H6v4h3v4h4v-4h3l1-4h-4V9c0-.66.34-1 1-1z" },
-  { name: "x-twitter" as const, label: "X", path: "M18.9 2H22l-6.77 7.74L23.2 22h-6.24l-4.89-6.39L6.48 22H3.37l7.24-8.28L2.8 2h6.4l4.42 5.84L18.9 2zm-1.1 17.7h1.73L8.27 4.2H6.42L17.8 19.7z" },
-];
+import type { PublicAdPlacement, PublicSiteNavigationItem, PublicSocialLink } from "@/lib/news-api";
+import { DEFAULT_PUBLIC_SOCIAL_LINKS, socialIconPath } from "@/lib/social-links";
+import { LocaleSelector } from "@/components/LocaleSelector";
+import type { SiteLocale } from "@/lib/site-copy";
 
 const DEFAULT_NAVIGATION: PublicSiteNavigationItem[] = [
   ["home", "الرئيسية", "/", "primary"], ["mughtarib", "أخبار المغتربين", "/category?cat=mughtarib", "primary"],
@@ -20,7 +18,7 @@ const DEFAULT_NAVIGATION: PublicSiteNavigationItem[] = [
   ["events", "فعاليات", "/category?cat=events", "more"], ["lamma", "اللمة الحلوة", "/category?cat=lamma", "more"],
   ["secondgen", "الجيل الثاني", "/category?cat=secondgen", "more"], ["sports", "رياضة", "/category?cat=sports", "more"],
   ["arts", "فنون", "/category?cat=arts", "more"], ["articles", "مقالات رأي", "/category?cat=articles", "more"],
-  ["fatwas", "الفتاوى", "/category?cat=fatwas", "more"], ["videos", "فيديو", "/videos", "more"],
+  ["fatwas", "فتاوى", "/category?cat=fatwas", "more"], ["videos", "فيديو", "/videos", "more"],
 ].map(([key, label, href, group], displayOrder) => ({ key, label, href, group: group as "primary" | "more", displayOrder, isVisible: true }));
 
 type Leadership = { entries: Array<{ id: string; title: string; name: string }> };
@@ -30,7 +28,7 @@ function LeadershipCredits({ leadership, className = "header-leadership" }: { le
   if (!entries.length) return null;
   return <div className={className} aria-label="هيئة الإدارة والتحرير">
     {entries.map((entry) => <div className="leadership-credit-group" key={entry.id}>
-      <span className="leadership-credit-role">{entry.title}</span>
+      <span className="leadership-credit-role">{entry.id === "board-editor" && entry.title === "رئيس مجلس الإدارة ورئيس التحرير" ? <>رئيس مجلس الإدارة<br />رئيس التحرير</> : entry.title}</span>
       {entry.name && <strong>{entry.name}</strong>}
     </div>)}
   </div>;
@@ -48,7 +46,17 @@ function LeadershipCredits({ leadership, className = "header-leadership" }: { le
  * titles) — this component never fetches data itself, matching the
  * project's "Server Components fetch, Client Components render" split.
  */
-export function HeaderInteractive({ tickerHeadlines, navbarAd, navigation, leadership }: { tickerHeadlines: string[]; navbarAd?: PublicAdPlacement; navigation?: PublicSiteNavigationItem[]; leadership?: Leadership }) {
+const HEADER_COPY = { ar: { cms: "لوحة التحرير", profile: "صفحتي", login: "دخول", signup: "إنشاء حساب", more: "المزيد", openMenu: "فتح القائمة", search: "بحث", searchLabel: "بحث في الأخبار", searchPlaceholder: "ابحث عن خبر، دولة، أو خدمة...", submitSearch: "تنفيذ البحث", closeSearch: "إغلاق البحث", searching: "جارٍ البحث…", allResults: "عرض كل نتائج البحث ←" }, en: { cms: "Newsroom", profile: "My profile", login: "Log in", signup: "Create account", more: "More", openMenu: "Open menu", search: "Search", searchLabel: "Search news", searchPlaceholder: "Search news, a country, or a service...", submitSearch: "Submit search", closeSearch: "Close search", searching: "Searching…", allResults: "View all search results →" }, fr: { cms: "Rédaction", profile: "Mon profil", login: "Connexion", signup: "Créer un compte", more: "Plus", openMenu: "Ouvrir le menu", search: "Rechercher", searchLabel: "Rechercher des actualités", searchPlaceholder: "Rechercher une actualité, un pays ou un service…", submitSearch: "Lancer la recherche", closeSearch: "Fermer la recherche", searching: "Recherche…", allResults: "Voir tous les résultats →" } } as const;
+function localizedNavigationLabel(key: string, arabicLabel: string, locale: SiteLocale): string {
+  if (locale === "ar") return arabicLabel;
+  const labels: Record<SiteLocale, Record<string, string>> = {
+    ar: {},
+    en: { home: "Home", mughtarib: "Diaspora news", success: "Success stories", egypt: "Egypt news", opportunities: "Investment opportunities", official: "Ask an official", red: "Red line", map: "Diaspora map", events: "Events", lamma: "Community", secondgen: "Second generation", sports: "Sports", arts: "Arts", articles: "Opinion", fatwas: "Fatwas", videos: "Videos" },
+    fr: { home: "Accueil", mughtarib: "Actualités de la diaspora", success: "Histoires de réussite", egypt: "Actualités d’Égypte", opportunities: "Opportunités d’investissement", official: "Parole officielle", red: "Ligne rouge", map: "Carte de la diaspora", events: "Événements", lamma: "Communauté", secondgen: "Deuxième génération", sports: "Sport", arts: "Arts", articles: "Opinions", fatwas: "Fatwas", videos: "Vidéos" },
+  };
+  return labels[locale][key] ?? arabicLabel;
+}
+export function HeaderInteractive({ tickerHeadlines, navbarAd, navigation, leadership, socialLinks = DEFAULT_PUBLIC_SOCIAL_LINKS, locale = "ar" }: { tickerHeadlines: string[]; navbarAd?: PublicAdPlacement; navigation?: PublicSiteNavigationItem[]; leadership?: Leadership; socialLinks?: PublicSocialLink[]; locale?: SiteLocale }) {
   const [drawerOpen, setDrawerOpen] = useState(false);
   const [searchOpen, setSearchOpen] = useState(false);
   const [searchQuery, setSearchQuery] = useState("");
@@ -56,6 +64,7 @@ export function HeaderInteractive({ tickerHeadlines, navbarAd, navigation, leade
   const [suggestionsLoading, setSuggestionsLoading] = useState(false);
   const [staffRoles, setStaffRoles] = useState<string[]>([]);
   const [signedIn, setSignedIn] = useState(false);
+  const text = HEADER_COPY[locale];
 
   useEffect(() => {
     let active = true;
@@ -127,14 +136,14 @@ export function HeaderInteractive({ tickerHeadlines, navbarAd, navigation, leade
   // seamless CSS marquee loop — same technique, applied to real headlines
   // instead of the demo's fixed sample list.
   const tickerGroups = tickerHeadlines.length > 0 ? [0, 1, 2] : [];
-  const visibleNavigation = (navigation?.length ? navigation : DEFAULT_NAVIGATION).filter((item) => item.isVisible);
+  const visibleNavigation = (navigation?.length ? navigation : DEFAULT_NAVIGATION).filter((item) => item.isVisible).map((item) => ({ ...item, label: localizedNavigationLabel(item.key, item.label, locale) }));
   const primaryLinks = visibleNavigation.filter((item) => item.group === "primary").sort((a, b) => a.displayOrder - b.displayOrder);
   const moreLinks = visibleNavigation.filter((item) => item.group === "more").sort((a, b) => a.displayOrder - b.displayOrder);
   const drawerLinks = [...primaryLinks, ...moreLinks];
   const renderAccountLinks = (className: string) => <div className={className}>
-    {staffRoles.length > 0 ? <Link href="/cms" className="btn-nav btn-ghostt">لوحة التحرير</Link>
-      : signedIn ? <Link href="/auth" className="btn-nav btn-ghostt">صفحتي</Link>
-      : <><Link href="/auth?tab=login" className="btn-nav btn-ghostt">دخول</Link><Link href="/auth?tab=signup" className="btn-nav btn-accent">إنشاء حساب</Link></>}
+    {staffRoles.length > 0 ? <Link href="/cms" className="btn-nav btn-ghostt">{text.cms}</Link>
+      : signedIn ? <Link href="/auth" className="btn-nav btn-ghostt">{text.profile}</Link>
+      : <><Link href="/auth?tab=login" className="btn-nav btn-ghostt">{text.login}</Link><Link href="/auth?tab=signup" className="btn-nav btn-accent">{text.signup}</Link></>}
   </div>;
 
   return (
@@ -142,18 +151,14 @@ export function HeaderInteractive({ tickerHeadlines, navbarAd, navigation, leade
       <div className="topbar">
         <div className="wrap">
           <div className="right topbar-info">
-            <TopbarClock />
-            <select className="lang" aria-label="اختر اللغة" defaultValue="العربية">
-              <option>العربية</option>
-              <option>English</option>
-              <option>Français</option>
-            </select>
+            <TopbarClock locale={locale} />
+            <LocaleSelector className="lang" locale={locale} />
           </div>
           <div className="left social-icons">
-            {SOCIAL_LINKS.map((social) => (
-              <a key={social.name} href="#" aria-label={social.label} className={social.name}>
+            {socialLinks.filter((social) => social.isVisible && social.href).map((social) => (
+              <a key={social.name} href={social.href} target="_blank" rel="noopener noreferrer" aria-label={social.name} className={social.icon}>
                 <svg viewBox="0 0 24 24" aria-hidden="true">
-                  <path d={social.path} />
+                  <path d={socialIconPath(social.icon)} fillRule="evenodd" />
                 </svg>
               </a>
             ))}
@@ -163,7 +168,7 @@ export function HeaderInteractive({ tickerHeadlines, navbarAd, navigation, leade
 
       <header className="site">
         <div className="wrap header-inner">
-          <button type="button" className="icon-btn burger" aria-label="فتح القائمة" onClick={() => setDrawerOpen(true)}>
+          <button type="button" className="icon-btn burger" aria-label={text.openMenu} onClick={() => setDrawerOpen(true)}>
             ☰
           </button>
 
@@ -178,7 +183,7 @@ export function HeaderInteractive({ tickerHeadlines, navbarAd, navigation, leade
           <ConfiguredAd placement={navbarAd} className="header-ad-banner" label={false} naturalSize />
 
           <div className="header-actions">
-            <button type="button" className="icon-btn" data-open-search aria-label="بحث" onClick={() => { setDrawerOpen(false); setSearchOpen(true); }}>
+            <button type="button" className="icon-btn" data-open-search aria-label={text.search} onClick={() => { setDrawerOpen(false); setSearchOpen(true); }}>
               🔍
             </button>
             {renderAccountLinks("auth-group mobile-header-account")}
@@ -212,7 +217,7 @@ export function HeaderInteractive({ tickerHeadlines, navbarAd, navigation, leade
                 </li>
               ))}
               {moreLinks.length > 0 && <li className="dropdown">
-                <button type="button" className="nav-link dropdown-btn">المزيد</button>
+                <button type="button" className="nav-link dropdown-btn">{text.more}</button>
                 <ul className="dropdown-menu">
                   {moreLinks.map((link) => (
                     <li key={link.key}><Link href={link.href}>{link.label}</Link></li>
@@ -226,7 +231,7 @@ export function HeaderInteractive({ tickerHeadlines, navbarAd, navigation, leade
             <button
               type="button"
               className="nav-action-btn search-trigger"
-              aria-label="بحث"
+              aria-label={text.search}
               onClick={() => { setDrawerOpen(false); setSearchOpen(true); }}
             >
               <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2}>
@@ -267,32 +272,32 @@ export function HeaderInteractive({ tickerHeadlines, navbarAd, navigation, leade
           <LeadershipCredits leadership={leadership} className="drawer-leadership" />
           <nav>
             {drawerLinks.map((link) => <Link key={link.key} href={link.href} onClick={() => setDrawerOpen(false)}>{link.label}</Link>)}
-            {staffRoles.length > 0 ? <Link href="/cms" onClick={() => setDrawerOpen(false)}>لوحة التحرير</Link> : signedIn ? <Link href="/auth" onClick={() => setDrawerOpen(false)}>صفحتي</Link> : <><Link href="/auth?tab=login" onClick={() => setDrawerOpen(false)}>دخول</Link><Link href="/auth?tab=signup" onClick={() => setDrawerOpen(false)}>إنشاء حساب</Link></>}
+            {staffRoles.length > 0 ? <Link href="/cms" onClick={() => setDrawerOpen(false)}>{text.cms}</Link> : signedIn ? <Link href="/auth" onClick={() => setDrawerOpen(false)}>{text.profile}</Link> : <><Link href="/auth?tab=login" onClick={() => setDrawerOpen(false)}>{text.login}</Link><Link href="/auth?tab=signup" onClick={() => setDrawerOpen(false)}>{text.signup}</Link></>}
           </nav>
         </div>
       </div>
 
       <div className={`search-overlay${searchOpen ? " is-active" : ""}`} onMouseDown={(event) => { if (event.target === event.currentTarget) setSearchOpen(false); }}>
-        <div className={`search-panel${searchOpen ? " is-active" : ""}`} role="dialog" aria-modal="true" aria-label="بحث في الأخبار">
+        <div className={`search-panel${searchOpen ? " is-active" : ""}`} role="dialog" aria-modal="true" aria-label={text.searchLabel}>
           <form action="/search" method="get" style={{ display: "flex", gap: 8 }}>
             <input
               type="text"
               name="q"
-              placeholder="ابحث عن خبر، دولة، أو خدمة..."
+              placeholder={text.searchPlaceholder}
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
               autoFocus={searchOpen}
             />
-            <button type="submit" className="icon-btn" aria-label="تنفيذ البحث">🔍</button>
-            <button type="button" className="icon-btn" aria-label="إغلاق البحث" onClick={() => setSearchOpen(false)}>✕</button>
+            <button type="submit" className="icon-btn" aria-label={text.submitSearch}>🔍</button>
+            <button type="button" className="icon-btn" aria-label={text.closeSearch} onClick={() => setSearchOpen(false)}>✕</button>
           </form>
           <div className="search-suggest" aria-live="polite">
-            {suggestionsLoading && <p className="row">جارٍ البحث…</p>}
+            {suggestionsLoading && <p className="row">{text.searching}</p>}
             {!suggestionsLoading && searchQuery.trim().length >= 2 && suggestions.map((item) => (
               <Link className="row" key={item.id} href={`/article/${item.id}/${encodeURIComponent(item.slug)}`} onClick={() => setSearchOpen(false)}>{item.title}</Link>
             ))}
             {!suggestionsLoading && searchQuery.trim().length >= 2 && suggestions.length === 0 && <p className="row">لا توجد نتائج مطابقة حتى الآن.</p>}
-            {searchQuery.trim().length >= 2 && <Link className="row" href={`/search?q=${encodeURIComponent(searchQuery.trim())}`} onClick={() => setSearchOpen(false)}>عرض كل نتائج البحث ←</Link>}
+            {searchQuery.trim().length >= 2 && <Link className="row" href={`/search?q=${encodeURIComponent(searchQuery.trim())}`} onClick={() => setSearchOpen(false)}>{text.allResults}</Link>}
           </div>
         </div>
       </div>

@@ -4,7 +4,8 @@ public enum EditorialMediaKind
 {
     Image = 1,
     Video = 2,
-    Document = 3
+    Document = 3,
+    Audio = 4
 }
 
 public enum EditorialMediaStatus

@@ -1,3 +1,4 @@
+import { LocalizedContent } from "@/components/LocalizedContent";
 import type { Metadata } from "next";
 import Link from "next/link";
 import Image from "next/image";
@@ -32,7 +33,7 @@ export function generateMetadata(): Metadata {
 const deskLabels: Record<string, string> = {
   mughtarib: "أخبار المغتربين", success: "قصص نجاح", egypt: "أخبار مصر", opportunities: "فرص استثمارية",
   official: "مع مسئول", events: "فعاليات", red: "خط أحمر", lamma: "اللمة الحلوة", secondgen: "الجيل الثاني",
-  sports: "رياضة", arts: "فنون", articles: "مقالات رأي", fatwas: "الفتاوى",
+  sports: "رياضة", arts: "فنون", articles: "مقالات رأي", fatwas: "فتاوى",
 };
 
 function articleHref(story: StorySummary) {
@@ -65,7 +66,7 @@ function HomeAdPlacement({ placement, className = "", ratio = "1 / 1", naturalSi
 }
 
 /** Demo's `.six-grid` of `.grid-card`s (cardGrid). */
-function DeskGrid({ stories, label, columns, mobileVariant }: { stories: StorySummary[]; label: string; columns?: number; mobileVariant?: "lead" | "compact" }) {
+function DeskGrid({ stories, label, columns, mobileVariant }: { stories: StorySummary[]; label: string; columns?: number; mobileVariant?: "lead" | "compact" | "uniform" }) {
   if (!stories.length) return <EmptyDesk label={label} />;
   return (
     <div className={`six-grid${mobileVariant ? ` home-news-grid home-news-grid--${mobileVariant}` : ""}`} style={columns ? { gridTemplateColumns: `repeat(${columns}, minmax(0, 1fr))` } : undefined}>
@@ -204,13 +205,13 @@ function NewsRecirculation({ desks }: { desks: Record<string, StorySummary[]> })
 }
 
 function ConfiguredHomepageSections({ sections, desks }: { sections: PublicHomepageSection[]; desks: Record<string, StorySummary[]> }) {
-  return <>{sections.filter((section) => section.isEnabled && (section.showOnWeb || section.showOnMobile)).sort((a, b) => a.displayOrder - b.displayOrder).map((section) => {
+  return <>{sections.filter((section) => section.isEnabled && (section.showOnWeb || section.showOnMobile)).sort((a, b) => a.displayOrder - b.displayOrder).map((section, index) => {
     const stories = desks[section.deskSlug] ?? [];
     const className = `section tight home-config-section${section.showOnWeb && !section.showOnMobile ? " home-config-section--web" : ""}${!section.showOnWeb && section.showOnMobile ? " home-config-section--mobile" : ""}`;
     const columns = section.layout === "columns" ? 2 : section.layout === "lead" ? 2 : 3;
     return <section className={className} id={`home-${section.key}`} key={section.key}><div className="wrap">
       <Head label={section.title} slug={section.deskSlug} more={`كل ${section.title} ←`} />
-      <DeskGrid stories={stories.slice(0, 6)} label={section.title} columns={columns} mobileVariant={section.layout === "lead" ? "lead" : "compact"} />
+      <DeskGrid stories={stories.slice(0, 6)} label={section.title} columns={columns} mobileVariant={index % 2 === 0 ? "lead" : "uniform"} />
     </div></section>;
   })}</>;
 }
@@ -252,7 +253,7 @@ export default async function HomePage() {
   // Section order and markup mirror the approved Final Demo's home page. The demo's
   // video rail, "خط أحمر" band, UAE strip and sports band are hidden/commented out
   // there, so they are intentionally not rendered here either.
-  return (
+  return <LocalizedContent>{(
     <main id="main">
       <JsonLd data={buildOrganizationJsonLd()} />
       {crisis && <section className="wrap" aria-label="تنبيه أزمة نشطة"><Link className="crisis-spotlight" href="/crisis"><span className="crisis-spotlight__eyebrow"><i className="crisis-bar__dot" aria-hidden="true" />مركز الأزمة · {crisis.severity === "emergency" ? "طوارئ" : crisis.severity === "advisory" ? "تنبيه" : "عاجل"}</span><h2 className="crisis-spotlight__title">{crisis.title}</h2><p className="crisis-spotlight__summary">{crisis.summary}</p><span className="crisis-spotlight__actions"><span className="primary">التفاصيل وإرشادات المتابعة ←</span></span></Link></section>}
@@ -262,7 +263,7 @@ export default async function HomePage() {
       <section className="section tight on-surface">
         <div className="wrap">
           <Head label={deskLabels.mughtarib} slug="mughtarib" />
-          <DeskGrid stories={desks.mughtarib.slice(0, 6)} label={deskLabels.mughtarib} mobileVariant="lead" />
+          <DeskGrid stories={desks.mughtarib.slice(0, 6)} label={deskLabels.mughtarib} mobileVariant="uniform" />
         </div>
       </section>
       <HomeAdPlacement placement={ad("mobile", "after-mughtarib")} className="home-ad-placement--mobile-only" />
@@ -279,15 +280,16 @@ export default async function HomePage() {
             </aside>
             <div className="home-success-stories">
               <Head label={deskLabels.success} slug="success" asHeading />
-              <DeskGrid stories={desks.success.slice(0, 4)} label={deskLabels.success} columns={2} />
+              <DeskGrid stories={desks.success.slice(0, 4)} label={deskLabels.success} columns={2} mobileVariant="lead" />
             </div>
           </div>
         </div>
       </section>
+      <HomepagePollWidget />
       <section className="section tight on-surface">
         <div className="wrap">
           <Head label={deskLabels.egypt} slug="egypt" />
-          <DeskGrid stories={desks.egypt.slice(0, 6)} label={deskLabels.egypt} mobileVariant="compact" />
+          <DeskGrid stories={desks.egypt.slice(0, 6)} label={deskLabels.egypt} mobileVariant="uniform" />
         </div>
       </section>
 
@@ -369,7 +371,6 @@ export default async function HomePage() {
       </section>
 
       <NewsRecirculation desks={desks} />
-      <HomepagePollWidget />
     </main>
-  );
+  )}</LocalizedContent>;
 }

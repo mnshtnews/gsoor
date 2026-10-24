@@ -1,5 +1,7 @@
 "use client";
 
+import { LocalizedContent } from "@/components/LocalizedContent";
+
 import { useCallback, useEffect, useRef, useState } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
@@ -14,6 +16,8 @@ import {
   type WorkflowAction,
 } from "@/lib/cms-client";
 import { formatArabicDate } from "@/lib/format";
+import { parseLocale } from "@/lib/site-copy";
+import { translateUi } from "@/lib/ui-translations";
 
 export default function CmsDashboardPage() {
   const router = useRouter();
@@ -28,6 +32,13 @@ export default function CmsDashboardPage() {
   const [error, setError] = useState<string | null>(null);
   const [busyId, setBusyId] = useState<string | null>(null);
   const requestSequence = useRef(0);
+  const [locale, setLocale] = useState<"ar" | "en" | "fr">("ar");
+  const t = (value: string) => translateUi(locale, value);
+
+  useEffect(() => {
+    const value = document.cookie.split(";").map((part) => part.trim()).find((part) => part.startsWith("jusoor_locale="))?.split("=")[1];
+    setLocale(parseLocale(value ? decodeURIComponent(value) : null));
+  }, []);
 
   const load = useCallback(
     async (filter: ArticleStatus | "", requestedPage: number, query = "") => {
@@ -94,10 +105,10 @@ export default function CmsDashboardPage() {
   // One quick action per row: the next forward step of the workflow.
   // Requesting a revision needs a reason, so it lives in the article editor.
   const QUICK: Partial<Record<ArticleStatus, { action: WorkflowAction; label: string; style: string }>> = {
-    Draft: { action: "submit", label: "إرسال للمراجعة", style: "primary" },
-    InReview: { action: "approve", label: "اعتماد", style: "success" },
-    Approved: { action: "publish", label: "نشر", style: "success" },
-    Published: { action: "unpublish", label: "إلغاء النشر", style: "danger" },
+    Draft: { action: "submit", label: t("إرسال للمراجعة"), style: "primary" },
+    InReview: { action: "approve", label: t("اعتماد"), style: "success" },
+    Approved: { action: "publish", label: t("نشر"), style: "success" },
+    Published: { action: "unpublish", label: t("إلغاء النشر"), style: "danger" },
   };
 
   async function runQuick(article: CmsArticleSummary) {
@@ -121,28 +132,28 @@ export default function CmsDashboardPage() {
       }
       await load(status, page, searchTerm.trim());
     } catch (e) {
-      setError(e instanceof CmsError ? e.message : "تعذّر تنفيذ الإجراء.");
+      setError(e instanceof CmsError ? e.message : t("تعذّر تنفيذ الإجراء."));
     } finally {
       setBusyId(null);
     }
   }
 
   if (!session) {
-    return <p>جارٍ التحميل…</p>;
+    return <LocalizedContent>{<p>{t("جارٍ التحميل…" )}</p>}</LocalizedContent>;
   }
 
-  return (
+  return <LocalizedContent>{(
     <div className="cms-page-stack">
-      <section className="cms-page-heading"><div><span className="cms-eyebrow">مساحة العمل التحريرية</span><h1>أهلًا بعودتك{session.email ? `، ${session.email.split("@")[0]}` : ""}</h1><p>تابع الأخبار وسير المراجعة، وأنجز مهام التحرير من مكان واحد.</p></div>{session.roles?.some((role) => ["Reporter", "AiEditor", "CopyEditor", "SeniorEditor", "ManagingEditor", "EditorInChief"].includes(role)) && <Link className="cms-btn primary cms-dashboard-create" href="/cms/articles/new">＋ مقال جديد</Link>}</section>
-      <nav className="cms-shortcuts" aria-label="اختصارات لوحة التحرير">
-        <Link href="/cms" className="cms-shortcut"><span className="cms-shortcut-icon">▤</span><span><strong>إدارة الأخبار</strong><small>بحث، تحرير، ومتابعة حالة النشر</small></span><b aria-hidden="true">←</b></Link>
-        {session.roles?.some((role) => ["SeniorEditor", "ManagingEditor", "EditorInChief"].includes(role)) && <Link href="/cms/home-videos" className="cms-shortcut"><span className="cms-shortcut-icon">▷</span><span><strong>فيديوهات الرئيسية</strong><small>اختيار وترتيب فيديوهات الواجهة</small></span><b aria-hidden="true">←</b></Link>}
-        {session.roles?.some((role) => ["SeniorEditor", "ManagingEditor", "EditorInChief"].includes(role)) && <Link href="/cms/advertisements" className="cms-shortcut"><span className="cms-shortcut-icon">▧</span><span><strong>إدارة الإعلانات</strong><small>توزيع إعلانات الويب والموبايل</small></span><b aria-hidden="true">←</b></Link>}
-        {session.roles?.includes("SeoEditor") && <Link href="/cms/seo" className="cms-shortcut"><span className="cms-shortcut-icon">⌕</span><span><strong>تحسين SEO</strong><small>إدارة ظهور الأخبار في البحث</small></span><b aria-hidden="true">←</b></Link>}
+      <section className="cms-page-heading"><div><span className="cms-eyebrow">{t("مساحة العمل التحريرية" )}</span><h1>{t("أهلًا بعودتك")} {session.email ? `، ${session.email.split("@")[0]}` : ""}</h1><p>{t("تابع الأخبار وسير المراجعة، وأنجز مهام التحرير من مكان واحد." )}</p></div>{session.roles?.some((role) => ["Reporter", "AiEditor", "CopyEditor", "SeniorEditor", "ManagingEditor", "EditorInChief"].includes(role)) && <Link className="cms-btn primary cms-dashboard-create" href="/cms/articles/new">＋ {t("مقال جديد")}</Link>}</section>
+      <nav className="cms-shortcuts" aria-label={t("اختصارات لوحة التحرير")}>
+        <Link href="/cms" className="cms-shortcut"><span className="cms-shortcut-icon">▤</span><span><strong>{t("إدارة الأخبار" )}</strong><small>{t("بحث، تحرير، ومتابعة حالة النشر" )}</small></span><b aria-hidden="true">←</b></Link>
+        {session.roles?.some((role) => ["SeniorEditor", "ManagingEditor", "EditorInChief"].includes(role)) && <Link href="/cms/home-videos" className="cms-shortcut"><span className="cms-shortcut-icon">▷</span><span><strong>{t("فيديوهات الرئيسية" )}</strong><small>{t("اختيار وترتيب فيديوهات الواجهة" )}</small></span><b aria-hidden="true">←</b></Link>}
+        {session.roles?.some((role) => ["SeniorEditor", "ManagingEditor", "EditorInChief"].includes(role)) && <Link href="/cms/advertisements" className="cms-shortcut"><span className="cms-shortcut-icon">▧</span><span><strong>{t("إدارة الإعلانات" )}</strong><small>{t("توزيع إعلانات الويب والموبايل" )}</small></span><b aria-hidden="true">←</b></Link>}
+        {session.roles?.includes("SeoEditor") && <Link href="/cms/seo" className="cms-shortcut"><span className="cms-shortcut-icon">⌕</span><span><strong>{t("تحسين SEO" )}</strong><small>{t("إدارة ظهور الأخبار في البحث" )}</small></span><b aria-hidden="true">←</b></Link>}
       </nav>
       <div className="cms-card">
       <div className="cms-head">
-        <h2 className="cms-list-title">آخر الأخبار</h2>
+        <h2 className="cms-list-title">{t("آخر الأخبار" )}</h2>
         <div className="cms-actions">
           <div className="cms-filter">
             <label htmlFor="status" className="cms-hint">
@@ -159,10 +170,10 @@ export default function CmsDashboardPage() {
                 window.dispatchEvent(new CustomEvent("cms-query-change", { detail: value ? `?status=${value}` : "?status=" }));
               }}
             >
-              <option value="">الكل</option>
+              <option value="">{t("الكل" )}</option>
               {(Object.keys(STATUS_META) as ArticleStatus[]).map((s) => (
                 <option key={s} value={s}>
-                  {STATUS_META[s].label}
+                  {t(STATUS_META[s].label)}
                 </option>
               ))}
             </select>
@@ -175,9 +186,9 @@ export default function CmsDashboardPage() {
       {!(session.roles?.length && session.roles.every((role) => role === "SeoEditor")) && <div className="cms-news-toolbar">
         <label className="cms-news-search">
           <span aria-hidden="true">⌕</span>
-          <input type="search" value={searchTerm} maxLength={120} onChange={(event) => { setSearchTerm(event.target.value); setPage(1); }} placeholder="ابحث في عنوان الخبر أو ملخصه" aria-label="البحث في الأخبار" />
+          <input type="search" value={searchTerm} maxLength={120} onChange={(event) => { setSearchTerm(event.target.value); setPage(1); }} placeholder={t("ابحث في عنوان الخبر أو ملخصه")} aria-label={t("البحث في الأخبار")} />
         </label>
-        <span className="cms-hint cms-news-results" aria-live="polite">{loading ? "جارٍ البحث…" : searchTerm.trim() ? `${totalCount} نتيجة بحث` : `${totalCount} مقالًا`}</span>
+        <span className="cms-hint cms-news-results" aria-live="polite">{loading ? t("جارٍ البحث…") : searchTerm.trim() ? `${totalCount} نتيجة بحث` : `${totalCount} مقالًا`}</span>
       </div>}
 
       {error && (
@@ -189,17 +200,17 @@ export default function CmsDashboardPage() {
       {items === null ? (
         <p>جارٍ تحميل المقالات…</p>
       ) : items.length === 0 ? (
-        <p className="cms-news-empty">{searchTerm.trim() ? "لا توجد أخبار تطابق كلمات البحث. جرّب كلمات أخرى." : status ? "لا توجد أخبار بهذه الحالة." : "لا توجد مقالات بعد. ابدأ بإنشاء مقال جديد."}</p>
+        <p className="cms-news-empty">{searchTerm.trim() ? t("لا توجد أخبار تطابق كلمات البحث. جرّب كلمات أخرى.") : status ? t("لا توجد أخبار بهذه الحالة.") : t("لا توجد مقالات بعد. ابدأ بإنشاء مقال جديد.")}</p>
       ) : (
         <>
         <p className="cms-hint">{searchTerm.trim() ? `${totalCount} نتيجة بحث · الصفحة ${page} من ${totalPages}` : `${totalCount} مقالًا · الصفحة ${page} من ${totalPages}`}</p>
         <table className="cms-table">
           <thead>
             <tr>
-              <th>العنوان</th>
-              <th>الحالة</th>
-              <th>آخر تعديل</th>
-              <th>إجراءات</th>
+              <th>{t("العنوان" )}</th>
+              <th>{t("الحالة" )}</th>
+              <th>{t("آخر تعديل" )}</th>
+              <th>{t("إجراءات" )}</th>
             </tr>
           </thead>
           <tbody>
@@ -207,21 +218,21 @@ export default function CmsDashboardPage() {
               const quick = QUICK[a.status];
               return (
               <tr key={a.id}>
-                <td data-label="العنوان">
+                <td data-label={t("العنوان")}>
                   <Link href={`/cms/articles/${a.id}`}>{a.title}</Link>
                   {a.status === "Scheduled" && a.scheduledPublishAtUtc && (
                     <small className="cms-hint" style={{ display: "block" }}>
-                      موعد النشر: {formatArabicDate(a.scheduledPublishAtUtc)}
+                      موعد النشر: {new Intl.DateTimeFormat(locale === "ar" ? "ar-EG" : locale === "en" ? "en-GB" : "fr-FR", { dateStyle: "medium" }).format(new Date(a.scheduledPublishAtUtc))}
                     </small>
                   )}
                 </td>
-                <td data-label="الحالة">
+                <td data-label={t("الحالة")}>
                   <span className={`cms-badge ${STATUS_META[a.status]?.badge ?? "draft"}`}>
-                    {STATUS_META[a.status]?.label ?? a.status}
+                    {t(STATUS_META[a.status]?.label ?? a.status)}
                   </span>
                 </td>
-                <td data-label="آخر تعديل">{formatArabicDate(a.lastModifiedAtUtc ?? a.createdAtUtc)}</td>
-                <td data-label="إجراءات">
+                <td data-label={t("آخر تعديل")}>{new Intl.DateTimeFormat(locale === "ar" ? "ar-EG" : locale === "en" ? "en-GB" : "fr-FR", { dateStyle: "medium" }).format(new Date(a.lastModifiedAtUtc ?? a.createdAtUtc))}</td>
+                <td data-label={t("إجراءات")}>
                   <div className="cms-actions">
                     <Link className="cms-btn" href={`/cms/articles/${a.id}`}>
                       تحرير
@@ -233,7 +244,7 @@ export default function CmsDashboardPage() {
                         disabled={busyId === a.id}
                         onClick={() => runQuick(a)}
                       >
-                        {quick.label}
+                        {t(quick.label)}
                       </button>
                     )}
                   </div>
@@ -244,13 +255,13 @@ export default function CmsDashboardPage() {
           </tbody>
         </table>
         <div className="cms-actions" style={{ justifyContent: "center", marginTop: 18 }}>
-          <button className="cms-btn" type="button" disabled={loading || page <= 1} onClick={() => setPage((current) => Math.max(1, current - 1))}>السابق</button>
+          <button className="cms-btn" type="button" disabled={loading || page <= 1} onClick={() => setPage((current) => Math.max(1, current - 1))}>{t("السابق" )}</button>
           <span className="cms-hint">{page} / {totalPages}</span>
-          <button className="cms-btn" type="button" disabled={loading || page >= totalPages} onClick={() => setPage((current) => Math.min(totalPages, current + 1))}>التالي</button>
+          <button className="cms-btn" type="button" disabled={loading || page >= totalPages} onClick={() => setPage((current) => Math.min(totalPages, current + 1))}>{t("التالي" )}</button>
         </div>
         </>
       )}
       </div>
     </div>
-  );
+  )}</LocalizedContent>;
 }

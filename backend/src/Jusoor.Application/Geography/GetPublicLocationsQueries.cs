@@ -4,7 +4,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Jusoor.Application.Geography;
 
-public sealed record PublicCountryDto(Guid Id, string NameAr, string NameEn, string IsoCode2);
+public sealed record PublicCountryDto(Guid Id, string NameAr, string NameEn, string IsoCode2, decimal? Latitude, decimal? Longitude);
 public sealed record PublicCityDto(Guid Id, Guid CountryId, string NameAr, string NameEn);
 
 public sealed record GetPublicCountriesQuery : IRequest<IReadOnlyList<PublicCountryDto>>;
@@ -15,7 +15,7 @@ public sealed class GetPublicCountriesQueryHandler(IApplicationDbContext context
     public async Task<IReadOnlyList<PublicCountryDto>> Handle(GetPublicCountriesQuery request, CancellationToken cancellationToken)
         => await context.Countries.AsNoTracking()
             .OrderBy(country => country.NameAr)
-            .Select(country => new PublicCountryDto(country.Id, country.NameAr, country.NameEn, country.IsoCode2))
+            .Select(country => new PublicCountryDto(country.Id, country.NameAr, country.NameEn, country.IsoCode2, country.Latitude, country.Longitude))
             .ToListAsync(cancellationToken);
 }
 

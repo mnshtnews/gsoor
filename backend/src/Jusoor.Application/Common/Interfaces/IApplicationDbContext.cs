@@ -26,6 +26,7 @@ public interface IApplicationDbContext
     DbSet<SourceFetchLog> SourceFetchLogs { get; }
     DbSet<Case> Cases { get; }
     DbSet<EditorialArticle> EditorialArticles { get; }
+    DbSet<EditorialArticleTranslation> EditorialArticleTranslations { get; }
     DbSet<EditorialCategory> EditorialCategories { get; }
     DbSet<RoleChangeAudit> RoleChangeAudits { get; }
     DbSet<EditorialArticleTransition> EditorialArticleTransitions { get; }
@@ -40,6 +41,8 @@ public interface IApplicationDbContext
     DbSet<HomepagePollVote> HomepagePollVotes { get; }
     DbSet<AlertEmailSubscription> AlertEmailSubscriptions { get; }
     DbSet<AlertSubscriptionSettings> AlertSubscriptionSettings { get; }
+    DbSet<UserPermissionGrant> UserPermissionGrants { get; }
+    DbSet<UserPermissionChangeAudit> UserPermissionChangeAudits { get; }
 
     /// <summary>Detaches an entity from change tracking. Used by
     /// IngestSourceCommandHandler to recover from a per-item duplicate-key

@@ -1,4 +1,6 @@
 using FluentValidation;
+using System.Security.Cryptography;
+using System.Text;
 using Jusoor.Application.Common.Interfaces;
 using Jusoor.Application.Editorial.Contracts;
 using Jusoor.Application.Stories.Contracts;
@@ -116,6 +118,12 @@ public class ListEditorialArticlesQueryHandler : IRequestHandler<ListEditorialAr
 //   detail (GetPublishedNewsByIdQuery) .. Published + Archived: full article · Retracted: the public notice only · anything else: not found.
 //   sitemap ............................. Published + Archived (flagged) · Retracted never.
 
+internal static class EditorialTranslationFingerprint
+{
+    public static string Compute(string title, string? summary, string body)
+        => Convert.ToHexString(SHA256.HashData(Encoding.UTF8.GetBytes(($"{title}\n{summary}\n{body}")))).ToLowerInvariant();
+}
+
 public sealed record GetPublishedNewsQuery(int Page = 1, int PageSize = 20, string? DeskSlug = null, string? SearchTerm = null, string? AuthorName = null, Guid? CountryId = null) : IRequest<PagedResult<PublicNewsSummaryDto>>;
 
 public class GetPublishedNewsQueryValidator : AbstractValidator<GetPublishedNewsQuery>
@@ -163,7 +171,8 @@ public class GetPublishedNewsQueryHandler : IRequestHandler<GetPublishedNewsQuer
         {
             baseQuery = baseQuery.Where(a => a.Title.ToLower().Contains(searchTerm)
                 || (a.Summary != null && a.Summary.ToLower().Contains(searchTerm))
-                || a.Body.ToLower().Contains(searchTerm));
+                || a.Body.ToLower().Contains(searchTerm)
+                || _context.EditorialArticleTranslations.Any(t => t.EditorialArticleId == a.Id && t.Status == EditorialTranslationStatus.Reviewed && (t.Title.ToLower().Contains(searchTerm) || (t.Summary != null && t.Summary.ToLower().Contains(searchTerm)))));
         }
 
         var totalCount = await baseQuery.CountAsync(cancellationToken);
@@ -178,6 +187,8 @@ public class GetPublishedNewsQueryHandler : IRequestHandler<GetPublishedNewsQuer
         var cityIds = rows.Where(a => a.CityId.HasValue).Select(a => a.CityId!.Value).Distinct().ToList();
         var countries = await _context.Countries.Where(c => countryIds.Contains(c.Id)).AsNoTracking().ToDictionaryAsync(c => c.Id, cancellationToken);
         var cities = await _context.Cities.Where(c => cityIds.Contains(c.Id)).AsNoTracking().ToDictionaryAsync(c => c.Id, cancellationToken);
+        var articleIds = rows.Select(a => a.Id).ToArray();
+        var translations = await _context.EditorialArticleTranslations.AsNoTracking().Where(t => articleIds.Contains(t.EditorialArticleId) && t.Status == EditorialTranslationStatus.Reviewed).ToListAsync(cancellationToken);
 
         var items = rows.Select(a =>
         {
@@ -191,7 +202,8 @@ public class GetPublishedNewsQueryHandler : IRequestHandler<GetPublishedNewsQuer
                 country?.NameAr, country?.NameEn, city?.NameAr, city?.NameEn)
                 { Slug = a.Slug, PresentationDesks = a.PresentationDesks.ToArray(), ImageUrl = a.SocialImageUrl, AuthorName = a.AuthorName, AuthorImageUrl = a.AuthorImageUrl,
                     SportsCoverageType = a.SportsCoverageType, SportsPlayerNames = a.SportsPlayerNames.ToArray(), SportsTeamName = a.SportsTeamName,
-                    SportsCompetitionName = a.SportsCompetitionName, SportsCountryName = a.SportsCountryName };
+                    SportsCompetitionName = a.SportsCompetitionName, SportsCountryName = a.SportsCountryName,
+                    Translations = translations.Where(t => t.EditorialArticleId == a.Id && t.SourceFingerprint == EditorialTranslationFingerprint.Compute(a.Title, a.Summary, a.Body)).Select(t => new PublicNewsTranslationSummaryDto(t.Locale, t.Title, t.Summary)).ToArray() };
         }).ToList();
 
         return new PagedResult<PublicNewsSummaryDto>(items, request.Page, request.PageSize, totalCount);
@@ -323,6 +335,12 @@ public class GetPublishedNewsByIdQueryHandler : IRequestHandler<GetPublishedNews
 
         // Append order == issue order. Issuer id/roles are not projected: they never leave the CMS.
         // Corrections stay visible on an Archived article (CheckCorrection allows them there).
+        var translations = await _context.EditorialArticleTranslations.AsNoTracking()
+            .Where(t => t.EditorialArticleId == article.Id && t.Status == EditorialTranslationStatus.Reviewed)
+            .ToListAsync(cancellationToken);
+        var publicTranslations = translations.Where(t => t.SourceFingerprint == EditorialTranslationFingerprint.Compute(article.Title, article.Summary, article.Body))
+            .Select(t => new PublicNewsTranslationDto(t.Locale, t.Title, t.Summary, t.Body)).ToArray();
+
         var corrections = await _context.EditorialCorrections.AsNoTracking()
             .Where(c => c.ArticleId == article.Id)
             .OrderBy(c => c.IssuedAtUtc)
@@ -356,7 +374,8 @@ public class GetPublishedNewsByIdQueryHandler : IRequestHandler<GetPublishedNews
             SportsTeamName = article.SportsTeamName,
             SportsCompetitionName = article.SportsCompetitionName,
             SportsCountryName = article.SportsCountryName,
-            TwitterTitle = article.TwitterTitle, TwitterDescription = article.TwitterDescription, TwitterImageUrl = article.TwitterImageUrl
+            TwitterTitle = article.TwitterTitle, TwitterDescription = article.TwitterDescription, TwitterImageUrl = article.TwitterImageUrl,
+            Translations = publicTranslations
         });
     }
 

@@ -21,7 +21,7 @@ public sealed class CrisisModeController(ISender mediator) : ControllerBase
 [Authorize(Policy = AuthorizationPolicies.CanManageCrisisMode)]
 public sealed class CmsCrisisModeController(ISender mediator) : ControllerBase
 {
-    public sealed record SaveRequest(bool IsActive, string Title, string Summary, string SourceName, string SourceUrl, string Severity, IReadOnlyList<Guid>? AffectedCountryIds);
+    public sealed record SaveRequest(bool IsActive, string Title, string Summary, string SourceName, string SourceUrl, string Severity, IReadOnlyList<Guid>? AffectedCountryIds, Guid? SoundAssetId, int SoundRepeatIntervalSeconds = 60);
 
     [HttpGet]
     public async Task<IActionResult> Get(CancellationToken cancellationToken)
@@ -31,7 +31,7 @@ public sealed class CmsCrisisModeController(ISender mediator) : ControllerBase
     public async Task<IActionResult> Save(SaveRequest request, CancellationToken cancellationToken)
     {
         var result = await mediator.Send(new SaveCrisisModeCommand(request.IsActive, request.Title, request.Summary, request.SourceName, request.SourceUrl,
-            request.Severity, request.AffectedCountryIds ?? Array.Empty<Guid>()), cancellationToken);
+            request.Severity, request.AffectedCountryIds ?? Array.Empty<Guid>(), request.SoundAssetId, request.SoundRepeatIntervalSeconds), cancellationToken);
         return Ok(result);
     }
 }

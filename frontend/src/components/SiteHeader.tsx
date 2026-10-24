@@ -1,6 +1,9 @@
 import { HeaderInteractive } from "./HeaderInteractive";
+import { cookies } from "next/headers";
+import { parseLocale } from "@/lib/site-copy";
+import { DEFAULT_PUBLIC_SOCIAL_LINKS } from "@/lib/social-links";
 import { getPublishedNews, getPublicAdPlacements, getPublicSiteStructure } from "@/lib/news-api";
-import type { PublicAdPlacement, PublicSiteNavigationItem } from "@/lib/news-api";
+import type { PublicAdPlacement, PublicSiteNavigationItem, PublicSocialLink } from "@/lib/news-api";
 
 /**
  * Server Component so the ticker's headlines are real titles of
@@ -13,10 +16,12 @@ import type { PublicAdPlacement, PublicSiteNavigationItem } from "@/lib/news-api
  * data call failed.
  */
 export async function SiteHeader() {
+  const locale = parseLocale((await cookies()).get("jusoor_locale")?.value);
   let tickerHeadlines: string[] = [];
   let navbarAd: PublicAdPlacement | undefined;
   let navigation: PublicSiteNavigationItem[] | undefined;
   let leadership: { entries: Array<{ id: string; title: string; name: string }> } | undefined;
+  let socialLinks: PublicSocialLink[] | undefined;
 
   const [newsResult, adsResult, structureResult] = await Promise.allSettled([
     getPublishedNews(1, 6),
@@ -25,7 +30,7 @@ export async function SiteHeader() {
   ]);
   if (newsResult.status === "fulfilled") tickerHeadlines = newsResult.value.items.map((s) => s.title);
   if (adsResult.status === "fulfilled") navbarAd = adsResult.value.find((placement) => placement.slotKey === "navbar-banner");
-  if (structureResult.status === "fulfilled") { navigation = structureResult.value.navigation; leadership = structureResult.value.leadership; }
+  if (structureResult.status === "fulfilled") { navigation = structureResult.value.navigation; leadership = structureResult.value.leadership; socialLinks = structureResult.value.socialLinks ?? DEFAULT_PUBLIC_SOCIAL_LINKS; }
 
-  return <HeaderInteractive tickerHeadlines={tickerHeadlines} navbarAd={navbarAd} navigation={navigation} leadership={leadership} />;
+  return <HeaderInteractive tickerHeadlines={tickerHeadlines} navbarAd={navbarAd} navigation={navigation} leadership={leadership} socialLinks={socialLinks} locale={locale} />;
 }

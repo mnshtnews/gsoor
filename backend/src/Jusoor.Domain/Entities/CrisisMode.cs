@@ -23,17 +23,19 @@ public sealed class CrisisMode : AuditableEntity
     public string SourceUrl { get; private set; } = string.Empty;
     public string Severity { get; private set; } = "urgent";
     public string AffectedCountryIdsJson { get; private set; } = "[]";
+    public Guid? SoundAssetId { get; private set; }
+    public int SoundRepeatIntervalSeconds { get; private set; } = 60;
 
     private CrisisMode() { }
 
-    public static CrisisMode Create(bool isActive, string title, string summary, string sourceName, string sourceUrl, string severity, string affectedCountryIdsJson)
+    public static CrisisMode Create(bool isActive, string title, string summary, string sourceName, string sourceUrl, string severity, string affectedCountryIdsJson, Guid? soundAssetId, int soundRepeatIntervalSeconds)
     {
         var mode = new CrisisMode();
-        mode.Update(isActive, title, summary, sourceName, sourceUrl, severity, affectedCountryIdsJson);
+        mode.Update(isActive, title, summary, sourceName, sourceUrl, severity, affectedCountryIdsJson, soundAssetId, soundRepeatIntervalSeconds);
         return mode;
     }
 
-    public void Update(bool isActive, string title, string summary, string sourceName, string sourceUrl, string severity, string affectedCountryIdsJson)
+    public void Update(bool isActive, string title, string summary, string sourceName, string sourceUrl, string severity, string affectedCountryIdsJson, Guid? soundAssetId, int soundRepeatIntervalSeconds)
     {
         if (string.IsNullOrWhiteSpace(title) || title.Trim().Length > TitleMaxLength)
             throw new ArgumentException("A crisis title is required and must be 200 characters or fewer.", nameof(title));
@@ -47,6 +49,8 @@ public sealed class CrisisMode : AuditableEntity
             throw new ArgumentException("Source URL must use HTTP or HTTPS.", nameof(sourceUrl));
         if (isActive && string.IsNullOrWhiteSpace(sourceUrl))
             throw new ArgumentException("An active crisis requires a source URL.", nameof(sourceUrl));
+        if (soundRepeatIntervalSeconds is < 15 or > 3600)
+            throw new ArgumentOutOfRangeException(nameof(soundRepeatIntervalSeconds), "Sound repeat interval must be between 15 and 3600 seconds.");
         if (string.IsNullOrWhiteSpace(affectedCountryIdsJson) || affectedCountryIdsJson.Length > 20_000)
             throw new ArgumentException("Affected countries must be provided as a bounded JSON array.", nameof(affectedCountryIdsJson));
 
@@ -58,5 +62,7 @@ public sealed class CrisisMode : AuditableEntity
         SourceUrl = string.IsNullOrWhiteSpace(sourceUrl) ? string.Empty : new Uri(sourceUrl).ToString();
         Severity = severity;
         AffectedCountryIdsJson = affectedCountryIdsJson;
+        SoundAssetId = soundAssetId;
+        SoundRepeatIntervalSeconds = soundRepeatIntervalSeconds;
     }
 }

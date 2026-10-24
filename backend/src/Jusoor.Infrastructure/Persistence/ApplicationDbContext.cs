@@ -44,6 +44,7 @@ public class ApplicationDbContext : IdentityDbContext<ApplicationUser>, IApplica
     public DbSet<SourceFetchLog> SourceFetchLogs => Set<SourceFetchLog>();
     public DbSet<Case> Cases => Set<Case>();
     public DbSet<EditorialArticle> EditorialArticles => Set<EditorialArticle>();
+    public DbSet<EditorialArticleTranslation> EditorialArticleTranslations => Set<EditorialArticleTranslation>();
     public DbSet<EditorialCategory> EditorialCategories => Set<EditorialCategory>();
     public DbSet<RoleChangeAudit> RoleChangeAudits => Set<RoleChangeAudit>();
     public DbSet<EditorialArticleTransition> EditorialArticleTransitions => Set<EditorialArticleTransition>();
@@ -58,6 +59,8 @@ public class ApplicationDbContext : IdentityDbContext<ApplicationUser>, IApplica
     public DbSet<HomepagePollVote> HomepagePollVotes => Set<HomepagePollVote>();
     public DbSet<AlertEmailSubscription> AlertEmailSubscriptions => Set<AlertEmailSubscription>();
     public DbSet<AlertSubscriptionSettings> AlertSubscriptionSettings => Set<AlertSubscriptionSettings>();
+    public DbSet<UserPermissionGrant> UserPermissionGrants => Set<UserPermissionGrant>();
+    public DbSet<UserPermissionChangeAudit> UserPermissionChangeAudits => Set<UserPermissionChangeAudit>();
 
     public void Detach<TEntity>(TEntity entity) where TEntity : class => Entry(entity).State = EntityState.Detached;
 

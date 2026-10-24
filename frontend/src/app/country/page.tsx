@@ -1,5 +1,8 @@
 import type { Metadata } from "next";
 import Link from "next/link";
+import { cookies } from "next/headers";
+import { parseLocale } from "@/lib/site-copy";
+import { translateUi } from "@/lib/ui-translations";
 import { notFound } from "next/navigation";
 import { StoryGridCard } from "@/components/StoryGridCard";
 import { getPublicCountries, getPublishedNews } from "@/lib/news-api";
@@ -29,6 +32,8 @@ export async function generateMetadata({ searchParams }: { searchParams: SearchP
 }
 
 export default async function CountryPage({ searchParams }: { searchParams: SearchParams }) {
+  const locale = parseLocale((await cookies()).get("jusoor_locale")?.value);
+  const t = (value: string) => translateUi(locale, value);
   const data = await loadCountry(searchParams).catch(() => null);
   if (!data) notFound();
   const { country, page } = data;
@@ -36,19 +41,19 @@ export default async function CountryPage({ searchParams }: { searchParams: Sear
   try {
     result = await getPublishedNews(page, PAGE_SIZE, undefined, undefined, undefined, country.id);
   } catch {
-    return <main id="main"><section className="wrap state-panel" role="alert"><h1>تعذّر تحميل أخبار البلد</h1><p>تعذّر الاتصال بالخادم. حاول تحديث الصفحة بعد قليل.</p></section></main>;
+    return <main id="main" dir={locale === "ar" ? "rtl" : "ltr"}><section className="wrap state-panel" role="alert"><h1>{t("تعذّر تحميل أخبار البلد")}</h1><p>{t("تعذّر الاتصال بالخادم. حاول تحديث الصفحة بعد قليل.")}</p></section></main>;
   }
-  return <main id="main" className="country-page">
+  return <main id="main" className="country-page" dir={locale === "ar" ? "rtl" : "ltr"}>
     <section className="page-header"><div className="wrap">
-      <nav className="breadcrumb" aria-label="مسار الصفحة"><Link className="breadcrumb-home" href="/">الرئيسية</Link><span className="breadcrumb-separator" aria-hidden="true">›</span><span aria-current="page">{country.nameAr}</span></nav>
-      <div className="category-heading"><div className="category-heading-line" aria-hidden="true"/><div className="category-heading-content"><span className="eyebrow">أخبار بحسب البلد</span><h1>أخبار المصريين في {country.nameAr}</h1><p className="category-heading-meta">{result.totalCount} خبرًا منشورًا</p></div></div>
+      <nav className="breadcrumb" aria-label={t("مسار الصفحة")}><Link className="breadcrumb-home" href="/">{t("الرئيسية")}</Link><span className="breadcrumb-separator" aria-hidden="true">›</span><span aria-current="page">{locale === "ar" ? country.nameAr : country.nameEn}</span></nav>
+      <div className="category-heading"><div className="category-heading-line" aria-hidden="true"/><div className="category-heading-content"><span className="eyebrow">{t("أخبار بحسب البلد")}</span><h1>{locale === "ar" ? `أخبار المصريين في ${country.nameAr}` : locale === "en" ? `Egyptians abroad in ${country.nameEn}` : `Égyptiens à l’étranger en ${country.nameEn}`}</h1><p className="category-heading-meta">{result.totalCount} {t("خبرًا منشورًا")}</p></div></div>
     </div></section>
     <section className="section tight on-surface"><div className="wrap">
-      {result.items.length ? <div className="six-grid">{result.items.map((story) => <StoryGridCard key={story.id} story={story}/>)}</div> : <p className="empty-state" style={{padding:"40px 0",textAlign:"center",color:"var(--text-mute)"}}>لا توجد أخبار منشورة مرتبطة بهذا البلد حاليًا.</p>}
-      {result.totalPages > 1 && <nav className="pagination" aria-label="صفحات أخبار البلد">
-        {page > 1 && <Link href={`/country?code=${country.isoCode2}&page=${page-1}`} rel="prev" aria-label="الصفحة السابقة">‹</Link>}
+      {result.items.length ? <div className="six-grid">{result.items.map((story) => <StoryGridCard key={story.id} story={story}/>)}</div> : <p className="empty-state" style={{padding:"40px 0",textAlign:"center",color:"var(--text-mute)"}}>{t("لا توجد أخبار منشورة مرتبطة بهذا البلد حاليًا.")}</p>}
+      {result.totalPages > 1 && <nav className="pagination" aria-label={t("صفحات أخبار البلد")}>
+        {page > 1 && <Link href={`/country?code=${country.isoCode2}&page=${page-1}`} rel="prev" aria-label={t("الصفحة السابقة")}>‹</Link>}
         <span aria-current="page">{page} / {result.totalPages}</span>
-        {page < result.totalPages && <Link href={`/country?code=${country.isoCode2}&page=${page+1}`} rel="next" aria-label="الصفحة التالية">›</Link>}
+        {page < result.totalPages && <Link href={`/country?code=${country.isoCode2}&page=${page+1}`} rel="next" aria-label={t("الصفحة التالية")}>›</Link>}
       </nav>}
     </div></section>
   </main>;

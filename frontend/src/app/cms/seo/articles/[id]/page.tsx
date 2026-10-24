@@ -1,5 +1,7 @@
 "use client";
 
+import { LocalizedContent } from "@/components/LocalizedContent";
+
 import { useEffect, useState } from "react";
 import { useParams, useRouter } from "next/navigation";
 import Link from "next/link";
@@ -59,14 +61,14 @@ export default function ArticleSeoEditorPage() {
     finally { setBusy(false); }
   }
 
-  if (!item) return <div className="cms-card">{error || "جارٍ التحميل…"}</div>;
+  if (!item) return <LocalizedContent>{<div className="cms-card">{error || "جارٍ التحميل…"}</div>}</LocalizedContent>;
   const change = (key: keyof CmsArticleSeo, value: string | boolean | string[]) => setItem({ ...item, [key]: value } as CmsArticleSeo);
   const textField = (key: "seoTitle" | "seoDescription" | "slug" | "canonicalUrl" | "socialTitle" | "socialDescription" | "socialImageUrl" | "twitterTitle" | "twitterDescription" | "twitterImageUrl", label: string, max: number, hint?: string) => (
     <div className="cms-field" key={key}><label htmlFor={key}>{label}</label>
       <input id={key} value={item[key] ?? ""} maxLength={max} onChange={e => change(key, e.target.value || null as unknown as string)} />
       <span className="cms-hint">{(item[key] ?? "").length} / {max}{hint ? ` — ${hint}` : ""}</span></div>
   );
-  return <main className="wrap cms-card" dir="rtl">
+  return <LocalizedContent>{<main className="wrap cms-card" dir="rtl">
     <header className="cms-head"><div><h1>تحسين ظهور المقال</h1><p>{item.title}</p></div><Link className="cms-btn" href={`/cms/articles/${id}`}>عودة للمقال</Link></header>
     {error && <div className="cms-msg error" role="alert">{error}</div>}{saved && <div className="cms-msg ok" role="status">تم حفظ إعدادات SEO.</div>}
     {textField("seoTitle", "عنوان محركات البحث (50–60 حرفًا؛ اتركه فارغًا لاستخدام عنوان المقال)", 60, "يظهر عنوانًا للنتيجة في محركات البحث؛ التزم بالطول حتى لا يرفضه النظام أو يُقتطع." )}
@@ -96,5 +98,5 @@ export default function ArticleSeoEditorPage() {
     <label><input type="checkbox" checked={item.noIndex} onChange={e => change("noIndex", e.target.checked)} /> منع الفهرسة وإخراج المقال من خرائط الموقع</label><p className="cms-hint">فعّله فقط للمحتوى الذي لا تريد ظهوره في نتائج البحث؛ قد يقلل الزيارات من البحث.</p>
     <label><input type="checkbox" checked={item.noFollow} onChange={e => change("noFollow", e.target.checked)} /> منع تتبع الروابط</label><p className="cms-hint">إعداد متقدم؛ لا تفعّله للمقالات العادية. يمنع محركات البحث من متابعة روابط الصفحة.</p>
     <div className="cms-actions"><button className="cms-btn primary" disabled={busy || item.slug.trim().length === 0 || !item.primaryCategoryId} onClick={() => void save()}>حفظ SEO</button></div>
-  </main>;
+  </main>}</LocalizedContent>;
 }

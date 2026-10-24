@@ -14,6 +14,7 @@ const GUID = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
  */
 const ACTIONS = new Set(["submit", "request-revision", "approve", "publish", "schedule", "cancel-schedule", "unpublish", "history", "corrections"]);
 const REVISION_NUMBER = /^[1-9][0-9]{0,8}$/;
+const LOCALE = /^(en|fr)$/;
 
 function resolveTarget(segments: string[] | undefined): string | null {
   const parts = segments ?? [];
@@ -23,6 +24,10 @@ function resolveTarget(segments: string[] | undefined): string | null {
   if (parts.length === 2 && ACTIONS.has(parts[1])) {
     return `/api/v1/cms/articles/${parts[0]}/${parts[1]}`;
   }
+  if (parts.length === 2 && parts[1] === "translations") return `/api/v1/cms/articles/${parts[0]}/translations`;
+  if (parts.length === 3 && parts[1] === "translations" && parts[2] === "generate") return `/api/v1/cms/articles/${parts[0]}/translations/generate`;
+  if (parts.length === 3 && parts[1] === "translations" && LOCALE.test(parts[2])) return `/api/v1/cms/articles/${parts[0]}/translations/${parts[2]}`;
+  if (parts.length === 4 && parts[1] === "translations" && LOCALE.test(parts[2]) && parts[3] === "review") return `/api/v1/cms/articles/${parts[0]}/translations/${parts[2]}/review`;
   if (parts.length === 2 && parts[1] === "seo") {
     return `/api/v1/cms/articles/${parts[0]}/seo`;
   }

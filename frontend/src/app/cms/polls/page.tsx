@@ -1,5 +1,7 @@
 "use client";
 
+import { LocalizedContent } from "@/components/LocalizedContent";
+
 import { useCallback, useEffect, useState, type FormEvent } from "react";
 import { useRouter } from "next/navigation";
 import { cms, cmsHomepagePolls, CmsError, type CmsHomepagePoll } from "@/lib/cms-client";
@@ -37,8 +39,8 @@ export default function HomepagePollsPage() {
     catch (e) { setError(e instanceof Error ? e.message : "تعذّر إيقاف الاستبيان."); }
     finally { setBusy(false); }
   }
-  if (!loaded) return <div className="cms-page-stack"><p>جارٍ تحميل الاستبيانات…</p></div>;
-  return <div className="cms-page-stack cms-polls-page" dir="rtl">
+  if (!loaded) return <LocalizedContent>{<div className="cms-page-stack"><p>جارٍ تحميل الاستبيانات…</p></div>}</LocalizedContent>;
+  return <LocalizedContent>{<div className="cms-page-stack cms-polls-page" dir="rtl">
     <section className="cms-page-heading"><div><span className="cms-eyebrow">التفاعل التحريري</span><h1>استبيانات الرئيسية</h1><p>أنشئ سؤالًا واختياراته، ثم فعّله ليظهر للزوار. لا يمكن تفعيل أكثر من استبيان في الوقت نفسه.</p></div></section>
     {error && <div className="cms-msg error" role="alert">{error}</div>}{notice && <div className="cms-msg ok" role="status">{notice}</div>}
     <section className="cms-card"><h2>{form.id ? "تحرير الاستبيان" : "إنشاء استبيان"}</h2><form className="cms-poll-form" onSubmit={(event) => void save(event)}>
@@ -51,5 +53,5 @@ export default function HomepagePollsPage() {
     <section className="cms-card"><div className="cms-section-title"><h2>الاستبيانات السابقة</h2><span className="cms-hint">{items.length} استبيان</span></div>
       {!items.length ? <p className="cms-news-empty">لم تُنشأ استبيانات بعد. ابدأ بسؤال واضح واختيارات قصيرة.</p> : <div className="cms-poll-list">{items.map((item) => <article className="cms-poll-item" key={item.id}><div><span className={"cms-badge " + (item.isActive ? "success" : "muted")}>{item.isActive ? "نشط" : "متوقف"}</span><h3>{item.question}</h3><p>{item.options.join(" · ")}</p><small>{item.totalVotes.toLocaleString("ar-EG")} مشاركة</small></div><div className="cms-actions"><button className="cms-btn" type="button" disabled={busy} onClick={() => edit(item)}>تحرير</button>{item.isActive && <button className="cms-btn danger" type="button" disabled={busy} onClick={() => void deactivate(item)}>إيقاف</button>}</div></article>)}</div>}
     </section>
-  </div>;
+  </div>}</LocalizedContent>;
 }

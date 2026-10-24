@@ -1,5 +1,7 @@
 "use client";
 
+import { LocalizedContent } from "@/components/LocalizedContent";
+
 import { useCallback, useEffect, useRef, useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
@@ -246,7 +248,7 @@ export default function CmsAdvertisementsPage() {
     </div>;
   }
 
-  return <main className="cms-card cms-ad-manager" dir="rtl">
+  return <LocalizedContent>{<main className="cms-card cms-ad-manager" dir="rtl">
     <div className="cms-head"><div><h1>إدارة الإعلانات</h1><p className="cms-hint">ارفع المواد الإعلانية، ثم اسحب كل صورة إلى المساحة المناسبة لكل واجهة. أضف رابط المعلن قبل الحفظ.</p></div><Link className="cms-btn" href="/cms">لوحة الأخبار</Link></div>
     {error && <div className="cms-msg error" role="alert">{error}</div>}
     {notice && <div className="cms-msg success" role="status">{notice}</div>}
@@ -285,5 +287,5 @@ export default function CmsAdvertisementsPage() {
         </div>
       </aside>
     </section>}
-  </main>;
+  </main>}</LocalizedContent>;
 }

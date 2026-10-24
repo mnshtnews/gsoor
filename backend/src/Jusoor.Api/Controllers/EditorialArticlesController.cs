@@ -21,11 +21,13 @@ public class EditorialArticlesController : ControllerBase
 {
     private readonly ISender _mediator;
     private readonly ICurrentUserService _currentUser;
+    private readonly Jusoor.Api.Services.EditorialTranslationGenerator _translationGenerator;
 
-    public EditorialArticlesController(ISender mediator, ICurrentUserService currentUser)
+    public EditorialArticlesController(ISender mediator, ICurrentUserService currentUser, Jusoor.Api.Services.EditorialTranslationGenerator translationGenerator)
     {
         _mediator = mediator;
         _currentUser = currentUser;
+        _translationGenerator = translationGenerator;
     }
 
     /// <param name="EditReason">Optional note recorded with the revision when a PUBLISHED article is edited (decision D4).</param>
@@ -99,9 +101,9 @@ public class EditorialArticlesController : ControllerBase
                 request.SportsCoverageType, request.SportsPlayerNames, request.SportsTeamName, request.SportsCompetitionName, request.SportsCountryName),
             cancellationToken);
 
-        return result.Outcome == EditorialOutcome.Success
-            ? CreatedAtAction(nameof(Get), new { id = result.Article!.Id }, result.Article)
-            : ToActionResult(result);
+        if (result.Outcome != EditorialOutcome.Success) return ToActionResult(result);
+        await _translationGenerator.GenerateAsync(result.Article!.Id, cancellationToken);
+        return CreatedAtAction(nameof(Get), new { id = result.Article!.Id }, result.Article);
     }
 
     [HttpPut("{id:guid}")]
@@ -125,6 +127,7 @@ public class EditorialArticlesController : ControllerBase
                 request.SportsCoverageType, request.SportsPlayerNames, request.SportsTeamName, request.SportsCompetitionName, request.SportsCountryName),
             cancellationToken);
 
+        if (result.Outcome == EditorialOutcome.Success) await _translationGenerator.GenerateAsync(id, cancellationToken);
         return ToActionResult(result);
     }
 

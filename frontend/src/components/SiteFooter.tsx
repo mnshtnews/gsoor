@@ -1,10 +1,10 @@
 import Image from "next/image";
 import Link from "next/link";
-
-const SOCIAL_LINKS = [
-  { name: "facebook" as const, label: "فيسبوك", path: "M14 8h3V4h-3c-3.31 0-5 1.69-5 5v3H6v4h3v4h4v-4h3l1-4h-4V9c0-.66.34-1 1-1z" },
-  { name: "x-twitter" as const, label: "X", path: "M18.9 2H22l-6.77 7.74L23.2 22h-6.24l-4.89-6.39L6.48 22H3.37l7.24-8.28L2.8 2h6.4l4.42 5.84L18.9 2zm-1.1 17.7h1.73L8.27 4.2H6.42L17.8 19.7z" },
-];
+import { getPublicSiteStructure } from "@/lib/news-api";
+import { cookies } from "next/headers";
+import { FOOTER_COPY, FOOTER_LINK_LABELS, SITE_DESCRIPTIONS, parseLocale } from "@/lib/site-copy";
+import { LocaleSelector } from "@/components/LocaleSelector";
+import { DEFAULT_PUBLIC_SOCIAL_LINKS, socialIconPath } from "@/lib/social-links";
 
 const SITE_LINKS = [
   { href: "/", label: "الرئيسية" },
@@ -20,6 +20,7 @@ const MORE_LINKS = [
   { href: "/category?cat=sports", label: "رياضة" },
   { href: "/category?cat=secondgen", label: "الجيل الثاني" },
   { href: "/category?cat=articles", label: "مقالات رأي" },
+  { href: "/category?cat=fatwas", label: "فتاوى" },
 ];
 
 const SERVICE_LINKS = [
@@ -34,7 +35,11 @@ const ABOUT_LINKS = [
   { href: "/privacy", label: "سياسة الخصوصية" },
 ];
 
-export function SiteFooter() {
+export async function SiteFooter() {
+  const locale = parseLocale((await cookies()).get("jusoor_locale")?.value);
+  const copy = FOOTER_COPY[locale];
+  let socialLinks = DEFAULT_PUBLIC_SOCIAL_LINKS;
+  try { socialLinks = (await getPublicSiteStructure()).socialLinks ?? DEFAULT_PUBLIC_SOCIAL_LINKS; } catch { /* Keep the safe, known profile links if the API is unavailable. */ }
   return (
     <footer className="foot-v2">
       <div className="wrap foot-v2-top">
@@ -43,13 +48,14 @@ export function SiteFooter() {
             <Link href="/">
               <Image className="logo-img" src="/assets/josour-logo-transparent.png" alt="جسور" width={1104} height={974} />
             </Link>
-            <p>منصة المصريين بالمهجر — إخبار، ذكاء استخباراتي جغرافي، وشبكة اطمئنان الأسرة.</p>
+            <p lang={locale} dir={locale === "ar" ? "rtl" : "ltr"}>{SITE_DESCRIPTIONS[locale]}</p>
+            <button type="button" className="foot-v2-replay" data-replay-intro>{copy.intro}</button>
 
             <div className="foot-v2-social social-icons">
-              {SOCIAL_LINKS.map((social) => (
-                <a key={social.name} href="#" aria-label={social.label} className={social.name}>
+              {socialLinks.filter((social) => social.isVisible && social.href).map((social) => (
+                <a key={social.name} href={social.href} target="_blank" rel="noopener noreferrer" aria-label={social.name} className={social.name}>
                   <svg viewBox="0 0 24 24" aria-hidden="true">
-                    <path d={social.path} />
+                    <path d={socialIconPath(social.icon)} fillRule="evenodd" />
                   </svg>
                 </a>
               ))}
@@ -57,28 +63,28 @@ export function SiteFooter() {
           </div>
 
           <div className="foot-v2-col">
-            <h5>أقسام الموقع</h5>
+            <h5>{copy.sections}</h5>
             <ul className="foot-v2-link-grid">
               {[...SITE_LINKS, ...MORE_LINKS].map((link) => (
-                <li key={link.href}><Link href={link.href}>{link.label}</Link></li>
+                <li key={link.href}><Link href={link.href}>{FOOTER_LINK_LABELS[locale][link.href] ?? link.label}</Link></li>
               ))}
             </ul>
           </div>
 
           <div className="foot-v2-col">
-            <h5>الخدمات</h5>
+            <h5>{copy.services}</h5>
             <ul className="foot-v2-link-grid foot-v2-link-grid--services">
               {SERVICE_LINKS.map((link) => (
-                <li key={link.href}><Link href={link.href}>{link.label}</Link></li>
+                <li key={link.href}><Link href={link.href}>{FOOTER_LINK_LABELS[locale][link.href] ?? link.label}</Link></li>
               ))}
             </ul>
           </div>
 
           <div className="foot-v2-col">
-            <h5>من نحن</h5>
+            <h5>{copy.about}</h5>
             <ul>
               {ABOUT_LINKS.map((link) => (
-                <li key={link.href}><Link href={link.href}>{link.label}</Link></li>
+                <li key={link.href}><Link href={link.href}>{FOOTER_LINK_LABELS[locale][link.href] ?? link.label}</Link></li>
               ))}
             </ul>
           </div>
@@ -86,15 +92,11 @@ export function SiteFooter() {
       </div>
 
       <div className="wrap foot-v2-bottom">
-        <span>© ٢٠٢٦ جسور. جميع الحقوق محفوظة. — منصة المصريين بالمهجر</span>
+        <span>© 2026 Jusoor. {copy.rights}</span>
         <div className="foot-v2-bottom-links">
-          <Link href="/privacy">الخصوصية</Link>
+          <Link href="/privacy">{copy.privacy}</Link>
         </div>
-        <select className="foot-v2-lang" aria-label="اختر اللغة" defaultValue="العربية">
-          <option>العربية</option>
-          <option>English</option>
-          <option>Français</option>
-        </select>
+        <LocaleSelector className="foot-v2-lang" locale={locale} />
       </div>
     </footer>
   );

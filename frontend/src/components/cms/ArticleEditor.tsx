@@ -5,6 +5,7 @@ import Link from "next/link";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
 import { ArticleHistory } from "@/components/cms/ArticleHistory";
+import { ArticleTranslationsPanel } from "@/components/cms/ArticleTranslationsPanel";
 import { useImageCropper } from "@/components/cms/ImageCropper";
 import { BODY_HTML_MAX, RichTextEditor } from "@/components/cms/RichTextEditor";
 import { cms, workflowHints, STATUS_META, CmsError, PRESENTATION_DESKS, type CmsArticle, type WorkflowAction } from "@/lib/cms-client";
@@ -245,12 +246,16 @@ export function ArticleEditor({ articleId }: { articleId: string | null }) {
       // fill() re-reads the cover from what the server actually stored, so the preview
       // can never show a cover that was not really saved.
       fill(saved);
+      let translationNotice = "";
+      try { await cms.generateTranslations(saved.id); translationNotice = " وتم إنشاء مسودتي الإنجليزية والفرنسية."; }
+      catch { translationNotice = " تعذر إنشاء الترجمة الآن؛ أعد المحاولة من قسم النسخ اللغوية."; }
       if (!article) {
         setDraftHydrated(false);
         try { sessionStorage.removeItem(draftKey); } catch { /* Best-effort cleanup. */ }
         router.replace(`/cms/articles/${saved.id}`);
       }
-      else setNotice("تم حفظ التعديلات.");
+      else setNotice("تم حفظ التعديلات." + translationNotice);
+      if (!article) setNotice("تم حفظ المسودة." + translationNotice);
     });
 
   async function ensureArticleExists(): Promise<CmsArticle> {
@@ -592,6 +597,8 @@ export function ArticleEditor({ articleId }: { articleId: string | null }) {
           </div>
         </div>
       )}
+
+      {article && canEditContent && <ArticleTranslationsPanel articleId={article.id} canReview={roles?.some((role) => ["SeniorEditor", "ManagingEditor", "EditorInChief", "SystemAdmin"].includes(role)) ?? false} />}
 
       <div className="cms-actions">
         {canEditContent && <button className="cms-btn primary" type="button" disabled={busy || !canSave} onClick={save}>

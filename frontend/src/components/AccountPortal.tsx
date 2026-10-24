@@ -2,6 +2,8 @@
 
 import type { FormEvent } from "react";
 import { useEffect, useState } from "react";
+import { parseLocale } from "@/lib/site-copy";
+import { translateUi } from "@/lib/ui-translations";
 
 type Place = { cityId: string; cityNameAr: string; countryNameAr: string | null };
 type Session = { authenticated: true; staff?: boolean; roles?: string[]; profile: { privacyLevel: string; countryNameAr: string | null; regionNameAr: string | null; cityNameAr: string | null; places: Place[] } };
@@ -12,6 +14,9 @@ const PRIVACY_LABELS: Record<string, string> = { NoLocation: "بدون موقع"
 
 export function AccountPortal() {
   const [session, setSession] = useState<Session | null>(null);
+  const [locale, setLocale] = useState<"ar" | "en" | "fr">("ar");
+  const t = (value: string) => translateUi(locale, value);
+  useEffect(() => { const value = document.cookie.split(";").map((part) => part.trim()).find((part) => part.startsWith("jusoor_locale="))?.split("=")[1]; setLocale(parseLocale(value ? decodeURIComponent(value) : null)); }, []);
   const [mode, setMode] = useState<AuthMode>("login");
   const [showPassword, setShowPassword] = useState(false);
   const [busy, setBusy] = useState(false);
@@ -107,17 +112,17 @@ export function AccountPortal() {
     await fetch("/account-api/session", { method: "DELETE" }); setSession(null); setMessage("تم تسجيل الخروج."); window.dispatchEvent(new Event("jusoor:session-change"));
   }
 
-  if (loading) return <section className="account-card auth-account-card" aria-busy="true"><p>جارٍ تحميل الحساب…</p></section>;
-  if (session) return <section className="account-card auth-account-card account-profile-card" aria-live="polite"><span className="eyebrow">ملف المهجر</span><h1>مرحبًا بك في جسور</h1>
-    <p>مستوى مشاركة الموقع: <strong>{PRIVACY_LABELS[session.profile.privacyLevel] ?? "غير محدد"}</strong></p>
-    <p>الموقع المسجل: {[session.profile.cityNameAr, session.profile.regionNameAr, session.profile.countryNameAr].filter(Boolean).join("، ") || "لم تضف موقعًا"}</p>
-    <h2>إعدادات الموقع</h2><label>مستوى مشاركة الموقع<select value={privacyLevel} onChange={(event) => setPrivacyLevel(event.target.value)}><option value="NoLocation">بدون موقع</option><option value="CountryOnly">الدولة فقط</option><option value="City">المدينة</option></select></label>
-    {privacyLevel !== "NoLocation" && <label>الدولة<select value={countryId} onChange={(event) => { setCountryId(event.target.value); setCityId(""); }}><option value="">اختر الدولة</option>{countries.map((country) => <option key={country.id} value={country.id}>{country.nameAr}</option>)}</select></label>}
-    {privacyLevel === "City" && <label>المدينة<select value={cityId} onChange={(event) => setCityId(event.target.value)}><option value="">اختر المدينة</option>{cities.map((city) => <option key={city.id} value={city.id}>{city.nameAr}</option>)}</select></label>}
-    <button type="button" className="btn btn-primary" onClick={saveLocation} disabled={busy || (privacyLevel !== "NoLocation" && !countryId) || (privacyLevel === "City" && !cityId)}>حفظ الموقع</button>
-    <h2>مدن تتابعها</h2><div className="account-follow-row"><select aria-label="اختر مدينة للمتابعة" value={cityId} onChange={(event) => setCityId(event.target.value)}><option value="">اختر مدينة</option>{cities.map((city) => <option key={city.id} value={city.id}>{city.nameAr}</option>)}</select><button type="button" className="btn btn-primary" onClick={followCity} disabled={busy || !cityId}>إضافة</button></div>
-    {session.profile.places.length ? <ul className="account-places">{session.profile.places.map((place) => <li key={place.cityId}><span>{place.cityNameAr}{place.countryNameAr ? `، ${place.countryNameAr}` : ""}</span><button type="button" onClick={() => removePlace(place)} disabled={busy} aria-label={`إزالة ${place.cityNameAr}`}>إزالة</button></li>)}</ul> : <p>لا تتابع مدنًا بعد.</p>}
-    {message && <p className="account-message" role="status">{message}</p>}<p className="account-note">يمكنك اختيار «بدون موقع» في أي وقت. لا يعرض الملف موقعك الدقيق للجمهور.</p><button type="button" className="btn btn-outline" onClick={logout}>تسجيل الخروج</button>
+  if (loading) return <section className="account-card auth-account-card" dir={locale === "ar" ? "rtl" : "ltr"} aria-busy="true"><p>{t("جارٍ تحميل الحساب…" )}</p></section>;
+  if (session) return <section className="account-card auth-account-card account-profile-card" dir={locale === "ar" ? "rtl" : "ltr"} aria-live="polite"><span className="eyebrow">{t("ملف المهجر" )}</span><h1>{t("مرحبًا بك في جسور" )}</h1>
+    <p>{t("مستوى مشاركة الموقع:")} <strong>{t(PRIVACY_LABELS[session.profile.privacyLevel] ?? "غير محدد")}</strong></p>
+    <p>{t("الموقع المسجل:")} {[session.profile.cityNameAr, session.profile.regionNameAr, session.profile.countryNameAr].filter(Boolean).join("، ") || t("لم تضف موقعًا")}</p>
+    <h2>{t("إعدادات الموقع" )}</h2><label>{t("مستوى مشاركة الموقع")}<select value={privacyLevel} onChange={(event) => setPrivacyLevel(event.target.value)}><option value="NoLocation">{t("بدون موقع")}</option><option value="CountryOnly">{t("الدولة فقط")}</option><option value="City">{t("المدينة")}</option></select></label>
+    {privacyLevel !== "NoLocation" && <label>{t("الدولة" )}<select value={countryId} onChange={(event) => { setCountryId(event.target.value); setCityId(""); }}><option value="">{t("اختر الدولة" )}</option>{countries.map((country) => <option key={country.id} value={country.id}>{locale === "ar" ? country.nameAr : country.nameEn}</option>)}</select></label>}
+    {privacyLevel === "City" && <label>{t("المدينة" )}<select value={cityId} onChange={(event) => setCityId(event.target.value)}><option value="">{t("اختر مدينة")}</option>{cities.map((city) => <option key={city.id} value={city.id}>{locale === "ar" ? city.nameAr : city.nameEn}</option>)}</select></label>}
+    <button type="button" className="btn btn-primary" onClick={saveLocation} disabled={busy || (privacyLevel !== "NoLocation" && !countryId) || (privacyLevel === "City" && !cityId)}>{t("حفظ الموقع" )}</button>
+    <h2>{t("مدن تتابعها" )}</h2><div className="account-follow-row"><select aria-label={t("اختر مدينة للمتابعة")} value={cityId} onChange={(event) => setCityId(event.target.value)}><option value="">{t("اختر مدينة" )}</option>{cities.map((city) => <option key={city.id} value={city.id}>{city.nameAr}</option>)}</select><button type="button" className="btn btn-primary" onClick={followCity} disabled={busy || !cityId}>{t("إضافة" )}</button></div>
+    {session.profile.places.length ? <ul className="account-places">{session.profile.places.map((place) => <li key={place.cityId}><span>{place.cityNameAr}{place.countryNameAr ? `، ${place.countryNameAr}` : ""}</span><button type="button" onClick={() => removePlace(place)} disabled={busy} aria-label={`إزالة ${place.cityNameAr}`}>{t("إزالة" )}</button></li>)}</ul> : <p>{t("لا تتابع مدنًا بعد." )}</p>}
+    {message && <p className="account-message" role="status">{t(message)}</p>}<p className="account-note">{t("يمكنك اختيار «بدون موقع» في أي وقت. لا يعرض الملف موقعك الدقيق للجمهور." )}</p><button type="button" className="btn btn-outline" onClick={logout}>{t("تسجيل الخروج" )}</button>
   </section>;
 
   function changeMode(next: AuthMode) {
@@ -129,23 +134,23 @@ export function AccountPortal() {
     window.history.replaceState(null, "", url);
   }
 
-  return <section className="account-card auth-account-card">
-    <h1>{mode === "login" ? "تسجيل الدخول" : mode === "register" ? "إنشاء حساب" : "استعادة كلمة المرور"}</h1>
-    <p>{mode === "login" ? "استخدم حسابك للوصول إلى الملف الشخصي وخدمات جسور." : mode === "register" ? "أنشئ حسابك لمتابعة خدمات جسور للمصريين بالخارج." : "استعادة كلمة المرور غير متاحة في نسخة التجربة الحالية."}</p>
-    <div className="auth-tabs" role="tablist" aria-label="خيارات الحساب">
-      <button type="button" role="tab" aria-selected={mode === "login"} className={mode === "login" ? "active" : ""} onClick={() => changeMode("login")}>دخول</button>
-      <button type="button" role="tab" aria-selected={mode === "register"} className={mode === "register" ? "active" : ""} onClick={() => changeMode("register")}>إنشاء حساب</button>
-      <button type="button" role="tab" aria-selected={mode === "forgot"} className={mode === "forgot" ? "active" : ""} onClick={() => changeMode("forgot")}>نسيت كلمة السر</button>
+  return <section className="account-card auth-account-card" dir={locale === "ar" ? "rtl" : "ltr"}>
+    <h1>{t(mode === "login" ? "تسجيل الدخول" : mode === "register" ? "إنشاء حساب" : "استعادة كلمة المرور")}</h1>
+    <p>{t(mode === "login" ? "استخدم حسابك للوصول إلى الملف الشخصي وخدمات جسور." : mode === "register" ? "أنشئ حسابك لمتابعة خدمات جسور للمصريين بالخارج." : "استعادة كلمة المرور غير متاحة في نسخة التجربة الحالية.")}</p>
+    <div className="auth-tabs" role="tablist" aria-label={t("خيارات الحساب")}>
+      <button type="button" role="tab" aria-selected={mode === "login"} className={mode === "login" ? "active" : ""} onClick={() => changeMode("login")}>{t("دخول" )}</button>
+      <button type="button" role="tab" aria-selected={mode === "register"} className={mode === "register" ? "active" : ""} onClick={() => changeMode("register")}>{t("إنشاء حساب" )}</button>
+      <button type="button" role="tab" aria-selected={mode === "forgot"} className={mode === "forgot" ? "active" : ""} onClick={() => changeMode("forgot")}>{t("نسيت كلمة السر" )}</button>
     </div>
-    {mode === "forgot" ? <div className="auth-recovery-note" role="status">لا تتوفر حاليًا خدمة إعادة تعيين كلمة المرور. تواصل مع فريق جسور لاستعادة الوصول إلى حسابك.</div> : <form className="auth-form" onSubmit={submit}>
-      {mode === "register" && <label className="auth-field">الاسم بالكامل<input name="displayName" autoComplete="name" required maxLength={100} /></label>}
-      <label className="auth-field">البريد الإلكتروني<input name="email" type="email" autoComplete="email" required maxLength={256} /></label>
-      <label className="auth-field">كلمة المرور<span className="auth-password"><input name="password" type={showPassword ? "text" : "password"} autoComplete={mode === "login" ? "current-password" : "new-password"} required minLength={mode === "register" ? 8 : 1} maxLength={128} /><button type="button" onClick={() => setShowPassword((visible) => !visible)}>{showPassword ? "إخفاء" : "إظهار"}</button></span></label>
-      {mode === "login" && <button className="auth-forgot-link" type="button" onClick={() => changeMode("forgot")}>نسيت كلمة المرور؟</button>}
-      {mode === "register" && <label className="auth-terms"><input type="checkbox" required /> أوافق على <a href="/privacy" target="_blank" rel="noreferrer">سياسة الخصوصية</a></label>}
-      {message && <p className="account-message" role="alert">{message}</p>}
-      <button className="btn btn-primary auth-submit" type="submit" disabled={busy}>{busy ? "جارٍ التنفيذ…" : mode === "login" ? "تسجيل الدخول" : "إنشاء الحساب"}</button>
+    {mode === "forgot" ? <div className="auth-recovery-note" role="status">{t("لا تتوفر حاليًا خدمة إعادة تعيين كلمة المرور. تواصل مع فريق جسور لاستعادة الوصول إلى حسابك." )}</div> : <form className="auth-form" onSubmit={submit}>
+      {mode === "register" && <label className="auth-field">{t("الاسم بالكامل" )}<input name="displayName" autoComplete="name" required maxLength={100} /></label>}
+      <label className="auth-field">{t("البريد الإلكتروني" )}<input name="email" type="email" autoComplete="email" required maxLength={256} /></label>
+      <label className="auth-field">{t("كلمة المرور" )}<span className="auth-password"><input name="password" type={showPassword ? "text" : "password"} autoComplete={mode === "login" ? "current-password" : "new-password"} required minLength={mode === "register" ? 8 : 1} maxLength={128} /><button type="button" onClick={() => setShowPassword((visible) => !visible)}>{t(showPassword ? "إخفاء" : "إظهار")}</button></span></label>
+      {mode === "login" && <button className="auth-forgot-link" type="button" onClick={() => changeMode("forgot")}>{t("نسيت كلمة المرور؟" )}</button>}
+      {mode === "register" && <label className="auth-terms"><input type="checkbox" required /> {t("أوافق على")} <a href="/privacy" target="_blank" rel="noreferrer">{t("سياسة الخصوصية" )}</a></label>}
+      {message && <p className="account-message" role="alert">{t(message)}</p>}
+      <button className="btn btn-primary auth-submit" type="submit" disabled={busy}>{busy ? t("جارٍ التنفيذ…") : t(mode === "login" ? "تسجيل الدخول" : "إنشاء الحساب")}</button>
     </form>}
-    {mode !== "forgot" && <p className="auth-form-footer">{mode === "login" ? <>مستخدم جديد؟ <button type="button" onClick={() => changeMode("register")}>أنشئ حسابًا</button></> : <>لديك حساب؟ <button type="button" onClick={() => changeMode("login")}>سجّل الدخول</button></>}</p>}
+    {mode !== "forgot" && <p className="auth-form-footer">{mode === "login" ? <>مستخدم جديد؟ <button type="button" onClick={() => changeMode("register")}>{t("أنشئ حسابًا" )}</button></> : <>لديك حساب؟ <button type="button" onClick={() => changeMode("login")}>{t("سجّل الدخول" )}</button></>}</p>}
   </section>;
 }

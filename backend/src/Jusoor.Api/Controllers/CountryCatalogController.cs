@@ -11,7 +11,7 @@ namespace Jusoor.Api.Controllers;
 [Authorize(Policy = AuthorizationPolicies.CanManageGeography)]
 public sealed class CountryCatalogController(ISender mediator) : ControllerBase
 {
-    public sealed record CreateCountryRequest(string NameAr, string NameEn, string IsoCode2);
+    public sealed record CreateCountryRequest(string NameAr, string NameEn, string IsoCode2, decimal? Latitude, decimal? Longitude);
     public sealed record CreateCityRequest(Guid CountryId, string NameAr, string NameEn, string Slug, decimal? Latitude, decimal? Longitude);
 
     [HttpGet]
@@ -21,7 +21,7 @@ public sealed class CountryCatalogController(ISender mediator) : ControllerBase
     [HttpPost("countries")]
     public async Task<IActionResult> CreateCountry(CreateCountryRequest request, CancellationToken cancellationToken)
     {
-        var item = await mediator.Send(new CreateCountryCommand(request.NameAr, request.NameEn, request.IsoCode2), cancellationToken);
+        var item = await mediator.Send(new CreateCountryCommand(request.NameAr, request.NameEn, request.IsoCode2, request.Latitude, request.Longitude), cancellationToken);
         return CreatedAtAction(nameof(Get), item);
     }
 

@@ -15,6 +15,9 @@ public sealed class SiteStructureSettingsConfiguration : IEntityTypeConfiguratio
         builder.Property(x => x.NavigationJson).IsRequired().HasMaxLength(30_000);
         builder.Property(x => x.HomepageSectionsJson).IsRequired().HasMaxLength(30_000);
         builder.Property(x => x.LeadershipJson).IsRequired().HasMaxLength(4_000).HasDefaultValue("{}");
+        builder.Property(x => x.SocialLinksJson).IsRequired().HasMaxLength(8_000).HasDefaultValue("[]");
+        builder.Property(x => x.WelcomeVideoAssetId);
+        builder.Property(x => x.WelcomeIntroEnabled).IsRequired().HasDefaultValue(false);
         builder.Property(x => x.CreatedByUserId).HasMaxLength(450);
         builder.Property(x => x.LastModifiedByUserId).HasMaxLength(450);
     }

@@ -1,5 +1,7 @@
 "use client";
 
+import { LocalizedContent } from "@/components/LocalizedContent";
+
 import { useCallback, useEffect, useState } from "react";
 import { cms } from "@/lib/cms-client";
 
@@ -28,7 +30,7 @@ export default function EditorialMonitoringPage() {
   }, [days]);
   useEffect(() => { void load(); }, [load]);
 
-  return <div className="cms-page-stack">
+  return <LocalizedContent>{<div className="cms-page-stack">
     <section className="cms-page-heading"><div><span className="cms-eyebrow">متابعة سير العمل التحريري</span><h1>مراقبة غرفة الأخبار</h1><p>صورة تشغيلية لحالة المقالات وحركة سير العمل. لا يتضمن التقرير بيانات شخصية أو أسباب التعديلات.</p></div><label className="cms-report-range">الفترة<select value={days} onChange={(event) => setDays(Number(event.target.value))}><option value={7}>آخر 7 أيام</option><option value={30}>آخر 30 يومًا</option><option value={90}>آخر 90 يومًا</option></select></label></section>
     {error && <div className="cms-msg error" role="alert">{error}</div>}
     {!allowed && !loading && !error && <div className="cms-msg error" role="alert">هذا التقرير متاح لأدوار التحرير القيادية فقط.</div>}
@@ -40,5 +42,5 @@ export default function EditorialMonitoringPage() {
       <section className="cms-card cms-report-section"><div className="cms-section-title"><div><h2>المقالات حسب الحالة</h2><p>الأعداد الحالية، بحسب حالة سير العمل.</p></div></div><div className="cms-report-statuses">{report.statusCounts.map((item) => <div className="cms-report-status" key={item.status}><span>{STATUS[item.status] ?? item.status}</span><strong>{item.count.toLocaleString("ar-EG")}</strong></div>)}</div></section>
       <section className="cms-card cms-report-section"><div className="cms-section-title"><div><h2>آخر انتقالات سير العمل</h2><p>آخر 30 انتقالًا مسجلًا للمقالات.</p></div><button className="cms-btn" type="button" onClick={() => void load()} disabled={loading}>تحديث</button></div>{report.recentActivity.length === 0 ? <div className="cms-empty-state">لا توجد انتقالات مسجلة حتى الآن.</div> : <div className="cms-report-table-wrap"><table className="cms-report-table"><thead><tr><th>المقال</th><th>الحالة السابقة</th><th>الحالة الجديدة</th><th>الدور المسجل</th><th>التوقيت</th></tr></thead><tbody>{report.recentActivity.map((item, index) => <tr key={`${item.occurredAtUtc}-${index}`}><td>{item.title}</td><td>{STATUS[item.fromStatus] ?? item.fromStatus}</td><td><strong>{STATUS[item.toStatus] ?? item.toStatus}</strong></td><td>{item.actorRoles.split(",").filter(Boolean).map((role) => ROLE[role] ?? role).join("، ") || "—"}</td><td>{new Intl.DateTimeFormat("ar-EG", { dateStyle: "medium", timeStyle: "short" }).format(new Date(item.occurredAtUtc))}</td></tr>)}</tbody></table></div>}</section>
     </>}
-  </div>;
+  </div>}</LocalizedContent>;
 }
