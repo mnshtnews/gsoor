@@ -1012,7 +1012,7 @@ button.hero-main-button:focus-visible { outline: 2px solid var(--amber); outline
 .cms-leadership-entry-fields { display: grid; grid-template-columns: 1fr; gap: .55rem; min-width: 0; }
 .cms-leadership-entry .cms-field input { min-width: 0; }
 .cms-leadership-entry-remove { color: #a42e3b; border-color: #f0c9ce; }
-.home-poll-section { padding-block: 12px 32px; }
+.home-poll-widget { min-width: 0; width: 100%; }
 .cta-form--subscription { flex: 0 1 620px; min-width: min(100%, 540px); display: grid; grid-template-columns: auto minmax(150px, 1fr) auto; align-items: center; gap: 8px; }
 .cta-form--subscription .cta-subscription-label { color: #fff; font-size: 13.5px; font-weight: 700; white-space: nowrap; }
 .cta-form--subscription input[type="email"] { width: 100%; min-width: 0; min-height: 44px; border-radius: 7px; }
@@ -1024,6 +1024,15 @@ button.hero-main-button:focus-visible { outline: 2px solid var(--amber); outline
 .cta-form--subscription .cta-subscription-status.is-error { color: #ffe1d7; }
 .cta-form--subscription .cta-honeypot { position: absolute; inset-inline-start: -10000px; width: 1px; height: 1px; overflow: hidden; }
 .home-poll-card { display: grid; grid-template-columns: minmax(220px,.7fr) minmax(0,1.3fr); gap: clamp(1.25rem,4vw,3.5rem); padding: clamp(1.25rem,3vw,2.5rem); border: 1px solid #eadccf; border-radius: 18px; background: linear-gradient(120deg,#fffaf5,#fff 72%); box-shadow: 0 16px 45px #6b3b1510; }
+.home-success-aside .home-poll-card { display: block; padding: 18px; border-color: var(--line); border-radius: 14px; background: var(--surface); box-shadow: 0 5px 22px rgba(16,30,54,.08); }
+.home-success-aside .home-poll-heading .eyebrow { display: inline-flex; padding: 5px 10px; border-radius: 6px; background: var(--amber); color: #fff; font-size: 12px; font-weight: 800; }
+.home-success-aside .home-poll-heading h2 { margin: 8px 0 4px; font-size: 20px; }
+.home-success-aside .home-poll-heading p { margin: 0 0 12px; font-size: 13px; line-height: 1.65; }
+.home-success-aside .home-poll-content h3 { margin-bottom: 10px; font-size: 15px; line-height: 1.65; }
+.home-success-aside .home-poll-options { gap: 8px; }
+.home-success-aside .home-poll-option { gap: 8px; padding: 10px; }
+.home-success-aside .home-poll-option-label { font-size: 13px; line-height: 1.5; }
+.home-success-aside .home-poll-submit { width: 100%; margin-top: 12px; padding-inline: 10px; }
 .home-poll-heading h2 { margin: .4rem 0; color: #172b47; font-size: clamp(1.4rem,2.5vw,2rem); font-weight: 900; }
 .home-poll-heading p { color: #687587; line-height: 1.8; }
 .home-poll-content h3 { margin: 0 0 1rem; font-size: 1.12rem; line-height: 1.8; color: #1b2b42; }

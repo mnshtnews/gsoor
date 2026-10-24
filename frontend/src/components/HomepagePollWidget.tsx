@@ -27,7 +27,7 @@ export function HomepagePollWidget() {
     finally { setBusy(false); }
   }
   if (!poll) return null;
-  return <section className="home-poll-section section tight"><div className="wrap"><div className="home-poll-card">
+  return <article className="home-poll-widget"><div className="home-poll-card">
     <div className="home-poll-heading"><span className="eyebrow">صوتك يهمنا</span><h2>استبيان جسور</h2><p>شاركنا رأيك في سؤال يهم المصريين بالخارج.</p></div>
     <div className="home-poll-content"><h3>{poll.question}</h3><div className="home-poll-options">
       {poll.options.map((option, index) => {
@@ -44,5 +44,5 @@ export function HomepagePollWidget() {
     {voted && <p className="home-poll-thanks">إجمالي المشاركات: {poll.totalVotes.toLocaleString("ar-EG")}</p>}
     {message && <p className="home-poll-message" role="status">{message}</p>}
     </div>
-  </div></div></section>;
+  </div></article>;
 }

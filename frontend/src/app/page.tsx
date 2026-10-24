@@ -277,6 +277,7 @@ export default async function HomePage() {
             <aside className="sidebar-interactive-ad home-success-aside">
               <ConfiguredAd placement={ad("web", "success-ad")} className="home-success-desktop-ad" />
               <ConfiguredAd placement={ad("mobile", "success-ad")} className="home-success-mobile-ad" />
+              <HomepagePollWidget />
             </aside>
             <div className="home-success-stories">
               <Head label={deskLabels.success} slug="success" asHeading />
@@ -285,7 +286,6 @@ export default async function HomePage() {
           </div>
         </div>
       </section>
-      <HomepagePollWidget />
       <section className="section tight on-surface">
         <div className="wrap">
           <Head label={deskLabels.egypt} slug="egypt" />
