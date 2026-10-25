@@ -267,7 +267,7 @@ export default async function HomePage() {
         </div>
       </section>
       <HomeAdPlacement placement={ad("mobile", "after-mughtarib")} className="home-ad-placement--mobile-only" />
-      <ServicesBand ad={ad("web", "services-inline")} />
+      <ServicesBand ads={webAds} />
       <AtmaenFeature webAd={ad("web", "atmaen-ad")} mobileAd={ad("mobile", "atmaen-ad")} />
 
       {/* الويب يحتفظ بمساحة الإعلان الجانبية؛ إعلانات الموبايل تظهر بعد السكشن. */}
@@ -282,6 +282,7 @@ export default async function HomePage() {
             <div className="home-success-stories">
               <Head label={deskLabels.success} slug="success" asHeading />
               <DeskGrid stories={desks.success.slice(0, 4)} label={deskLabels.success} columns={2} mobileVariant="lead" />
+              <HomeAdPlacement placement={ad("web", "success-inline")} className="home-success-inline-ad home-wide-ad home-wide-ad--web-only home-ad-placement--natural" naturalSize />
             </div>
           </div>
         </div>
@@ -324,6 +325,7 @@ export default async function HomePage() {
         </div>
       </section>
 
+      <HomeAdPlacement placement={ad("web", "opportunities-top")} className="home-opportunities-ad home-wide-ad home-wide-ad--web-only home-ad-placement--natural" naturalSize />
       <section className="section on-surface opportunities-section">
         <div className="wrap">
           <div className="split-2">

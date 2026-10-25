@@ -238,7 +238,8 @@ export function ArticleEditor({ articleId }: { articleId: string | null }) {
     }
   }
 
-  const save = () =>
+  const canEditSeo = roles?.some((role) => ["SeoEditor", "SeniorEditor", "ManagingEditor", "EditorInChief"].includes(role)) ?? false;
+  const save = (openSeoAfterSave = false) =>
     run(async () => {
       const saved: CmsArticle = article
         ? await cms.update(article.id, input())
@@ -252,8 +253,9 @@ export function ArticleEditor({ articleId }: { articleId: string | null }) {
       if (!article) {
         setDraftHydrated(false);
         try { sessionStorage.removeItem(draftKey); } catch { /* Best-effort cleanup. */ }
-        router.replace(`/cms/articles/${saved.id}`);
+        router.replace(openSeoAfterSave && canEditSeo ? `/cms/seo/articles/${saved.id}` : `/cms/articles/${saved.id}`);
       }
+      else if (article.status === "Published") router.replace("/cms");
       else setNotice("تم حفظ التعديلات." + translationNotice);
       if (!article) setNotice("تم حفظ المسودة." + translationNotice);
     });
@@ -430,8 +432,8 @@ export function ArticleEditor({ articleId }: { articleId: string | null }) {
               عرض على الموقع
             </Link>
           )}
-          {article && roles?.some((role) => ["SeoEditor", "SeniorEditor", "ManagingEditor", "EditorInChief"].includes(role)) && (
-            <Link className="cms-btn" href={`/cms/seo/articles/${article.id}`}>إعدادات SEO</Link>
+          {article && canEditSeo && (
+            <Link className="cms-btn" href={`/cms/seo/articles/${article.id}`}>{article.status === "Published" ? "إعدادات SEO" : "إعداد SEO قبل النشر"}</Link>
           )}
           <Link className="cms-btn" href="/cms">
             العودة للقائمة
@@ -601,9 +603,10 @@ export function ArticleEditor({ articleId }: { articleId: string | null }) {
       {article && canEditContent && <ArticleTranslationsPanel articleId={article.id} canReview={roles?.some((role) => ["SeniorEditor", "ManagingEditor", "EditorInChief", "SystemAdmin"].includes(role)) ?? false} />}
 
       <div className="cms-actions">
-        {canEditContent && <button className="cms-btn primary" type="button" disabled={busy || !canSave} onClick={save}>
-          {article ? "حفظ التعديلات" : "حفظ كمسودة"}
+        {canEditContent && <button className="cms-btn primary" type="button" disabled={busy || !canSave} onClick={() => save()}>
+          {article?.status === "Published" ? "حفظ ونشر" : article ? "حفظ التعديلات" : "حفظ كمسودة"}
         </button>}
+        {!article && canEditSeo && <button className="cms-btn" type="button" disabled={busy || !canSave} onClick={() => save(true)}>حفظ المسودة وضبط SEO قبل النشر</button>}
         {hints.includes("submit") && (
           <button className="cms-btn" type="button" disabled={busy} onClick={submit}>
             إرسال للمراجعة

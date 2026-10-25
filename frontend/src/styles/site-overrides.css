@@ -1213,3 +1213,38 @@ button.hero-main-button:focus-visible { outline: 2px solid var(--amber); outline
     overflow-wrap: anywhere;
   }
 }
+
+/* Crop frame can be repositioned and resized freely with its four corners. */
+.cms-image-crop-stage { position: relative; width: 100%; height: min(58vh, 560px); min-height: 240px; overflow: hidden; border: 1px solid #d9e1ec; border-radius: 12px; background: #182333; touch-action: none; }
+.cms-image-crop-selection { position: absolute; z-index: 2; box-sizing: border-box; min-width: 48px; min-height: 48px; border: 2px solid #fff; outline: 2px solid #1c56bd; box-shadow: 0 0 0 9999px rgba(10, 20, 35, .58); cursor: move; touch-action: none; }
+.cms-image-crop-selection::after { content: ""; position: absolute; inset: 0; pointer-events: none; background: linear-gradient(90deg,transparent 33.15%,#ffffff80 33.33%,transparent 33.55%,transparent 66.45%,#ffffff80 66.66%,transparent 66.85%),linear-gradient(0deg,transparent 33.15%,#ffffff80 33.33%,transparent 33.55%,transparent 66.45%,#ffffff80 66.66%,transparent 66.85%); }
+.cms-image-crop-guides { position: absolute; inset: 0; pointer-events: none; }
+.cms-image-crop-handle { position: absolute; z-index: 3; width: 18px; height: 18px; padding: 0; border: 2px solid #1c56bd; border-radius: 50%; background: #fff; touch-action: none; }
+.cms-image-crop-handle--nw { top: -9px; left: -9px; cursor: nwse-resize; }
+.cms-image-crop-handle--ne { top: -9px; right: -9px; cursor: nesw-resize; }
+.cms-image-crop-handle--sw { bottom: -9px; left: -9px; cursor: nesw-resize; }
+.cms-image-crop-handle--se { bottom: -9px; right: -9px; cursor: nwse-resize; }
+.topbar-mobile-controls { display: none; }
+.article-body > p:first-of-type::first-letter,
+[dir="rtl"] .article-body > p:first-of-type::first-letter { float: none; margin: 0; font-size: inherit; line-height: inherit; color: inherit; font-weight: inherit; font-family: inherit; }
+@media (max-width: 1024px) and (hover: none) and (pointer: coarse), (max-width: 600px) {
+  .topbar .wrap { min-height: 42px; height: 42px; gap: 8px; }
+  .topbar .social-icons { display: none; }
+  .topbar-mobile-controls { display: flex; align-items: center; gap: 6px; flex: 0 0 auto; }
+  .topbar-mobile-controls > .icon-btn { width: 32px; height: 32px; min-width: 32px; min-height: 32px; border-color: #ffffff80; border-radius: 8px; background: #fff; font-size: 16px; }
+  .topbar-mobile-account { display: flex; align-items: center; gap: 5px; }
+  .topbar-mobile-account .btn-nav { min-height: 32px; padding: 4px 9px; border-radius: 7px; font-size: 11px; }
+  .topbar-mobile-account .btn-ghostt { border: 1px solid #fff; background: #fff; color: #16478f; }
+  .topbar-mobile-account .btn-accent { border: 1px solid #16478f; background: #16478f; color: #fff; }
+  .header-actions { display: none !important; }
+  .header-inner { min-height: 106px; padding-block: 4px; }
+  .header-branding .logo-img { width: clamp(84px, 23vw, 100px); height: clamp(88px, 24vw, 104px); }
+  .header-branding .header-leadership { max-width: 205px; }
+  .header-branding .leadership-credit-role { font-size: clamp(9px, 2.45vw, 11px); }
+  .header-branding .leadership-credit-group strong { font-size: clamp(10px, 2.8vw, 12px); }
+  .foot-v2-top, .foot-v2-bottom { padding-inline: 18px; box-sizing: border-box; }
+  .foot-v2-grid { padding-inline: 4px; }
+  .foot-v2-bottom-links, .foot-v2-lang { display: none !important; }
+  .home-success-inline-ad { margin-top: 18px; }
+  .home-opportunities-ad { margin-bottom: 8px; }
+}

@@ -16,12 +16,21 @@ public static class EditorialAdSlotCatalog
             ["hero-after-videos"] = ("بعد فيديوهات المقدمة", "mobile"),
             ["after-mughtarib"] = ("بعد أخبار المغتربين", "mobile"),
             ["success-ad"] = ("إعلان قسم قصص النجاح", "both"),
+            ["success-inline"] = ("إعلان أفقي أسفل قصص النجاح", "web"),
             ["atmaen-ad"] = ("داخل قسم اطمن", "both"),
             ["editorial-top"] = ("قبل خط أحمر ومع مسؤول", "web"),
             ["latest-news-square"] = ("أسفل أحدث الأخبار", "web"),
+            ["opportunities-top"] = ("إعلان أفقي أعلى فرص الاستثمار", "web"),
             ["lamma-top"] = ("أعلى قسم اللمة الحلوة", "web"),
             ["lamma-events-square"] = ("أسفل فعاليات وتغطيات", "web"),
-            ["services-inline"] = ("بين خدمات الموقع", "web"),
+            ["services-1"] = ("بعد خدمة اطمّن على مغتربك", "web"),
+            ["services-2"] = ("بعد خدمة خريطة المهجر", "web"),
+            ["services-3"] = ("بعد خدمة التنبيهات الجغرافية", "web"),
+            ["services-4"] = ("بعد خدمة الرياضيون", "web"),
+            ["services-5"] = ("بعد خدمة دليل السفارات", "web"),
+            ["services-6"] = ("بعد خدمة ملف جسور", "web"),
+            ["services-7"] = ("بعد خدمة فرص العمل", "web"),
+            ["services-8"] = ("بعد خدمة الجيل الثاني", "web"),
         };
 
     public static bool Supports(string key, EditorialAdSurface surface)

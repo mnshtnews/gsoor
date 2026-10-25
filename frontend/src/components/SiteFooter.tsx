@@ -92,7 +92,7 @@ export async function SiteFooter() {
       </div>
 
       <div className="wrap foot-v2-bottom">
-        <span>© 2026 Jusoor. {copy.rights}</span>
+        <span dir={locale === "ar" ? "rtl" : "ltr"}>{locale === "ar" ? "جميع الحقوق محفوظة لمنصة جسور 2026 ©" : `© 2026 Jusoor. ${copy.rights}`}</span>
         <div className="foot-v2-bottom-links">
           <Link href="/privacy">{copy.privacy}</Link>
         </div>

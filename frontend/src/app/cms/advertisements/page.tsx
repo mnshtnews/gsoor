@@ -17,12 +17,21 @@ const SLOTS: SlotDefinition[] = [
   { key: "hero-after-videos", label: "بعد فيديوهات المقدمة", surfaces: ["mobile"], ratio: "1 / 1", note: "إعلان مربع بعد الفيديوهات" },
   { key: "after-mughtarib", label: "بعد أخبار المغتربين", surfaces: ["mobile"], ratio: "1 / 1", note: "إعلان مربع" },
   { key: "success-ad", label: "قسم قصص النجاح", surfaces: ["web", "mobile"], ratio: "1 / 1", note: "بجوار القصص على الويب، وفوق الاستطلاع على الهاتف" },
+  { key: "success-inline", label: "أسفل قصص النجاح", surfaces: ["web"], ratio: "4 / 1", note: "إعلان أفقي أسفل بطاقات قصص النجاح" },
   { key: "atmaen-ad", label: "داخل قسم اطمن", surfaces: ["web", "mobile"], ratio: "16 / 8", note: "داخل مساحة الإعلان الموجودة" },
   { key: "editorial-top", label: "قبل خط أحمر ومع مسؤول", surfaces: ["web"], ratio: "3 / 1", note: "مساحة عرضية جديدة — الويب فقط" },
   { key: "latest-news-square", label: "أسفل أحدث الأخبار", surfaces: ["web"], ratio: "1 / 1", note: "مربع مستقل أسفل صندوق أحدث الأخبار — الويب فقط" },
+  { key: "opportunities-top", label: "أعلى فرص الاستثمار", surfaces: ["web"], ratio: "4 / 1", note: "مساحة إعلانية أفقية تسبق قسم فرص الاستثمار" },
   { key: "lamma-top", label: "أعلى قسم اللمة الحلوة", surfaces: ["web"], ratio: "3 / 1", note: "مساحة عرضية تملأ المنطقة أعلى اللمة الحلوة بمحاذاة فعاليات وتغطيات — الويب فقط" },
   { key: "lamma-events-square", label: "أسفل فعاليات وتغطيات", surfaces: ["web"], ratio: "1 / 1", note: "مربع تحت فعاليات وتغطيات، ونهايته بمحاذاة آخر خبرين في اللمة الحلوة — الويب فقط" },
-  { key: "services-inline", label: "بين خدمات الموقع", surfaces: ["web"], ratio: "4 / 3", note: "تظهر كعنصر داخل شريط الخدمات — الويب فقط" },
+  { key: "services-1", label: "بعد خدمة اطمّن على مغتربك", surfaces: ["web"], ratio: "4 / 3", note: "تظهر بعد بطاقة الخدمة الأولى داخل شريط الخدمات" },
+  { key: "services-2", label: "بعد خدمة خريطة المهجر", surfaces: ["web"], ratio: "4 / 3", note: "تظهر بعد بطاقة الخدمة الثانية داخل شريط الخدمات" },
+  { key: "services-3", label: "بعد خدمة التنبيهات الجغرافية", surfaces: ["web"], ratio: "4 / 3", note: "تظهر بعد بطاقة الخدمة الثالثة داخل شريط الخدمات" },
+  { key: "services-4", label: "بعد خدمة الرياضيون", surfaces: ["web"], ratio: "4 / 3", note: "تظهر بعد بطاقة الخدمة الرابعة داخل شريط الخدمات" },
+  { key: "services-5", label: "بعد خدمة دليل السفارات", surfaces: ["web"], ratio: "4 / 3", note: "تظهر بعد بطاقة الخدمة الخامسة داخل شريط الخدمات" },
+  { key: "services-6", label: "بعد خدمة ملف جسور", surfaces: ["web"], ratio: "4 / 3", note: "تظهر بعد بطاقة الخدمة السادسة داخل شريط الخدمات" },
+  { key: "services-7", label: "بعد خدمة فرص العمل", surfaces: ["web"], ratio: "4 / 3", note: "تظهر بعد بطاقة الخدمة السابعة داخل شريط الخدمات" },
+  { key: "services-8", label: "بعد خدمة الجيل الثاني", surfaces: ["web"], ratio: "4 / 3", note: "تظهر بعد بطاقة الخدمة الثامنة داخل شريط الخدمات" },
 ];
 
 const SURFACE_LABEL: Record<Surface, string> = { web: "الويب", mobile: "الموبايل" };

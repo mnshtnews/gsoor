@@ -154,6 +154,10 @@ export function HeaderInteractive({ tickerHeadlines, navbarAd, navigation, leade
             <TopbarClock locale={locale} />
             <LocaleSelector className="lang" locale={locale} />
           </div>
+          <div className="topbar-mobile-controls">
+            <button type="button" className="icon-btn" data-open-search aria-label={text.search} onClick={() => { setDrawerOpen(false); setSearchOpen(true); }}>🔍</button>
+            {renderAccountLinks("topbar-mobile-account auth-group")}
+          </div>
           <div className="left social-icons">
             {socialLinks.filter((social) => social.isVisible && social.href).map((social) => (
               <a key={social.name} href={social.href} target="_blank" rel="noopener noreferrer" aria-label={social.name} className={social.icon}>

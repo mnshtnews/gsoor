@@ -30,7 +30,7 @@ const services: Service[] = [
  * Component because the arrow buttons scroll the row (event handlers cannot
  * be rendered from the Server Component home page).
  */
-export function ServicesBand({ ad }: { ad?: PublicAdPlacement }) {
+export function ServicesBand({ ads = [] }: { ads?: PublicAdPlacement[] }) {
   const rowRef = useRef<HTMLDivElement>(null);
   const [locale, setLocale] = useState<"ar" | "en" | "fr">("ar");
   const t = (value: string) => translateUi(locale, value);
@@ -56,7 +56,7 @@ export function ServicesBand({ ad }: { ad?: PublicAdPlacement }) {
 
         <div className="svc-slider-container">
           <div className="svc-row" id="svcRow" ref={rowRef}>
-            {services.map((service, index) => <Fragment key={service.title}>
+            {services.map((service, index) => { const placement = ads.find((item) => item.slotKey === `services-${index + 1}`); return <Fragment key={service.title}>
               <a className={`svc-card${service.featured ? " featured" : ""}`} href={service.href}>
                 <div className="icon-box">
                   <span className="emoji-icon">{service.icon}</span>
@@ -67,15 +67,15 @@ export function ServicesBand({ ad }: { ad?: PublicAdPlacement }) {
                   <span className="svc-desc">{t(service.description)}</span>
                 </div>
               </a>
-              {ad && index === 3 && <a className="svc-card svc-ad-card" href={ad.targetUrl} target="_blank" rel="sponsored noopener noreferrer" aria-label={`${ad.altText} — ${t("زيارة موقع المعلن")}`}>
+              {placement && <a className="svc-card svc-ad-card" href={placement.targetUrl} target="_blank" rel="sponsored noopener noreferrer" aria-label={`${placement.altText} — ${t("زيارة موقع المعلن")}`}>
                 <span className="svc-ad-card__label">{t("مساحة إعلانية · إعلان ممول")}</span>
                 {/* Blurred copy of the creative fills any letterbox gap, so the sharp original is never cropped or stretched. */}
                 <span className="svc-ad-card__media">
-                  <Image className="svc-ad-card__bg" src={ad.mediaUrl} alt="" aria-hidden="true" fill sizes="280px" unoptimized />
-                  <Image className="svc-ad-card__img" src={ad.mediaUrl} alt={ad.altText} fill sizes="280px" unoptimized />
+                  <Image className="svc-ad-card__bg" src={placement.mediaUrl} alt="" aria-hidden="true" fill sizes="280px" unoptimized />
+                  <Image className="svc-ad-card__img" src={placement.mediaUrl} alt={placement.altText} fill sizes="280px" unoptimized />
                 </span>
               </a>}
-            </Fragment>)}
+            </Fragment>; })}
           </div>
         </div>
         <div className="svc-controls" role="group" aria-label={t("التنقل بين الخدمات")}>
