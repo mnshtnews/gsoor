@@ -180,8 +180,8 @@ function LammaSection({ lamma, events, topAd, sideAd }: { lamma: StorySummary[];
 function AtmaenFeature({ webAd, mobileAd }: { webAd?: PublicAdPlacement; mobileAd?: PublicAdPlacement }) {
   return (
     <section className="section atmaen-feature-section" id="atmaen"><div className="wrap"><div className="atmaen-feature-card"><div className="split-2 atmaen-feature-layout">
-          <div><span className="eyebrow atmaen-feature-eyebrow">على منصة جسور فقط</span><h2 className="atmaen-feature-title">لا تنتظر أخبار الوكالات والمراسلين وقت الأزمات الكبرى.. تابع المستجدات المعتمدة، وأرسل بلاغًا خاصًا للاطمئنان على مغتربك</h2>
-          <div className="flex gap-8 mt-24 atmaen-feature-actions"><Link className="btn btn-primary" href="/atmaen">اطمّن على مغتربك</Link><Link className="btn btn-ghost" href="/crisis">مركز الأزمة</Link></div>
+          <div><span className="eyebrow atmaen-feature-eyebrow">اطمّن على مغتربك</span><h2 className="atmaen-feature-title">لا تنتظر أخبار الوكالات والمراسلين وقت الأزمات الكبرى.. تابع المستجدات المعتمدة، وأرسل بلاغًا خاصًا للاطمئنان على مغتربك</h2>
+          <div className="flex gap-8 mt-24 atmaen-feature-actions"><Link className="btn btn-primary" href="/atmaen">إطمن</Link><Link className="btn btn-ghost" href="/crisis">مركز الأزمة</Link></div>
         </div>
         <ConfiguredAd placement={webAd} className="atmaen-ad-slot atmaen-ad-slot--web" ratio="1424 / 745" />
         <ConfiguredAd placement={mobileAd} className="atmaen-ad-slot atmaen-ad-slot--mobile" ratio="1424 / 745" />

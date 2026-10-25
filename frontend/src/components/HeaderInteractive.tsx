@@ -155,7 +155,6 @@ export function HeaderInteractive({ tickerHeadlines, navbarAd, navigation, leade
             <LocaleSelector className="lang" locale={locale} />
           </div>
           <div className="topbar-mobile-controls">
-            <button type="button" className="icon-btn" data-open-search aria-label={text.search} onClick={() => { setDrawerOpen(false); setSearchOpen(true); }}>🔍</button>
             {renderAccountLinks("topbar-mobile-account auth-group")}
           </div>
           <div className="left social-icons">
@@ -194,6 +193,13 @@ export function HeaderInteractive({ tickerHeadlines, navbarAd, navigation, leade
           </div>
         </div>
       </header>
+      <div className="mobile-search-row">
+        <div className="wrap">
+          <button type="button" className="icon-btn mobile-search-trigger" data-open-search aria-label={text.search} onClick={() => { setDrawerOpen(false); setSearchOpen(true); }}>
+            <svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" aria-hidden="true"><circle cx="11" cy="11" r="7.5" /><path d="m16.5 16.5 4 4" /></svg>
+          </button>
+        </div>
+      </div>
 
       <nav className="bluebarr">
         <div className="nav-container">

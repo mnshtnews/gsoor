@@ -1248,3 +1248,13 @@ button.hero-main-button:focus-visible { outline: 2px solid var(--amber); outline
   .home-success-inline-ad { margin-top: 18px; }
   .home-opportunities-ad { margin-bottom: 8px; }
 }
+
+/* Mobile search control sits directly below the masthead; account links remain in the orange utility bar. */
+.mobile-search-row { display: none; }
+@media (max-width: 1024px) and (hover: none) and (pointer: coarse), (max-width: 600px) {
+  .mobile-search-row { display: block; position: relative; z-index: 2; background: #fff; border-bottom: 1px solid var(--line); }
+  .mobile-search-row .wrap { display: flex; min-height: 44px; align-items: center; justify-content: flex-end; box-sizing: border-box; padding-block: 4px; }
+  .mobile-search-trigger { display: inline-flex; width: 36px; height: 36px; min-width: 36px; min-height: 36px; align-items: center; justify-content: center; border: 1px solid #d7e0ed; border-radius: 9px; background: #fff; color: var(--blue-dark); box-shadow: 0 2px 7px rgba(16,30,54,.08); transition: color .18s ease, background .18s ease, transform .18s ease; }
+  .mobile-search-trigger:hover { background: #f3f7ff; color: var(--blue); transform: translateY(-1px); }
+  .mobile-search-trigger:focus-visible { outline: 3px solid var(--amber); outline-offset: 2px; }
+}
