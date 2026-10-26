@@ -33,11 +33,12 @@ public sealed class AtmaenCommunityController(IApplicationDbContext db, ICurrent
                     join country in db.Countries.AsNoTracking() on p.CountryId equals country.Id
                     join city in db.Cities.AsNoTracking() on p.CityId equals city.Id
                     where (!countryId.HasValue || p.CountryId == countryId.Value) && (string.IsNullOrWhiteSpace(status) || p.Status == status)
-                    select new PostRow(p, country.NameAr, city.NameAr);
+                    select new { Post = p, Country = country.NameAr, City = city.NameAr };
         var total = await query.CountAsync(ct);
         if (sort == "active") query = query.OrderByDescending(x => db.AtmaenCommunityLikes.Count(l => l.PostId == x.Post.Id) + db.AtmaenCommunityComments.Count(c => c.PostId == x.Post.Id)).ThenByDescending(x => x.Post.CreatedAtUtc);
         else query = query.OrderByDescending(x => x.Post.CreatedAtUtc);
-        var rows = await query.Skip((page - 1) * pageSize).Take(pageSize).ToListAsync(ct);
+        var selected = await query.Skip((page - 1) * pageSize).Take(pageSize).ToListAsync(ct);
+        var rows = selected.Select(x => new PostRow(x.Post, x.Country, x.City)).ToList();
         return Ok(new CommunityFeedDto(await MapRows(rows, ct), page, pageSize, total));
     }
 
