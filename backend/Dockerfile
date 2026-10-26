@@ -19,9 +19,10 @@ WORKDIR /app
 COPY --from=build /app .
 
 # Runs as a non-root user — never run production containers as root.
-RUN useradd --create-home --shell /bin/bash jusoor \
-    && chown -R jusoor:jusoor /app
-USER jusoor
+RUN groupadd --gid 10001 jusoor \
+    && useradd --uid 10001 --gid 10001 --create-home --shell /usr/sbin/nologin jusoor \
+    && chown -R 10001:10001 /app
+USER 10001:10001
 
 EXPOSE 8080
 ENTRYPOINT ["dotnet", "Jusoor.Api.dll"]

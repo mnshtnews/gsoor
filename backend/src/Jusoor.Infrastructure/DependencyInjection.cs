@@ -90,14 +90,18 @@ public static class DependencyInjection
 
 
         // --- Field-level encryption for Atmaen Case data (Phase 2 decision 2,
-        // approved: EF Core value converters + Azure Key Vault + envelope
+        // approved: EF Core value converters + envelope
         // encryption). Singleton for a reason that is NOT just style
         // consistency this time: ApplicationDbContext.OnModelCreating builds
         // EF Core's value converters from this exact injected instance, and
         // that model is built once and cached for the DbContext type's
         // lifetime — see ApplicationDbContext's own comment on why this
         // specific registration lifetime is load-bearing, not cosmetic.
-        if (configuration.GetValue<bool>("UseLocalFieldEncryption"))
+        if (configuration.GetValue<bool>("UseVpsFieldEncryption"))
+        {
+            services.AddSingleton<IFieldEncryptionService, VpsFieldEncryptionService>();
+        }
+        else if (configuration.GetValue<bool>("UseLocalFieldEncryption"))
         {
             services.AddSingleton<IFieldEncryptionService, LocalFieldEncryptionService>();
         }

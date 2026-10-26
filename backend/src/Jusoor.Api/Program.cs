@@ -14,8 +14,14 @@ using Serilog;
 
 var builder = WebApplication.CreateBuilder(args);
 var clientDemoMode = builder.Configuration.GetValue<bool>("ClientDemoMode");
-// Local providers are allowed in Development. A separate, isolated client-preview
-// deployment may use the stable local encryption key, but it must not mint/log OTPs.
+var useVpsFieldEncryption = builder.Configuration.GetValue<bool>("UseVpsFieldEncryption");
+var keyRingPath = builder.Configuration["FieldEncryption:KeyRingFile"];
+if (useVpsFieldEncryption && builder.Configuration.GetValue<bool>("UseLocalFieldEncryption"))
+    throw new InvalidOperationException("UseVpsFieldEncryption and UseLocalFieldEncryption cannot both be enabled.");
+
+// Local field encryption is only allowed for Development or the explicitly
+// isolated Staging client demo. Production may use Azure Key Vault or the
+// explicit VPS file-backed envelope provider; local OTP is never allowed.
 if (!builder.Environment.IsDevelopment())
 {
     if (clientDemoMode)
@@ -25,8 +31,9 @@ if (!builder.Environment.IsDevelopment())
         if (!builder.Configuration.GetValue<bool>("UseLocalFieldEncryption") ||
             builder.Configuration.GetValue<bool>("UseLocalOtp"))
             throw new InvalidOperationException("ClientDemoMode requires local field encryption and the disabled demo OTP provider.");
-        if (string.IsNullOrWhiteSpace(builder.Configuration["FieldEncryption:LocalKey"]))
-            throw new InvalidOperationException("ClientDemoMode requires a stable FieldEncryption:LocalKey secret.");
+        if (string.IsNullOrWhiteSpace(builder.Configuration["FieldEncryption:LocalKey"]) &&
+            !File.Exists(keyRingPath))
+            throw new InvalidOperationException("ClientDemoMode requires a stable local key or mounted field-encryption key ring.");
     }
     else
     {
@@ -34,28 +41,37 @@ if (!builder.Environment.IsDevelopment())
             builder.Configuration.GetValue<bool>("UseLocalOtp"))
         {
             throw new InvalidOperationException(
-                "Local field encryption and local OTP providers are development-only; configure Azure Key Vault and Twilio for non-development environments.");
+                "Development-only encryption and OTP providers cannot be used in Production.");
         }
 
-        var requiredProductionSettings = new[]
+        var missingProductionSettings = new List<string>();
+        foreach (var key in new[] { "Twilio:AccountSid", "Twilio:AuthToken", "Twilio:VerifyServiceSid" })
         {
-            "FieldEncryption:KeyVaultUri",
-            "FieldEncryption:KeyEncryptionKeyName",
-            "Twilio:AccountSid",
-            "Twilio:AuthToken",
-            "Twilio:VerifyServiceSid"
-        };
-        var missingProductionSettings = requiredProductionSettings
-            .Where(key => string.IsNullOrWhiteSpace(builder.Configuration[key]))
-            .ToArray();
-        if (missingProductionSettings.Length > 0)
+            if (string.IsNullOrWhiteSpace(builder.Configuration[key]))
+                missingProductionSettings.Add(key);
+        }
+
+        if (useVpsFieldEncryption)
+        {
+            if (string.IsNullOrWhiteSpace(keyRingPath) || !File.Exists(keyRingPath))
+                missingProductionSettings.Add("FieldEncryption:KeyRingFile (mounted Docker secret)");
+        }
+        else
+        {
+            foreach (var key in new[] { "FieldEncryption:KeyVaultUri", "FieldEncryption:KeyEncryptionKeyName" })
+            {
+                if (string.IsNullOrWhiteSpace(builder.Configuration[key]))
+                    missingProductionSettings.Add(key);
+            }
+        }
+
+        if (missingProductionSettings.Count > 0)
         {
             throw new InvalidOperationException(
                 $"Production security configuration is incomplete: {string.Join(", ", missingProductionSettings)}.");
         }
     }
 }
-
 builder.Host.UseSerilog((context, configuration) =>
     configuration.ReadFrom.Configuration(context.Configuration));
 

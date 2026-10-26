@@ -28,3 +28,6 @@ PHASE3_EDITORIAL_DECISIONS.zip
 p3-up.zip
 test.zip
 frontend/.npm-cache/
+
+# Host-mounted VPS encryption key ring (never commit)
+deploy/vps/secrets/

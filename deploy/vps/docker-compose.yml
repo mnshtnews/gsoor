@@ -24,9 +24,8 @@ services:
       postgres:
         condition: service_healthy
     environment:
-      # APP_ENVIRONMENT / CLIENT_DEMO_MODE are flipped together by ./mode.sh:
-      #   demo -> Staging + ClientDemoMode (no Twilio/Azure needed)
-      #   live -> Production (Azure Key Vault + Twilio REQUIRED, API refuses to boot without them)
+      # mode.sh selects demo or Production with a VPS file key ring + Twilio.
+      # Azure Key Vault remains available when VPS_FIELD_ENCRYPTION=false.
       ASPNETCORE_ENVIRONMENT: ${APP_ENVIRONMENT:-Production}
       ASPNETCORE_URLS: http://+:8080
       HttpsRedirection__Enabled: "false"
@@ -37,8 +36,9 @@ services:
       Bootstrap__RunOnStartup: ${BOOTSTRAP_RUN_ON_STARTUP:-false}
       ClientDemoMode: ${CLIENT_DEMO_MODE:-false}
       UseLocalFieldEncryption: ${CLIENT_DEMO_MODE:-false}
+      UseVpsFieldEncryption: ${VPS_FIELD_ENCRYPTION:-false}
       UseLocalOtp: "false"
-      FieldEncryption__LocalKey: ${FIELD_ENCRYPTION_LOCAL_KEY:-}
+      FieldEncryption__KeyRingFile: /run/secrets/field-encryption-keyring
       FieldEncryption__KeyVaultUri: ${FIELD_ENCRYPTION_KEY_VAULT_URI:-}
       FieldEncryption__KeyEncryptionKeyName: ${FIELD_ENCRYPTION_KEY_NAME:-}
       AZURE_CLIENT_ID: ${AZURE_CLIENT_ID:-}
@@ -78,6 +78,8 @@ services:
       SUPABASE_URL: ${SUPABASE_URL:?Set Supabase project URL}
       SUPABASE_STORAGE_BUCKET: ${SUPABASE_STORAGE_BUCKET:-jusoor-media}
       SUPABASE_SERVICE_ROLE_KEY: ${SUPABASE_SERVICE_ROLE_KEY:?Set Supabase service role key}
+    secrets:
+      - field-encryption-keyring
     networks: [internal]
 
   web:
@@ -113,6 +115,10 @@ services:
       - caddy_data:/data
       - caddy_config:/config
     networks: [internal]
+
+secrets:
+  field-encryption-keyring:
+    file: ./secrets/field-encryption-keyring.json
 
 volumes:
   postgres_data:

@@ -27,6 +27,12 @@ public sealed class LocalFieldEncryptionService : IFieldEncryptionService
     public LocalFieldEncryptionService(IConfiguration configuration)
     {
         var key = configuration["FieldEncryption:LocalKey"];
+        if (string.IsNullOrWhiteSpace(key) &&
+            !string.IsNullOrWhiteSpace(configuration["FieldEncryption:KeyRingFile"]))
+        {
+            _key = FieldEncryptionKeyRing.Load(configuration).CurrentKey;
+            return;
+        }
 
         if (string.IsNullOrWhiteSpace(key))
         {
