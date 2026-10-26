@@ -94,6 +94,12 @@ public class IdentityService : IIdentityService
         return new NewsroomUserInfo(user.Id, user.Email, user.DisplayName, roles.ToList());
     }
 
+    public async Task<string?> GetDisplayNameAsync(string userId)
+    {
+        var user = await _userManager.FindByIdAsync(userId);
+        return user?.DisplayName;
+    }
+
     public async Task<bool> AddToRoleAsync(string userId, string role)
     {
         var user = await _userManager.FindByIdAsync(userId);

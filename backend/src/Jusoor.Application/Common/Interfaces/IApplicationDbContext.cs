@@ -25,6 +25,10 @@ public interface IApplicationDbContext
     DbSet<MyPlace> MyPlaces { get; }
     DbSet<SourceFetchLog> SourceFetchLogs { get; }
     DbSet<Case> Cases { get; }
+    DbSet<AtmaenCommunityPost> AtmaenCommunityPosts { get; }
+    DbSet<AtmaenCommunityComment> AtmaenCommunityComments { get; }
+    DbSet<AtmaenCommunityLike> AtmaenCommunityLikes { get; }
+    DbSet<AtmaenCommunityReport> AtmaenCommunityReports { get; }
     DbSet<EditorialArticle> EditorialArticles { get; }
     DbSet<EditorialArticleTranslation> EditorialArticleTranslations { get; }
     DbSet<EditorialCategory> EditorialCategories { get; }

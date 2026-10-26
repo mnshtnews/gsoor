@@ -19,6 +19,7 @@ public interface IIdentityService
     Task<NewsroomUserPage> ListUsersAsync(string? search, int page, int pageSize, CancellationToken cancellationToken);
 
     Task<NewsroomUserInfo?> FindUserAsync(string userId);
+    Task<string?> GetDisplayNameAsync(string userId);
 
     /// <summary>Returns false if the user does not exist or the role could not be added.</summary>
     Task<bool> AddToRoleAsync(string userId, string role);

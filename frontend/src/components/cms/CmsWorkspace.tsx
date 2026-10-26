@@ -37,6 +37,7 @@ const GROUPS: NavGroup[] = [
   ] },
   { title: "اطمّن", items: [
     { label: "قائمة الحالات المسندة", href: "/cms/atmaen", roles: ["CrisisEditor"] },
+    { label: "مراجعة مجتمع الاطمئنان", href: "/cms/atmaen-community", roles: ["SeniorEditor", "ManagingEditor", "EditorInChief", "SystemAdmin"] },
   ] },
   { title: "إدارة الأزمات", items: [
     { label: "وضع الأزمة والدول المتأثرة", href: "/cms/crisis", roles: ["ManagingEditor", "EditorInChief"] },

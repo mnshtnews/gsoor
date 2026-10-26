@@ -26,7 +26,12 @@ public class TestApplicationDbContext : DbContext, IApplicationDbContext
     // CaseConfiguration, not reproduced here, same as this class's own
     // comment already says for every other entity's real configuration.
     public DbSet<Case> Cases => Set<Case>();
+    public DbSet<AtmaenCommunityPost> AtmaenCommunityPosts => Set<AtmaenCommunityPost>();
+    public DbSet<AtmaenCommunityComment> AtmaenCommunityComments => Set<AtmaenCommunityComment>();
+    public DbSet<AtmaenCommunityLike> AtmaenCommunityLikes => Set<AtmaenCommunityLike>();
+    public DbSet<AtmaenCommunityReport> AtmaenCommunityReports => Set<AtmaenCommunityReport>();
     public DbSet<EditorialArticle> EditorialArticles => Set<EditorialArticle>();
+    public DbSet<EditorialArticleTranslation> EditorialArticleTranslations => Set<EditorialArticleTranslation>();
     public DbSet<RoleChangeAudit> RoleChangeAudits => Set<RoleChangeAudit>();
     public DbSet<EditorialArticleTransition> EditorialArticleTransitions => Set<EditorialArticleTransition>();
     public DbSet<EditorialArticleRevision> EditorialArticleRevisions => Set<EditorialArticleRevision>();
@@ -39,6 +44,8 @@ public class TestApplicationDbContext : DbContext, IApplicationDbContext
     public DbSet<SiteStructureSettings> SiteStructureSettings => Set<SiteStructureSettings>();
     public DbSet<HomepagePoll> HomepagePolls => Set<HomepagePoll>();
     public DbSet<HomepagePollVote> HomepagePollVotes => Set<HomepagePollVote>();
+    public DbSet<UserPermissionGrant> UserPermissionGrants => Set<UserPermissionGrant>();
+    public DbSet<UserPermissionChangeAudit> UserPermissionChangeAudits => Set<UserPermissionChangeAudit>();
         public DbSet<AlertEmailSubscription> AlertEmailSubscriptions => Set<AlertEmailSubscription>();
         public DbSet<AlertSubscriptionSettings> AlertSubscriptionSettings => Set<AlertSubscriptionSettings>();
     public void Detach<TEntity>(TEntity entity) where TEntity : class => Entry(entity).State = EntityState.Detached;
