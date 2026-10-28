@@ -8,7 +8,6 @@ public sealed record EmailOtpCompletionResult(EmailOtpCompletionOutcome Outcome,
 public interface IEmailOtpAuthService
 {
     Task<EmailOtpStartResult> RegisterAsync(string email, string password, string displayName, CancellationToken cancellationToken);
-    Task<EmailOtpStartResult> StartLoginAsync(string email, string password, CancellationToken cancellationToken);
     Task<EmailOtpStartResult> ResendAsync(string email, string password, string purpose, CancellationToken cancellationToken);
     Task<EmailOtpCompletionResult> VerifyAsync(string email, string code, CancellationToken cancellationToken);
 }

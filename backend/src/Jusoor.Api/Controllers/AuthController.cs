@@ -1,5 +1,7 @@
 using System.ComponentModel.DataAnnotations;
+using Jusoor.Application.Auth;
 using Jusoor.Application.Common.Interfaces;
+using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.RateLimiting;
 
@@ -8,7 +10,7 @@ namespace Jusoor.Api.Controllers;
 [ApiController]
 [Route("api/v1/auth")]
 [EnableRateLimiting("email-otp")]
-public sealed class AuthController(IEmailOtpAuthService auth) : ControllerBase
+public sealed class AuthController(IEmailOtpAuthService auth, ISender mediator) : ControllerBase
 {
     public sealed record RegisterRequest([Required, EmailAddress, MaxLength(256)] string Email, [Required, MinLength(8), MaxLength(128)] string Password, [Required, MaxLength(100)] string DisplayName);
     public sealed record LoginRequest([Required, EmailAddress, MaxLength(256)] string Email, [Required, MaxLength(128)] string Password);
@@ -25,9 +27,13 @@ public sealed class AuthController(IEmailOtpAuthService auth) : ControllerBase
     [HttpPost("login")]
     [ProducesResponseType(StatusCodes.Status202Accepted)]
     [ProducesResponseType(StatusCodes.Status401Unauthorized)]
-    [ProducesResponseType(StatusCodes.Status503ServiceUnavailable)]
     public async Task<IActionResult> Login(LoginRequest request, CancellationToken ct)
-        => StartResponse(await auth.StartLoginAsync(request.Email, request.Password, ct), request.Email);
+    {
+        var result = await mediator.Send(new LoginCommand(request.Email, request.Password), ct);
+        return result.Succeeded && result.Tokens is not null
+            ? Ok(result.Tokens)
+            : Unauthorized(new { message = "تعذّر تسجيل الدخول. راجع البريد وكلمة المرور وحاول مجددًا." });
+    }
 
     [HttpPost("resend")]
     public async Task<IActionResult> Resend(ResendRequest request, CancellationToken ct)

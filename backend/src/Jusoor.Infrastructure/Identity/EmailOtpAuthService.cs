@@ -44,24 +44,14 @@ public sealed class EmailOtpAuthService(
         return await IssueAsync(user, "register", cancellationToken);
     }
 
-    public async Task<EmailOtpStartResult> StartLoginAsync(string email, string password, CancellationToken cancellationToken)
-    {
-        if (!IsReady) return new(EmailOtpStartOutcome.NotConfigured);
-        var user = await users.FindByEmailAsync(email.Trim());
-        if (user is null || !await users.CheckPasswordAsync(user, password)) return new(EmailOtpStartOutcome.InvalidCredentials);
-        return await IssueAsync(user, user.EmailConfirmed ? "login" : "register", cancellationToken);
-    }
-
     public async Task<EmailOtpStartResult> ResendAsync(string email, string password, string purpose, CancellationToken cancellationToken)
     {
         if (!IsReady) return new(EmailOtpStartOutcome.NotConfigured);
         var user = await users.FindByEmailAsync(email.Trim());
         if (user is null || !await users.CheckPasswordAsync(user, password)) return new(EmailOtpStartOutcome.InvalidCredentials);
-        var normalizedPurpose = purpose.Trim().ToLowerInvariant();
-        if (normalizedPurpose == "register" && user.EmailConfirmed) return new(EmailOtpStartOutcome.InvalidCredentials);
-        if (normalizedPurpose == "login" && !user.EmailConfirmed) normalizedPurpose = "register";
-        if (normalizedPurpose is not ("register" or "login")) return new(EmailOtpStartOutcome.InvalidCredentials);
-        return await IssueAsync(user, normalizedPurpose, cancellationToken);
+        if (purpose.Trim().Equals("register", StringComparison.OrdinalIgnoreCase) is false || user.EmailConfirmed)
+            return new(EmailOtpStartOutcome.InvalidCredentials);
+        return await IssueAsync(user, "register", cancellationToken);
     }
 
     public async Task<EmailOtpCompletionResult> VerifyAsync(string email, string code, CancellationToken cancellationToken)
@@ -75,7 +65,7 @@ public sealed class EmailOtpAuthService(
         try { challenge = JsonSerializer.Deserialize<Challenge>(saved); }
         catch (JsonException) { challenge = null; }
         var now = DateTimeOffset.UtcNow;
-        if (challenge is null || challenge.ExpiresAtUtc <= now || challenge.FailedAttempts >= MaxAttempts)
+        if (challenge is null || challenge.Purpose != "register" || user.EmailConfirmed || challenge.ExpiresAtUtc <= now || challenge.FailedAttempts >= MaxAttempts)
             return new(EmailOtpCompletionOutcome.InvalidOrExpiredCode);
 
         var suppliedHash = HashCode(user.Id, challenge.Purpose, code);
@@ -95,11 +85,6 @@ public sealed class EmailOtpAuthService(
             var update = await users.UpdateAsync(user);
             if (!update.Succeeded) return new(EmailOtpCompletionOutcome.InvalidOrExpiredCode);
         }
-        else if (challenge.Purpose == "login" && !user.EmailConfirmed)
-        {
-            return new(EmailOtpCompletionOutcome.InvalidOrExpiredCode);
-        }
-
         await users.RemoveAuthenticationTokenAsync(user, LoginProvider, TokenName);
         var roles = await users.GetRolesAsync(user);
         return new(EmailOtpCompletionOutcome.Succeeded, jwtTokens.GenerateTokens(user.Id, user.Email!, roles.ToList()));

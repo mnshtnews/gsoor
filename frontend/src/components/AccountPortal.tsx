@@ -22,7 +22,6 @@ export function AccountPortal() {
   const [otpStep, setOtpStep] = useState(false);
   const [otpEmail, setOtpEmail] = useState("");
   const [otpPassword, setOtpPassword] = useState("");
-  const [otpPurpose, setOtpPurpose] = useState<"register" | "login">("login");
   const [otpCode, setOtpCode] = useState("");
   const [busy, setBusy] = useState(false);
   const [loading, setLoading] = useState(true);
@@ -78,7 +77,7 @@ export function AccountPortal() {
     const response = await fetch("/account-api/session", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify(payload) }).catch(() => null);
     const result = await response?.json().catch(() => ({})) as { message?: string; staff?: boolean; requiresEmailOtp?: boolean; email?: string } | undefined;
     if (response?.status === 202 && result?.requiresEmailOtp) {
-      setOtpEmail(result.email ?? email); setOtpPassword(password); setOtpPurpose(mode === "register" ? "register" : "login"); setOtpCode(""); setOtpStep(true);
+      setOtpEmail(result.email ?? email); setOtpPassword(password); setOtpCode(""); setOtpStep(true);
       setMessage(result.message ?? "أرسلنا رمز تحقق إلى بريدك الإلكتروني.");
     } else if (response?.ok) {
       setOtpStep(false); setOtpPassword(""); setOtpCode("");
@@ -95,7 +94,7 @@ export function AccountPortal() {
   async function resendCode() {
     if (!otpEmail || !otpPassword) return;
     setBusy(true); setMessage("");
-    const response = await fetch("/account-api/session", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ action: "resend", email: otpEmail, password: otpPassword, purpose: otpPurpose }) }).catch(() => null);
+    const response = await fetch("/account-api/session", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ action: "resend", email: otpEmail, password: otpPassword, purpose: "register" }) }).catch(() => null);
     const result = await response?.json().catch(() => ({})) as { message?: string; requiresEmailOtp?: boolean } | undefined;
     setMessage(result?.message ?? (response?.ok ? "أرسلنا رمزًا جديدًا إلى بريدك." : "تعذّر إرسال رمز جديد."));
     setBusy(false);
@@ -166,7 +165,7 @@ export function AccountPortal() {
       {otpStep ? <><label className="auth-field">{t("البريد الإلكتروني")}<input value={otpEmail} readOnly /></label><label className="auth-field">{t("رمز التحقق")}<input name="code" type="text" inputMode="numeric" autoComplete="one-time-code" pattern="[0-9]{6}" maxLength={6} required value={otpCode} onChange={(event) => setOtpCode(event.target.value.replace(/\D/g, "").slice(0, 6))} /></label></> : <>{mode === "register" && <label className="auth-field">{t("الاسم بالكامل" )}<input name="displayName" autoComplete="name" required maxLength={100} /></label>}<label className="auth-field">{t("البريد الإلكتروني" )}<input name="email" type="email" autoComplete="email" required maxLength={256} /></label><label className="auth-field">{t("كلمة المرور" )}<span className="auth-password"><input name="password" type={showPassword ? "text" : "password"} autoComplete={mode === "login" ? "current-password" : "new-password"} required minLength={mode === "register" ? 8 : 1} maxLength={128} /><button type="button" onClick={() => setShowPassword((visible) => !visible)}>{t(showPassword ? "إخفاء" : "إظهار")}</button></span></label></>}      {!otpStep && mode === "login" && <button className="auth-forgot-link" type="button" onClick={() => changeMode("forgot")}>{t("نسيت كلمة المرور؟" )}</button>}
       {!otpStep && mode === "register" && <label className="auth-terms"><input type="checkbox" required /> {t("أوافق على")} <a href="/privacy" target="_blank" rel="noreferrer">{t("سياسة الخصوصية" )}</a></label>}
       {message && <p className="account-message" role="alert">{t(message)}</p>}
-      <button className="btn btn-primary auth-submit" type="submit" disabled={busy}>{busy ? t("جارٍ التنفيذ…") : t(otpStep ? "تأكيد الرمز" : mode === "login" ? "متابعة وإرسال الرمز" : "إنشاء الحساب وإرسال الرمز")}</button>{otpStep && <button className="auth-forgot-link" type="button" onClick={() => void resendCode()} disabled={busy}>{t("إعادة إرسال الرمز")}</button>}
+      <button className="btn btn-primary auth-submit" type="submit" disabled={busy}>{busy ? t("جارٍ التنفيذ…") : t(otpStep ? "تأكيد الرمز" : mode === "login" ? "تسجيل الدخول" : "إنشاء الحساب وإرسال الرمز")}</button>{otpStep && <button className="auth-forgot-link" type="button" onClick={() => void resendCode()} disabled={busy}>{t("إعادة إرسال الرمز")}</button>}
     </form>}
     {mode !== "forgot" && !otpStep && <p className="auth-form-footer">{mode === "login" ? <>مستخدم جديد؟ <button type="button" onClick={() => changeMode("register")}>{t("أنشئ حسابًا" )}</button></> : <>لديك حساب؟ <button type="button" onClick={() => changeMode("login")}>{t("سجّل الدخول" )}</button></>}</p>}
   </section>;
