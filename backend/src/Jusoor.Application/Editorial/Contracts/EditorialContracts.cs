@@ -89,6 +89,7 @@ public sealed record PublicNewsSummaryDto(
 {
     public string Slug { get; init; } = "";
     public string[] PresentationDesks { get; init; } = Array.Empty<string>();
+    public string[] SecondaryTags { get; init; } = Array.Empty<string>();
     public string? SportsCoverageType { get; init; }
     public string[] SportsPlayerNames { get; init; } = Array.Empty<string>();
     public string? SportsTeamName { get; init; }

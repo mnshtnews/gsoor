@@ -15,7 +15,6 @@ import { ServicesBand } from "@/components/home/ServicesBand";
 import { formatArabicDate } from "@/lib/format";
 import { HomepagePollWidget } from "@/components/HomepagePollWidget";
 import { AlertSubscriptionForm } from "@/components/AlertSubscriptionForm";
-import { CrisisHomeTheme } from "@/components/CrisisHomeTheme";
 
 // The homepage is rendered per request so a newly published article (and a
 // deleted one) is reflected immediately — no stale cache during the client trial.
@@ -256,9 +255,8 @@ export default async function HomePage() {
   // there, so they are intentionally not rendered here either.
   return <LocalizedContent>{(
     <main id="main">
-      {crisis && <CrisisHomeTheme />}
       <JsonLd data={buildOrganizationJsonLd()} />
-      {crisis && <section className="wrap" aria-label="تنبيه أزمة نشطة"><Link className="crisis-spotlight" href="/crisis"><span className="crisis-spotlight__eyebrow"><i className="crisis-bar__dot" aria-hidden="true" />مركز الأزمة · {crisis.severity === "emergency" ? "طوارئ" : crisis.severity === "advisory" ? "تنبيه" : "عاجل"}</span><h2 className="crisis-spotlight__title">{crisis.title}</h2><p className="crisis-spotlight__summary">{crisis.summary}</p><span className="crisis-spotlight__actions"><span className="primary">التفاصيل وإرشادات المتابعة ←</span></span></Link></section>}
+      {crisis && <section id="crisisSpotlightSection" className="section tight crisis-spotlight-section" aria-label="تنبيه أزمة نشطة"><div className="wrap"><Link className="crisis-spotlight" href="/crisis"><span className="crisis-spotlight__eyebrow"><i className="crisis-bar__dot" aria-hidden="true" />مركز الأزمة · {crisis.severity === "emergency" ? "طوارئ" : crisis.severity === "advisory" ? "تنبيه" : "عاجل"}</span><h2 className="crisis-spotlight__title">{crisis.title}</h2><p className="crisis-spotlight__summary">{crisis.summary}</p><span className="crisis-spotlight__actions"><span className="primary">التفاصيل وإرشادات المتابعة ←</span></span></Link></div></section>}
       {heroSlides.length > 0 && <HomeHeroSlider slides={heroSlides} />}
       <HomeAdPlacement placement={ad("mobile", "hero-after-videos")} className="home-ad-placement--mobile-only home-ad-placement--mobile-after-videos" />
 

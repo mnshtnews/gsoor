@@ -20,6 +20,8 @@ export interface StorySummary {
   imageUrl?: string | null;
   authorName?: string | null;
   authorImageUrl?: string | null;
+  /** Editorial tags used to connect published newsroom articles across sections. */
+  secondaryTags?: string[];
 }
 
 export interface StorySource {

@@ -6,9 +6,10 @@ import { SiteHeader } from "@/components/SiteHeader";
 import { SiteFooter } from "@/components/SiteFooter";
 import { CrisisStatusBar } from "@/components/CrisisStatusBar";
 import { WelcomeIntro } from "@/components/WelcomeIntro";
-import { getPublicSiteStructure } from "@/lib/news-api";
+import { getPublicCrisisMode, getPublicSiteStructure } from "@/lib/news-api";
 import { cookies } from "next/headers";
 import { parseLocale } from "@/lib/site-copy";
+import { CrisisSiteTheme } from "@/components/CrisisSiteTheme";
 
 export const viewport: Viewport = { width: "device-width", initialScale: 1 };
 
@@ -35,8 +36,14 @@ export default async function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
-  const structure = await getPublicSiteStructure().catch(() => null);
-  const locale = parseLocale((await cookies()).get("jusoor_locale")?.value);
+  const [structureResult, crisisResult, cookieStore] = await Promise.allSettled([
+    getPublicSiteStructure(),
+    getPublicCrisisMode(),
+    cookies(),
+  ]);
+  const structure = structureResult.status === "fulfilled" ? structureResult.value : null;
+  const crisis = crisisResult.status === "fulfilled" && crisisResult.value.isActive ? crisisResult.value : null;
+  const locale = parseLocale(cookieStore.status === "fulfilled" ? cookieStore.value.get("jusoor_locale")?.value : undefined);
   return (
     <html lang={locale} dir={locale === "ar" ? "rtl" : "ltr"}>
       <head>
@@ -53,8 +60,9 @@ export default async function RootLayout({
         />
       </head>
       <body>
+        <CrisisSiteTheme active={Boolean(crisis)} />
         <SiteHeader />
-        <CrisisStatusBar />
+        <CrisisStatusBar crisis={crisis} />
         {children}
         <SiteFooter />
         <WelcomeIntro enabled={structure?.welcomeIntro?.isEnabled ?? false} videoUrl={structure?.welcomeIntro?.videoUrl ?? null} />

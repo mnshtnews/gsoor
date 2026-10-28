@@ -124,7 +124,7 @@ internal static class EditorialTranslationFingerprint
         => Convert.ToHexString(SHA256.HashData(Encoding.UTF8.GetBytes(($"{title}\n{summary}\n{body}")))).ToLowerInvariant();
 }
 
-public sealed record GetPublishedNewsQuery(int Page = 1, int PageSize = 20, string? DeskSlug = null, string? SearchTerm = null, string? AuthorName = null, Guid? CountryId = null) : IRequest<PagedResult<PublicNewsSummaryDto>>;
+public sealed record GetPublishedNewsQuery(int Page = 1, int PageSize = 20, string? DeskSlug = null, string? SearchTerm = null, string? AuthorName = null, Guid? CountryId = null, string? Tag = null) : IRequest<PagedResult<PublicNewsSummaryDto>>;
 
 public class GetPublishedNewsQueryValidator : AbstractValidator<GetPublishedNewsQuery>
 {
@@ -136,6 +136,7 @@ public class GetPublishedNewsQueryValidator : AbstractValidator<GetPublishedNews
         RuleFor(x => x.SearchTerm).MaximumLength(120);
         RuleFor(x => x.AuthorName).MaximumLength(120);
         RuleFor(x => x.CountryId).Must(id => id is null || id != Guid.Empty);
+        RuleFor(x => x.Tag).MaximumLength(40);
     }
 }
 
@@ -161,6 +162,11 @@ public class GetPublishedNewsQueryHandler : IRequestHandler<GetPublishedNewsQuer
         {
             baseQuery = baseQuery.Where(a => a.CountryId == request.CountryId.Value);
         }
+        var tag = request.Tag?.Trim().ToLowerInvariant();
+        if (!string.IsNullOrWhiteSpace(tag))
+        {
+            baseQuery = baseQuery.Where(a => a.SecondaryTags.Any(articleTag => articleTag.ToLower() == tag));
+        }
         var authorName = request.AuthorName?.Trim();
         if (!string.IsNullOrWhiteSpace(authorName))
         {
@@ -172,6 +178,7 @@ public class GetPublishedNewsQueryHandler : IRequestHandler<GetPublishedNewsQuer
             baseQuery = baseQuery.Where(a => a.Title.ToLower().Contains(searchTerm)
                 || (a.Summary != null && a.Summary.ToLower().Contains(searchTerm))
                 || a.Body.ToLower().Contains(searchTerm)
+                || a.SecondaryTags.Any(tag => tag.ToLower() == searchTerm)
                 || _context.EditorialArticleTranslations.Any(t => t.EditorialArticleId == a.Id && t.Status == EditorialTranslationStatus.Reviewed && (t.Title.ToLower().Contains(searchTerm) || (t.Summary != null && t.Summary.ToLower().Contains(searchTerm)))));
         }
 
@@ -200,7 +207,7 @@ public class GetPublishedNewsQueryHandler : IRequestHandler<GetPublishedNewsQuer
             return new PublicNewsSummaryDto(
                 a.Id, a.Title, excerpt, a.PublishedAtUtc!.Value,
                 country?.NameAr, country?.NameEn, city?.NameAr, city?.NameEn)
-                { Slug = a.Slug, PresentationDesks = a.PresentationDesks.ToArray(), ImageUrl = a.SocialImageUrl, AuthorName = a.AuthorName, AuthorImageUrl = a.AuthorImageUrl,
+                { Slug = a.Slug, PresentationDesks = a.PresentationDesks.ToArray(), SecondaryTags = a.SecondaryTags.ToArray(), ImageUrl = a.SocialImageUrl, AuthorName = a.AuthorName, AuthorImageUrl = a.AuthorImageUrl,
                     SportsCoverageType = a.SportsCoverageType, SportsPlayerNames = a.SportsPlayerNames.ToArray(), SportsTeamName = a.SportsTeamName,
                     SportsCompetitionName = a.SportsCompetitionName, SportsCountryName = a.SportsCountryName,
                     Translations = translations.Where(t => t.EditorialArticleId == a.Id && t.SourceFingerprint == EditorialTranslationFingerprint.Compute(a.Title, a.Summary, a.Body)).Select(t => new PublicNewsTranslationSummaryDto(t.Locale, t.Title, t.Summary)).ToArray() };
