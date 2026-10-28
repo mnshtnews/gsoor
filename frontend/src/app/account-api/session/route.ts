@@ -40,7 +40,12 @@ export async function POST(request: Request) {
   if (!upstream) return NextResponse.json({ message: "تعذّر الاتصال بالخادم." }, { status: 502 });
   const result = await upstream.json().catch(() => ({})) as Tokens & { requiresEmailOtp?: boolean; email?: string };
   if (upstream.status === 202 && result.requiresEmailOtp) {
-    return NextResponse.json({ requiresEmailOtp: true, email: result.email ?? body.email, message: result.message }, { status: 202 });
+    if (body.action === "register") {
+      return NextResponse.json({ requiresEmailOtp: true, email: result.email ?? body.email, message: result.message }, { status: 202 });
+    }
+    // Login must always complete with credentials alone. Treat any upstream
+    // OTP challenge on this endpoint as an ordinary authentication failure.
+    return NextResponse.json({ message: "تعذّر تسجيل الدخول. راجع البريد وكلمة المرور وحاول مجددًا." }, { status: 401 });
   }
   if (!upstream.ok || !result.accessToken || !result.expiresAtUtc) {
     return NextResponse.json({ message: result.message ?? result.errors?.join(" ") ?? "تعذّر تنفيذ الطلب. حاول مجددًا." }, { status: upstream.status });

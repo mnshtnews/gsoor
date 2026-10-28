@@ -76,7 +76,9 @@ export function AccountPortal() {
     };
     const response = await fetch("/account-api/session", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify(payload) }).catch(() => null);
     const result = await response?.json().catch(() => ({})) as { message?: string; staff?: boolean; requiresEmailOtp?: boolean; email?: string } | undefined;
-    if (response?.status === 202 && result?.requiresEmailOtp) {
+    // Email OTP is a registration-only step. Never let an upstream 202
+    // response switch a login attempt into the registration verification flow.
+    if (action === "register" && response?.status === 202 && result?.requiresEmailOtp) {
       setOtpEmail(result.email ?? email); setOtpPassword(password); setOtpCode(""); setOtpStep(true);
       setMessage(result.message ?? "أرسلنا رمز تحقق إلى بريدك الإلكتروني.");
     } else if (response?.ok) {
@@ -146,6 +148,10 @@ export function AccountPortal() {
 
   function changeMode(next: AuthMode) {
     setMode(next);
+    setOtpStep(false);
+    setOtpEmail("");
+    setOtpPassword("");
+    setOtpCode("");
     setMessage("");
     const url = new URL(window.location.href);
     if (next === "login") url.searchParams.delete("tab");
