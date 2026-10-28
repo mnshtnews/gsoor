@@ -75,30 +75,32 @@ case "${1:-}" in
     set_kv APP_ENVIRONMENT Staging
     set_kv CLIENT_DEMO_MODE true
     set_kv VPS_FIELD_ENCRYPTION false
+    set_kv EMAIL_OTP_ENABLED false
     set_kv BOOTSTRAP_RUN_ON_STARTUP true
     echo "Mode: DEMO (Staging, isolated file key ring, Atmaen OTP disabled)"
     restart
     ;;
   live)
     missing=()
-    for k in TWILIO_ACCOUNT_SID TWILIO_AUTH_TOKEN TWILIO_VERIFY_SERVICE_SID; do
+    for k in TWILIO_ACCOUNT_SID TWILIO_AUTH_TOKEN TWILIO_VERIFY_SERVICE_SID EMAIL_BREVO_API_KEY EMAIL_FROM_ADDRESS EMAIL_OTP_HASHING_KEY; do
       [ -n "$(get "$k")" ] || missing+=("$k")
     done
     if [ "${#missing[@]}" -gt 0 ]; then
       echo "Cannot go live. Fill these in $(pwd)/.env first:"; printf '  - %s\n' "${missing[@]}"; exit 1
     fi
     prepare_keyring false
+    set_kv EMAIL_OTP_ENABLED true
     set_kv APP_ENVIRONMENT Production
     set_kv CLIENT_DEMO_MODE false
     set_kv VPS_FIELD_ENCRYPTION true
     set_kv BOOTSTRAP_RUN_ON_STARTUP false
-    echo "Mode: LIVE (Production, VPS file key ring + Twilio Verify; Azure Key Vault not required)"
+    echo "Mode: LIVE (Production, VPS file key ring + Twilio Verify + email OTP; Azure Key Vault not required)"
     echo "Legacy local AES-GCM fields remain readable while their key id remains in the ring."
     echo "Azure Key Vault-encrypted fields cannot be opened by this provider and need migration with their original key."
     restart
     ;;
   status)
-    echo "APP_ENVIRONMENT=$(get APP_ENVIRONMENT)  CLIENT_DEMO_MODE=$(get CLIENT_DEMO_MODE)  VPS_FIELD_ENCRYPTION=$(get VPS_FIELD_ENCRYPTION)  BOOTSTRAP_RUN_ON_STARTUP=$(get BOOTSTRAP_RUN_ON_STARTUP)"
+    echo "APP_ENVIRONMENT=$(get APP_ENVIRONMENT)  CLIENT_DEMO_MODE=$(get CLIENT_DEMO_MODE)  VPS_FIELD_ENCRYPTION=$(get VPS_FIELD_ENCRYPTION)  EMAIL_OTP_ENABLED=$(get EMAIL_OTP_ENABLED)  BOOTSTRAP_RUN_ON_STARTUP=$(get BOOTSTRAP_RUN_ON_STARTUP)"
     ;;
   *) echo "Usage: $0 {demo|live|status}"; exit 1 ;;
 esac

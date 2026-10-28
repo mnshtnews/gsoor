@@ -24,6 +24,7 @@ const SLOTS: SlotDefinition[] = [
   { key: "opportunities-top", label: "أعلى فرص الاستثمار", surfaces: ["web"], ratio: "4 / 1", note: "مساحة إعلانية أفقية تسبق قسم فرص الاستثمار" },
   { key: "lamma-top", label: "أعلى قسم اللمة الحلوة", surfaces: ["web"], ratio: "3 / 1", note: "مساحة عرضية تملأ المنطقة أعلى اللمة الحلوة بمحاذاة فعاليات وتغطيات — الويب فقط" },
   { key: "lamma-events-square", label: "أسفل فعاليات وتغطيات", surfaces: ["web"], ratio: "1 / 1", note: "مربع تحت فعاليات وتغطيات، ونهايته بمحاذاة آخر خبرين في اللمة الحلوة — الويب فقط" },
+  { key: "article-bottom", label: "أسفل صفحة الخبر", surfaces: ["web"], ratio: "4 / 1", note: "مساحة عرضية بعد متن الخبر وقبل اقرأ أيضاً" },
   { key: "services-1", label: "بعد خدمة اطمّن على مغتربك", surfaces: ["web"], ratio: "4 / 3", note: "تظهر بعد بطاقة الخدمة الأولى داخل شريط الخدمات" },
   { key: "services-2", label: "بعد خدمة خريطة المهجر", surfaces: ["web"], ratio: "4 / 3", note: "تظهر بعد بطاقة الخدمة الثانية داخل شريط الخدمات" },
   { key: "services-3", label: "بعد خدمة التنبيهات الجغرافية", surfaces: ["web"], ratio: "4 / 3", note: "تظهر بعد بطاقة الخدمة الثالثة داخل شريط الخدمات" },

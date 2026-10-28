@@ -15,7 +15,7 @@ interface Service {
 }
 
 const services: Service[] = [
-  { icon: "🆘", title: "اطمّن على مغتربك", description: "إرسال بلاغ خاص لفريق المتابعة", href: "/atmaen", featured: true },
+  { icon: "🆘", title: "اطمن على مغتربك", description: "إرسال بلاغ خاص لفريق المتابعة", href: "/atmaen", featured: true },
   { icon: "🗺️", title: "خريطة المهجر", description: "بيانات موثقة عن الجاليات", href: "/diaspora-map" },
   { icon: "🔔", title: "تنبيهات جغرافية", description: "إشعارات الطوارئ", href: "#city-alerts" },
   { icon: "⚽", title: "الرياضيون", description: "متابعة المحترفين", href: "/category?cat=sports" },
@@ -68,7 +68,7 @@ export function ServicesBand({ ads = [] }: { ads?: PublicAdPlacement[] }) {
                 </div>
               </a>
               {placement && <a className="svc-card svc-ad-card" href={placement.targetUrl} target="_blank" rel="sponsored noopener noreferrer" aria-label={`${placement.altText} — ${t("زيارة موقع المعلن")}`}>
-                <span className="svc-ad-card__label">{t("مساحة إعلانية · إعلان ممول")}</span>
+                <span className="svc-ad-card__label">{t("مساحة إعلانية")}</span>
                 {/* Blurred copy of the creative fills any letterbox gap, so the sharp original is never cropped or stretched. */}
                 <span className="svc-ad-card__media">
                   <Image className="svc-ad-card__bg" src={placement.mediaUrl} alt="" aria-hidden="true" fill sizes="280px" unoptimized />

@@ -140,9 +140,9 @@ public sealed class EditorialMediaReferenceValidator(
 
     private static bool IsFacebookLink(string value)
         => Uri.TryCreate(value, UriKind.Absolute, out var uri) && uri.Scheme == Uri.UriSchemeHttps
-           && uri.IdnHost.Equals("www.facebook.com", StringComparison.OrdinalIgnoreCase)
+           && (uri.IdnHost.Equals("www.facebook.com", StringComparison.OrdinalIgnoreCase) || uri.IdnHost.Equals("fb.watch", StringComparison.OrdinalIgnoreCase))
            && string.IsNullOrEmpty(uri.UserInfo) && uri.IsDefaultPort
-           && (uri.AbsolutePath == "/watch" || uri.AbsolutePath.StartsWith("/videos/", StringComparison.Ordinal)
+           && (uri.IdnHost.Equals("fb.watch", StringComparison.OrdinalIgnoreCase) || uri.AbsolutePath == "/watch" || uri.AbsolutePath.StartsWith("/videos/", StringComparison.Ordinal)
                || uri.AbsolutePath.StartsWith("/posts/", StringComparison.Ordinal)
                || uri.AbsolutePath.StartsWith("/reel/", StringComparison.Ordinal)
                || uri.AbsolutePath.StartsWith("/permalink.php", StringComparison.Ordinal));

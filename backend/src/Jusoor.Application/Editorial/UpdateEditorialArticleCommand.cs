@@ -132,7 +132,7 @@ public class UpdateEditorialArticleCommandHandler : IRequestHandler<UpdateEditor
             Jusoor.Domain.Editorial.EditorialDesk.Catalog.Keys.Where(requestedDesks.Contains));
         var featuredVideoChanged = article.FeaturedVideoMediaAssetId != request.FeaturedVideoMediaAssetId;
         featuredVideoChanged |= article.FeaturedVideoEmbedUrl != (string.IsNullOrWhiteSpace(request.FeaturedVideoEmbedUrl) ? null : request.FeaturedVideoEmbedUrl.Trim());
-        if (article.Status == EditorialArticleStatus.Published && (desksChanged || featuredVideoChanged))
+        if (article.Status == EditorialArticleStatus.Published && featuredVideoChanged)
         {
             return new EditorialArticleResult(EditorialOutcome.Conflict, EditorialSupport.ToDto(article));
         }

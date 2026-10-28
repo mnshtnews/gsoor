@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import { notFound, permanentRedirect } from "next/navigation";
 import Link from "next/link";
 import Image from "next/image";
-import { getPublishedNews, getPublishedNewsById, type NewsRetraction } from "@/lib/news-api";
+import { getPublishedNews, getPublishedNewsById, getPublicAdPlacements, type NewsRetraction } from "@/lib/news-api";
 import { estimateReadMinutes } from "@/lib/format";
 import { htmlToPlainText } from "@/lib/html";
 import { CorrectionsBox } from "@/components/CorrectionsBox";
@@ -11,12 +11,15 @@ import { articleDescription, articleUrl, buildArticleJsonLd, buildBreadcrumbJson
 import { EDITORIAL_BYLINE, SITE_NAME, absoluteUrl } from "@/lib/site";
 import { StoryGridCard } from "@/components/StoryGridCard";
 import { ArticleShareActions } from "@/components/ArticleShareActions";
+import { ArticleReadingProgress } from "@/components/ArticleReadingProgress";
+import { ConfiguredAd } from "@/components/home/ConfiguredAd";
+
 import { ArticleStaffToolbar } from "@/components/ArticleStaffToolbar";
 import { cookies } from "next/headers";
 import { parseLocale, type SiteLocale } from "@/lib/site-copy";
 
 const ARTICLE_COPY = {
- ar: { home: "الرئيسية", correction: "إشعار تحريري", retracted: "سُحب هذا الخبر", returnHome: "العودة إلى الصفحة الرئيسية", archived: "أرشيف", published: "نُشر في", minute: "دقيقة قراءة", minutes: "دقائق قراءة", sports: "التغطية الرياضية", players: "اللاعبون", taxonomy: "التصنيفات", moreAuthor: "المزيد من الكاتب", allAuthor: "كل مقالات", readAlso: "اقرأ أيضًا", sportsTypes: { EgyptianProfessionalsAbroad: "محترفون مصريون بالخارج", NaturalizedEgyptians: "لاعبون مصريون مجنسون", EgyptianLeague: "الدوري المصري", EgyptNationalTeam: "المنتخب المصري", General: "رياضة عامة" } },
+ ar: { home: "الرئيسية", correction: "إشعار تحريري", retracted: "سُحب هذا الخبر", returnHome: "العودة إلى الصفحة الرئيسية", archived: "أرشيف", published: "نُشر في", minute: "دقيقة قراءة", minutes: "دقائق قراءة", sports: "التغطية الرياضية", players: "اللاعبون", taxonomy: "التصنيفات", moreAuthor: "المزيد من الكاتب", allAuthor: "كل مقالات", readAlso: "اقرأ أيضاً", sportsTypes: { EgyptianProfessionalsAbroad: "محترفون مصريون بالخارج", NaturalizedEgyptians: "لاعبون مصريون مجنسون", EgyptianLeague: "الدوري المصري", EgyptNationalTeam: "المنتخب المصري", General: "رياضة عامة" } },
  en: { home: "Home", correction: "Editorial notice", retracted: "This story was withdrawn", returnHome: "Return to the homepage", archived: "Archive", published: "Published", minute: "minute read", minutes: "minutes read", sports: "Sports coverage", players: "Players", taxonomy: "Topics", moreAuthor: "More from this author", allAuthor: "All stories by", readAlso: "Read also", sportsTypes: { EgyptianProfessionalsAbroad: "Egyptian professionals abroad", NaturalizedEgyptians: "Naturalized Egyptian players", EgyptianLeague: "Egyptian League", EgyptNationalTeam: "Egypt national team", General: "General sports" } },
  fr: { home: "Accueil", correction: "Avis éditorial", retracted: "Cet article a été retiré", returnHome: "Retour à l’accueil", archived: "Archives", published: "Publié le", minute: "minute de lecture", minutes: "minutes de lecture", sports: "Couverture sportive", players: "Joueurs", taxonomy: "Rubriques", moreAuthor: "Autres articles de cet auteur", allAuthor: "Tous les articles de", readAlso: "À lire aussi", sportsTypes: { EgyptianProfessionalsAbroad: "Professionnels égyptiens à l’étranger", NaturalizedEgyptians: "Joueurs égyptiens naturalisés", EgyptianLeague: "Championnat égyptien", EgyptNationalTeam: "Équipe nationale d’Égypte", General: "Sport en général" } },
 } as const;
@@ -135,6 +138,10 @@ export default async function ArticlePage({ params }: { params: Promise<{ id: st
   if (!slug || safeDecode(slug).normalize("NFC") !== story.slug.normalize("NFC")) permanentRedirect(articleUrl(story));
 
   const publishedLabel = formatLocalizedDate(story.publishedAtUtc, locale);
+  const isOpinion = story.presentationDesks.includes("articles");
+  const heroImageUrl = isOpinion ? story.authorImageUrl || story.socialImageUrl : story.socialImageUrl;
+  let articleBottomAd;
+  try { articleBottomAd = (await getPublicAdPlacements("web")).find((placement) => placement.slotKey === "article-bottom"); } catch { articleBottomAd = undefined; }
   const readMinutes = estimateReadMinutes(htmlToPlainText(story.body));
   const place = locale === "ar" ? story.cityNameAr ?? story.countryNameAr ?? null : story.cityNameEn ?? story.countryNameEn ?? story.cityNameAr ?? story.countryNameAr ?? null;
   const byline = story.authorName || EDITORIAL_BYLINE;
@@ -156,7 +163,8 @@ export default async function ArticlePage({ params }: { params: Promise<{ id: st
   };
 
   return (
-    <main id="main">
+    <main id="main" className="article-page">
+      <ArticleReadingProgress />
       <JsonLd data={buildArticleJsonLd(story)} />
       <JsonLd
         data={buildBreadcrumbJsonLd([
@@ -227,10 +235,10 @@ export default async function ArticlePage({ params }: { params: Promise<{ id: st
       </div>
 
       <figure className="article-hero-figure">
-        {story.socialImageUrl ? (
+        {heroImageUrl ? (
           // Image URL is persisted by the newsroom's media/SEO workflow.
           // Keep the branded placeholder only when the article has no cover.
-          <Image className="article-hero-img wrap" src={story.socialImageUrl} alt={story.title} width={1200} height={760} unoptimized />
+          <Image className="article-hero-img wrap" src={heroImageUrl} alt={isOpinion && story.authorName ? `صورة الكاتب ${story.authorName}` : story.title} width={1200} height={760} unoptimized />
         ) : <div className="article-hero-img wrap article-hero-placeholder" aria-hidden="true"><span>جسور</span></div>}
       </figure>
 
@@ -261,6 +269,7 @@ export default async function ArticlePage({ params }: { params: Promise<{ id: st
           <div className="six-grid">{moreFromAuthor.map((item) => <StoryGridCard key={item.id} story={item} />)}</div>
         </div>
       </section>}
+      {articleBottomAd && <section className="article-bottom-ad wrap" aria-label="مساحة إعلانية"><ConfiguredAd placement={articleBottomAd} ratio="4 / 1" /></section>}
       {relatedStories.length > 0 && <section className="section tight on-surface article-related" aria-labelledby="article-related-heading">
         <div className="wrap article-editorial-narrow">
           <div className="section-head"><h2 id="article-related-heading">{copy.readAlso}</h2></div>

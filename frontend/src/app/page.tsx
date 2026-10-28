@@ -15,6 +15,7 @@ import { ServicesBand } from "@/components/home/ServicesBand";
 import { formatArabicDate } from "@/lib/format";
 import { HomepagePollWidget } from "@/components/HomepagePollWidget";
 import { AlertSubscriptionForm } from "@/components/AlertSubscriptionForm";
+import { CrisisHomeTheme } from "@/components/CrisisHomeTheme";
 
 // The homepage is rendered per request so a newly published article (and a
 // deleted one) is reflected immediately — no stale cache during the client trial.
@@ -181,7 +182,7 @@ function AtmaenFeature({ webAd, mobileAd }: { webAd?: PublicAdPlacement; mobileA
   return (
     <section className="section atmaen-feature-section" id="atmaen"><div className="wrap"><div className="atmaen-feature-card"><div className="split-2 atmaen-feature-layout">
           <div><span className="eyebrow atmaen-feature-eyebrow">اطمّن على مغتربك</span><h2 className="atmaen-feature-title">لا تنتظر أخبار الوكالات والمراسلين وقت الأزمات الكبرى.. تابع المستجدات المعتمدة، وأرسل بلاغًا خاصًا للاطمئنان على مغتربك</h2>
-          <div className="flex gap-8 mt-24 atmaen-feature-actions"><Link className="btn btn-primary" href="/atmaen">إطمن</Link><Link className="btn btn-ghost" href="/crisis">مركز الأزمة</Link></div>
+          <div className="flex gap-8 mt-24 atmaen-feature-actions"><Link className="btn btn-primary" href="/atmaen">اطمن</Link><Link className="btn btn-ghost" href="/crisis">مركز الأزمة</Link></div>
         </div>
         <ConfiguredAd placement={webAd} className="atmaen-ad-slot atmaen-ad-slot--web" ratio="1424 / 745" />
         <ConfiguredAd placement={mobileAd} className="atmaen-ad-slot atmaen-ad-slot--mobile" ratio="1424 / 745" />
@@ -190,7 +191,7 @@ function AtmaenFeature({ webAd, mobileAd }: { webAd?: PublicAdPlacement; mobileA
 }
 
 function NewsRecirculation({ desks }: { desks: Record<string, StorySummary[]> }) {
-  const sections = [{ slug: "arts", variant: "lead" }, { slug: "sports", variant: "compact" }, { slug: "fatwas", variant: "lead" }] as const;
+  const sections = [{ slug: "arts", variant: "lead" }, { slug: "sports", variant: "lead" }, { slug: "fatwas", variant: "lead" }] as const;
   return (
     <section className="section tight recirc-section"><div className="wrap"><div className="recirc-cols">{sections.map(({ slug, variant }) => {
       const label = deskLabels[slug];
@@ -255,6 +256,7 @@ export default async function HomePage() {
   // there, so they are intentionally not rendered here either.
   return <LocalizedContent>{(
     <main id="main">
+      {crisis && <CrisisHomeTheme />}
       <JsonLd data={buildOrganizationJsonLd()} />
       {crisis && <section className="wrap" aria-label="تنبيه أزمة نشطة"><Link className="crisis-spotlight" href="/crisis"><span className="crisis-spotlight__eyebrow"><i className="crisis-bar__dot" aria-hidden="true" />مركز الأزمة · {crisis.severity === "emergency" ? "طوارئ" : crisis.severity === "advisory" ? "تنبيه" : "عاجل"}</span><h2 className="crisis-spotlight__title">{crisis.title}</h2><p className="crisis-spotlight__summary">{crisis.summary}</p><span className="crisis-spotlight__actions"><span className="primary">التفاصيل وإرشادات المتابعة ←</span></span></Link></section>}
       {heroSlides.length > 0 && <HomeHeroSlider slides={heroSlides} />}
@@ -325,11 +327,11 @@ export default async function HomePage() {
         </div>
       </section>
 
-      <HomeAdPlacement placement={ad("web", "opportunities-top")} className="home-opportunities-ad home-wide-ad home-wide-ad--web-only home-ad-placement--natural" naturalSize />
       <section className="section on-surface opportunities-section">
         <div className="wrap">
           <div className="split-2">
-            <div>
+            <div className="opportunities-main">
+              <HomeAdPlacement placement={ad("web", "opportunities-top")} className="home-opportunities-ad home-wide-ad home-wide-ad--web-only home-ad-placement--natural" naturalSize />
               <Head label={deskLabels.opportunities} slug="opportunities" />
               <DeskGrid stories={desks.opportunities.slice(0, 4)} label={deskLabels.opportunities} columns={2} />
             </div>

@@ -5,6 +5,7 @@ using Jusoor.Domain.Entities;
 using Jusoor.Domain.Enums;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
+using System.Text.RegularExpressions;
 
 namespace Jusoor.Application.Atmaen;
 
@@ -51,7 +52,7 @@ public sealed record SubmitCaseCommand(
     string? SubjectContactPhone,
     string ConcernDescription,
     string ApplicantPhoneE164,
-    string OtpCode) : IRequest<SubmitCaseResult>;
+    string OtpCode, bool ShareCommunityUpdate = false, string? CommunityMessage = null) : IRequest<SubmitCaseResult>;
 
 public class SubmitCaseCommandValidator : AbstractValidator<SubmitCaseCommand>
 {
@@ -75,6 +76,9 @@ public class SubmitCaseCommandValidator : AbstractValidator<SubmitCaseCommand>
             .NotEmpty()
             .Matches(@"^\+[1-9]\d{7,14}$")
             .WithMessage("Phone number must be in E.164 format, e.g. +201001234567.");
+
+        RuleFor(x => x.CommunityMessage).MaximumLength(1000);
+        RuleFor(x => x).Must(x => !x.ShareCommunityUpdate || (!string.IsNullOrWhiteSpace(x.CommunityMessage) && x.CommunityMessage.Trim().Length >= 10)).WithMessage("اكتب تحديثًا عامًا منفصلًا لا يقل عن 10 أحرف عند اختيار المشاركة.");
 
         RuleFor(x => x.OtpCode)
             .NotEmpty().WithMessage("Please enter the verification code sent to your phone.")
@@ -162,6 +166,13 @@ public class SubmitCaseCommandHandler : IRequestHandler<SubmitCaseCommand, Submi
         @case.AssignTo(assigneeUserId, now);
 
         _context.Cases.Add(@case);
+        if (request.ShareCommunityUpdate)
+        {
+            var publicMessage = request.CommunityMessage?.Trim() ?? "";
+            if (Regex.IsMatch(publicMessage, @"(?:[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,})|(?:https?://|www\.)|(?<!\w)\+?\d[\d\s().-]{7,}\d(?!\w)", RegexOptions.IgnoreCase))
+                throw new ValidationException("لا تنشر بيانات تواصل أو روابط في التحديث العام.");
+            _context.AtmaenCommunityPosts.Add(AtmaenCommunityPost.Create(request.CountryId, request.CityId, null, "أحد أفراد الجالية", "بحاجة لمزيد من المعلومات", publicMessage, now));
+        }
         await _context.SaveChangesAsync(cancellationToken);
 
         return new SubmitCaseResult(true, SubmitCaseOutcome.Created, @case.Id);

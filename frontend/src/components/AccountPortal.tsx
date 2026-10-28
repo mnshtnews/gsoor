@@ -19,6 +19,11 @@ export function AccountPortal() {
   useEffect(() => { const value = document.cookie.split(";").map((part) => part.trim()).find((part) => part.startsWith("jusoor_locale="))?.split("=")[1]; setLocale(parseLocale(value ? decodeURIComponent(value) : null)); }, []);
   const [mode, setMode] = useState<AuthMode>("login");
   const [showPassword, setShowPassword] = useState(false);
+  const [otpStep, setOtpStep] = useState(false);
+  const [otpEmail, setOtpEmail] = useState("");
+  const [otpPassword, setOtpPassword] = useState("");
+  const [otpPurpose, setOtpPurpose] = useState<"register" | "login">("login");
+  const [otpCode, setOtpCode] = useState("");
   const [busy, setBusy] = useState(false);
   const [loading, setLoading] = useState(true);
   const [message, setMessage] = useState("");
@@ -64,22 +69,37 @@ export function AccountPortal() {
   async function submit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault(); setBusy(true); setMessage("");
     const data = new FormData(event.currentTarget);
-    const response = await fetch("/account-api/session", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ action: mode === "register" ? "register" : "login", email: data.get("email"), password: data.get("password"), displayName: data.get("displayName") }) }).catch(() => null);
-    const result = await response?.json().catch(() => ({})) as { message?: string; staff?: boolean } | undefined;
-    if (response?.ok) {
+    const action = otpStep ? "verify" : mode === "register" ? "register" : "login";
+    const email = otpStep ? otpEmail : String(data.get("email") ?? "").trim();
+    const password = otpStep ? otpPassword : String(data.get("password") ?? "");
+    const payload = otpStep ? { action, email, code: otpCode.trim() } : {
+      action, email, password, displayName: mode === "register" ? data.get("displayName") : undefined,
+    };
+    const response = await fetch("/account-api/session", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify(payload) }).catch(() => null);
+    const result = await response?.json().catch(() => ({})) as { message?: string; staff?: boolean; requiresEmailOtp?: boolean; email?: string } | undefined;
+    if (response?.status === 202 && result?.requiresEmailOtp) {
+      setOtpEmail(result.email ?? email); setOtpPassword(password); setOtpPurpose(mode === "register" ? "register" : "login"); setOtpCode(""); setOtpStep(true);
+      setMessage(result.message ?? "أرسلنا رمز تحقق إلى بريدك الإلكتروني.");
+    } else if (response?.ok) {
+      setOtpStep(false); setOtpPassword(""); setOtpCode("");
       if (result?.staff) {
         const requested = new URLSearchParams(window.location.search).get("returnTo");
         const target = requested?.startsWith("/") && !requested.startsWith("//") ? requested : "/cms";
-        window.location.assign(target);
-        return;
+        window.location.assign(target); return;
       }
-      await refreshSession();
-      window.dispatchEvent(new Event("jusoor:session-change"));
-    }
-    else setMessage(result?.message ?? "تعذّر الاتصال بالخادم. حاول مجددًا.");
+      await refreshSession(); window.dispatchEvent(new Event("jusoor:session-change"));
+    } else setMessage(result?.message ?? "تعذّر الاتصال بالخادم. حاول مجددًا.");
     setBusy(false);
   }
 
+  async function resendCode() {
+    if (!otpEmail || !otpPassword) return;
+    setBusy(true); setMessage("");
+    const response = await fetch("/account-api/session", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ action: "resend", email: otpEmail, password: otpPassword, purpose: otpPurpose }) }).catch(() => null);
+    const result = await response?.json().catch(() => ({})) as { message?: string; requiresEmailOtp?: boolean } | undefined;
+    setMessage(result?.message ?? (response?.ok ? "أرسلنا رمزًا جديدًا إلى بريدك." : "تعذّر إرسال رمز جديد."));
+    setBusy(false);
+  }
   async function saveLocation() {
     setBusy(true); setMessage("");
     const privacyCode = privacyLevel === "CountryOnly" ? 1 : privacyLevel === "City" ? 3 : 0;
@@ -135,22 +155,19 @@ export function AccountPortal() {
   }
 
   return <section className="account-card auth-account-card" dir={locale === "ar" ? "rtl" : "ltr"}>
-    <h1>{t(mode === "login" ? "تسجيل الدخول" : mode === "register" ? "إنشاء حساب" : "استعادة كلمة المرور")}</h1>
-    <p>{t(mode === "login" ? "استخدم حسابك للوصول إلى الملف الشخصي وخدمات جسور." : mode === "register" ? "أنشئ حسابك لمتابعة خدمات جسور للمصريين بالخارج." : "استعادة كلمة المرور غير متاحة في نسخة التجربة الحالية.")}</p>
-    <div className="auth-tabs" role="tablist" aria-label={t("خيارات الحساب")}>
+    <h1>{t(otpStep ? "تأكيد البريد الإلكتروني" : mode === "login" ? "تسجيل الدخول" : mode === "register" ? "إنشاء حساب" : "استعادة كلمة المرور")}</h1>
+    <p>{t(otpStep ? "أدخل رمز التحقق المكوّن من 6 أرقام الذي أرسلناه إلى بريدك." : mode === "login" ? "استخدم حسابك للوصول إلى الملف الشخصي وخدمات جسور." : mode === "register" ? "أنشئ حسابك لمتابعة خدمات جسور للمصريين بالخارج." : "استعادة كلمة المرور غير متاحة في نسخة التجربة الحالية.")}</p>
+    {!otpStep && <div className="auth-tabs" role="tablist" aria-label={t("خيارات الحساب")}>
       <button type="button" role="tab" aria-selected={mode === "login"} className={mode === "login" ? "active" : ""} onClick={() => changeMode("login")}>{t("دخول" )}</button>
       <button type="button" role="tab" aria-selected={mode === "register"} className={mode === "register" ? "active" : ""} onClick={() => changeMode("register")}>{t("إنشاء حساب" )}</button>
       <button type="button" role="tab" aria-selected={mode === "forgot"} className={mode === "forgot" ? "active" : ""} onClick={() => changeMode("forgot")}>{t("نسيت كلمة السر" )}</button>
-    </div>
-    {mode === "forgot" ? <div className="auth-recovery-note" role="status">{t("لا تتوفر حاليًا خدمة إعادة تعيين كلمة المرور. تواصل مع فريق جسور لاستعادة الوصول إلى حسابك." )}</div> : <form className="auth-form" onSubmit={submit}>
-      {mode === "register" && <label className="auth-field">{t("الاسم بالكامل" )}<input name="displayName" autoComplete="name" required maxLength={100} /></label>}
-      <label className="auth-field">{t("البريد الإلكتروني" )}<input name="email" type="email" autoComplete="email" required maxLength={256} /></label>
-      <label className="auth-field">{t("كلمة المرور" )}<span className="auth-password"><input name="password" type={showPassword ? "text" : "password"} autoComplete={mode === "login" ? "current-password" : "new-password"} required minLength={mode === "register" ? 8 : 1} maxLength={128} /><button type="button" onClick={() => setShowPassword((visible) => !visible)}>{t(showPassword ? "إخفاء" : "إظهار")}</button></span></label>
-      {mode === "login" && <button className="auth-forgot-link" type="button" onClick={() => changeMode("forgot")}>{t("نسيت كلمة المرور؟" )}</button>}
-      {mode === "register" && <label className="auth-terms"><input type="checkbox" required /> {t("أوافق على")} <a href="/privacy" target="_blank" rel="noreferrer">{t("سياسة الخصوصية" )}</a></label>}
+    </div>}
+    {mode === "forgot" && !otpStep ? <div className="auth-recovery-note" role="status">{t("لا تتوفر حاليًا خدمة إعادة تعيين كلمة المرور. تواصل مع فريق جسور لاستعادة الوصول إلى حسابك." )}</div> : <form className="auth-form" onSubmit={submit}>
+      {otpStep ? <><label className="auth-field">{t("البريد الإلكتروني")}<input value={otpEmail} readOnly /></label><label className="auth-field">{t("رمز التحقق")}<input name="code" type="text" inputMode="numeric" autoComplete="one-time-code" pattern="[0-9]{6}" maxLength={6} required value={otpCode} onChange={(event) => setOtpCode(event.target.value.replace(/\D/g, "").slice(0, 6))} /></label></> : <>{mode === "register" && <label className="auth-field">{t("الاسم بالكامل" )}<input name="displayName" autoComplete="name" required maxLength={100} /></label>}<label className="auth-field">{t("البريد الإلكتروني" )}<input name="email" type="email" autoComplete="email" required maxLength={256} /></label><label className="auth-field">{t("كلمة المرور" )}<span className="auth-password"><input name="password" type={showPassword ? "text" : "password"} autoComplete={mode === "login" ? "current-password" : "new-password"} required minLength={mode === "register" ? 8 : 1} maxLength={128} /><button type="button" onClick={() => setShowPassword((visible) => !visible)}>{t(showPassword ? "إخفاء" : "إظهار")}</button></span></label></>}      {!otpStep && mode === "login" && <button className="auth-forgot-link" type="button" onClick={() => changeMode("forgot")}>{t("نسيت كلمة المرور؟" )}</button>}
+      {!otpStep && mode === "register" && <label className="auth-terms"><input type="checkbox" required /> {t("أوافق على")} <a href="/privacy" target="_blank" rel="noreferrer">{t("سياسة الخصوصية" )}</a></label>}
       {message && <p className="account-message" role="alert">{t(message)}</p>}
-      <button className="btn btn-primary auth-submit" type="submit" disabled={busy}>{busy ? t("جارٍ التنفيذ…") : t(mode === "login" ? "تسجيل الدخول" : "إنشاء الحساب")}</button>
+      <button className="btn btn-primary auth-submit" type="submit" disabled={busy}>{busy ? t("جارٍ التنفيذ…") : t(otpStep ? "تأكيد الرمز" : mode === "login" ? "متابعة وإرسال الرمز" : "إنشاء الحساب وإرسال الرمز")}</button>{otpStep && <button className="auth-forgot-link" type="button" onClick={() => void resendCode()} disabled={busy}>{t("إعادة إرسال الرمز")}</button>}
     </form>}
-    {mode !== "forgot" && <p className="auth-form-footer">{mode === "login" ? <>مستخدم جديد؟ <button type="button" onClick={() => changeMode("register")}>{t("أنشئ حسابًا" )}</button></> : <>لديك حساب؟ <button type="button" onClick={() => changeMode("login")}>{t("سجّل الدخول" )}</button></>}</p>}
+    {mode !== "forgot" && !otpStep && <p className="auth-form-footer">{mode === "login" ? <>مستخدم جديد؟ <button type="button" onClick={() => changeMode("register")}>{t("أنشئ حسابًا" )}</button></> : <>لديك حساب؟ <button type="button" onClick={() => changeMode("login")}>{t("سجّل الدخول" )}</button></>}</p>}
   </section>;
 }

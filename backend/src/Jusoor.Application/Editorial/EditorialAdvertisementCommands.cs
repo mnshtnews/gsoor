@@ -23,6 +23,7 @@ public static class EditorialAdSlotCatalog
             ["opportunities-top"] = ("إعلان أفقي أعلى فرص الاستثمار", "web"),
             ["lamma-top"] = ("أعلى قسم اللمة الحلوة", "web"),
             ["lamma-events-square"] = ("أسفل فعاليات وتغطيات", "web"),
+            ["article-bottom"] = ("أسفل صفحة الخبر", "web"),
             ["services-1"] = ("بعد خدمة اطمّن على مغتربك", "web"),
             ["services-2"] = ("بعد خدمة خريطة المهجر", "web"),
             ["services-3"] = ("بعد خدمة التنبيهات الجغرافية", "web"),

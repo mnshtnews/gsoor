@@ -6,6 +6,8 @@ export const dynamic = "force-dynamic";
 const USER_COOKIE = "jusoor_user_token";
 const STAFF_ROLES = ["Reporter", "AiEditor", "CopyEditor", "SeniorEditor", "ManagingEditor", "EditorInChief", "SystemAdmin", "SeoEditor", "FactChecker", "Researcher", "CrisisEditor"];
 
+type Tokens = { accessToken?: string; expiresAtUtc?: string; message?: string; errors?: string[] };
+
 export async function GET() {
   const jar = await cookies();
   const token = jar.get(USER_COOKIE)?.value ?? jar.get(CMS_COOKIE)?.value;
@@ -19,20 +21,29 @@ export async function GET() {
 
 export async function POST(request: Request) {
   if (!isSameOrigin(request)) return forbiddenOrigin();
-  const body = await request.json().catch(() => null) as { action?: string; email?: string; password?: string; displayName?: string } | null;
-  if (!body || !["login", "register"].includes(body.action ?? "") || !body.email || !body.password || (body.action === "register" && !body.displayName?.trim())) {
+  const body = await request.json().catch(() => null) as { action?: string; email?: string; password?: string; displayName?: string; code?: string; purpose?: string } | null;
+  const allowed = ["login", "register", "verify", "resend"];
+  if (!body || !allowed.includes(body.action ?? "") || !body.email || (body.action !== "verify" && !body.password) || (body.action === "register" && !body.displayName?.trim()) || (body.action === "verify" && !body.code)) {
     return NextResponse.json({ message: "أكمل بيانات الحساب المطلوبة." }, { status: 400 });
   }
-  const upstream = await fetch(backendUrl(`/api/v1/auth/${body.action}`), {
-    method: "POST", headers: { "Content-Type": "application/json" },
-    body: JSON.stringify(body.action === "register" ? { email: body.email, password: body.password, displayName: body.displayName } : { email: body.email, password: body.password }),
-    cache: "no-store",
+  const endpoint = body.action === "verify" ? "verify" : body.action === "resend" ? "resend" : body.action;
+  const payload = body.action === "register"
+    ? { email: body.email, password: body.password, displayName: body.displayName }
+    : body.action === "verify"
+      ? { email: body.email, code: body.code }
+      : body.action === "resend"
+        ? { email: body.email, password: body.password, purpose: body.purpose }
+        : { email: body.email, password: body.password };
+  const upstream = await fetch(backendUrl(`/api/v1/auth/${endpoint}`), {
+    method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify(payload), cache: "no-store",
   }).catch(() => null);
   if (!upstream) return NextResponse.json({ message: "تعذّر الاتصال بالخادم." }, { status: 502 });
-  const result = await upstream.json().catch(() => ({})) as { accessToken?: string; expiresAtUtc?: string; message?: string; errors?: string[] };
+  const result = await upstream.json().catch(() => ({})) as Tokens & { requiresEmailOtp?: boolean; email?: string };
+  if (upstream.status === 202 && result.requiresEmailOtp) {
+    return NextResponse.json({ requiresEmailOtp: true, email: result.email ?? body.email, message: result.message }, { status: 202 });
+  }
   if (!upstream.ok || !result.accessToken || !result.expiresAtUtc) {
-    const message = result.errors?.join(" ") || (body.action === "login" ? "تعذّر تسجيل الدخول. راجع البيانات وحاول مجددًا." : "تعذّر إنشاء الحساب. راجع البيانات وحاول مجددًا.");
-    return NextResponse.json({ message }, { status: upstream.status });
+    return NextResponse.json({ message: result.message ?? result.errors?.join(" ") ?? "تعذّر تنفيذ الطلب. حاول مجددًا." }, { status: upstream.status });
   }
   const maxAge = Math.max(60, Math.floor((new Date(result.expiresAtUtc).getTime() - Date.now()) / 1000));
   const { roles } = decodeTokenClaims(result.accessToken);

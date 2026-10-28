@@ -50,6 +50,11 @@ services:
       Twilio__AccountSid: ${TWILIO_ACCOUNT_SID:-}
       Twilio__AuthToken: ${TWILIO_AUTH_TOKEN:-}
       Twilio__VerifyServiceSid: ${TWILIO_VERIFY_SERVICE_SID:-}
+      EmailOtp__Enabled: ${EMAIL_OTP_ENABLED:-false}
+      EmailOtp__HashingKey: ${EMAIL_OTP_HASHING_KEY:-}
+      Email__BrevoApiKey: ${EMAIL_BREVO_API_KEY:-}
+      Email__FromAddress: ${EMAIL_FROM_ADDRESS:-}
+      Email__FromName: ${EMAIL_FROM_NAME:-جسور}
       Cors__AllowedOrigins__0: https://${SITE_DOMAIN:?Set SITE_DOMAIN, e.g. gosour.net}
       Cors__AllowedOrigins__1: https://www.${SITE_DOMAIN:?Set SITE_DOMAIN, e.g. gosour.net}
       # Newsroom logins created at startup when BOOTSTRAP_RUN_ON_STARTUP=true.

@@ -54,7 +54,7 @@ public class AtmaenController : ControllerBase
         string? SubjectContactPhone,
         string ConcernDescription,
         string ApplicantPhoneE164,
-        string OtpCode);
+        string OtpCode, bool ShareCommunityUpdate = false, string? CommunityMessage = null);
 
     public record UpdateCaseStatusRequest(CaseStatus NewStatus);
 
@@ -93,7 +93,7 @@ public class AtmaenController : ControllerBase
                 request.SubjectContactPhone,
                 request.ConcernDescription,
                 request.ApplicantPhoneE164,
-                request.OtpCode),
+                request.OtpCode, request.ShareCommunityUpdate, request.CommunityMessage),
             cancellationToken);
 
         return result.Outcome switch

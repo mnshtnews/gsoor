@@ -412,9 +412,22 @@ function normalizeEmbedUrl(value: string): { src: string; provider: string } | n
       if (!source) return null;
     }
 
-    const u = new URL(source);
+    let u = new URL(source);
     if (u.protocol !== "https:" || u.username || u.password || u.port || u.hash) return null;
-    const path = u.pathname.replace(/\/$/, "");
+    let path = u.pathname.replace(/\/$/, "");
+    // Accept ordinary share links and convert them to provider-owned iframe URLs.
+    if (["facebook.com", "www.facebook.com", "m.facebook.com"].includes(u.hostname) && path !== "/plugins/video.php" && (/^\/watch$/.test(path) || /^\/(videos|posts|reel)\//.test(path) || /^\/permalink\.php$/.test(path))) {
+      const shared = new URL(u.toString()); shared.hostname = "www.facebook.com";
+      u = new URL("https://www.facebook.com/plugins/video.php"); u.searchParams.set("href", shared.toString()); path = u.pathname;
+    } else if (["instagram.com", "www.instagram.com"].includes(u.hostname) && /^\/(p|reel)\/[\w-]{3,40}$/.test(path)) {
+      u.hostname = "www.instagram.com"; u.pathname = `${path}/embed`; path = u.pathname;
+    } else if (["x.com", "www.x.com", "twitter.com", "www.twitter.com"].includes(u.hostname)) {
+      const status = path.match(/^\/[^/]+\/status\/(\d{1,30})$/);
+      if (status) { u = new URL("https://platform.twitter.com/embed/Tweet.html"); u.searchParams.set("id", status[1]); path = u.pathname; }
+    } else if (u.hostname === "www.tiktok.com") {
+      const video = path.match(/^\/@[\w.-]+\/video\/(\d{5,30})$/);
+      if (video) { u.pathname = `/embed/v2/${video[1]}`; path = u.pathname; }
+    }
     let provider = "";
     if (["youtube.com", "www.youtube.com", "m.youtube.com", "youtube-nocookie.com", "www.youtube-nocookie.com"].includes(u.hostname)) {
       const embed = path.match(/^\/(?:embed|shorts|live)\/([\w-]{11})$/);

@@ -7,10 +7,10 @@ import { translateUi } from "@/lib/ui-translations";
 type Country = { id: string; nameAr: string; nameEn: string; isoCode2: string };
 type City = { id: string; countryId: string; nameAr: string; nameEn: string };
 type Step = "details" | "verify" | "success";
-type FormState = { countryId: string; cityId: string; subjectName: string; subjectContactPhone: string; concernDescription: string; applicantPhoneE164: string; otpCode: string };
+type FormState = { countryId: string; cityId: string; subjectName: string; subjectContactPhone: string; concernDescription: string; shareCommunityUpdate: boolean; communityMessage: string; applicantPhoneE164: string; otpCode: string };
 
 const API = process.env.NEXT_PUBLIC_API_BASE_URL ?? "http://localhost:5000";
-const INITIAL: FormState = { countryId: "", cityId: "", subjectName: "", subjectContactPhone: "", concernDescription: "", applicantPhoneE164: "", otpCode: "" };
+const INITIAL: FormState = { countryId: "", cityId: "", subjectName: "", subjectContactPhone: "", concernDescription: "", shareCommunityUpdate: false, communityMessage: "", applicantPhoneE164: "", otpCode: "" };
 
 async function request<T>(path: string, body?: unknown): Promise<T> {
   const response = await fetch(`${API}${path}`, {
@@ -84,7 +84,7 @@ export function AtmaenRequestForm() {
       await request("/api/v1/atmaen/cases", {
         countryId: form.countryId, cityId: form.cityId, subjectName: form.subjectName.trim(),
         subjectContactPhone: form.subjectContactPhone.trim() || null, concernDescription: form.concernDescription.trim(),
-        applicantPhoneE164: form.applicantPhoneE164.trim(), otpCode: form.otpCode.trim(),
+        applicantPhoneE164: form.applicantPhoneE164.trim(), otpCode: form.otpCode.trim(), shareCommunityUpdate: form.shareCommunityUpdate, communityMessage: form.shareCommunityUpdate ? form.communityMessage.trim() : null,
       });
       setStep("success");
     } catch (reason) { setError(reason instanceof Error ? reason.message : t("تعذّر إرسال البلاغ.")); }
@@ -104,7 +104,7 @@ export function AtmaenRequestForm() {
         <label className="wide"><span>{t("ما الذي يقلقك؟")} <b>*</b></span><textarea required minLength={10} maxLength={2000} rows={4} value={form.concernDescription} onChange={(event) => change("concernDescription", event.target.value)} placeholder={t("اشرح بإيجاز سبب طلب المساعدة…")} /><small>{form.concernDescription.length} / 2000</small></label>
         <label className="wide"><span>{t("رقم هاتفك لإرسال رمز التأكيد")} <b>*</b></span><input required type="tel" dir="ltr" autoComplete="tel" pattern="\+[1-9]\d{7,14}" placeholder="+201XXXXXXXXX" value={form.applicantPhoneE164} onChange={(event) => change("applicantPhoneE164", event.target.value)} /><small>{t("اكتب الرقم بالصيغة الدولية، مثل +201XXXXXXXXX.")}</small></label>
       </div>
-      <label className="atmaen-consent"><input type="checkbox" checked={consented} onChange={(event) => setConsented(event.target.checked)} /><span>{t("أوافق على استخدام بيانات التواصل والمعلومات أعلاه لمعالجة هذا البلاغ والتواصل معي بشأنه.")} <strong>{t("لا ترسل معلومات طبية أو مالية أو كلمات مرور.")}</strong></span></label>
+      <label className="atmaen-community-consent"><input type="checkbox" checked={form.shareCommunityUpdate} onChange={(event) => change("shareCommunityUpdate", event.target.checked)} /><span>{t("أرغب في مشاركة تحديث عام منفصل في مجتمع الاطمئنان بعد تأكيد البلاغ. لن تُنشر بيانات البلاغ أو أسماء أو أرقام التواصل.")}</span></label>{form.shareCommunityUpdate && <label className="wide"><span>{t("التحديث العام الذي سيظهر للمجتمع")}</span><textarea required minLength={10} maxLength={1000} rows={3} value={form.communityMessage} onChange={(event) => change("communityMessage", event.target.value)} placeholder={t("اكتب معلومة عامة تساعد الآخرين دون أسماء أو أرقام أو تفاصيل خاصة…")} /><small>{form.communityMessage.length} / 1000</small></label>}      <label className="atmaen-consent"><input type="checkbox" checked={consented} onChange={(event) => setConsented(event.target.checked)} /><span>{t("أوافق على استخدام بيانات التواصل والمعلومات أعلاه لمعالجة هذا البلاغ والتواصل معي بشأنه.")} <strong>{t("لا ترسل معلومات طبية أو مالية أو كلمات مرور.")}</strong></span></label>
       <button className="atmaen-submit" disabled={busy || countries.length === 0 || cities.length === 0}>{busy ? t("جارٍ إرسال الرمز…") : t("إرسال رمز التأكيد")}<span aria-hidden="true">←</span></button>
     </form> : <form className="atmaen-form" onSubmit={(event) => void submitCase(event)}>
       <div className="atmaen-verify-callout"><span aria-hidden="true">✉</span><p>{t("أرسلنا رمز التحقق إلى")} <b dir="ltr">{form.applicantPhoneE164}</b>. {t("أدخله لتأكيد رقمك وإرسال البلاغ.")}</p></div>

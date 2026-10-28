@@ -40,7 +40,7 @@ export default async function RootLayout({
   return (
     <html lang={locale} dir={locale === "ar" ? "rtl" : "ltr"}>
       <head>
-        <link rel="icon" type="image/png" href="/assets/josour-logo-transparent.png" />
+        <link rel="icon" type="image/jpeg" href={structure?.leadership?.logoUrl || "/assets/josour-logo-client.jpg"} />
         <link rel="preconnect" href="https://fonts.googleapis.com" />
         <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="" />
         {/* eslint-disable-next-line @next/next/no-page-custom-font -- this

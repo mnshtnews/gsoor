@@ -21,7 +21,7 @@ const DEFAULT_NAVIGATION: PublicSiteNavigationItem[] = [
   ["fatwas", "فتاوى", "/category?cat=fatwas", "more"], ["videos", "فيديو", "/videos", "more"],
 ].map(([key, label, href, group], displayOrder) => ({ key, label, href, group: group as "primary" | "more", displayOrder, isVisible: true }));
 
-type Leadership = { entries: Array<{ id: string; title: string; name: string }> };
+type Leadership = { entries: Array<{ id: string; title: string; name: string }>; logoAssetId?: string | null; logoUrl?: string | null };
 
 function LeadershipCredits({ leadership, className = "header-leadership" }: { leadership?: Leadership; className?: string }) {
   const entries = leadership?.entries.filter((entry) => entry.title.trim() || entry.name.trim()) ?? [];
@@ -65,6 +65,7 @@ export function HeaderInteractive({ tickerHeadlines, navbarAd, navigation, leade
   const [staffRoles, setStaffRoles] = useState<string[]>([]);
   const [signedIn, setSignedIn] = useState(false);
   const text = HEADER_COPY[locale];
+  const logoSrc = leadership?.logoUrl || "/assets/josour-logo-client.jpg";
 
   useEffect(() => {
     let active = true;
@@ -135,7 +136,7 @@ export function HeaderInteractive({ tickerHeadlines, navbarAd, navigation, leade
   // The demo repeats the ticker group 3-4x in the HTML itself for a
   // seamless CSS marquee loop — same technique, applied to real headlines
   // instead of the demo's fixed sample list.
-  const tickerGroups = tickerHeadlines.length > 0 ? [0, 1, 2] : [];
+  const tickerGroups = tickerHeadlines.length > 0 ? [0, 1] : [];
   const visibleNavigation = (navigation?.length ? navigation : DEFAULT_NAVIGATION).filter((item) => item.isVisible).map((item) => ({ ...item, label: localizedNavigationLabel(item.key, item.label, locale) }));
   const primaryLinks = visibleNavigation.filter((item) => item.group === "primary").sort((a, b) => a.displayOrder - b.displayOrder);
   const moreLinks = visibleNavigation.filter((item) => item.group === "more").sort((a, b) => a.displayOrder - b.displayOrder);
@@ -177,7 +178,7 @@ export function HeaderInteractive({ tickerHeadlines, navbarAd, navigation, leade
 
           <div className="header-branding">
             <Link className="logo" href="/">
-              <Image className="logo-img" src="/assets/josour-logo-transparent.png" alt="جسور" width={1104} height={974} priority />
+              <Image className="logo-img" src={logoSrc} alt="جسور" width={1104} height={974} priority />
               <span className="logo-slogan">المصريون بالخارج سفراء الوطن</span>
             </Link>
             <LeadershipCredits leadership={leadership} />
@@ -210,7 +211,7 @@ export function HeaderInteractive({ tickerHeadlines, navbarAd, navigation, leade
             </button>
             <div className="nav-sticky-logo">
               <Link href="/" aria-label="الرئيسية">
-                <Image src="/assets/josour-logo-transparent.png" alt="جسور" width={1104} height={974} />
+                <Image src={logoSrc} alt="جسور" width={1104} height={974} />
               </Link>
             </div>
 
@@ -272,7 +273,7 @@ export function HeaderInteractive({ tickerHeadlines, navbarAd, navigation, leade
       >
         <div className="drawer">
           <div className="flex" style={{ justifyContent: "space-between", alignItems: "center", marginBottom: 20 }}>
-            <Image className="logo-img" src="/assets/josour-logo-transparent.png" alt="جسور" width={1104} height={974} />
+            <Image className="logo-img" src={logoSrc} alt="جسور" width={1104} height={974} />
             <button type="button" className="drawer-close icon-btn" onClick={() => setDrawerOpen(false)}>✕</button>
           </div>
           <LeadershipCredits leadership={leadership} className="drawer-leadership" />

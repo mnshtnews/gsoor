@@ -194,7 +194,7 @@ export interface PublicSocialLink { id: string; name: string; href: string; icon
 export interface PublicSiteStructure {
   navigation: PublicSiteNavigationItem[];
   homepageSections: PublicHomepageSection[];
-  leadership: { entries: Array<{ id: string; title: string; name: string }> };
+  leadership: { entries: Array<{ id: string; title: string; name: string }>; logoAssetId?: string | null; logoUrl?: string | null };
   socialLinks: PublicSocialLink[];
   welcomeIntro: { isEnabled: boolean; assetId: string | null; videoUrl: string | null; fileName: string | null };
   lastModifiedAtUtc: string | null;

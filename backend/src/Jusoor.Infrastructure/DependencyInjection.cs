@@ -63,6 +63,8 @@ public static class DependencyInjection
         services.AddScoped<IIdentityService, IdentityService>();
         services.AddScoped<IUserPermissionService, UserPermissionService>();
         services.AddSingleton<IJwtTokenService, JwtTokenService>();
+        services.AddScoped<IEmailOtpAuthService, EmailOtpAuthService>();
+        services.AddHttpClient<ITransactionalEmailSender, BrevoTransactionalEmailSender>(client => client.Timeout = TimeSpan.FromSeconds(20));
 
         services.Configure<JwtOptions>(configuration.GetSection(JwtOptions.SectionName));
 
@@ -177,6 +179,8 @@ public static class DependencyInjection
                 policy.RequireRole(NewsroomRole.SeoEditor, NewsroomRole.SeniorEditor, NewsroomRole.ManagingEditor, NewsroomRole.EditorInChief));
             options.AddPolicy(AuthorizationPolicies.CanManageEditorialTaxonomy, policy =>
                 policy.RequireRole(NewsroomRole.EditorInChief));
+            options.AddPolicy(AuthorizationPolicies.CanManageSiteStructure, policy =>
+                policy.RequireRole(NewsroomRole.EditorInChief, NewsroomRole.ManagingEditor, NewsroomRole.SystemAdmin));
             options.AddPolicy(AuthorizationPolicies.CanCreateEditorialArticle, policy =>
                 policy.RequireRole(EditorialArticleAccess.CreatorRoles.ToArray()));
             options.AddPolicy(AuthorizationPolicies.CanPublishEditorialArticle, policy =>

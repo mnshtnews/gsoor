@@ -8,6 +8,8 @@ using Jusoor.Infrastructure.Ingestion;
 using Jusoor.Infrastructure.Persistence;
 using Jusoor.Infrastructure.Scheduling;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.RateLimiting;
+using System.Threading.RateLimiting;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;
 using Serilog;
@@ -79,6 +81,15 @@ builder.Services.AddApplication(builder.Configuration);
 builder.Services.AddInfrastructure(builder.Configuration);
 builder.Services.AddScoped<Jusoor.Api.Services.EditorialTranslationGenerator>();
 
+builder.Services.AddRateLimiter(options =>
+{
+    options.RejectionStatusCode = StatusCodes.Status429TooManyRequests;
+    options.AddPolicy("email-otp", context => RateLimitPartition.GetFixedWindowLimiter(
+        // Production API traffic comes only through the private Caddy network.
+        context.Request.Headers["X-Forwarded-For"].FirstOrDefault()?.Split(',').Last().Trim()
+            is { Length: > 0 } forwardedIp ? forwardedIp : context.Connection.RemoteIpAddress?.ToString() ?? "unknown",
+        _ => new FixedWindowRateLimiterOptions { PermitLimit = 10, Window = TimeSpan.FromMinutes(15), QueueLimit = 0, AutoReplenishment = true }));
+});
 builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
@@ -163,6 +174,7 @@ using (var geographyScope = app.Services.CreateScope())
 if (app.Configuration.GetValue("HttpsRedirection:Enabled", true))
     app.UseHttpsRedirection();
 app.UseCors("Frontend");
+app.UseRateLimiter();
 app.UseAuthentication();
 app.UseAuthorization();
 app.MapControllers();

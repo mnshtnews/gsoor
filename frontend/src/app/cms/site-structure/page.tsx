@@ -1,5 +1,6 @@
 "use client";
 
+import Image from "next/image";
 import { LocalizedContent } from "@/components/LocalizedContent";
 
 import { useCallback, useEffect, useMemo, useState } from "react";
@@ -7,7 +8,7 @@ import { useRouter } from "next/navigation";
 import { cms, cmsSiteStructure, CmsError, PRESENTATION_DESKS, type CmsHomepageSection, type CmsSiteNavigationItem, type CmsSiteStructure, type CmsSocialLink } from "@/lib/cms-client";
 import { cmsMedia } from "@/lib/cms-media-client";
 
-const DEFAULT_LEADERSHIP: CmsSiteStructure["leadership"] = { entries: [
+const DEFAULT_LEADERSHIP: CmsSiteStructure["leadership"] = { logoAssetId: null, logoUrl: null, entries: [
   { id: "board-editor", title: "رئيس مجلس الإدارة ورئيس التحرير", name: "أحمد سليمان" },
   { id: "executive-editor", title: "رئيس التحرير التنفيذي", name: "أشرف جبريل" },
 ] };
@@ -30,15 +31,16 @@ export default function SiteStructurePage() {
   const [newDesk, setNewDesk] = useState("");
   const [canManage, setCanManage] = useState(false);
   const [introUploadBusy, setIntroUploadBusy] = useState(false);
+  const [logoUploadBusy, setLogoUploadBusy] = useState(false);
 
   const load = useCallback(async () => {
     setError("");
     try {
       const session = await cms.session();
       if (!session.authenticated) { router.replace("/cms/login"); return; }
-      const allowed = !!session.roles?.includes("EditorInChief");
+      const allowed = !!session.roles?.some((role) => ["EditorInChief", "ManagingEditor", "SystemAdmin"].includes(role));
       setCanManage(allowed);
-      if (!allowed) { setError("إدارة هيكل الموقع متاحة لرئيس التحرير فقط."); return; }
+      if (!allowed) { setError("إدارة هيكل الموقع متاحة لرئيس التحرير ومدير التحرير ومدير النظام."); return; }
       setStructure(await cmsSiteStructure.get());
       setDirty(false);
     } catch (cause) {
@@ -99,17 +101,28 @@ export default function SiteStructurePage() {
   const updateWelcomeIntro = (patch: Partial<CmsSiteStructure["welcomeIntro"]>) => {
     setStructure((current) => ({ ...current, welcomeIntro: { ...current.welcomeIntro, ...patch } })); setDirty(true); setNotice("");
   };
+  async function uploadBrandLogo(file?: File) {
+    if (!file) return;
+    if (!file.type.startsWith("image/")) { setError("اختر ملف صورة للشعار."); return; }
+    setLogoUploadBusy(true); setError(""); setNotice("");
+    try {
+      const asset = await cmsMedia.upload(file, { altText: "شعار جسور", credit: "جسور", caption: "", focalPointX: null, focalPointY: null });
+      setStructure((current) => ({ ...current, leadership: { ...current.leadership, logoAssetId: asset.id, logoUrl: asset.publicUrl } }));
+      setDirty(true);
+    } catch (cause) { setError(cause instanceof Error ? cause.message : "تعذّر رفع الشعار."); }
+    finally { setLogoUploadBusy(false); }
+  }
   const updateLeadership = (id: string, patch: Partial<CmsSiteStructure["leadership"]["entries"][number]>) => {
-    setStructure((current) => ({ ...current, leadership: { entries: current.leadership.entries.map((entry) => entry.id === id ? { ...entry, ...patch } : entry) } }));
+    setStructure((current) => ({ ...current, leadership: { ...current.leadership, entries: current.leadership.entries.map((entry) => entry.id === id ? { ...entry, ...patch } : entry) } }));
     setDirty(true); setNotice("");
   };
   const addLeadership = () => {
     const id = `custom-${crypto.randomUUID()}`;
-    setStructure((current) => ({ ...current, leadership: { entries: [...current.leadership.entries, { id, title: "", name: "" }] } }));
+    setStructure((current) => ({ ...current, leadership: { ...current.leadership, entries: [...current.leadership.entries, { id, title: "", name: "" }] } }));
     setDirty(true); setNotice("");
   };
   const removeLeadership = (id: string) => {
-    setStructure((current) => ({ ...current, leadership: { entries: current.leadership.entries.filter((entry) => entry.id !== id) } }));
+    setStructure((current) => ({ ...current, leadership: { ...current.leadership, entries: current.leadership.entries.filter((entry) => entry.id !== id) } }));
     setDirty(true); setNotice("");
   };
   const moveSection = (index: number, delta: -1 | 1) => {
@@ -145,6 +158,11 @@ export default function SiteStructurePage() {
     {error && <div className="cms-msg error" role="alert">{error}<button className="cms-btn" type="button" onClick={() => void load()}>إعادة المحاولة</button></div>}
     {notice && <div className="cms-msg ok" role="status">{notice}</div>}
 
+    <section className="cms-card"><div className="cms-section-title"><div><h2>شعار الموقع</h2><p className="cms-hint">ارفع الشعار الجديد من هنا؛ يُستخدم في رأس الموقع والقائمة والفوتر بعد الحفظ.</p></div></div>
+      <label className="cms-field"><span>تغيير الشعار</span><input type="file" accept="image/jpeg,image/png,image/webp" disabled={!canManage || logoUploadBusy || busy} onChange={(event) => { void uploadBrandLogo(event.target.files?.[0]); event.currentTarget.value = ""; }} /></label>
+      {logoUploadBusy && <p className="cms-hint" role="status">جارٍ رفع الشعار…</p>}
+      {structure.leadership.logoUrl && <div className="cms-actions"><Image src={structure.leadership.logoUrl} alt="معاينة شعار جسور" width={120} height={100} unoptimized style={{ objectFit: "contain", background: "#fff" }} /><button type="button" className="cms-btn" disabled={busy} onClick={() => { setStructure((current) => ({ ...current, leadership: { ...current.leadership, logoAssetId: null, logoUrl: null } })); setDirty(true); }}>الرجوع للشعار الافتراضي</button></div>}
+    </section>
     <section className="cms-card"><div className="cms-section-title"><div><h2>أسماء الإدارة والتحرير</h2><p className="cms-hint">تظهر بجوار شعار جسور. الحقلان الأساسيان ثابتان، ويمكن إضافة حتى 8 مسميات أخرى وتعديلها أو حذفها.</p></div><button type="button" className="cms-btn" disabled={structure.leadership.entries.length >= 10} onClick={addLeadership}>＋ إضافة مسمى</button></div>
       <div className="cms-leadership-fields">
         {structure.leadership.entries.map((entry, index) => <div className="cms-leadership-entry" key={entry.id}>

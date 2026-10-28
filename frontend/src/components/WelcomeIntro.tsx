@@ -51,7 +51,7 @@ export function WelcomeIntro({ enabled, videoUrl }: { enabled: boolean; videoUrl
         <div className="intro-bar bottom" />
         <video ref={videoRef} className="intro-video is-ready" src={videoUrl} autoPlay muted={muted} playsInline preload="auto" onEnded={() => setOpen(false)} onError={() => setOpen(false)} />
         <div className="intro-scrim" />
-        <div className="intro-brand"><Image src="/assets/josour-logo-transparent.png" alt="" width={1104} height={974} /><span>جسور</span></div>
+        <div className="intro-brand"><Image src="/assets/josour-logo-client.jpg" alt="" width={1104} height={974} /><span>جسور</span></div>
         <button className="intro-skip" type="button" onClick={() => setOpen(false)}>تخطي</button>
         <button className="intro-sound" type="button" aria-label={muted ? "تشغيل الصوت" : "كتم الصوت"} onClick={() => setMuted((value) => !value)}>{muted ? "🔇" : "🔊"}</button>
         <div className="intro-captions"><span className="intro-caption-eyebrow show">منصة المصريين بالخارج</span><h2 className="intro-caption-title show">أخبار جسور وخدماتها أينما كنت</h2></div>

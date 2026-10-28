@@ -39,7 +39,7 @@ public sealed class SiteStructureController(IApplicationDbContext context, IEdit
     public sealed record NavigationItem(string Key, string Label, string Href, bool IsVisible, int DisplayOrder, string Group);
     public sealed record HomepageSection(string Key, string Title, string DeskSlug, string Layout, bool IsEnabled, bool ShowOnWeb, bool ShowOnMobile, int DisplayOrder);
     public sealed record LeadershipEntry(string Id, string Title, string Name);
-    public sealed record LeadershipInput(IReadOnlyList<LeadershipEntry>? Entries);
+    public sealed record LeadershipInput(IReadOnlyList<LeadershipEntry>? Entries, Guid? LogoAssetId = null, string? LogoUrl = null);
     public sealed record SocialLink(string Id, string Name, string Href, string Icon, bool IsVisible);
     public sealed record WelcomeIntro(bool IsEnabled, Guid? AssetId, string? VideoUrl, string? FileName);
     public sealed record SiteStructureDocument(IReadOnlyList<NavigationItem> Navigation, IReadOnlyList<HomepageSection> HomepageSections, LeadershipInput Leadership, IReadOnlyList<SocialLink> SocialLinks, WelcomeIntro WelcomeIntro, DateTimeOffset? LastModifiedAtUtc);
@@ -53,15 +53,16 @@ public sealed class SiteStructureController(IApplicationDbContext context, IEdit
         => Ok(await ReadDocument(ct));
 
     [HttpGet("cms")]
-    [Authorize(Policy = AuthorizationPolicies.CanManageEditorialTaxonomy)]
+    [Authorize(Policy = AuthorizationPolicies.CanManageSiteStructure)]
     public async Task<ActionResult<SiteStructureDocument>> GetForCms(CancellationToken ct)
         => Ok(await ReadDocument(ct));
 
     [HttpPut("cms")]
-    [Authorize(Policy = AuthorizationPolicies.CanManageEditorialTaxonomy)]
+    [Authorize(Policy = AuthorizationPolicies.CanManageSiteStructure)]
     public async Task<ActionResult<SiteStructureDocument>> Save(SaveInput input, CancellationToken ct)
     {
         var validation = Validate(input);
+        if (input.Leadership?.LogoAssetId is { } logoAssetId && !await context.EditorialMediaAssets.AnyAsync(x => x.Id == logoAssetId && x.Kind == EditorialMediaKind.Image && x.Status == EditorialMediaStatus.Ready, ct)) return BadRequest(new { message = "اختر صورة شعار جاهزة من مكتبة الوسائط." });
         if (validation is not null) return BadRequest(new { message = validation });
 
         var navigation = input.Navigation.Select(x => new NavigationItem(x.Key, x.Key == "fatwas" ? NavigationCatalog[x.Key].Label : x.Label.Trim(), NavigationCatalog[x.Key].Href, x.IsVisible, x.DisplayOrder, x.Group)).OrderBy(x => x.Group == "primary" ? 0 : 1).ThenBy(x => x.DisplayOrder).ToArray();
@@ -115,6 +116,11 @@ public sealed class SiteStructureController(IApplicationDbContext context, IEdit
         {
             var asset = await context.EditorialMediaAssets.AsNoTracking().FirstOrDefaultAsync(x => x.Id == assetId && x.Kind == EditorialMediaKind.Video && x.Status == EditorialMediaStatus.Ready, ct);
             if (asset is not null) intro = new WelcomeIntro(settings.WelcomeIntroEnabled, asset.Id, mediaStorage.GetPublicUrl(asset.ObjectPath), asset.OriginalFileName);
+        }
+        if (leadership.LogoAssetId is { } logoId)
+        {
+            var logo = await context.EditorialMediaAssets.AsNoTracking().FirstOrDefaultAsync(x => x.Id == logoId && x.Kind == EditorialMediaKind.Image && x.Status == EditorialMediaStatus.Ready, ct);
+            if (logo is not null) leadership = leadership with { LogoUrl = mediaStorage.GetPublicUrl(logo.ObjectPath) };
         }
         return new SiteStructureDocument(navigation, sections, leadership, socialLinks, intro, settings.LastModifiedAtUtc ?? settings.CreatedAtUtc);
     }
@@ -171,7 +177,7 @@ public sealed class SiteStructureController(IApplicationDbContext context, IEdit
     private static LeadershipInput NormalizeLeadership(LeadershipInput? leadership)
     {
         if (leadership?.Entries is not { } entries) return DefaultLeadership();
-        return new LeadershipInput(entries.Select(x => new LeadershipEntry(x.Id?.Trim() ?? "", x.Title?.Trim() ?? "", x.Name?.Trim() ?? "")).ToArray());
+        return new LeadershipInput(entries.Select(x => new LeadershipEntry(x.Id?.Trim() ?? "", x.Title?.Trim() ?? "", x.Name?.Trim() ?? "")).ToArray(), leadership.LogoAssetId);
     }
 
     private static string? Validate(SaveInput input)

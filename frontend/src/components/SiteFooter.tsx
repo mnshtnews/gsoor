@@ -39,14 +39,15 @@ export async function SiteFooter() {
   const locale = parseLocale((await cookies()).get("jusoor_locale")?.value);
   const copy = FOOTER_COPY[locale];
   let socialLinks = DEFAULT_PUBLIC_SOCIAL_LINKS;
-  try { socialLinks = (await getPublicSiteStructure()).socialLinks ?? DEFAULT_PUBLIC_SOCIAL_LINKS; } catch { /* Keep the safe, known profile links if the API is unavailable. */ }
+  let logoUrl = "/assets/josour-logo-client.jpg";
+  try { const structure = await getPublicSiteStructure(); socialLinks = structure.socialLinks ?? DEFAULT_PUBLIC_SOCIAL_LINKS; logoUrl = structure.leadership?.logoUrl || logoUrl; } catch { /* Keep the safe, known profile links if the API is unavailable. */ }
   return (
     <footer className="foot-v2">
       <div className="wrap foot-v2-top">
         <div className="foot-v2-grid">
           <div className="foot-v2-brand">
             <Link href="/">
-              <Image className="logo-img" src="/assets/josour-logo-transparent.png" alt="جسور" width={1104} height={974} />
+              <Image className="logo-img" src={logoUrl} alt="جسور" width={1104} height={974} />
             </Link>
             <p lang={locale} dir={locale === "ar" ? "rtl" : "ltr"}>{SITE_DESCRIPTIONS[locale]}</p>
             <button type="button" className="foot-v2-replay" data-replay-intro>{copy.intro}</button>

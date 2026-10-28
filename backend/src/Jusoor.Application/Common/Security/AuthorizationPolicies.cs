@@ -32,6 +32,7 @@ public static class AuthorizationPolicies
     public const string CanAccessCms = "CanAccessCms";
     public const string CanEditEditorialSeo = "CanEditEditorialSeo";
     public const string CanManageEditorialTaxonomy = "CanManageEditorialTaxonomy";
+    public const string CanManageSiteStructure = "CanManageSiteStructure";
     public const string CanCreateEditorialArticle = "CanCreateEditorialArticle";
     public const string CanPublishEditorialArticle = "CanPublishEditorialArticle";
 

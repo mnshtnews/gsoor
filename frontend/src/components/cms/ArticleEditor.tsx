@@ -485,10 +485,11 @@ export function ArticleEditor({ articleId }: { articleId: string | null }) {
         </span>
       </div>
 
-      <fieldset className="cms-field" disabled={!canEditContent || isPublished || busy}>
+      <fieldset className="cms-field" disabled={!canEditContent || busy}>
         <legend>أماكن ظهور الخبر</legend>
         <p className="cms-hint">اختر مكتبًا أو أكثر قبل النشر. هذا الاختيار مستقل عن التصنيف الموضوعي ووسوم SEO.</p>
-        <div className="cms-desk-options">
+        {articleId && <p className="cms-hint"><Link href={`/cms/seo/articles/${articleId}`}>تعديل التصنيف والكلمات المفتاحية وبيانات SEO ←</Link></p>}
+      <div className="cms-desk-options">
           {PRESENTATION_DESKS.map((desk) => (
             <label key={desk.slug}>
               <input
@@ -504,7 +505,7 @@ export function ArticleEditor({ articleId }: { articleId: string | null }) {
         </div>
       </fieldset>
 
-      {presentationDesks.includes("sports") && <fieldset className="cms-field cms-sports-fields" disabled={!canEditContent || isPublished || busy}>
+      {presentationDesks.includes("sports") && <fieldset className="cms-field cms-sports-fields" disabled={!canEditContent || busy}>
         <legend>بيانات التغطية الرياضية</legend>
         <p className="cms-hint">حقول تحريرية خاصة باهتمامات جسور: المحترفون المصريون بالخارج، اللاعبون المجنسون، والدوري المصري.</p>
         <label className="cms-field"><span>مسار التغطية</span><select value={sportsCoverageType} onChange={(event) => setSportsCoverageType(event.target.value)}><option value="">غير محدد</option><option value="EgyptianProfessionalsAbroad">محترفون مصريون بالخارج</option><option value="NaturalizedEgyptians">لاعبون مصريون مجنسون</option><option value="EgyptianLeague">الدوري المصري</option><option value="EgyptNationalTeam">المنتخب المصري</option><option value="General">رياضة عامة</option></select></label>

@@ -10,8 +10,8 @@ export function ConfiguredAd({ placement, className = "", ratio = "1 / 1", label
   naturalSize?: boolean;
 }) {
   if (!placement) return null;
-  return <aside className={`configured-ad ${className}`.trim()} aria-label="إعلان ممول">
-    {label && <span className="home-wide-ad__label">مساحة إعلانية <span aria-hidden="true">·</span> إعلان ممول</span>}
+  return <aside className={`configured-ad ${className}`.trim()} aria-label="مساحة إعلانية">
+    {label && <span className="home-wide-ad__label">مساحة إعلانية</span>}
     <a href={placement.targetUrl} target="_blank" rel="sponsored noopener noreferrer" aria-label={`${placement.altText} — زيارة موقع المعلن`}>
       {naturalSize
         ? <span className="configured-ad__image configured-ad__image--natural">
