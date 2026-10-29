@@ -14,6 +14,7 @@ namespace Jusoor.Api.Controllers;
 [Route("api/v1/site-structure")]
 public sealed class SiteStructureController(IApplicationDbContext context, IEditorialMediaStorage mediaStorage) : ControllerBase
 {
+    private const string DefaultLogoSlogan = "صوت المصريين في الخارج";
     private static readonly JsonSerializerOptions JsonOptions = new(JsonSerializerDefaults.Web);
     private static readonly IReadOnlyDictionary<string, (string Label, string Href)> NavigationCatalog =
         new Dictionary<string, (string, string)>(StringComparer.Ordinal)
@@ -39,7 +40,7 @@ public sealed class SiteStructureController(IApplicationDbContext context, IEdit
     public sealed record NavigationItem(string Key, string Label, string Href, bool IsVisible, int DisplayOrder, string Group);
     public sealed record HomepageSection(string Key, string Title, string DeskSlug, string Layout, bool IsEnabled, bool ShowOnWeb, bool ShowOnMobile, int DisplayOrder);
     public sealed record LeadershipEntry(string Id, string Title, string Name);
-    public sealed record LeadershipInput(IReadOnlyList<LeadershipEntry>? Entries, Guid? LogoAssetId = null, string? LogoUrl = null);
+    public sealed record LeadershipInput(IReadOnlyList<LeadershipEntry>? Entries, Guid? LogoAssetId = null, string? LogoUrl = null, string? Slogan = null);
     public sealed record SocialLink(string Id, string Name, string Href, string Icon, bool IsVisible);
     public sealed record WelcomeIntro(bool IsEnabled, Guid? AssetId, string? VideoUrl, string? FileName);
     public sealed record SiteStructureDocument(IReadOnlyList<NavigationItem> Navigation, IReadOnlyList<HomepageSection> HomepageSections, LeadershipInput Leadership, IReadOnlyList<SocialLink> SocialLinks, WelcomeIntro WelcomeIntro, DateTimeOffset? LastModifiedAtUtc);
@@ -65,10 +66,11 @@ public sealed class SiteStructureController(IApplicationDbContext context, IEdit
         if (input.Leadership?.LogoAssetId is { } logoAssetId && !await context.EditorialMediaAssets.AnyAsync(x => x.Id == logoAssetId && x.Kind == EditorialMediaKind.Image && x.Status == EditorialMediaStatus.Ready, ct)) return BadRequest(new { message = "اختر صورة شعار جاهزة من مكتبة الوسائط." });
         if (validation is not null) return BadRequest(new { message = validation });
 
+        var settings = await context.SiteStructureSettings.FirstOrDefaultAsync(x => x.Key == SiteStructureSettings.SingletonKey, ct);
         var navigation = input.Navigation.Select(x => new NavigationItem(x.Key, x.Key == "fatwas" ? NavigationCatalog[x.Key].Label : x.Label.Trim(), NavigationCatalog[x.Key].Href, x.IsVisible, x.DisplayOrder, x.Group)).OrderBy(x => x.Group == "primary" ? 0 : 1).ThenBy(x => x.DisplayOrder).ToArray();
         var sections = input.HomepageSections.Select(x => new HomepageSection(x.Key, x.Title.Trim(), x.DeskSlug, x.Layout, x.IsEnabled, x.ShowOnWeb, x.ShowOnMobile, x.DisplayOrder)).OrderBy(x => x.DisplayOrder).ToArray();
-        var leadership = NormalizeLeadership(input.Leadership);
-        var settings = await context.SiteStructureSettings.FirstOrDefaultAsync(x => x.Key == SiteStructureSettings.SingletonKey, ct);
+        var savedSlogan = settings is null ? null : ReadLeadership(settings.LeadershipJson).Slogan;
+        var leadership = NormalizeLeadership(input.Leadership, savedSlogan);
         var socialLinks = input.SocialLinks is not null ? NormalizeSocialLinks(input.SocialLinks) : settings is null ? DefaultSocialLinks() : ReadSocialLinks(settings.SocialLinksJson);
         var introEnabled = input.WelcomeIntroEnabled ?? settings?.WelcomeIntroEnabled ?? false;
         var introVideoId = input.WelcomeVideoAssetId;
@@ -150,7 +152,7 @@ public sealed class SiteStructureController(IApplicationDbContext context, IEdit
     {
         new LeadershipEntry("board-editor", "رئيس مجلس الإدارة ورئيس التحرير", "أحمد سليمان"),
         new LeadershipEntry("executive-editor", "رئيس التحرير التنفيذي", "أشرف جبريل")
-    });
+    }, Slogan: DefaultLogoSlogan);
 
     private static LeadershipInput ReadLeadership(string json)
     {
@@ -169,22 +171,27 @@ public sealed class SiteStructureController(IApplicationDbContext context, IEdit
             if (string.IsNullOrWhiteSpace(firstName)) firstName = ReadLegacy("boardChairman");
             var executiveName = ReadLegacy("executiveEditor");
             var migrated = DefaultLeadership().Entries!.Select(x => x.Id == "board-editor" ? x with { Name = firstName } : x with { Name = executiveName }).ToArray();
-            return new LeadershipInput(migrated);
+            return NormalizeLeadership(new LeadershipInput(migrated));
         }
         catch (JsonException) { return DefaultLeadership(); }
     }
 
-    private static LeadershipInput NormalizeLeadership(LeadershipInput? leadership)
+    private static LeadershipInput NormalizeLeadership(LeadershipInput? leadership, string? fallbackSlogan = null)
     {
         if (leadership?.Entries is not { } entries) return DefaultLeadership();
-        return new LeadershipInput(entries.Select(x => new LeadershipEntry(x.Id?.Trim() ?? "", x.Title?.Trim() ?? "", x.Name?.Trim() ?? "")).ToArray(), leadership.LogoAssetId);
+        var slogan = leadership.Slogan?.Trim();
+        if (string.IsNullOrWhiteSpace(slogan)) slogan = string.IsNullOrWhiteSpace(fallbackSlogan) ? DefaultLogoSlogan : fallbackSlogan.Trim();
+        return new LeadershipInput(entries.Select(x => new LeadershipEntry(x.Id?.Trim() ?? "", x.Title?.Trim() ?? "", x.Name?.Trim() ?? "")).ToArray(), leadership.LogoAssetId, Slogan: slogan);
     }
 
     private static string? Validate(SaveInput input)
     {
         if (input.Navigation is null || input.HomepageSections is null) return "أرسل إعدادات التنقل وأقسام الرئيسية.";
-        if (input.Leadership?.Entries is not { } leaders || leaders.Count is < 2 or > 10) return "أضف الحقلين الأساسيين، ويمكن إدارة حتى 8 حقول إضافية.";
+        var leadership = input.Leadership;
+        if (leadership is null || leadership.Entries is not { } leaders || leaders.Count is < 2 or > 10) return "أضف الحقلين الأساسيين، ويمكن إدارة حتى 8 حقول إضافية.";
         if (leaders.Select(x => x.Id).Distinct(StringComparer.Ordinal).Count() != leaders.Count) return "معرّفات حقول القيادة يجب أن تكون فريدة.";
+        var slogan = leadership.Slogan;
+        if (slogan is not null && (string.IsNullOrWhiteSpace(slogan) || slogan.Trim().Length > 80)) return "اكتب عبارة تعريفية للشعار لا تتجاوز 80 حرفًا.";
         if (leaders[0].Id != "board-editor" || leaders[0].Title != "رئيس مجلس الإدارة ورئيس التحرير" || leaders[1].Id != "executive-editor" || leaders[1].Title != "رئيس التحرير التنفيذي")
             return "الحقلان الأساسيان للقيادة لا يمكن حذفهما أو تغيير مسماهما.";
         if (leaders.Any(x => string.IsNullOrWhiteSpace(x.Id) || x.Id.Length > 80 || string.IsNullOrWhiteSpace(x.Title) || x.Title.Trim().Length > 80 || x.Name?.Trim().Length > 100))

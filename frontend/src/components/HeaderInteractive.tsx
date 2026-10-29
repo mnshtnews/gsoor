@@ -21,7 +21,7 @@ const DEFAULT_NAVIGATION: PublicSiteNavigationItem[] = [
   ["fatwas", "فتاوى", "/category?cat=fatwas", "more"], ["videos", "فيديو", "/videos", "more"],
 ].map(([key, label, href, group], displayOrder) => ({ key, label, href, group: group as "primary" | "more", displayOrder, isVisible: true }));
 
-type Leadership = { entries: Array<{ id: string; title: string; name: string }>; logoAssetId?: string | null; logoUrl?: string | null };
+type Leadership = { entries: Array<{ id: string; title: string; name: string }>; logoAssetId?: string | null; logoUrl?: string | null; slogan?: string | null };
 
 function LeadershipCredits({ leadership, className = "header-leadership" }: { leadership?: Leadership; className?: string }) {
   const entries = leadership?.entries.filter((entry) => entry.title.trim() || entry.name.trim()) ?? [];
@@ -180,7 +180,7 @@ export function HeaderInteractive({ tickerHeadlines, navbarAd, navigation, leade
             <Link className="logo" href="/">
               <Image className="logo-img" src={logoSrc} alt="جسور" width={1104} height={974} priority />
               <span className="header-demo-badge"><i aria-hidden="true" />بث تجريبي</span>
-              <span className="logo-slogan">المصريون بالخارج سفراء الوطن</span>
+              <span className="logo-slogan">{leadership?.slogan?.trim() || "صوت المصريين في الخارج"}</span>
             </Link>
             <LeadershipCredits leadership={leadership} />
             <button type="button" className="icon-btn mobile-header-search-trigger" data-open-search aria-label={text.search} onClick={() => { setDrawerOpen(false); setSearchOpen(true); }}>

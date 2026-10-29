@@ -20,7 +20,7 @@ export async function SiteHeader() {
   let tickerHeadlines: string[] = [];
   let navbarAd: PublicAdPlacement | undefined;
   let navigation: PublicSiteNavigationItem[] | undefined;
-  let leadership: { entries: Array<{ id: string; title: string; name: string }>; logoAssetId?: string | null; logoUrl?: string | null } | undefined;
+  let leadership: { entries: Array<{ id: string; title: string; name: string }>; logoAssetId?: string | null; logoUrl?: string | null; slogan?: string | null } | undefined;
   let socialLinks: PublicSocialLink[] | undefined;
 
   const [newsResult, adsResult, structureResult] = await Promise.allSettled([

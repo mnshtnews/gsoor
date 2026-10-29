@@ -185,7 +185,7 @@ export type CmsHomepageSection = { key: string; title: string; deskSlug: string;
 export type CmsLeadershipEntry = { id: string; title: string; name: string };
 export type CmsSocialLink = { id: string; name: string; href: string; icon: "facebook" | "x" | "instagram" | "youtube" | "globe" | "tiktok" | "linkedin"; isVisible: boolean };
 export type CmsWelcomeIntro = { isEnabled: boolean; assetId: string | null; videoUrl: string | null; fileName: string | null };
-export type CmsSiteStructure = { navigation: CmsSiteNavigationItem[]; homepageSections: CmsHomepageSection[]; leadership: { entries: CmsLeadershipEntry[]; logoAssetId: string | null; logoUrl: string | null }; socialLinks: CmsSocialLink[]; welcomeIntro: CmsWelcomeIntro; lastModifiedAtUtc: string | null };
+export type CmsSiteStructure = { navigation: CmsSiteNavigationItem[]; homepageSections: CmsHomepageSection[]; leadership: { entries: CmsLeadershipEntry[]; logoAssetId: string | null; logoUrl: string | null; slogan: string }; socialLinks: CmsSocialLink[]; welcomeIntro: CmsWelcomeIntro; lastModifiedAtUtc: string | null };
 
 export const cmsSiteStructure = {
   async get(): Promise<CmsSiteStructure> {

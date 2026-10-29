@@ -8,7 +8,7 @@ import { useRouter } from "next/navigation";
 import { cms, cmsSiteStructure, CmsError, PRESENTATION_DESKS, type CmsHomepageSection, type CmsSiteNavigationItem, type CmsSiteStructure, type CmsSocialLink } from "@/lib/cms-client";
 import { cmsMedia } from "@/lib/cms-media-client";
 
-const DEFAULT_LEADERSHIP: CmsSiteStructure["leadership"] = { logoAssetId: null, logoUrl: null, entries: [
+const DEFAULT_LEADERSHIP: CmsSiteStructure["leadership"] = { logoAssetId: null, logoUrl: null, slogan: "صوت المصريين في الخارج", entries: [
   { id: "board-editor", title: "رئيس مجلس الإدارة ورئيس التحرير", name: "أحمد سليمان" },
   { id: "executive-editor", title: "رئيس التحرير التنفيذي", name: "أشرف جبريل" },
 ] };
@@ -147,7 +147,7 @@ export default function SiteStructurePage() {
       if (structure.leadership.entries.length < 2 || structure.leadership.entries.length > 10) throw new Error("يمكنك إدارة الحقلين الأساسيين وإضافة حتى 8 حقول أخرى.");
       if (structure.leadership.entries.slice(2).some((entry) => !entry.title.trim())) throw new Error("اكتب مسمى لكل حقل إضافي قبل الحفظ.");
       const saved = await cmsSiteStructure.save({ navigation: structure.navigation.map((item) => ({ ...item, displayOrder: structure.navigation.filter((entry) => entry.group === item.group).sort((a, b) => a.displayOrder - b.displayOrder).findIndex((entry) => entry.key === item.key) })), homepageSections: structure.homepageSections.map((section, displayOrder) => ({ ...section, displayOrder })), leadership: structure.leadership, socialLinks: structure.socialLinks, welcomeVideoAssetId: structure.welcomeIntro.assetId, welcomeIntroEnabled: structure.welcomeIntro.isEnabled });
-      setStructure(saved); setDirty(false); setNotice("حُفظت الإعدادات وستنعكس على الموقع بعد تحديث الصفحة الرئيسية.");
+      setStructure(saved); setDirty(false); setNotice("حُفظت الإعدادات وستظهر على الموقع بعد تحديث الصفحة.");
     } catch (cause) { setError(cause instanceof Error ? cause.message : "تعذّر حفظ الإعدادات."); }
     finally { setBusy(false); }
   }
@@ -162,6 +162,8 @@ export default function SiteStructurePage() {
       <label className="cms-field"><span>تغيير الشعار</span><input type="file" accept="image/jpeg,image/png,image/webp" disabled={!canManage || logoUploadBusy || busy} onChange={(event) => { void uploadBrandLogo(event.target.files?.[0]); event.currentTarget.value = ""; }} /></label>
       {logoUploadBusy && <p className="cms-hint" role="status">جارٍ رفع الشعار…</p>}
       {structure.leadership.logoUrl && <div className="cms-actions"><Image src={structure.leadership.logoUrl} alt="معاينة شعار جسور" width={120} height={100} unoptimized style={{ objectFit: "contain", background: "#fff" }} /><button type="button" className="cms-btn" disabled={busy} onClick={() => { setStructure((current) => ({ ...current, leadership: { ...current.leadership, logoAssetId: null, logoUrl: null } })); setDirty(true); }}>الرجوع للشعار الافتراضي</button></div>}
+      <label className="cms-field"><span>العبارة التعريفية أسفل الشعار</span><input required value={structure.leadership.slogan} maxLength={80} disabled={!canManage || busy} onChange={(event) => { setStructure((current) => ({ ...current, leadership: { ...current.leadership, slogan: event.target.value } })); setDirty(true); setNotice(""); }} placeholder="مثال: صوت المصريين في الخارج" /><span className="cms-hint">{structure.leadership.slogan.length} / 80 — تظهر في رأس الموقع على الويب والموبايل. اضغط «حفظ التغييرات» لتطبيقها.</span></label>
+      <div className="cms-logo-slogan-preview" aria-label="معاينة العبارة أسفل الشعار"><Image src={structure.leadership.logoUrl || "/assets/josour-logo-transparent.png"} alt="" width={88} height={78} unoptimized /><strong>{structure.leadership.slogan || "ستظهر العبارة هنا"}</strong></div>
     </section>
     <section className="cms-card"><div className="cms-section-title"><div><h2>أسماء الإدارة والتحرير</h2><p className="cms-hint">تظهر بجوار شعار جسور. الحقلان الأساسيان ثابتان، ويمكن إضافة حتى 8 مسميات أخرى وتعديلها أو حذفها.</p></div><button type="button" className="cms-btn" disabled={structure.leadership.entries.length >= 10} onClick={addLeadership}>＋ إضافة مسمى</button></div>
       <div className="cms-leadership-fields">

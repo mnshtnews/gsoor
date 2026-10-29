@@ -469,9 +469,9 @@ const AUTH_TRANSLATIONS: Record<string, Partial<Record<SiteLocale, string>>> = {
     "en": "Back to Jusoor",
     "fr": "Retour à Jusoor"
   },
-  "المصريون بالخارج سفراء الوطن": {
-    "en": "Egyptians abroad, ambassadors of the homeland",
-    "fr": "Les Égyptiens à l’étranger, ambassadeurs de la patrie"
+  "صوت المصريين في الخارج": {
+    "en": "The voice of Egyptians abroad",
+    "fr": "La voix des Égyptiens à l’étranger"
   },
   "أخبارك وخدماتك وشبكة اطمئنان أسرتك — ": {
     "en": "Your news, services, and family check-in network — ",
