@@ -179,9 +179,9 @@ export function HeaderInteractive({ tickerHeadlines, navbarAd, navigation, leade
           <div className="header-branding">
             <Link className="logo" href="/">
               <Image className="logo-img" src={logoSrc} alt="جسور" width={1104} height={974} priority />
+              <span className="header-demo-badge"><i aria-hidden="true" />بث تجريبي</span>
               <span className="logo-slogan">المصريون بالخارج سفراء الوطن</span>
             </Link>
-            <span className="header-demo-badge"><i aria-hidden="true" />بث تجريبي</span>
             <LeadershipCredits leadership={leadership} />
             <button type="button" className="icon-btn mobile-header-search-trigger" data-open-search aria-label={text.search} onClick={() => { setDrawerOpen(false); setSearchOpen(true); }}>
               <svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" aria-hidden="true"><circle cx="11" cy="11" r="7.5" /><path d="m16.5 16.5 4 4" /></svg>
