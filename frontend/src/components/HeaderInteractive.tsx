@@ -65,7 +65,7 @@ export function HeaderInteractive({ tickerHeadlines, navbarAd, navigation, leade
   const [staffRoles, setStaffRoles] = useState<string[]>([]);
   const [signedIn, setSignedIn] = useState(false);
   const text = HEADER_COPY[locale];
-  const logoSrc = leadership?.logoUrl || "/assets/josour-logo-client.jpg";
+  const logoSrc = leadership?.logoUrl || "/assets/josour-logo-transparent.png";
 
   useEffect(() => {
     let active = true;
@@ -181,6 +181,7 @@ export function HeaderInteractive({ tickerHeadlines, navbarAd, navigation, leade
               <Image className="logo-img" src={logoSrc} alt="جسور" width={1104} height={974} priority />
               <span className="logo-slogan">المصريون بالخارج سفراء الوطن</span>
             </Link>
+            <span className="header-demo-badge"><i aria-hidden="true" />بث تجريبي</span>
             <LeadershipCredits leadership={leadership} />
             <button type="button" className="icon-btn mobile-header-search-trigger" data-open-search aria-label={text.search} onClick={() => { setDrawerOpen(false); setSearchOpen(true); }}>
               <svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" aria-hidden="true"><circle cx="11" cy="11" r="7.5" /><path d="m16.5 16.5 4 4" /></svg>

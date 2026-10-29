@@ -8693,13 +8693,14 @@ body.crisis-mode-active .topbar-info::before {
   animation: crisisPulse 1.6s ease-in-out infinite;
 }
 body.crisis-mode-active .topbar-info::after {
-  content: "تغطية مباشرة للأزمة";
+  content: "تغطية مباشرة";
   font-weight: 800;
   font-size: 11.5px;
   letter-spacing: 0.2px;
   margin-inline-end: 10px;
   padding-inline-end: 10px;
   border-inline-end: 1px solid rgba(255, 255, 255, 0.4);
+  white-space: nowrap;
 }
 
 /* ---------- 2. الهيدر (الشعار) — يتحول بالكامل لخلفية حمراء + كل
@@ -8743,21 +8744,11 @@ body.crisis-mode-active header.site::before {
    "شرحة" بيضاء عشان تفضل واضحة ومتباينة أياً كان لون الخلفية، بدل ما
    تحاول تلوّنها هي نفسها */
 body.crisis-mode-active .logo {
-  padding: 6px 14px;
-  border-radius: var(--radius);
-  box-shadow: var(--shadow-pop);
-  animation: crisisLogoPulse 1.8s ease-in-out infinite;
-}
-@keyframes crisisLogoPulse {
-  0%,
-  100% {
-    box-shadow: var(--shadow-pop);
-  }
-  50% {
-    box-shadow:
-      var(--shadow-pop),
-      0 0 0 6px rgba(255, 255, 255, 0.18);
-  }
+  padding: 0;
+  border-radius: 0;
+  background: transparent;
+  box-shadow: none;
+  animation: none;
 }
 body.crisis-mode-active .logo-slogan {
   color: rgba(255, 255, 255, 0.85);
@@ -8809,20 +8800,24 @@ body.crisis-mode-active .header-inner .icon-btn:hover {
 }
 
 /* أزرار الدخول / إنشاء حساب داخل الهيدر */
-body.crisis-mode-active [data-auth-slot] .btn-ghost {
+body.crisis-mode-active [data-auth-slot] .btn-ghost,
+body.crisis-mode-active .topbar-mobile-account .btn-ghostt {
   color: #fff;
   border-color: rgba(255, 255, 255, 0.6);
   text-shadow: 0 1px 3px rgba(0, 0, 0, 0.2);
 }
-body.crisis-mode-active [data-auth-slot] .btn-ghost:hover {
+body.crisis-mode-active [data-auth-slot] .btn-ghost:hover,
+body.crisis-mode-active .topbar-mobile-account .btn-ghostt:hover {
   border-color: #fff;
   background: rgba(255, 255, 255, 0.12);
 }
-body.crisis-mode-active [data-auth-slot] .btn-primary {
+body.crisis-mode-active [data-auth-slot] .btn-primary,
+body.crisis-mode-active .topbar-mobile-account .btn-accent {
   background: #fff;
   color: var(--crisis-red-1);
 }
-body.crisis-mode-active [data-auth-slot] .btn-primary:hover {
+body.crisis-mode-active [data-auth-slot] .btn-primary:hover,
+body.crisis-mode-active .topbar-mobile-account .btn-accent:hover {
   background: #fff;
   opacity: 0.9;
 }

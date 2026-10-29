@@ -90,6 +90,24 @@ public class EditorialHtmlSanitizerTests
         html.Should().NotContain("camera");
     }
 
+    [Fact]
+    public void A_Facebook_share_video_link_is_accepted_by_the_server_embed_allowlist()
+    {
+        var html = Sut.Sanitize("<iframe src=\"https://www.facebook.com/plugins/video.php?href=https%3A%2F%2Fwww.facebook.com%2Fshare%2Fv%2F1EFWswuJvB%2F\"></iframe>");
+
+        html.Should().Contain("data-provider=\"Facebook\"");
+        html.Should().Contain("%2Fshare%2Fv%2F");
+    }
+
+    [Fact]
+    public void A_TikTok_player_embed_is_accepted_by_the_server_embed_allowlist()
+    {
+        var html = Sut.Sanitize("<iframe src=\"https://www.tiktok.com/player/v1/1234567890123456789\"></iframe>");
+
+        html.Should().Contain("data-provider=\"TikTok\"");
+        html.Should().Contain("/player/v1/1234567890123456789");
+    }
+
     [Theory]
     [InlineData("javascript:alert(1)")]
     [InlineData("JaVaScRiPt:alert(1)")]

@@ -120,7 +120,7 @@ public sealed class EditorialMediaReferenceValidator(
             provider = "Instagram";
         else if (host == "www.facebook.com" && path == "/plugins/video.php" && IsFacebookLink(GetSingleQuery(uri, "href")))
             provider = "Facebook";
-        else if (host == "www.tiktok.com" && Regex.IsMatch(path, @"^/embed/v2/[0-9]{5,30}$"))
+        else if (host == "www.tiktok.com" && Regex.IsMatch(path, @"^/(?:player/v1|embed/v2)/[0-9]{5,30}$"))
             provider = "TikTok";
         else return false;
 
@@ -145,5 +145,6 @@ public sealed class EditorialMediaReferenceValidator(
            && (uri.IdnHost.Equals("fb.watch", StringComparison.OrdinalIgnoreCase) || uri.AbsolutePath == "/watch" || uri.AbsolutePath.StartsWith("/videos/", StringComparison.Ordinal)
                || uri.AbsolutePath.StartsWith("/posts/", StringComparison.Ordinal)
                || uri.AbsolutePath.StartsWith("/reel/", StringComparison.Ordinal)
-               || uri.AbsolutePath.StartsWith("/permalink.php", StringComparison.Ordinal));
+               || uri.AbsolutePath.StartsWith("/permalink.php", StringComparison.Ordinal)
+               || Regex.IsMatch(uri.AbsolutePath.TrimEnd('/'), @"^/share/(?:v|p|r)/[A-Za-z0-9_.-]+$"));
 }

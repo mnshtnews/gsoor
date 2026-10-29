@@ -416,17 +416,17 @@ function normalizeEmbedUrl(value: string): { src: string; provider: string } | n
     if (u.protocol !== "https:" || u.username || u.password || u.port || u.hash) return null;
     let path = u.pathname.replace(/\/$/, "");
     // Accept ordinary share links and convert them to provider-owned iframe URLs.
-    if (["facebook.com", "www.facebook.com", "m.facebook.com"].includes(u.hostname) && path !== "/plugins/video.php" && (/^\/watch$/.test(path) || /^\/(videos|posts|reel)\//.test(path) || /^\/permalink\.php$/.test(path))) {
-      const shared = new URL(u.toString()); shared.hostname = "www.facebook.com";
+    if (u.hostname === "fb.watch" || (["facebook.com", "www.facebook.com", "m.facebook.com"].includes(u.hostname) && path !== "/plugins/video.php" && (/^\/watch$/.test(path) || /^\/(videos|posts|reel)\//.test(path) || /^\/permalink\.php$/.test(path) || /^\/share\/(v|p|r)\/[\w.-]+$/.test(path)))) {
+      const shared = new URL(u.toString()); if (shared.hostname !== "fb.watch") shared.hostname = "www.facebook.com";
       u = new URL("https://www.facebook.com/plugins/video.php"); u.searchParams.set("href", shared.toString()); path = u.pathname;
     } else if (["instagram.com", "www.instagram.com"].includes(u.hostname) && /^\/(p|reel)\/[\w-]{3,40}$/.test(path)) {
       u.hostname = "www.instagram.com"; u.pathname = `${path}/embed`; path = u.pathname;
     } else if (["x.com", "www.x.com", "twitter.com", "www.twitter.com"].includes(u.hostname)) {
       const status = path.match(/^\/[^/]+\/status\/(\d{1,30})$/);
       if (status) { u = new URL("https://platform.twitter.com/embed/Tweet.html"); u.searchParams.set("id", status[1]); path = u.pathname; }
-    } else if (u.hostname === "www.tiktok.com") {
+    } else if (["tiktok.com", "www.tiktok.com"].includes(u.hostname)) {
       const video = path.match(/^\/@[\w.-]+\/video\/(\d{5,30})$/);
-      if (video) { u.pathname = `/embed/v2/${video[1]}`; path = u.pathname; }
+      if (video) { u.hostname = "www.tiktok.com"; u.pathname = `/player/v1/${video[1]}`; u.search = ""; path = u.pathname; }
     }
     let provider = "";
     if (["youtube.com", "www.youtube.com", "m.youtube.com", "youtube-nocookie.com", "www.youtube-nocookie.com"].includes(u.hostname)) {
@@ -449,7 +449,7 @@ function normalizeEmbedUrl(value: string): { src: string; provider: string } | n
     else if (u.hostname === "platform.twitter.com" && path === "/embed/Tweet.html" && /^\d{1,30}$/.test(u.searchParams.get("id") ?? "")) provider = "X";
     else if (u.hostname === "www.instagram.com" && /^\/(p|reel)\/[\w-]{3,40}\/embed$/.test(path)) provider = "Instagram";
     else if (u.hostname === "www.facebook.com" && path === "/plugins/video.php" && isFacebookUrl(u.searchParams.get("href") ?? "")) provider = "Facebook";
-    else if (u.hostname === "www.tiktok.com" && /^\/embed\/v2\/\d{5,30}$/.test(path)) provider = "TikTok";
+    else if (u.hostname === "www.tiktok.com" && /^\/(?:player\/v1|embed\/v2)\/\d{5,30}$/.test(path)) provider = "TikTok";
     if (!provider) return null;
     for (const key of [...u.searchParams.keys()]) if (provider === "X" ? key !== "id" : provider === "Facebook" ? key !== "href" : true) u.searchParams.delete(key);
     return { src: u.toString(), provider };
@@ -457,7 +457,7 @@ function normalizeEmbedUrl(value: string): { src: string; provider: string } | n
 }
 
 function isFacebookUrl(value: string) {
-  try { const u = new URL(value); return u.protocol === "https:" && u.hostname === "www.facebook.com" && !u.username && !u.password && !u.port && (/^\/watch$/.test(u.pathname) || /^\/(videos|posts|reel)\//.test(u.pathname) || /^\/permalink\.php$/.test(u.pathname)); }
+  try { const u = new URL(value); const path = u.pathname.replace(/\/$/, ""); return u.protocol === "https:" && u.hostname === "www.facebook.com" && !u.username && !u.password && !u.port && (/^\/watch$/.test(path) || /^\/(videos|posts|reel)\//.test(path) || /^\/permalink\.php$/.test(path) || /^\/share\/(v|p|r)\/[\w.-]+$/.test(path)); }
   catch { return false; }
 }
 
