@@ -1402,7 +1402,8 @@ body.crisis-mode-active #crisisSpotlightSection .crisis-spotlight { display: blo
 .atmaen-form > .atmaen-community-consent { margin-top:14px; }
 
 /* Header refinements for desktop crisis mode and narrow touch screens. */
-.header-branding .header-demo-badge { display:inline-flex; position:static; align-self:center; align-items:center; justify-content:center; gap:5px; margin-top:1px; padding:3px 8px; border:1px solid #f1c9c8; border-radius:999px; color:#9b3437; background:#fff8f7; font-size:10px; font-weight:800; line-height:1.2; white-space:nowrap; }
+.header-branding .logo { position:relative; overflow:visible; }
+.header-branding .header-demo-badge { display:inline-flex; position:absolute; left:-38px; top:10px; z-index:2; align-items:center; justify-content:center; gap:5px; margin:0; padding:5px 8px; border:1px solid #f1c9c8; border-radius:999px; color:#9b3437; background:#fff8f7; font-size:10px; font-weight:800; line-height:1.2; white-space:nowrap; }
 .header-branding .header-demo-badge i { width:6px; height:6px; border-radius:50%; background:#d14a40; }
 .header-branding .logo-img { mix-blend-mode:multiply; }
 body.crisis-mode-active .topbar-mobile-account .btn-ghostt {
@@ -1424,7 +1425,7 @@ body.crisis-mode-active .header-branding .header-demo-badge i { background:#fff;
   .header-branding .logo { position:relative; width:clamp(96px,30vw,124px); overflow:visible; }
   .header-branding .logo-slogan { display:block; max-width:100%; padding-top:3px; font-size:clamp(8px,2.3vw,9.5px); line-height:1.2; text-align:center; white-space:nowrap; }
   .header-branding .logo-slogan::before { display:none; }
-  .header-branding .header-demo-badge { position:absolute; align-self:auto; left:-38px; top:0; z-index:2; width:max-content; margin:0; padding:5px 7px; border-color:#dbe5f3; color:#405476; background:#ffffffdf; font-size:clamp(8px,2.2vw,10px); }
+  .header-branding .header-demo-badge { left:-38px; top:0; width:max-content; padding:5px 7px; border-color:#dbe5f3; color:#405476; background:#ffffffdf; font-size:clamp(8px,2.2vw,10px); }
   .header-branding .header-leadership { flex:1 1 140px; width:auto; min-width:120px; max-width:158px; gap:8px; padding-inline:0; }
   .header-branding .leadership-credit-group { gap:2px; }
   .header-branding .leadership-credit-role,
