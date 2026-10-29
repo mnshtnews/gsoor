@@ -141,7 +141,7 @@ export function HeaderInteractive({ tickerHeadlines, navbarAd, navigation, leade
   const primaryLinks = visibleNavigation.filter((item) => item.group === "primary").sort((a, b) => a.displayOrder - b.displayOrder);
   const moreLinks = visibleNavigation.filter((item) => item.group === "more").sort((a, b) => a.displayOrder - b.displayOrder);
   const drawerLinks = [...primaryLinks, ...moreLinks];
-  const renderAccountLinks = (className: string) => <div className={className}>
+  const renderAccountLinks = (className: string) => <div className={`${className}${staffRoles.length > 0 || signedIn ? " auth-group--single" : ""}`}>
     {staffRoles.length > 0 ? <Link href="/cms" className="btn-nav btn-ghostt">{text.cms}</Link>
       : signedIn ? <Link href="/auth" className="btn-nav btn-ghostt">{text.profile}</Link>
       : <><Link href="/auth?tab=login" className="btn-nav btn-ghostt">{text.login}</Link><Link href="/auth?tab=signup" className="btn-nav btn-accent">{text.signup}</Link></>}

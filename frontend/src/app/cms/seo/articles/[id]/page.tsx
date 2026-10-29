@@ -69,7 +69,7 @@ export default function ArticleSeoEditorPage() {
       <span className="cms-hint">{(item[key] ?? "").length} / {max}{hint ? ` — ${hint}` : ""}</span></div>
   );
   return <LocalizedContent>{<main className="wrap cms-card" dir="rtl">
-    <header className="cms-head"><div><h1>تحسين ظهور المقال</h1><p>{item.title}</p></div><Link className="cms-btn" href={`/cms/articles/${id}`}>عودة للمقال</Link></header>
+    <header className="cms-head"><div><h1>تحسين ظهور المقال</h1><p>{item.title}</p></div><div className="cms-actions"><Link className="cms-btn" href="/seo-guide.html" target="_blank" rel="noreferrer">دليل SEO للعميل</Link><Link className="cms-btn" href={`/cms/articles/${id}`}>عودة للمقال</Link></div></header>
     {error && <div className="cms-msg error" role="alert">{error}</div>}{saved && <div className="cms-msg ok" role="status">تم حفظ إعدادات SEO.</div>}
     {textField("seoTitle", "عنوان محركات البحث (50–60 حرفًا؛ اتركه فارغًا لاستخدام عنوان المقال)", 60, "يظهر عنوانًا للنتيجة في محركات البحث؛ التزم بالطول حتى لا يرفضه النظام أو يُقتطع." )}
     {textField("seoDescription", "الوصف (150–160 حرفًا؛ اتركه فارغًا لاستخدام الملخص)", 160, "ملخص النتيجة في البحث؛ اكتب وصفًا دقيقًا من الخبر. الطول خارج النطاق يمنع الحفظ." )}

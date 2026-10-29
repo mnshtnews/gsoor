@@ -18,7 +18,7 @@ export default function SeoArticlesPage() {
     else setError(e instanceof Error ? e.message : "تعذر تحميل قائمة المقالات.");
   }); }, [page, router]);
   useEffect(() => { load(); }, [load]);
-  return <LocalizedContent>{<main className="cms-card" dir="rtl"><div className="cms-head"><h1>تحسين ظهور المقالات</h1><Link className="cms-btn" href="/cms">لوحة الأخبار</Link></div>
+  return <LocalizedContent>{<main className="cms-card" dir="rtl"><div className="cms-head"><h1>تحسين ظهور المقالات</h1><div className="cms-actions"><Link className="cms-btn" href="/seo-guide.html" target="_blank" rel="noreferrer">دليل SEO للعميل</Link><Link className="cms-btn" href="/cms">لوحة الأخبار</Link></div></div>
     {error && <div className="cms-msg error" role="alert">{error}</div>}
     {!items.length && !error ? <p>جارٍ تحميل المقالات…</p> : <ul>{items.map(article => <li key={article.id}>
       <Link href={`/cms/seo/articles/${article.id}`}>{article.title}</Link> — {article.status}
