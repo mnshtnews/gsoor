@@ -175,11 +175,17 @@ export function RichTextEditor({
     editor.chain().focus().extendMarkRange("link").setLink({ href }).run();
   }
 
-  function setEmbed() {
+  async function setEmbed() {
     if (!editor) return;
     const value = window.prompt("ألصق رابط الفيديو أو كود iframe الرسمي من YouTube أو Vimeo أو X أو Instagram أو Facebook أو TikTok:");
     if (!value) return;
-    const safe = normalizeEmbedUrl(value.trim());
+    let safe: { src: string; provider: string } | null;
+    try { safe = await normalizeEmbedUrl(value.trim()); }
+    catch (error) {
+      setMediaError(error instanceof Error ? error.message : "تعذّر التحقق من رابط الفيديو.");
+      setMediaOpen(true);
+      return;
+    }
     if (!safe) { setMediaError("تعذّر التعرّف على الفيديو. ألصق رابطًا مباشرًا أو كود iframe رسميًا من أحد المزودين المعتمدين."); setMediaOpen(true); return; }
     setMediaError(null);
     editor.chain().focus().insertContent({ type: "mediaEmbed", attrs: safe }).run();
@@ -399,7 +405,7 @@ const MediaVideo = Node.create({
   },
 });
 
-function normalizeEmbedUrl(value: string): { src: string; provider: string } | null {
+async function normalizeEmbedUrl(value: string): Promise<{ src: string; provider: string } | null> {
   try {
     // Editors often paste the whole iframe snippet. Parse it as inert HTML and
     // use only its src; the URL still goes through the provider allowlist below.
@@ -414,6 +420,14 @@ function normalizeEmbedUrl(value: string): { src: string; provider: string } | n
 
     let u = new URL(source);
     if (u.protocol !== "https:" || u.username || u.password || u.port || u.hash) return null;
+    const isFacebookPlugin = u.hostname === "www.facebook.com" && u.pathname.replace(/\/$/, "") === "/plugins/video.php";
+    const facebookLink = isFacebookPlugin ? u.searchParams.get("href") : source;
+    if (facebookLink && isFacebookShareLink(facebookLink)) {
+      const resolvedLink = await resolveFacebookShareLink(facebookLink);
+      if (isFacebookPlugin) u.searchParams.set("href", resolvedLink);
+      else source = resolvedLink;
+      if (!isFacebookPlugin) u = new URL(source);
+    }
     let path = u.pathname.replace(/\/$/, "");
     // Accept ordinary share links and convert them to provider-owned iframe URLs.
     if (u.hostname === "fb.watch" || (["facebook.com", "www.facebook.com", "m.facebook.com"].includes(u.hostname) && path !== "/plugins/video.php" && (/^\/watch$/.test(path) || /^\/(videos|posts|reel)\//.test(path) || /^\/permalink\.php$/.test(path) || /^\/share\/(v|p|r)\/[\w.-]+$/.test(path)))) {
@@ -425,8 +439,8 @@ function normalizeEmbedUrl(value: string): { src: string; provider: string } | n
       const status = path.match(/^\/[^/]+\/status\/(\d{1,30})$/);
       if (status) { u = new URL("https://platform.twitter.com/embed/Tweet.html"); u.searchParams.set("id", status[1]); path = u.pathname; }
     } else if (["tiktok.com", "www.tiktok.com"].includes(u.hostname)) {
-      const video = path.match(/^\/@[\w.-]+\/video\/(\d{5,30})$/);
-      if (video) { u.hostname = "www.tiktok.com"; u.pathname = `/player/v1/${video[1]}`; u.search = ""; path = u.pathname; }
+      const post = path.match(/^\/@[\w.-]+\/(?:video|photo)\/(\d{5,30})$/);
+      if (post) { u.hostname = "www.tiktok.com"; u.pathname = `/player/v1/${post[1]}`; u.search = ""; path = u.pathname; }
     }
     let provider = "";
     if (["youtube.com", "www.youtube.com", "m.youtube.com", "youtube-nocookie.com", "www.youtube-nocookie.com"].includes(u.hostname)) {
@@ -453,7 +467,35 @@ function normalizeEmbedUrl(value: string): { src: string; provider: string } | n
     if (!provider) return null;
     for (const key of [...u.searchParams.keys()]) if (provider === "X" ? key !== "id" : provider === "Facebook" ? key !== "href" : true) u.searchParams.delete(key);
     return { src: u.toString(), provider };
-  } catch { return null; }
+  } catch (error) {
+    if (error instanceof FacebookShareResolutionError) throw error;
+    return null;
+  }
+}
+
+class FacebookShareResolutionError extends Error {}
+
+async function resolveFacebookShareLink(value: string): Promise<string> {
+  const response = await fetch("/api/resolve-facebook-share", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ url: value }),
+  }).catch(() => null);
+  const result = await response?.json().catch(() => null) as { url?: string; message?: string } | null;
+  if (!response?.ok || !result?.url) {
+    throw new FacebookShareResolutionError(result?.message ?? "تعذّر تحويل رابط مشاركة فيسبوك إلى رابط فيديو مباشر. استخدم رابط الفيديو الأصلي أو كود التضمين الرسمي.");
+  }
+  return result.url;
+}
+
+function isFacebookShareLink(value: string) {
+  try {
+    const u = new URL(value);
+    const path = u.pathname.replace(/\/$/, "");
+    return u.protocol === "https:" && !u.username && !u.password && !u.port && !u.hash
+      && ((["facebook.com", "www.facebook.com", "m.facebook.com"].includes(u.hostname) && /^\/share\/(?:v|r)\/[\w.-]+$/.test(path))
+        || (u.hostname === "fb.watch" && /^\/[\w.-]+$/.test(path)));
+  } catch { return false; }
 }
 
 function isFacebookUrl(value: string) {

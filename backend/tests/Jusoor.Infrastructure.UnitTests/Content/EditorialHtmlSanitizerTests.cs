@@ -100,12 +100,12 @@ public class EditorialHtmlSanitizerTests
     }
 
     [Fact]
-    public void A_TikTok_player_embed_is_accepted_by_the_server_embed_allowlist()
+    public void A_TikTok_photo_post_player_embed_is_accepted_by_the_server_embed_allowlist()
     {
-        var html = Sut.Sanitize("<iframe src=\"https://www.tiktok.com/player/v1/1234567890123456789\"></iframe>");
+        var html = Sut.Sanitize("<iframe src=\"https://www.tiktok.com/player/v1/7680332389221960980\"></iframe>");
 
         html.Should().Contain("data-provider=\"TikTok\"");
-        html.Should().Contain("/player/v1/1234567890123456789");
+        html.Should().Contain("/player/v1/7680332389221960980");
     }
 
     [Theory]
