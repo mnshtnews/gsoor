@@ -1401,8 +1401,9 @@ body.crisis-mode-active #crisisSpotlightSection .crisis-spotlight { display: blo
 .atmaen-form > label.wide { display:grid; gap:8px; margin-top:14px; }
 .atmaen-form > .atmaen-community-consent { margin-top:14px; }
 
-/* Header refinements for crisis mode and narrow touch screens. */
-.header-demo-badge { display:none; }
+/* Header refinements for desktop crisis mode and narrow touch screens. */
+.header-branding .header-demo-badge { display:inline-flex; position:static; align-self:center; align-items:center; justify-content:center; gap:5px; margin-top:1px; padding:3px 8px; border:1px solid #f1c9c8; border-radius:999px; color:#9b3437; background:#fff8f7; font-size:10px; font-weight:800; line-height:1.2; white-space:nowrap; }
+.header-branding .header-demo-badge i { width:6px; height:6px; border-radius:50%; background:#d14a40; }
 .header-branding .logo-img { mix-blend-mode:multiply; }
 body.crisis-mode-active .topbar-mobile-account .btn-ghostt {
   color:#7a1220; background:#fff; border-color:#fff; text-shadow:none;
@@ -1413,8 +1414,8 @@ body.crisis-mode-active .topbar-mobile-account .btn-accent {
 body.crisis-mode-active .header-branding .logo { background:transparent; }
 body.crisis-mode-active .header-branding .logo-img { mix-blend-mode:multiply; }
 body.crisis-mode-active .header-branding .logo-slogan { display:block; color:#fff; font-size:clamp(9px,2.5vw,11px); line-height:1.25; white-space:nowrap; }
-body.crisis-mode-active .header-demo-badge { color:#fff; }
-body.crisis-mode-active .header-demo-badge i { background:#fff; }
+body.crisis-mode-active .header-branding .header-demo-badge { color:#fff; border-color:#ffffff80; background:#7a1220; }
+body.crisis-mode-active .header-branding .header-demo-badge i { background:#fff; }
 @media (max-width: 1024px) and (hover: none) and (pointer: coarse), (max-width: 600px) {
   .topbar .wrap { padding-inline: max(14px, env(safe-area-inset-left)) max(14px, env(safe-area-inset-right)); }
   .header-inner { padding-inline: max(14px, env(safe-area-inset-left)) max(14px, env(safe-area-inset-right)); gap:8px; }
@@ -1423,8 +1424,7 @@ body.crisis-mode-active .header-demo-badge i { background:#fff; }
   .header-branding .logo { position:relative; width:clamp(96px,30vw,124px); overflow:visible; }
   .header-branding .logo-slogan { display:block; max-width:100%; padding-top:3px; font-size:clamp(8px,2.3vw,9.5px); line-height:1.2; text-align:center; white-space:nowrap; }
   .header-branding .logo-slogan::before { display:none; }
-  .header-demo-badge { position:absolute; display:inline-flex; align-items:center; justify-content:center; gap:5px; left:-38px; top:0; z-index:2; width:max-content; padding:5px 7px; border:1px solid #dbe5f3; border-radius:999px; color:#405476; background:#ffffffdf; font-size:clamp(8px,2.2vw,10px); font-weight:800; line-height:1.2; white-space:nowrap; }
-  .header-demo-badge i { width:6px; height:6px; border-radius:50%; background:#d14a40; }
+  .header-branding .header-demo-badge { position:absolute; align-self:auto; left:-38px; top:0; z-index:2; width:max-content; margin:0; padding:5px 7px; border-color:#dbe5f3; color:#405476; background:#ffffffdf; font-size:clamp(8px,2.2vw,10px); }
   .header-branding .header-leadership { flex:1 1 140px; width:auto; min-width:120px; max-width:158px; gap:8px; padding-inline:0; }
   .header-branding .leadership-credit-group { gap:2px; }
   .header-branding .leadership-credit-role,
@@ -1436,8 +1436,8 @@ body.crisis-mode-active .header-demo-badge i { background:#fff; }
   body.crisis-mode-active .header-branding .logo { padding:0; border:0; border-radius:0; background:transparent; box-shadow:none; }
   body.crisis-mode-active .header-branding .logo-img { mix-blend-mode:multiply; }
   body.crisis-mode-active .header-branding .logo-slogan { display:block; color:#fff; }
-  body.crisis-mode-active .header-demo-badge { color:#fff; border-color:#ffffff80; background:#7a122080; }
-  body.crisis-mode-active .header-demo-badge i { background:#fff; }
+  body.crisis-mode-active .header-branding .header-demo-badge { color:#fff; border-color:#ffffff80; background:#7a122080; }
+  body.crisis-mode-active .header-branding .header-demo-badge i { background:#fff; }
   body.crisis-mode-active .header-inner .icon-btn { color:#173c78; }
   body.crisis-mode-active .bluebar { display:none; }
   .crisis-bar__inner { display:flex; flex-wrap:nowrap; justify-content:space-between; gap:7px; padding:9px max(12px, env(safe-area-inset-left)) 9px max(12px, env(safe-area-inset-right)); }
