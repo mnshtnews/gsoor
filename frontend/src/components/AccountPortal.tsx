@@ -81,6 +81,26 @@ export function AccountPortal() {
     if (action === "register" && response?.status === 202 && result?.requiresEmailOtp) {
       setOtpEmail(result.email ?? email); setOtpPassword(password); setOtpCode(""); setOtpStep(true);
       setMessage(result.message ?? "أرسلنا رمز تحقق إلى بريدك الإلكتروني.");
+    } else if (action === "register" && response?.status === 503 && result?.message === "تعذّر إرسال رمز التحقق. انتظر دقيقة ثم أعد المحاولة.") {
+      // The account may already have been persisted before the mail provider
+      // rejected delivery. Keep the credentials and expose the resend path.
+      setOtpEmail(email); setOtpPassword(password); setOtpCode(""); setOtpStep(true);
+      setMessage(result?.message ?? "تعذّر إرسال رمز التحقق. انتظر دقيقة ثم أعد المحاولة.");
+    } else if (action === "register" && response?.status === 409) {
+      // A previous delivery failure can leave an unconfirmed account behind.
+      // The resend endpoint checks the password and only accepts that state.
+      const resendResponse = await fetch("/account-api/session", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ action: "resend", email, password, purpose: "register" }),
+      }).catch(() => null);
+      const resendResult = await resendResponse?.json().catch(() => ({})) as { message?: string } | undefined;
+      if (resendResponse?.status === 202 || resendResponse?.status === 429 || (resendResponse?.status === 503 && resendResult?.message === "تعذّر إرسال رمز التحقق. انتظر دقيقة ثم أعد المحاولة.")) {
+        setOtpEmail(email); setOtpPassword(password); setOtpCode(""); setOtpStep(true);
+        setMessage(resendResult?.message ?? "أرسلنا رمز تحقق إلى بريدك الإلكتروني.");
+      } else {
+        setMessage(result?.message ?? "تعذّر إنشاء الحساب بهذا البريد. سجّل الدخول أو استخدم بريدًا آخر.");
+      }
     } else if (response?.ok) {
       setOtpStep(false); setOtpPassword(""); setOtpCode("");
       if (result?.staff) {
@@ -161,7 +181,7 @@ export function AccountPortal() {
 
   return <section className="account-card auth-account-card" dir={locale === "ar" ? "rtl" : "ltr"}>
     <h1>{t(otpStep ? "تأكيد البريد الإلكتروني" : mode === "login" ? "تسجيل الدخول" : mode === "register" ? "إنشاء حساب" : "استعادة كلمة المرور")}</h1>
-    <p>{t(otpStep ? "أدخل رمز التحقق المكوّن من 6 أرقام الذي أرسلناه إلى بريدك." : mode === "login" ? "استخدم حسابك للوصول إلى الملف الشخصي وخدمات جسور." : mode === "register" ? "أنشئ حسابك لمتابعة خدمات جسور للمصريين بالخارج." : "استعادة كلمة المرور غير متاحة في نسخة التجربة الحالية.")}</p>
+    <p>{t(otpStep ? "أدخل رمز التحقق المكوّن من 6 أرقام. إذا لم يصلك، يمكنك طلب إرساله مرة أخرى." : mode === "login" ? "استخدم حسابك للوصول إلى الملف الشخصي وخدمات جسور." : mode === "register" ? "أنشئ حسابك لمتابعة خدمات جسور للمصريين بالخارج." : "استعادة كلمة المرور غير متاحة في نسخة التجربة الحالية.")}</p>
     {!otpStep && <div className="auth-tabs" role="tablist" aria-label={t("خيارات الحساب")}>
       <button type="button" role="tab" aria-selected={mode === "login"} className={mode === "login" ? "active" : ""} onClick={() => changeMode("login")}>{t("دخول" )}</button>
       <button type="button" role="tab" aria-selected={mode === "register"} className={mode === "register" ? "active" : ""} onClick={() => changeMode("register")}>{t("إنشاء حساب" )}</button>
