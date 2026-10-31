@@ -55,7 +55,7 @@ export default async function AuthorPage({ searchParams }: { searchParams: Searc
     </div></section>
     <section className="section on-surface"><div className="wrap">
       <div className="section-head"><h2>{t("مقالات الكاتب")}</h2><span className="author-article-range">{new Intl.DateTimeFormat(locale === "ar" ? "ar-EG" : locale === "en" ? "en-GB" : "fr-FR", { dateStyle: "medium" }).format(new Date(result.items[0]?.publishedAtUtc ?? Date.now()))}{result.items[0] && result.items.length > 1 ? ` — ${new Intl.DateTimeFormat(locale === "ar" ? "ar-EG" : locale === "en" ? "en-GB" : "fr-FR", { dateStyle: "medium" }).format(new Date(result.items.at(-1)?.publishedAtUtc ?? Date.now()))}` : ""}</span></div>
-      <div className="six-grid">{result.items.map((story) => <StoryGridCard key={story.id} story={story} />)}</div>
+      <div className="six-grid">{result.items.map((story) => <StoryGridCard key={story.id} story={story} locale={locale} />)}</div>
       {result.totalPages > 1 && <nav className="pagination" aria-label={t("صفحات مقالات الكاتب")}>
         {page > 1 && <Link href={`/author?name=${encodeURIComponent(name)}&page=${page - 1}`} rel="prev" aria-label={t("الصفحة السابقة")}>‹</Link>}
         <span aria-current="page">{page} / {result.totalPages}</span>

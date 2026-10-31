@@ -2,6 +2,7 @@ import Link from "next/link";
 import Image from "next/image";
 import type { StorySummary } from "@/lib/stories-api";
 import { formatArabicDate } from "@/lib/format";
+import type { SiteLocale } from "@/lib/site-copy";
 
 /**
  * Mirrors the demo's cardGrid() output (.grid-card > .thumb + h3 + .foot)
@@ -9,9 +10,11 @@ import { formatArabicDate } from "@/lib/format";
  * when the publisher supplies a social/cover image; other source rows retain
  * a branded placeholder rather than a broken image.
  */
-export function StoryGridCard({ story }: { story: StorySummary }) {
-  const place = story.cityNameAr ?? story.countryNameAr ?? null;
-  const publishedLabel = formatArabicDate(story.publishedAtUtc);
+export function StoryGridCard({ story, locale = "ar" }: { story: StorySummary; locale?: SiteLocale }) {
+  const place = locale === "ar"
+    ? story.cityNameAr ?? story.countryNameAr ?? null
+    : story.cityNameEn ?? story.countryNameEn ?? story.cityNameAr ?? story.countryNameAr ?? null;
+  const publishedLabel = formatArabicDate(story.publishedAtUtc, locale);
 
   return (
     <Link href={story.slug ? `/article/${story.id}/${encodeURIComponent(story.slug)}` : `/article/${story.id}`} className="grid-card" aria-label={story.title}>

@@ -2,17 +2,15 @@
 import { useCallback, useEffect, useState } from "react";
 import { cms, type CmsArticleTranslation } from "@/lib/cms-client";
 import { RichTextEditor } from "@/components/cms/RichTextEditor";
-import { parseLocale } from "@/lib/site-copy";
-import { translateUi } from "@/lib/ui-translations";
+import { useUiLocale } from "@/lib/use-ui-locale";
 const locales = [{ id: "en", label: "English" }, { id: "fr", label: "Français" }] as const;
 export function ArticleTranslationsPanel({ articleId, canReview }: { articleId: string; canReview: boolean }) {
- const [locale,setLocale]=useState<"en"|"fr">("en"), [uiLocale,setUiLocale]=useState<"ar"|"en"|"fr">("ar"), [items,setItems]=useState<CmsArticleTranslation[]>([]), [title,setTitle]=useState(""), [summary,setSummary]=useState(""), [body,setBody]=useState(""), [busy,setBusy]=useState(false), [message,setMessage]=useState("");
+ const [locale,setLocale]=useState<"en"|"fr">("en"), [items,setItems]=useState<CmsArticleTranslation[]>([]), [title,setTitle]=useState(""), [summary,setSummary]=useState(""), [body,setBody]=useState(""), [busy,setBusy]=useState(false), [message,setMessage]=useState("");
+ const { t } = useUiLocale();
  const current=items.find(x=>x.locale===locale);
- const t=(value:string)=>translateUi(uiLocale,value);
- useEffect(()=>{const value=document.cookie.split(";").map((part)=>part.trim()).find((part)=>part.startsWith("jusoor_locale="))?.split("=")[1];setUiLocale(parseLocale(value?decodeURIComponent(value):null));},[]);
  function selectVersion(rows:CmsArticleTranslation[], selected=locale){setItems(rows);const v=rows.find(x=>x.locale===selected);setTitle(v?.title??"");setSummary(v?.summary??"");setBody(v?.body??"");}
  const refresh=useCallback(async()=>{const rows=await cms.translations(articleId);setItems(rows);const v=rows.find(x=>x.locale===locale);setTitle(v?.title??"");setSummary(v?.summary??"");setBody(v?.body??"");},[articleId,locale]);
- useEffect(()=>{void refresh().catch(()=>setMessage(translateUi(uiLocale,"تعذر تحميل الترجمات.")));},[refresh,uiLocale]);
+ useEffect(()=>{void refresh().catch(()=>setMessage(t("تعذر تحميل الترجمات.")));},[refresh,t]);
  function changeLocale(next:"en"|"fr"){setLocale(next);selectVersion(items,next);setMessage("");}
  async function generate(){setBusy(true);setMessage("");try{selectVersion(await cms.generateTranslations(articleId));setMessage(t("تم إنشاء مسودتي الترجمة. راجعهما قبل الاعتماد."));}catch(e){setMessage(e instanceof Error?e.message:t("تعذّر إنشاء الترجمات."));}finally{setBusy(false);}}
  async function save(){setBusy(true);setMessage("");try{const saved=await cms.saveTranslation(articleId,locale,{title,summary:summary||null,body});setItems(old=>[...old.filter(x=>x.locale!==locale),saved]);setMessage(t("تم حفظ النسخة التحريرية."));}catch(e){setMessage(e instanceof Error?e.message:t("تعذّر حفظ الترجمة."));}finally{setBusy(false);}}

@@ -1,5 +1,6 @@
 import { formatArabicDate } from "@/lib/format";
 import type { NewsCorrection } from "@/lib/news-api";
+import type { SiteLocale } from "@/lib/site-copy";
 
 const KIND_LABEL: Record<NewsCorrection["kind"], string> = {
   Correction: "تصحيح",
@@ -15,7 +16,7 @@ const KIND_LABEL: Record<NewsCorrection["kind"], string> = {
  * is plain text rendered as a React text node (no HTML), and the box renders
  * nothing when there is nothing to show.
  */
-export function CorrectionsBox({ corrections, major = false }: { corrections: NewsCorrection[]; major?: boolean }) {
+export function CorrectionsBox({ corrections, major = false, locale = "ar" }: { corrections: NewsCorrection[]; major?: boolean; locale?: SiteLocale }) {
   if (corrections.length === 0) {
     return null;
   }
@@ -26,7 +27,7 @@ export function CorrectionsBox({ corrections, major = false }: { corrections: Ne
       <ul>
         {corrections.map((c, i) => (
           <li key={`${c.issuedAtUtc}-${i}`}>
-            <span className="correction-kind">{KIND_LABEL[c.kind] ?? c.kind}</span> <time dateTime={c.issuedAtUtc}>{formatArabicDate(c.issuedAtUtc)}</time>
+            <span className="correction-kind">{KIND_LABEL[c.kind] ?? c.kind}</span> <time dateTime={c.issuedAtUtc}>{formatArabicDate(c.issuedAtUtc, locale)}</time>
             <p>{c.note}</p>
           </li>
         ))}

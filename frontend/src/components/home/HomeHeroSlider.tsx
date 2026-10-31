@@ -4,6 +4,7 @@ import { useCallback, useEffect, useRef, useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { formatArabicDate } from "@/lib/format";
+import { useUiLocale } from "@/lib/use-ui-locale";
 import { VideoModal } from "./VideoModal";
 
 export interface HomeHeroSlide {
@@ -30,6 +31,7 @@ function formatDuration(seconds: number): string | null {
 }
 
 export function HomeHeroSlider({ slides }: { slides: HomeHeroSlide[] }) {
+  const { locale, t } = useUiLocale();
   const [active, setActive] = useState(0);
   const [modalOpen, setModalOpen] = useState(false);
   const [durations, setDurations] = useState<Record<string, string>>({});
@@ -100,7 +102,7 @@ export function HomeHeroSlider({ slides }: { slides: HomeHeroSlide[] }) {
   const currentDuration = durations[current.id];
 
   const thumb = (slide: HomeHeroSlide) => (
-    <button className={`hero-thumb${slide.id === current.id ? " active" : ""}`} key={slide.id} type="button" onClick={() => select(slides.indexOf(slide), sideSlides.indexOf(slide) < 3 ? 1 : -1)} aria-label={`عرض: ${slide.title}`}>
+    <button className={`hero-thumb${slide.id === current.id ? " active" : ""}`} key={slide.id} type="button" onClick={() => select(slides.indexOf(slide), sideSlides.indexOf(slide) < 3 ? 1 : -1)} aria-label={`${t("عرض:")} ${slide.title}`}>
       {slide.imageUrl ? <Image src={slide.imageUrl} alt="" width={480} height={270} unoptimized /> : <span className="home-thumb-fallback">جسور</span>}
       {slide.videoUrl && <span className="play" aria-hidden="true">▶</span>}
       {slide.videoUrl && durations[slide.id] && <span className="duration-badge">{durations[slide.id]}</span>}
@@ -108,7 +110,7 @@ export function HomeHeroSlider({ slides }: { slides: HomeHeroSlide[] }) {
   );
 
   return (
-    <section className="section tight" id="heroSliderSection" aria-label="أبرز التغطيات المرئية">
+    <section className="section tight" id="heroSliderSection" aria-label={t("أبرز التغطيات المرئية")}>
       <div className="wrap">
         <div className="hero-slider">
           <div className="hero-side">{sideSlides.slice(0, 3).map(thumb)}</div>
@@ -127,14 +129,14 @@ export function HomeHeroSlider({ slides }: { slides: HomeHeroSlide[] }) {
                 <>
                   {currentDuration && <span className="duration-badge duration-badge-lg">{currentDuration}</span>}
                   <span className="playbtn" aria-hidden="true">▶</span>
-                  <button className="hero-main-link hero-main-button" type="button" aria-label={`تشغيل الفيديو: ${current.title}`} onClick={() => setModalOpen(true)} />
+                  <button className="hero-main-link hero-main-button" type="button" aria-label={`${t("تشغيل الفيديو:")} ${current.title}`} onClick={() => setModalOpen(true)} />
                 </>
               ) : (
-                <Link className="hero-main-link" href={current.href} aria-label={`اقرأ: ${current.title}`} />
+                <Link className="hero-main-link" href={current.href} aria-label={`${t("اقرأ:")} ${current.title}`} />
               )}
               {slides.length > 1 && <>
-                <button className="hero-mobile-arrow hero-mobile-arrow--prev" type="button" aria-label="الفيديو السابق" onClick={() => select(active - 1, -1)}>›</button>
-                <button className="hero-mobile-arrow hero-mobile-arrow--next" type="button" aria-label="الفيديو التالي" onClick={() => select(active + 1, 1)}>‹</button>
+                <button className="hero-mobile-arrow hero-mobile-arrow--prev" type="button" aria-label={t("الفيديو السابق")} onClick={() => select(active - 1, -1)}>›</button>
+                <button className="hero-mobile-arrow hero-mobile-arrow--next" type="button" aria-label={t("الفيديو التالي")} onClick={() => select(active + 1, 1)}>‹</button>
               </>}
             </div>
             <div className="hero-headline-stage" aria-live="polite">
@@ -147,12 +149,12 @@ export function HomeHeroSlider({ slides }: { slides: HomeHeroSlide[] }) {
           <div className="hero-side">{sideSlides.slice(3, 6).map(thumb)}</div>
         </div>
         <div className={`hero-nav${slides.length > 1 ? " has-multiple" : ""}`}>
-          <button className="btn btn-ghost btn-sm" type="button" onClick={() => select(active - 1, -1)}><span aria-hidden="true">→</span> السابق</button>
-          <div className="hero-dots" aria-label="اختيار التغطية">
-            {slides.map((slide, index) => <button key={slide.id} type="button" className={index === active ? "active" : ""} aria-label={`التغطية ${index + 1}`} aria-current={index === active ? "true" : undefined} onClick={() => select(index)}>{index + 1}</button>)}
+          <button className="btn btn-ghost btn-sm" type="button" onClick={() => select(active - 1, -1)}><span aria-hidden="true">→</span> {t("السابق")}</button>
+          <div className="hero-dots" aria-label={t("اختيار التغطية")}>
+            {slides.map((slide, index) => <button key={slide.id} type="button" className={index === active ? "active" : ""} aria-label={`${t("التغطية")} ${index + 1}`} aria-current={index === active ? "true" : undefined} onClick={() => select(index)}>{index + 1}</button>)}
           </div>
           <span className="hero-mobile-count" aria-live="polite">{active + 1} / {slides.length}</span>
-          <button className="btn btn-ghost btn-sm" type="button" onClick={() => select(active + 1, 1)}>التالي <span aria-hidden="true">←</span></button>
+          <button className="btn btn-ghost btn-sm" type="button" onClick={() => select(active + 1, 1)}>{t("التالي")} <span aria-hidden="true">←</span></button>
         </div>
       </div>
       {modalOpen && current.videoUrl && (
@@ -163,7 +165,7 @@ export function HomeHeroSlider({ slides }: { slides: HomeHeroSlide[] }) {
             isEmbedded: current.isEmbedded,
             posterUrl: current.imageUrl,
             href: current.href,
-            meta: [current.publishedAtUtc ? formatArabicDate(current.publishedAtUtc) : "", currentDuration ?? ""].filter(Boolean).join(" · "),
+            meta: [current.publishedAtUtc ? formatArabicDate(current.publishedAtUtc, locale) : "", currentDuration ?? ""].filter(Boolean).join(" · "),
           }}
           onClose={closeModal}
         />

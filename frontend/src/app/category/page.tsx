@@ -78,7 +78,7 @@ export default async function CategoryPage({ searchParams }: { searchParams: Sea
             </p>
           ) : (
             <div className="six-grid">
-              {result.items.map((story) => <StoryGridCard key={story.id} story={story} />)}
+              {result.items.map((story) => <StoryGridCard key={story.id} story={story} locale={locale} />)}
             </div>
           )}
           {result.totalPages > 1 && (

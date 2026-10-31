@@ -5,8 +5,7 @@ import Link from "next/link";
 import Image from "next/image";
 import { usePathname, useRouter } from "next/navigation";
 import { cms, type CmsSession } from "@/lib/cms-client";
-import { parseLocale } from "@/lib/site-copy";
-import { translateUi } from "@/lib/ui-translations";
+import { useUiLocale } from "@/lib/use-ui-locale";
 
 type NavItem = { label: string; href: string; roles?: string[]; permissions?: string[]; exact?: boolean };
 type NavGroup = { title: string; items: NavItem[] };
@@ -57,13 +56,8 @@ export default function CmsWorkspace({ children }: Readonly<{ children: React.Re
   const [session, setSession] = useState<CmsSession | null>(null);
   const [menuOpen, setMenuOpen] = useState(false);
   const [query, setQuery] = useState("");
-  const [locale, setLocale] = useState<"ar" | "en" | "fr">("ar");
+  const { locale, dir, t: text } = useUiLocale();
   const isLogin = pathname === "/cms/login";
-
-  useEffect(() => {
-    const value = document.cookie.split(";").map((part) => part.trim()).find((part) => part.startsWith("jusoor_locale="))?.split("=")[1];
-    setLocale(parseLocale(value ? decodeURIComponent(value) : null));
-  }, []);
   useEffect(() => {
     if (isLogin) return;
     let alive = true;
@@ -92,13 +86,12 @@ export default function CmsWorkspace({ children }: Readonly<{ children: React.Re
   }
 
   if (isLogin) return <div className="cms-login-frame">{children}</div>;
-  const text = (value: string) => translateUi(locale, value);
   const roles = session?.roles ?? [];
   const permissions = session?.permissions ?? [];
   const groups = GROUPS.map((group) => ({ ...group, items: group.items.filter((item) => canSee(item, roles, permissions)) })).filter((group) => group.items.length > 0);
 
   return (
-    <div className="cms-workspace" dir={locale === "ar" ? "rtl" : "ltr"}>
+    <div className="cms-workspace" dir={dir}>
       <header className="cms-topbar">
         <button className="cms-menu-toggle" type="button" onClick={() => setMenuOpen((open) => !open)} aria-expanded={menuOpen} aria-controls="cms-sidebar" aria-label={text(menuOpen ? "إغلاق القائمة" : "فتح القائمة")}><span aria-hidden="true">☰</span></button>
         <Link className="cms-brand" href="/cms" aria-label="جسور، لوحة التحرير"><Image className="cms-brand-img" src="/assets/josour-logo-client.jpg" alt="" width={1104} height={974} priority /><span><strong>جسور</strong><small>غرفة الأخبار الرقمية</small></span></Link>

@@ -1,8 +1,7 @@
 "use client";
 
-import { useCallback, useEffect, useState } from "react";
-import { parseLocale } from "@/lib/site-copy";
-import { translateUi } from "@/lib/ui-translations";
+import { useEffect, useState } from "react";
+import { useUiLocale } from "@/lib/use-ui-locale";
 
 type Country = { id: string; nameAr: string; nameEn: string; isoCode2: string };
 type City = { id: string; countryId: string; nameAr: string; nameEn: string };
@@ -35,13 +34,7 @@ export function AtmaenRequestForm() {
   const [loading, setLoading] = useState(true);
   const [busy, setBusy] = useState(false);
   const [error, setError] = useState("");
-  const [locale, setLocale] = useState<"ar" | "en" | "fr">("ar");
-  const t = useCallback((value: string) => translateUi(locale, value), [locale]);
-
-  useEffect(() => {
-    const value = document.cookie.split(";").map((part) => part.trim()).find((part) => part.startsWith("jusoor_locale="))?.split("=")[1];
-    setLocale(parseLocale(value ? decodeURIComponent(value) : null));
-  }, []);
+  const { locale, t } = useUiLocale();
 
   useEffect(() => {
     let live = true;

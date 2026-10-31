@@ -15,6 +15,9 @@ import { ServicesBand } from "@/components/home/ServicesBand";
 import { formatArabicDate } from "@/lib/format";
 import { HomepagePollWidget } from "@/components/HomepagePollWidget";
 import { AlertSubscriptionForm } from "@/components/AlertSubscriptionForm";
+import { cookies } from "next/headers";
+import { parseLocale } from "@/lib/site-copy";
+import { translateUi } from "@/lib/ui-translations";
 
 // The homepage is rendered per request so a newly published article (and a
 // deleted one) is reflected immediately — no stale cache during the client trial.
@@ -40,18 +43,20 @@ function articleHref(story: StorySummary) {
   return story.slug ? `/article/${story.id}/${encodeURIComponent(story.slug)}` : `/article/${story.id}`;
 }
 
-function placeOf(story: StorySummary) {
-  return story.cityNameAr ?? story.countryNameAr ?? "جسور";
+function placeOf(story: StorySummary, locale: "ar" | "en" | "fr") {
+  return locale === "ar"
+    ? story.cityNameAr ?? story.countryNameAr ?? "جسور"
+    : story.cityNameEn ?? story.countryNameEn ?? story.cityNameAr ?? story.countryNameAr ?? "Jusoor";
 }
 
 /** Section heading, same markup as the Final Demo (`.section-head` + `.eyebrow` link). */
-function Head({ label, slug, more, asHeading }: { label: string; slug: string; more?: string; asHeading?: boolean }) {
+function Head({ label, slug, more, asHeading, locale }: { label: string; slug: string; more?: string; asHeading?: boolean; locale: "ar" | "en" | "fr" }) {
   const href = `/category?cat=${slug}`;
-  const eyebrow = <Link className="eyebrow" href={href}>{label}</Link>;
+  const eyebrow = <Link className="eyebrow" href={href}>{translateUi(locale, label)}</Link>;
   return (
     <div className="section-head">
       {asHeading ? <h2>{eyebrow}</h2> : eyebrow}
-      {more && <Link className="more" href={href}>{more}</Link>}
+      {more && <Link className="more" href={href}>{translateUi(locale, more)}</Link>}
     </div>
   );
 }
@@ -66,23 +71,23 @@ function HomeAdPlacement({ placement, className = "", ratio = "1 / 1", naturalSi
 }
 
 /** Demo's `.six-grid` of `.grid-card`s (cardGrid). */
-function DeskGrid({ stories, label, columns, mobileVariant }: { stories: StorySummary[]; label: string; columns?: number; mobileVariant?: "lead" | "compact" | "uniform" }) {
+function DeskGrid({ stories, label, columns, mobileVariant, locale }: { stories: StorySummary[]; label: string; columns?: number; mobileVariant?: "lead" | "compact" | "uniform"; locale: "ar" | "en" | "fr" }) {
   if (!stories.length) return <EmptyDesk label={label} />;
   return (
     <div className={`six-grid${mobileVariant ? ` home-news-grid home-news-grid--${mobileVariant}` : ""}`} style={columns ? { gridTemplateColumns: `repeat(${columns}, minmax(0, 1fr))` } : undefined}>
-      {stories.map((story) => <StoryGridCard key={story.id} story={story} />)}
+      {stories.map((story) => <StoryGridCard key={story.id} story={story} locale={locale} />)}
     </div>
   );
 }
 
-function EditorialColumn({ slug, stories }: { slug: "red" | "official"; stories: StorySummary[] }) {
-  const title = deskLabels[slug];
+function EditorialColumn({ slug, stories, locale }: { slug: "red" | "official"; stories: StorySummary[]; locale: "ar" | "en" | "fr" }) {
+  const title = translateUi(locale, deskLabels[slug]);
   const href = `/category?cat=${slug}`;
   return (
     <section className={`editorial-column editorial-column--${slug}`} aria-label={title}>
       <div className="editorial-column__head">
         <Link href={href} className="editorial-column__title"><span aria-hidden="true" />{title}</Link>
-        <Link href={href} className="editorial-column__more">{slug === "red" ? "كل التحديثات ←" : "كل اللقاءات ←"}</Link>
+        <Link href={href} className="editorial-column__more">{translateUi(locale, slug === "red" ? "كل التحديثات ←" : "كل اللقاءات ←")}</Link>
       </div>
       {stories.length ? <>
         <div className="editorial-top-grid">
@@ -92,7 +97,7 @@ function EditorialColumn({ slug, stories }: { slug: "red" | "official"; stories:
                 {story.imageUrl ? <Image src={story.imageUrl} alt="" fill sizes="(max-width: 900px) 100vw, 35vw" unoptimized /> : <span>جسور</span>}
               </div>
               <h3>{story.title}</h3>
-              <small className="editorial-top-card__meta">{placeOf(story)} · {formatArabicDate(story.publishedAtUtc)}</small>
+              <small className="editorial-top-card__meta">{placeOf(story, locale)} · {formatArabicDate(story.publishedAtUtc, locale)}</small>
             </Link>
           ))}
         </div>
@@ -102,7 +107,7 @@ function EditorialColumn({ slug, stories }: { slug: "red" | "official"; stories:
               {story.imageUrl ? <Image src={story.imageUrl} alt="" width={224} height={156} unoptimized /> : <span className="editorial-news-row__ph" aria-hidden="true">جسور</span>}
               <span className="editorial-news-row__body">
                 <h3>{story.title}</h3>
-                <small>{placeOf(story)} · {formatArabicDate(story.publishedAtUtc)}</small>
+                <small>{placeOf(story, locale)} · {formatArabicDate(story.publishedAtUtc, locale)}</small>
               </span>
             </Link>
           ))}
@@ -113,14 +118,14 @@ function EditorialColumn({ slug, stories }: { slug: "red" | "official"; stories:
 }
 
 /** Demo's cardLamma(): `.lamma-card` > `.thumb` + h4 + `.foot`. */
-function LammaCard({ story }: { story: StorySummary }) {
+function LammaCard({ story, locale }: { story: StorySummary; locale: "ar" | "en" | "fr" }) {
   return (
     <Link className="lamma-card" href={articleHref(story)} aria-label={story.title}>
       <div className={`thumb${story.imageUrl ? "" : " thumb-placeholder"}`}>
         {story.imageUrl ? <Image src={story.imageUrl} alt="" width={720} height={480} unoptimized /> : <span>ج</span>}
       </div>
       <h4>{story.title}</h4>
-      <div className="foot"><span>{placeOf(story)}</span><span>·</span><span>{formatArabicDate(story.publishedAtUtc)}</span></div>
+      <div className="foot"><span>{placeOf(story, locale)}</span><span>·</span><span>{formatArabicDate(story.publishedAtUtc, locale)}</span></div>
     </Link>
   );
 }
@@ -131,7 +136,7 @@ function LammaCard({ story }: { story: StorySummary }) {
  * Both columns end on the same line: the wide ad takes the height the Lamma column has
  * to spare, so Lamma's last cards line up with the bottom of the square ad.
  */
-function LammaSection({ lamma, events, topAd, sideAd }: { lamma: StorySummary[]; events: StorySummary[]; topAd?: PublicAdPlacement; sideAd?: PublicAdPlacement }) {
+function LammaSection({ lamma, events, topAd, sideAd, locale }: { lamma: StorySummary[]; events: StorySummary[]; topAd?: PublicAdPlacement; sideAd?: PublicAdPlacement; locale: "ar" | "en" | "fr" }) {
   const [feature, ...rest] = lamma;
   return (
     <section className="section tight on-surface" id="lamma">
@@ -139,7 +144,7 @@ function LammaSection({ lamma, events, topAd, sideAd }: { lamma: StorySummary[];
         <div className="split-2 lamma-split" style={{ gridTemplateColumns: "1fr 340px" }}>
           <div className="lamma-main">
             <AdBox placement={topAd} ratio="3 / 1" fill className="lamma-top-ad ad-box--web-only" />
-            <Head label={deskLabels.lamma} slug="lamma" more="كل اللمّات ←" />
+            <Head label={deskLabels.lamma} slug="lamma" more="كل اللمّات ←" locale={locale} />
             {feature ? <>
               <Link className="lead-story lamma-feature" href={articleHref(feature)}>
                 <div className="lead-story-img">
@@ -149,10 +154,10 @@ function LammaSection({ lamma, events, topAd, sideAd }: { lamma: StorySummary[];
                 <div className="lead-story-body">
                   <h2>{feature.title}</h2>
                   {feature.excerpt && <p className="sub">{feature.excerpt}</p>}
-                  <div className="foot"><span>{placeOf(feature)}</span><span>·</span><span>{formatArabicDate(feature.publishedAtUtc)}</span></div>
+                  <div className="foot"><span>{placeOf(feature, locale)}</span><span>·</span><span>{formatArabicDate(feature.publishedAtUtc, locale)}</span></div>
                 </div>
               </Link>
-              {rest.length > 0 && <div className="lamma-grid">{rest.slice(0, 2).map((story) => <LammaCard key={story.id} story={story} />)}</div>}
+              {rest.length > 0 && <div className="lamma-grid">{rest.slice(0, 2).map((story) => <LammaCard key={story.id} story={story} locale={locale} />)}</div>}
             </> : <EmptyDesk label={deskLabels.lamma} />}
           </div>
           <aside className="lamma-side">
@@ -161,8 +166,8 @@ function LammaSection({ lamma, events, topAd, sideAd }: { lamma: StorySummary[];
               <div className="events-widget">
                 {events.slice(0, 4).map((story) => (
                   <Link className="event-item" key={story.id} href={articleHref(story)}>
-                    <span className="event-date"><b>{story.publishedAtUtc ? new Date(story.publishedAtUtc).getDate() : "—"}</b><span>{story.publishedAtUtc ? new Date(story.publishedAtUtc).toLocaleDateString("ar-EG", { month: "short" }) : ""}</span></span>
-                    <span><h5>{story.title}</h5><span className="foot">{placeOf(story)} · {formatArabicDate(story.publishedAtUtc)}</span></span>
+                    <span className="event-date"><b>{story.publishedAtUtc ? new Intl.NumberFormat(locale === "ar" ? "ar-EG" : locale === "fr" ? "fr-FR" : "en-GB").format(new Date(story.publishedAtUtc).getDate()) : "—"}</b><span>{story.publishedAtUtc ? new Date(story.publishedAtUtc).toLocaleDateString(locale === "ar" ? "ar-EG" : locale === "fr" ? "fr-FR" : "en-GB", { month: "short" }) : ""}</span></span>
+                    <span><h5>{story.title}</h5><span className="foot">{placeOf(story, locale)} · {formatArabicDate(story.publishedAtUtc, locale)}</span></span>
                   </Link>
                 ))}
                 {events.length === 0 && <EmptyDesk label={deskLabels.events} />}
@@ -189,34 +194,37 @@ function AtmaenFeature({ webAd, mobileAd }: { webAd?: PublicAdPlacement; mobileA
   );
 }
 
-function NewsRecirculation({ desks }: { desks: Record<string, StorySummary[]> }) {
+function NewsRecirculation({ desks, locale }: { desks: Record<string, StorySummary[]>; locale: "ar" | "en" | "fr" }) {
   const sections = [{ slug: "arts", variant: "lead" }, { slug: "sports", variant: "lead" }, { slug: "fatwas", variant: "lead" }] as const;
   return (
     <section className="section tight recirc-section"><div className="wrap"><div className="recirc-cols">{sections.map(({ slug, variant }) => {
-      const label = deskLabels[slug];
+      const label = translateUi(locale, deskLabels[slug]);
       const [lead, ...rest] = desks[slug] ?? [];
       return <div className={`recirc-col home-news-grid home-news-grid--${variant}`} key={slug}><Link href={`/category?cat=${slug}`} className="eyebrow">{label}</Link>
-        {lead ? <><Link className="recirc-feature" href={articleHref(lead)}><div className="thumb">{lead.imageUrl ? <Image src={lead.imageUrl} alt="" width={720} height={440} unoptimized /> : <span>جسور</span>}</div><h4>{lead.title}</h4><div className="foot">{placeOf(lead)} · {formatArabicDate(lead.publishedAtUtc)}</div></Link>
-          <div className="articles-list">{rest.slice(0, 3).map((story) => <Link className="row-card" href={articleHref(story)} key={story.id}><div className="thumb">{story.imageUrl && <Image src={story.imageUrl} alt="" width={200} height={140} unoptimized />}</div><div><h4>{story.title}</h4><div className="foot">{placeOf(story)} · {formatArabicDate(story.publishedAtUtc)}</div></div></Link>)}</div></>
+        {lead ? <><Link className="recirc-feature" href={articleHref(lead)}><div className="thumb">{lead.imageUrl ? <Image src={lead.imageUrl} alt="" width={720} height={440} unoptimized /> : <span>جسور</span>}</div><h4>{lead.title}</h4><div className="foot">{placeOf(lead, locale)} · {formatArabicDate(lead.publishedAtUtc, locale)}</div></Link>
+          <div className="articles-list">{rest.slice(0, 3).map((story) => <Link className="row-card" href={articleHref(story)} key={story.id}><div className="thumb">{story.imageUrl && <Image src={story.imageUrl} alt="" width={200} height={140} unoptimized />}</div><div><h4>{story.title}</h4><div className="foot">{placeOf(story, locale)} · {formatArabicDate(story.publishedAtUtc, locale)}</div></div></Link>)}</div></>
         : <EmptyDesk label={label} />}
       </div>;
     })}</div></div></section>
   );
 }
 
-function ConfiguredHomepageSections({ sections, desks }: { sections: PublicHomepageSection[]; desks: Record<string, StorySummary[]> }) {
+function ConfiguredHomepageSections({ sections, desks, locale }: { sections: PublicHomepageSection[]; desks: Record<string, StorySummary[]>; locale: "ar" | "en" | "fr" }) {
   return <>{sections.filter((section) => section.isEnabled && (section.showOnWeb || section.showOnMobile)).sort((a, b) => a.displayOrder - b.displayOrder).map((section, index) => {
     const stories = desks[section.deskSlug] ?? [];
     const className = `section tight home-config-section${section.showOnWeb && !section.showOnMobile ? " home-config-section--web" : ""}${!section.showOnWeb && section.showOnMobile ? " home-config-section--mobile" : ""}`;
     const columns = section.layout === "columns" ? 2 : section.layout === "lead" ? 2 : 3;
+    const title = translateUi(locale, locale === "ar" ? section.title : deskLabels[section.deskSlug] ?? section.title);
+    const more = locale === "ar" ? `كل ${title} ←` : locale === "en" ? `All ${title} →` : `Toute la rubrique : ${title} →`;
     return <section className={className} id={`home-${section.key}`} key={section.key}><div className="wrap">
-      <Head label={section.title} slug={section.deskSlug} more={`كل ${section.title} ←`} />
-      <DeskGrid stories={stories.slice(0, 6)} label={section.title} columns={columns} mobileVariant={index % 2 === 0 ? "lead" : "uniform"} />
+      <Head label={title} slug={section.deskSlug} more={more} locale={locale} />
+      <DeskGrid stories={stories.slice(0, 6)} label={title} columns={columns} locale={locale} mobileVariant={index % 2 === 0 ? "lead" : "uniform"} />
     </div></section>;
   })}</>;
 }
 
 export default async function HomePage() {
+  const locale = parseLocale((await cookies()).get("jusoor_locale")?.value);
   const deskSlugs = Object.keys(deskLabels);
   const [[newsResult, videoResult, webAdsResult, mobileAdsResult, crisisResult, structureResult], deskResults] = await Promise.all([
     Promise.allSettled([
@@ -262,8 +270,8 @@ export default async function HomePage() {
 
       <section className="section tight on-surface">
         <div className="wrap">
-          <Head label={deskLabels.mughtarib} slug="mughtarib" />
-          <DeskGrid stories={desks.mughtarib.slice(0, 6)} label={deskLabels.mughtarib} mobileVariant="uniform" />
+          <Head label={deskLabels.mughtarib} slug="mughtarib" locale={locale} />
+          <DeskGrid stories={desks.mughtarib.slice(0, 6)} label={deskLabels.mughtarib} locale={locale} mobileVariant="uniform" />
         </div>
       </section>
       <HomeAdPlacement placement={ad("mobile", "after-mughtarib")} className="home-ad-placement--mobile-only" />
@@ -280,8 +288,8 @@ export default async function HomePage() {
               <HomepagePollWidget />
             </aside>
             <div className="home-success-stories">
-              <Head label={deskLabels.success} slug="success" asHeading />
-              <DeskGrid stories={desks.success.slice(0, 4)} label={deskLabels.success} columns={2} mobileVariant="lead" />
+              <Head label={deskLabels.success} slug="success" asHeading locale={locale} />
+              <DeskGrid stories={desks.success.slice(0, 4)} label={deskLabels.success} columns={2} locale={locale} mobileVariant="lead" />
               <HomeAdPlacement placement={ad("web", "success-inline")} className="home-success-inline-ad home-wide-ad home-wide-ad--web-only home-ad-placement--natural" naturalSize />
             </div>
           </div>
@@ -289,8 +297,8 @@ export default async function HomePage() {
       </section>
       <section className="section tight on-surface">
         <div className="wrap">
-          <Head label={deskLabels.egypt} slug="egypt" />
-          <DeskGrid stories={desks.egypt.slice(0, 6)} label={deskLabels.egypt} mobileVariant="uniform" />
+          <Head label={deskLabels.egypt} slug="egypt" locale={locale} />
+          <DeskGrid stories={desks.egypt.slice(0, 6)} label={deskLabels.egypt} locale={locale} mobileVariant="uniform" />
         </div>
       </section>
 
@@ -298,15 +306,15 @@ export default async function HomePage() {
       <section className="section editorial-columns-section" aria-label="خط أحمر ومع مسؤول">
         <div className="wrap">
           <div className="editorial-columns">
-            <EditorialColumn slug="red" stories={desks.red.slice(0, 4)} />
-            <EditorialColumn slug="official" stories={desks.official.slice(0, 4)} />
+            <EditorialColumn slug="red" stories={desks.red.slice(0, 4)} locale={locale} />
+            <EditorialColumn slug="official" stories={desks.official.slice(0, 4)} locale={locale} />
           </div>
         </div>
       </section>
 
       <section className="on-ink section tight opinion-section" id="opinion">
         <div className="wrap">
-          <Head label={deskLabels.articles} slug="articles" more="كل المقالات ←" />
+          <Head label={deskLabels.articles} slug="articles" more="كل المقالات ←" locale={locale} />
           {desks.articles.length ? (
             <div className="opinion-grid">
               {desks.articles.slice(0, 8).map((story, index) => (
@@ -330,8 +338,8 @@ export default async function HomePage() {
           <div className="split-2">
             <div className="opportunities-main">
               <HomeAdPlacement placement={ad("web", "opportunities-top")} className="home-opportunities-ad home-wide-ad home-wide-ad--web-only home-ad-placement--natural" naturalSize />
-              <Head label={deskLabels.opportunities} slug="opportunities" />
-              <DeskGrid stories={desks.opportunities.slice(0, 4)} label={deskLabels.opportunities} columns={2} />
+              <Head label={deskLabels.opportunities} slug="opportunities" locale={locale} />
+              <DeskGrid stories={desks.opportunities.slice(0, 4)} label={deskLabels.opportunities} columns={2} locale={locale} />
             </div>
             <div className="latest-news-column">
               <aside>
@@ -354,14 +362,14 @@ export default async function HomePage() {
 
       <section className="section" id="second-gen">
         <div className="wrap">
-          <Head label={deskLabels.secondgen} slug="secondgen" asHeading />
-          <DeskGrid stories={desks.secondgen.slice(0, 4)} label={deskLabels.secondgen} columns={4} />
+          <Head label={deskLabels.secondgen} slug="secondgen" asHeading locale={locale} />
+          <DeskGrid stories={desks.secondgen.slice(0, 4)} label={deskLabels.secondgen} columns={4} locale={locale} />
         </div>
       </section>
 
-      <LammaSection lamma={desks.lamma} events={desks.events} topAd={ad("web", "lamma-top")} sideAd={ad("web", "lamma-events-square")} />
+      <LammaSection lamma={desks.lamma} events={desks.events} topAd={ad("web", "lamma-top")} sideAd={ad("web", "lamma-events-square")} locale={locale} />
 
-      <ConfiguredHomepageSections sections={homepageSections} desks={desks} />
+      <ConfiguredHomepageSections sections={homepageSections} desks={desks} locale={locale} />
 
       <section className="section on-surface" id="city-alerts" style={{ paddingTop: 0 }}>
         <div className="wrap">
@@ -372,7 +380,7 @@ export default async function HomePage() {
         </div>
       </section>
 
-      <NewsRecirculation desks={desks} />
+      <NewsRecirculation desks={desks} locale={locale} />
     </main>
   )}</LocalizedContent>;
 }

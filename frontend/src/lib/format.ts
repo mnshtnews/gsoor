@@ -1,13 +1,16 @@
+import type { SiteLocale } from "@/lib/site-copy";
+
 // Intl-based Arabic-Egyptian date formatting, used anywhere a Story's
 // PublishedAtUtc needs to be shown. The demo's own topbar clock hand-rolls
 // day/month name arrays for the *current* time — this covers arbitrary
 // past dates from real data, which that function was never meant to do.
-export function formatArabicDate(iso: string | null): string | null {
+export function formatArabicDate(iso: string | null, locale: SiteLocale = "ar"): string | null {
   if (!iso) {
     return null;
   }
 
-  return new Intl.DateTimeFormat("ar-EG", {
+  const languageTag = locale === "ar" ? "ar-EG" : locale === "fr" ? "fr-FR" : "en-GB";
+  return new Intl.DateTimeFormat(languageTag, {
     day: "numeric",
     month: "long",
     year: "numeric",

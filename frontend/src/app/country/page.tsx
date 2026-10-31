@@ -49,7 +49,7 @@ export default async function CountryPage({ searchParams }: { searchParams: Sear
       <div className="category-heading"><div className="category-heading-line" aria-hidden="true"/><div className="category-heading-content"><span className="eyebrow">{t("أخبار بحسب البلد")}</span><h1>{locale === "ar" ? `أخبار المصريين في ${country.nameAr}` : locale === "en" ? `Egyptians abroad in ${country.nameEn}` : `Égyptiens à l’étranger en ${country.nameEn}`}</h1><p className="category-heading-meta">{result.totalCount} {t("خبرًا منشورًا")}</p></div></div>
     </div></section>
     <section className="section tight on-surface"><div className="wrap">
-      {result.items.length ? <div className="six-grid">{result.items.map((story) => <StoryGridCard key={story.id} story={story}/>)}</div> : <p className="empty-state" style={{padding:"40px 0",textAlign:"center",color:"var(--text-mute)"}}>{t("لا توجد أخبار منشورة مرتبطة بهذا البلد حاليًا.")}</p>}
+      {result.items.length ? <div className="six-grid">{result.items.map((story) => <StoryGridCard key={story.id} story={story} locale={locale} />)}</div> : <p className="empty-state" style={{padding:"40px 0",textAlign:"center",color:"var(--text-mute)"}}>{t("لا توجد أخبار منشورة مرتبطة بهذا البلد حاليًا.")}</p>}
       {result.totalPages > 1 && <nav className="pagination" aria-label={t("صفحات أخبار البلد")}>
         {page > 1 && <Link href={`/country?code=${country.isoCode2}&page=${page-1}`} rel="prev" aria-label={t("الصفحة السابقة")}>‹</Link>}
         <span aria-current="page">{page} / {result.totalPages}</span>

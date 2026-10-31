@@ -263,7 +263,7 @@ export default function CmsAdvertisementsPage() {
     {error && <div className="cms-msg error" role="alert">{error}</div>}
     {notice && <div className="cms-msg success" role="status">{notice}</div>}
     {!loaded ? <p>جارٍ تحميل المساحات…</p> : <section className="cms-ad-workspace" aria-label="إدارة مواضع الإعلانات">
-      <div className="cms-ad-stage" dir="rtl">
+      <div className="cms-ad-stage">
         <div className="cms-ad-stage__toolbar">
           <div><h2>معاينة المساحات</h2><p>{dirty ? "هناك تغييرات غير محفوظة" : "كل واجهة تُحفظ بشكل مستقل"}</p></div>
           <div className="cms-ad-surface-tabs" role="tablist" aria-label="اختيار الواجهة">
@@ -277,7 +277,7 @@ export default function CmsAdvertisementsPage() {
         </div>
       </div>
 
-      <aside className="cms-ad-library-pane" dir="rtl">
+      <aside className="cms-ad-library-pane">
         <div className="cms-ad-library-head"><div><h2>مكتبة صور الإعلانات</h2><p>اختر صورة ثم ضعها في مساحة، أو اسحبها مباشرة.</p></div>
           <label className="cms-btn primary">{busy ? "جارٍ التحميل…" : "رفع صورة"}<input hidden type="file" accept="image/jpeg,image/png,image/webp,image/avif" disabled={busy} onChange={(event) => { void upload(event.target.files?.[0]); event.currentTarget.value = ""; }} /></label>
           <input className="cms-ad-search" type="search" value={assetSearch} onChange={(event) => setAssetSearch(event.target.value)} placeholder="ابحث في جميع الصور…" aria-label="البحث في جميع صور مكتبة الوسائط" />

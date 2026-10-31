@@ -1,8 +1,7 @@
 "use client";
 
-import { Fragment, useEffect, useRef, useState } from "react";
-import { parseLocale } from "@/lib/site-copy";
-import { translateUi } from "@/lib/ui-translations";
+import { Fragment, useRef } from "react";
+import { useUiLocale } from "@/lib/use-ui-locale";
 import Image from "next/image";
 import type { PublicAdPlacement } from "@/lib/news-api";
 
@@ -32,9 +31,7 @@ const services: Service[] = [
  */
 export function ServicesBand({ ads = [] }: { ads?: PublicAdPlacement[] }) {
   const rowRef = useRef<HTMLDivElement>(null);
-  const [locale, setLocale] = useState<"ar" | "en" | "fr">("ar");
-  const t = (value: string) => translateUi(locale, value);
-  useEffect(() => { const value = document.cookie.split(";").map((part) => part.trim()).find((part) => part.startsWith("jusoor_locale="))?.split("=")[1]; setLocale(parseLocale(value ? decodeURIComponent(value) : null)); }, []);
+  const { dir, t } = useUiLocale();
   const scroll = (direction: 1 | -1) => {
     const row = rowRef.current;
     if (!row) return;
@@ -45,7 +42,7 @@ export function ServicesBand({ ads = [] }: { ads?: PublicAdPlacement[] }) {
   };
 
   return (
-    <section className="services-band" id="services" aria-labelledby="services-heading" dir={locale === "ar" ? "rtl" : "ltr"}>
+    <section className="services-band" id="services" aria-labelledby="services-heading" dir={dir}>
       <div className="wrap">
         <div className="services-header-wrap">
           <div className="section-head-title">

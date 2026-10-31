@@ -6,6 +6,7 @@ import { useEffect, useState } from "react";
 import type { PublishedVideo } from "@/lib/news-api";
 import { formatArabicDate } from "@/lib/format";
 import { VideoModal, type VideoModalItem } from "./VideoModal";
+import { useUiLocale } from "@/lib/use-ui-locale";
 
 function formatDuration(seconds: number): string {
   if (!Number.isFinite(seconds) || seconds <= 0) return "";
@@ -15,6 +16,7 @@ function formatDuration(seconds: number): string {
 
 /** Homepage video feature using the featured-player treatment from the approved Final Demo. */
 export function HomeVideoFeature({ videos }: { videos: PublishedVideo[] }) {
+  const { locale, t } = useUiLocale();
   const [index, setIndex] = useState(0);
   const [duration, setDuration] = useState("");
   const [playing, setPlaying] = useState(false);
@@ -45,7 +47,7 @@ export function HomeVideoFeature({ videos }: { videos: PublishedVideo[] }) {
     isEmbedded: video.isEmbedded,
     posterUrl: video.thumbnailUrl,
     href,
-    meta: [formatArabicDate(video.publishedAtUtc), video.credit].filter(Boolean).join(" · "),
+    meta: [formatArabicDate(video.publishedAtUtc, locale), video.credit].filter(Boolean).join(" · "),
   };
 
   return (
@@ -53,8 +55,8 @@ export function HomeVideoFeature({ videos }: { videos: PublishedVideo[] }) {
       <section className="section tight on-surface home-video-section" aria-labelledby="home-videos-heading">
         <div className="wrap">
           <div className="section-head">
-            <h2 id="home-videos-heading"><Link className="eyebrow" href="/videos">جسور فيديو</Link></h2>
-            <Link href="/videos" className="video-rail-cta">شاهد كل الفيديوهات ←</Link>
+            <h2 id="home-videos-heading"><Link className="eyebrow" href="/videos">{t("جسور فيديو")}</Link></h2>
+            <Link href="/videos" className="video-rail-cta">{t("شاهد كل الفيديوهات ←")}</Link>
           </div>
           <article className="video-featured home-video-featured">
             <div className="video-featured-media">
@@ -62,18 +64,18 @@ export function HomeVideoFeature({ videos }: { videos: PublishedVideo[] }) {
                 <Image src={video.thumbnailUrl} alt={video.title} fill sizes="(max-width: 760px) 100vw, 900px" unoptimized priority={index === 0} />
               ) : <div className="home-hero-fallback" aria-hidden="true"><span>جسور</span></div>}
               {duration && <span className="duration-badge duration-badge-lg">{duration}</span>}
-              <button className="playbtn" type="button" aria-label={`تشغيل الفيديو: ${video.title}`} onClick={() => setPlaying(true)}>▶</button>
+              <button className="playbtn" type="button" aria-label={`${t("تشغيل الفيديو:")} ${video.title}`} onClick={() => setPlaying(true)}>▶</button>
               {videos.length > 1 && <button
                 className="home-video-next"
                 type="button"
-                aria-label="الفيديو التالي"
+                aria-label={t("الفيديو التالي")}
                 onClick={() => setIndex((current) => (current + 1) % videos.length)}
               >←</button>}
             </div>
             <div className="video-featured-body">
-              <span className="eyebrow">{video.caption || "تغطية مرئية"}</span>
+              <span className="eyebrow">{video.caption || t("تغطية مرئية")}</span>
               <h2><Link href={href}>{video.title}</Link></h2>
-              <time className="home-video-date" dateTime={video.publishedAtUtc}>{formatArabicDate(video.publishedAtUtc)}</time>
+              <time className="home-video-date" dateTime={video.publishedAtUtc}>{formatArabicDate(video.publishedAtUtc, locale)}</time>
             </div>
           </article>
         </div>

@@ -3,6 +3,7 @@
 import Link from "next/link";
 import { useCallback, useEffect, useMemo, useState } from "react";
 import type { PublicCountry } from "@/lib/news-api";
+import { useUiLocale } from "@/lib/use-ui-locale";
 
 type City = { id: string; nameAr: string; nameEn: string };
 type Comment = { id: string; authorName: string; text: string; createdAtUtc: string };
@@ -27,7 +28,7 @@ function relativeTime(iso: string, locale: string) {
 }
 
 export function AtmaenCommunityFeed() {
-  const [locale, setLocale] = useState("ar");
+  const { locale } = useUiLocale();
   const isArabic = locale === "ar";
   const [countries, setCountries] = useState<PublicCountry[]>([]);
   const [authenticated, setAuthenticated] = useState(false);
@@ -63,7 +64,6 @@ export function AtmaenCommunityFeed() {
     finally { setLoading(false); }
   }, [page, countryFilter, statusFilter, sort]);
 
-  useEffect(() => { if (document.documentElement.lang) setLocale(document.documentElement.lang); }, []);
   useEffect(() => { let live = true; fetch("/account-api/session", { cache: "no-store" }).then(r => r.ok ? r.json() : { authenticated: false }).then(data => { if (live) setAuthenticated(Boolean(data.authenticated)); }).catch(() => undefined); return () => { live = false; }; }, []);
   useEffect(() => { let live = true; fetch("/account-api/geography", { cache: "no-store" }).then(r => r.json()).then((data: PublicCountry[]) => { if (live) setCountries(Array.isArray(data) ? data : []); }).catch(() => undefined); return () => { live = false; }; }, []);
   useEffect(() => { void loadFeed(); }, [loadFeed]);

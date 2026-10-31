@@ -4,8 +4,7 @@ import { LocalizedContent } from "@/components/LocalizedContent";
 
 import { useCallback, useEffect, useState } from "react";
 import { cms, type CmsSession } from "@/lib/cms-client";
-import { parseLocale } from "@/lib/site-copy";
-import { translateUi } from "@/lib/ui-translations";
+import { useUiLocale } from "@/lib/use-ui-locale";
 import { cmsMedia } from "@/lib/cms-media-client";
 
 type Country = { id: string; nameAr: string; nameEn: string; isoCode2: string };
@@ -25,9 +24,7 @@ async function responseError(response: Response) {
 
 export default function CmsCrisisModePage() {
   const [session, setSession] = useState<CmsSession | null>(null);
-  const [locale,setLocale]=useState<"ar"|"en"|"fr">("ar");
-  const t=(value:string)=>translateUi(locale,value);
-  useEffect(()=>{const value=document.cookie.split(";").map((part)=>part.trim()).find((part)=>part.startsWith("jusoor_locale="))?.split("=")[1];setLocale(parseLocale(value?decodeURIComponent(value):null));},[]);
+  const { locale, t } = useUiLocale();
   const [countries, setCountries] = useState<Country[]>([]);
   const [config, setConfig] = useState<CrisisConfig>(EMPTY);
   const [subscriptions, setSubscriptions] = useState<SubscriptionSettings | null>(null);

@@ -10,6 +10,7 @@ import { getPublicCrisisMode, getPublicSiteStructure } from "@/lib/news-api";
 import { cookies } from "next/headers";
 import { parseLocale } from "@/lib/site-copy";
 import { CrisisSiteTheme } from "@/components/CrisisSiteTheme";
+import { UiLocaleProvider } from "@/lib/use-ui-locale";
 
 export const viewport: Viewport = { width: "device-width", initialScale: 1 };
 
@@ -60,12 +61,14 @@ export default async function RootLayout({
         />
       </head>
       <body>
-        <CrisisSiteTheme active={Boolean(crisis)} />
-        <SiteHeader />
-        <CrisisStatusBar crisis={crisis} />
-        {children}
-        <SiteFooter />
-        <WelcomeIntro enabled={structure?.welcomeIntro?.isEnabled ?? false} videoUrl={structure?.welcomeIntro?.videoUrl ?? null} />
+        <UiLocaleProvider locale={locale}>
+          <CrisisSiteTheme active={Boolean(crisis)} />
+          <SiteHeader />
+          <CrisisStatusBar crisis={crisis} />
+          {children}
+          <SiteFooter />
+          <WelcomeIntro enabled={structure?.welcomeIntro?.isEnabled ?? false} videoUrl={structure?.welcomeIntro?.videoUrl ?? null} />
+        </UiLocaleProvider>
       </body>
     </html>
   );

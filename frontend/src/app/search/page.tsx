@@ -31,7 +31,7 @@ export default async function SearchPage({ searchParams }: { searchParams: Promi
       {query.length < 2 ? <p className="search-empty">{text("اكتب كلمتين على الأقل لبدء البحث في الأخبار المنشورة.")}</p> : (
         <section className="section tight">
           <div className="section-head"><h2>{locale === "ar" ? `نتائج البحث عن «${query}»` : `${locale === "en" ? "Search results for" : "Résultats pour"} “${query}”`}</h2><span>{result?.totalCount ?? 0} {text("نتيجة")}</span></div>
-          {result?.items.length ? <div className="six-grid">{result.items.map((story) => <StoryGridCard key={story.id} story={story} />)}</div> : <p className="search-empty">{text("لم نعثر على نتائج مطابقة. جرّب كلمات أخرى.")}</p>}
+          {result?.items.length ? <div className="six-grid">{result.items.map((story) => <StoryGridCard key={story.id} story={story} locale={locale} />)}</div> : <p className="search-empty">{text("لم نعثر على نتائج مطابقة. جرّب كلمات أخرى.")}</p>}
         </section>
       )}
     </main>

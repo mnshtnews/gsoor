@@ -16,8 +16,7 @@ import {
   type WorkflowAction,
 } from "@/lib/cms-client";
 import { formatArabicDate } from "@/lib/format";
-import { parseLocale } from "@/lib/site-copy";
-import { translateUi } from "@/lib/ui-translations";
+import { useUiLocale } from "@/lib/use-ui-locale";
 
 export default function CmsDashboardPage() {
   const router = useRouter();
@@ -32,13 +31,7 @@ export default function CmsDashboardPage() {
   const [error, setError] = useState<string | null>(null);
   const [busyId, setBusyId] = useState<string | null>(null);
   const requestSequence = useRef(0);
-  const [locale, setLocale] = useState<"ar" | "en" | "fr">("ar");
-  const t = (value: string) => translateUi(locale, value);
-
-  useEffect(() => {
-    const value = document.cookie.split(";").map((part) => part.trim()).find((part) => part.startsWith("jusoor_locale="))?.split("=")[1];
-    setLocale(parseLocale(value ? decodeURIComponent(value) : null));
-  }, []);
+  const { locale, t } = useUiLocale();
 
   const load = useCallback(
     async (filter: ArticleStatus | "", requestedPage: number, query = "") => {

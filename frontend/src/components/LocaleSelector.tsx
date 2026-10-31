@@ -10,7 +10,6 @@ export function LocaleSelector({ className, locale = "ar" }: { className: string
     const next = parseLocale(value);
     setSelected(next);
     document.cookie = `jusoor_locale=${next}; Path=/; Max-Age=31536000; SameSite=Lax`;
-    window.localStorage.setItem("jusoor_locale", next);
     window.location.reload();
   }
   return <select className={className} aria-label={selected === "en" ? "Choose language" : selected === "fr" ? "Choisir la langue" : "اختر اللغة"} value={selected} onChange={event => change(event.target.value)}>

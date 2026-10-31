@@ -541,7 +541,7 @@
 .cms-ad-library-count { grid-column: 1 / -1; color: var(--text-mute); font-size: 12px; }
 .cms-ad-assets-scroll { min-height: 0; flex: 1; padding: 12px; overflow: auto; overscroll-behavior: contain; }
 .cms-ad-assets { display: grid; grid-template-columns: repeat(auto-fill, minmax(135px, 1fr)); gap: 10px; }
-.cms-ad-asset { display: flex; min-width: 0; flex-direction: column; gap: 6px; padding: 8px; border: 1px solid var(--line); border-radius: 11px; background: #fff; color: var(--text); text-align: right; cursor: grab; transition: border-color .16s ease, box-shadow .16s ease, transform .16s ease; }
+.cms-ad-asset { display: flex; min-width: 0; flex-direction: column; gap: 6px; padding: 8px; border: 1px solid var(--line); border-radius: 11px; background: #fff; color: var(--text); text-align: start; cursor: grab; transition: border-color .16s ease, box-shadow .16s ease, transform .16s ease; }
 .cms-ad-asset:hover { transform: translateY(-2px); border-color: #98b8ee; box-shadow: 0 5px 14px rgba(28,86,190,.1); }
 .cms-ad-asset.selected { border: 2px solid var(--blue); padding: 7px; background: #f2f6ff; box-shadow: 0 0 0 3px rgba(28,86,190,.1); }
 .cms-ad-asset:active { cursor: grabbing; }

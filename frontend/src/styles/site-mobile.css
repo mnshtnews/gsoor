@@ -668,7 +668,7 @@
   .author-hero {
     flex-direction: column;
     align-items: flex-start;
-    text-align: right;
+    text-align: start;
     gap: 16px;
   }
   .author-hero-avatar {

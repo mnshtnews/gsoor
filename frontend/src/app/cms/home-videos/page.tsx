@@ -8,6 +8,7 @@ import Image from "next/image";
 import { useRouter } from "next/navigation";
 import { cms, cmsHomeVideos, CmsError, type CmsHomeVideo } from "@/lib/cms-client";
 import { formatArabicDate } from "@/lib/format";
+import { useUiLocale } from "@/lib/use-ui-locale";
 
 const MAX_VIDEOS = 7;
 
@@ -16,6 +17,7 @@ const MAX_VIDEOS = 7;
  * Nothing is added automatically; with no selection the hero is not rendered at all.
  */
 export default function HomeVideosPage() {
+  const { locale } = useUiLocale();
   const router = useRouter();
   const [selected, setSelected] = useState<CmsHomeVideo[]>([]);
   const [available, setAvailable] = useState<CmsHomeVideo[]>([]);
@@ -84,7 +86,7 @@ export default function HomeVideosPage() {
         : <span aria-hidden="true" style={{ width: 96, height: 54, borderRadius: 6, background: "#101c30", color: "#fff", display: "grid", placeItems: "center", flex: "none", fontWeight: 800 }}>جسور</span>}
       <span style={{ flex: 1, minWidth: 0 }}>
         <span style={{ display: "block", fontWeight: 700 }}>{video.title}</span>
-        <small className="cms-hint">{formatArabicDate(video.publishedAtUtc)} · {video.isEmbedded ? "فيديو مضمّن" : "ملف مرفوع"}{!video.thumbnailUrl && " · بدون صورة غلاف (ستظهر «جسور» مكانها)"}</small>
+        <small className="cms-hint">{formatArabicDate(video.publishedAtUtc, locale)} · {video.isEmbedded ? "فيديو مضمّن" : "ملف مرفوع"}{!video.thumbnailUrl && " · بدون صورة غلاف (ستظهر «جسور» مكانها)"}</small>
       </span>
       <span className="cms-actions" style={{ flex: "none" }}>{children}</span>
     </li>

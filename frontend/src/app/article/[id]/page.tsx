@@ -253,7 +253,7 @@ export default async function ArticlePage({ params }: { params: Promise<{ id: st
       </figure>}
 
       <div className="wrap">
-        <CorrectionsBox corrections={story.corrections.filter((c) => c.isMajor)} major />
+        <CorrectionsBox corrections={story.corrections.filter((c) => c.isMajor)} major locale={locale} />
         {story.presentationDesks.includes("sports") && (story.sportsCoverageType || story.sportsPlayerNames.length > 0 || story.sportsTeamName || story.sportsCompetitionName || story.sportsCountryName) && <aside className="article-sports-facts" aria-label={copy.sports}>
           <strong>{copy.sports}</strong>
           {story.sportsCoverageType && <span>{(copy.sportsTypes as Record<string, string>)[story.sportsCoverageType] ?? copy.sports}</span>}
@@ -271,12 +271,12 @@ export default async function ArticlePage({ params }: { params: Promise<{ id: st
           {story.secondaryTags.map((tag) => <Link className="article-taxonomy__tag" href={`/search?q=${encodeURIComponent(tag)}`} key={tag}>{tag}</Link>)}
           {story.presentationDesks.filter((desk) => deskLabels[desk]?.[locale]).map((desk) => <Link className="article-taxonomy__tag is-desk" href={`/category?cat=${encodeURIComponent(desk)}`} key={desk}>{deskLabels[desk][locale]}</Link>)}
         </nav>}
-        <CorrectionsBox corrections={story.corrections.filter((c) => !c.isMajor)} />
+        <CorrectionsBox corrections={story.corrections.filter((c) => !c.isMajor)} locale={locale} />
       </div>
       {moreFromAuthor.length > 0 && <section className="section tight on-surface article-author-more" aria-labelledby="article-author-more-heading">
         <div className="wrap article-editorial-narrow">
           <div className="section-head"><h2 id="article-author-more-heading">{copy.moreAuthor}</h2>{authorHref && <Link className="more" href={authorHref}>{copy.allAuthor} {byline} ←</Link>}</div>
-          <div className="six-grid">{moreFromAuthor.map((item) => <StoryGridCard key={item.id} story={item} />)}</div>
+          <div className="six-grid">{moreFromAuthor.map((item) => <StoryGridCard key={item.id} story={item} locale={locale} />)}</div>
         </div>
       </section>}
       {articleBottomAd && <section className="article-bottom-ad wrap" aria-label="مساحة إعلانية"><ConfiguredAd placement={articleBottomAd} ratio="4 / 1" /></section>}
@@ -284,7 +284,7 @@ export default async function ArticlePage({ params }: { params: Promise<{ id: st
         <div className="wrap article-related__inner">
           <div className="section-head"><h2 id="article-read-also-heading">{copy.readAlso}</h2></div>
           {readAlsoStories.length > 0
-            ? <div className="six-grid article-related__grid">{readAlsoStories.map((related) => <StoryGridCard key={related.id} story={related} />)}</div>
+            ? <div className="six-grid article-related__grid">{readAlsoStories.map((related) => <StoryGridCard key={related.id} story={related} locale={locale} />)}</div>
             : <p className="article-related__empty">{copy.noRelated}</p>}
         </div>
       </section>

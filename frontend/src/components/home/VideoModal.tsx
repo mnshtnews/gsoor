@@ -3,6 +3,7 @@
 import { useEffect, useRef, useState } from "react";
 import { createPortal } from "react-dom";
 import Link from "next/link";
+import { useUiLocale } from "@/lib/use-ui-locale";
 
 export interface VideoModalItem {
   title: string;
@@ -22,6 +23,7 @@ export interface VideoModalItem {
  * on close so nothing keeps streaming in the background.
  */
 export function VideoModal({ item, onClose }: { item: VideoModalItem; onClose: () => void }) {
+  const { t } = useUiLocale();
   const videoRef = useRef<HTMLVideoElement>(null);
   const closeRef = useRef<HTMLButtonElement>(null);
   const onCloseRef = useRef(onClose);
@@ -63,13 +65,13 @@ export function VideoModal({ item, onClose }: { item: VideoModalItem; onClose: (
         if (event.target === event.currentTarget) onClose();
       }}
     >
-      <div className="video-modal-box" role="dialog" aria-modal="true" aria-label="مشغّل الفيديو">
+      <div className="video-modal-box" role="dialog" aria-modal="true" aria-label={t("مشغّل الفيديو")}>
         <div className="video-modal-head">
           <div className="video-modal-heading">
-            <span className="eyebrow">فيديو</span>
+            <span className="eyebrow">{t("فيديو")}</span>
             <h3>{item.title}</h3>
           </div>
-          <button ref={closeRef} className="video-modal-close" type="button" aria-label="إغلاق" onClick={onClose}>✕</button>
+          <button ref={closeRef} className="video-modal-close" type="button" aria-label={t("إغلاق")} onClick={onClose}>✕</button>
         </div>
 
         <div className="video-modal-player">
@@ -99,7 +101,7 @@ export function VideoModal({ item, onClose }: { item: VideoModalItem; onClose: (
 
         <div className="video-modal-foot">
           <span className="video-modal-meta">{item.meta}</span>
-          <Link className="btn btn-ghost btn-sm" href={item.href} onClick={onClose}>اقرأ التقرير كاملاً →</Link>
+          <Link className="btn btn-ghost btn-sm" href={item.href} onClick={onClose}>{t("اقرأ التقرير كاملاً →")}</Link>
         </div>
       </div>
     </div>,

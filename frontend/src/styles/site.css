@@ -932,7 +932,7 @@ footer .logo-img {
   max-width: 700px;
   height: 150px;
 
-  margin-right: 24px; /* المسافة عن الشعار — التباعد الأساسي الآن من كتلة رئاسة التحرير */
+  margin-inline-start: 24px;
 
   border: 1px dashed #cfd5df;
   border-radius: 6px;
@@ -1364,7 +1364,7 @@ footer .logo-img {
   border-radius: 0;
   background: transparent;
   box-shadow: none;
-  text-align: right;
+  text-align: start;
 }
 
 .hero-below h2 {
@@ -3317,7 +3317,7 @@ table.cms-table {
   font-size: 13.5px;
 }
 table.cms-table th {
-  text-align: right;
+  text-align: start;
   padding: 10px 12px;
   color: var(--text-mute);
   font-size: 12px;
@@ -5089,8 +5089,8 @@ body {
 }
 
 .article-body > p:first-of-type::first-letter {
-  float: right;
-  margin: 4px 0 0 10px;
+  float: inline-start;
+  margin: 4px 10px 0 0;
   font-family: "Cairo", sans-serif;
   font-weight: 900;
   font-size: 58px;
@@ -5098,8 +5098,8 @@ body {
   color: var(--blue);
 }
 [dir="rtl"] .article-body > p:first-of-type::first-letter {
-  float: right;
-  margin: 4px 0 0 10px;
+  float: inline-start;
+  margin: 4px 10px 0 0;
 }
 .article-body blockquote {
   position: relative;
@@ -5108,9 +5108,11 @@ body {
     rgba(224, 124, 30, 0.07),
     rgba(224, 124, 30, 0)
   );
-  border-right: 3px solid var(--amber);
-  border-radius: 0 var(--radius) var(--radius) 0;
-  padding: 14px 22px 14px 16px;
+  border-inline-start: 3px solid var(--amber);
+  border-start-start-radius: var(--radius);
+  border-end-start-radius: var(--radius);
+  padding-block: 14px;
+  padding-inline: 22px 16px;
   font-weight: 600;
   color: var(--text);
 }
@@ -5118,7 +5120,7 @@ body {
   content: "”";
   position: absolute;
   top: -6px;
-  right: 12px;
+  inset-inline-start: 12px;
   font-family: Georgia, serif;
   font-size: 46px;
   font-weight: 800;
@@ -9685,7 +9687,7 @@ body.crisis-mode-active #heroSliderSection .hero-thumb.active {
 }
 .perm-matrix th:first-child,
 .perm-matrix td:first-child {
-  text-align: right;
+  text-align: start;
 }
 .perm-matrix thead th {
   color: var(--text-mute);

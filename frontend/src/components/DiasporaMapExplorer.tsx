@@ -1,19 +1,16 @@
 "use client";
 
-import { useEffect, useMemo, useState } from "react";
-import { parseLocale } from "@/lib/site-copy";
-import { translateUi } from "@/lib/ui-translations";
+import { useMemo, useState } from "react";
+import { useUiLocale } from "@/lib/use-ui-locale";
 import type { PublicDiasporaMapItem } from "@/lib/news-api";
 
 export function DiasporaMapExplorer({ items }: { items: PublicDiasporaMapItem[] }) {
   const [country, setCountry] = useState("all");
-  const [locale, setLocale] = useState<"ar" | "en" | "fr">("ar");
-  const t=(value:string)=>translateUi(locale,value);
-  useEffect(()=>{const value=document.cookie.split(";").map((part)=>part.trim()).find((part)=>part.startsWith("jusoor_locale="))?.split("=")[1];setLocale(parseLocale(value?decodeURIComponent(value):null));},[]);
+  const { locale, dir, t } = useUiLocale();
   const countries = useMemo(() => [...new Map(items.map((item) => [item.countryId, item.countryNameAr])).entries()].map(([id, nameAr]) => ({ id, nameAr })), [items]);
   const visible = useMemo(() => country === "all" ? items : items.filter((item) => item.countryId === country), [country, items]);
   const plotted = visible.filter((item) => item.cityId && item.latitude !== null && item.longitude !== null);
-  return <div className="diaspora-map-explorer" dir={locale === "ar" ? "rtl" : "ltr"}>
+  return <div className="diaspora-map-explorer" dir={dir}>
     <div className="diaspora-map-toolbar"><div><span className="diaspora-map-eyebrow">{t("المواقع والبيانات المنشورة")}</span><h2>{t("مجتمعات المصريين حول العالم")}</h2><small>المواضع الجغرافية من <a href="https://www.geonames.org/" target="_blank" rel="noopener noreferrer">GeoNames · CC BY 4.0</a>، وإحداثيات الدول المرجعية من <a href="https://www.naturalearthdata.com/" target="_blank" rel="noopener noreferrer">Natural Earth</a>.</small></div><label><span>{t("تصفية حسب الدولة")}</span><select value={country} onChange={(event) => setCountry(event.target.value)}><option value="all">{t("كل الدول")}</option>{countries.map((item) => <option key={item.id} value={item.id}>{item.nameAr}</option>)}</select></label></div>
     {visible.length > 0 ? <>
       {plotted.length > 0 && <div className="diaspora-coordinate-map" role="img" aria-label={`مواقع المدن المسجلة جغرافيًا: ${plotted.map((item) => item.cityNameAr).join("، ")}`}>

@@ -600,6 +600,22 @@ const CMS_TRANSLATIONS: Record<string, Partial<Record<SiteLocale, string>>> = Ob
 );
 
 const HOME_TRANSLATIONS: Record<string, Partial<Record<SiteLocale, string>>> = Object.fromEntries([
+  ["أخبار المغتربين", "Diaspora news", "Actualités de la diaspora"], ["قصص نجاح", "Success stories", "Histoires de réussite"], ["قصة نجاح", "Success story", "Histoire de réussite"],
+  ["أخبار مصر", "Egypt news", "Actualités d’Égypte"], ["فرص استثمارية", "Investment opportunities", "Opportunités d’investissement"], ["مع مسئول", "Ask an official", "Parole officielle"],
+  ["فعاليات", "Events", "Événements"], ["خط أحمر", "Red Line", "Ligne rouge"], ["اللمة الحلوة", "Community", "Communauté"],
+  ["فعاليات وتغطيات", "Events and coverage", "Événements et reportages"], ["لمّة الجالية", "Diaspora gathering", "Rencontre de la diaspora"], ["كل اللمّات ←", "All community stories →", "Toutes les rencontres →"],
+  ["الجيل الثاني", "Second generation", "Deuxième génération"], ["رياضة", "Sports", "Sports"], ["فنون", "Arts", "Arts"], ["مقالات رأي", "Opinion", "Opinions"], ["فتاوى", "Fatwas", "Fatwas"],
+  ["منظومة الخدمات", "Our services", "Nos services"], ["اطمن على مغتربك", "Check on your loved one abroad", "Prendre des nouvelles de votre proche à l’étranger"],
+  ["إرسال بلاغ خاص لفريق المتابعة", "Send a private report to the support team", "Envoyer un signalement privé à l’équipe de suivi"],
+  ["بيانات موثقة عن الجاليات", "Verified diaspora data", "Données vérifiées sur les diasporas"], ["تنبيهات جغرافية", "Location-based alerts", "Alertes géolocalisées"], ["إشعارات الطوارئ", "Emergency notifications", "Notifications d’urgence"],
+  ["الرياضيون", "Athletes", "Sportifs"], ["متابعة المحترفين", "Follow professional athletes", "Suivre les sportifs professionnels"], ["دليل السفارات", "Embassy directory", "Annuaire des ambassades"], ["المعاملات والتواصل", "Services and contacts", "Démarches et contacts"],
+  ["ملف جسور", "Jusoor profile", "Profil Jusoor"], ["أخبار تهمك", "News that matters to you", "Les actualités qui vous concernent"], ["فرص العمل", "Job opportunities", "Offres d’emploi"], ["وظائف دولية", "International jobs", "Emplois à l’international"],
+  ["برامج وقصص ملهمة", "Programs and inspiring stories", "Programmes et récits inspirants"], ["تغطية مرئية", "Video coverage", "Reportage vidéo"],
+  ["زيارة موقع المعلن", "Visit advertiser website", "Visiter le site de l’annonceur"], ["مساحة إعلانية", "Advertisement", "Publicité"], ["التنقل بين الخدمات", "Browse services", "Parcourir les services"], ["الخدمة السابقة", "Previous service", "Service précédent"], ["الخدمة التالية", "Next service", "Service suivant"],
+  ["أبرز التغطيات المرئية", "Featured video coverage", "Reportages vidéo à la une"], ["عرض:", "Show:", "Afficher :"], ["تشغيل الفيديو:", "Play video:", "Lire la vidéo :"], ["اقرأ:", "Read:", "Lire :"],
+  ["الفيديو السابق", "Previous video", "Vidéo précédente"], ["الفيديو التالي", "Next video", "Vidéo suivante"], ["اختيار التغطية", "Choose coverage", "Choisir un reportage"], ["التغطية", "Coverage", "Reportage"], ["جسور فيديو", "Jusoor Videos", "Vidéos Jusoor"],
+  ["شاهد كل الفيديوهات ←", "View all videos →", "Voir toutes les vidéos →"], ["مشغّل الفيديو", "Video player", "Lecteur vidéo"], ["فيديو", "Video", "Vidéo"], ["إغلاق", "Close", "Fermer"], ["اقرأ التقرير كاملاً →", "Read the full story →", "Lire l’article complet →"],
+  ["خط أحمر ومع مسؤول", "Red Line and an Official", "Ligne rouge et parole officielle"], ["خط أحمر ومع مسئول", "Red Line and an Official", "Ligne rouge et parole officielle"],
   ["لا توجد مواد منشورة في «{label}» حتى الآن.", "No published items in “{label}” yet.", "Aucun contenu publié dans « {label} » pour le moment."],
   ["ستظهر التغطيات هنا بعد نشر خبر واختيار هذا القسم.", "Coverage will appear here after an article is published in this section.", "Les articles apparaîtront ici après la publication d’un contenu dans cette rubrique."],
   ["كل التحديثات ←", "All updates ←", "Toutes les mises à jour ←"], ["كل اللقاءات ←", "All interviews ←", "Tous les entretiens ←"],
@@ -642,6 +658,11 @@ const CMS_PREFIX_TRANSLATIONS: Record<string, Partial<Record<SiteLocale, string>
 
 export function translateUi(locale: SiteLocale, text: string): string {
   if (locale === "ar") return text;
+  const emptyDesk = text.match(/^لا توجد مواد منشورة في «(.+)» حتى الآن\.$/);
+  if (emptyDesk) {
+    const label = translateUi(locale, emptyDesk[1]);
+    return locale === "en" ? `No published items in “${label}” yet.` : `Aucun contenu publié dans « ${label} » pour le moment.`;
+  }
   const exact = UI_TRANSLATIONS[text]?.[locale] ?? UI_EXTRA[text]?.[locale] ?? AUTH_TRANSLATIONS[text]?.[locale] ?? MAP_TRANSLATIONS[text]?.[locale] ?? CMS_TRANSLATIONS[text]?.[locale] ?? HOME_TRANSLATIONS[text]?.[locale];
   if (exact) return exact;
   const prefix = Object.entries(CMS_PREFIX_TRANSLATIONS).find(([key]) => text.startsWith(key));
