@@ -195,7 +195,7 @@ export function HeaderInteractive({ tickerHeadlines, navbarAd, navigation, leade
   // French labels are substantially longer than Arabic/English. Keep the
   // highest-traffic destinations in the bar and move all remaining sections
   // into Plus so account actions never get pushed off-screen.
-  const frenchPrimaryKeys = new Set(["home", "mughtarib", "egypt"]);
+  const frenchPrimaryKeys = new Set(["home", "mughtarib", "success", "egypt", "opportunities"]);
   const primaryLinks = visibleNavigation.filter((item) => locale === "fr" ? frenchPrimaryKeys.has(item.key) : item.group === "primary").sort((a, b) => a.displayOrder - b.displayOrder);
   const moreLinks = visibleNavigation.filter((item) => locale === "fr" ? !frenchPrimaryKeys.has(item.key) : item.group === "more").sort((a, b) => a.displayOrder - b.displayOrder);
   const drawerLinks = [...primaryLinks, ...moreLinks];

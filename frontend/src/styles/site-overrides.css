@@ -433,6 +433,9 @@
 .home-ad-placement__frame > a,
 .atmaen-ad-slot > a { display: block; border-radius: 8px; }
 .home-ad-placement__frame img { aspect-ratio: 1; object-fit: contain; }
+.home-ad-placement--wide .home-ad-placement__frame { width: min(100%, 1120px); }
+.home-ad-placement--wide .configured-ad__image { aspect-ratio: 1424 / 745; border-radius: 8px; background: transparent; }
+.home-ad-placement--wide .configured-ad__image img { aspect-ratio: auto; object-fit: contain; }
 .home-ad-placement--natural { padding: 5px 0; border: 0; background: transparent; }
 .home-ad-placement--natural.home-wide-ad { margin: 0 auto; }
 .home-ad-placement--natural .configured-ad__image { border-radius: 8px; background: transparent; }

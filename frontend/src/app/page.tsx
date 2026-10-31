@@ -67,7 +67,10 @@ function EmptyDesk({ label }: { label: string }) {
 
 function HomeAdPlacement({ placement, className = "", ratio = "1 / 1", naturalSize = false }: { placement?: PublicAdPlacement; className?: string; ratio?: string; naturalSize?: boolean }) {
   if (!placement) return null;
-  return <div className={`home-ad-placement ${className}`.trim()}><div className="wrap"><ConfiguredAd placement={placement} ratio={ratio} naturalSize={naturalSize} /></div></div>;
+  return <div className={`home-ad-placement ${className}`.trim()}><div className="wrap">{naturalSize
+    ? <ConfiguredAd placement={placement} ratio={ratio} naturalSize />
+    : <div className="home-ad-placement__frame"><ConfiguredAd placement={placement} ratio={ratio} />
+    </div>}</div></div>;
 }
 
 /** Demo's `.six-grid` of `.grid-card`s (cardGrid). */
@@ -182,14 +185,13 @@ function LammaSection({ lamma, events, topAd, sideAd, locale }: { lamma: StorySu
   );
 }
 
-function AtmaenFeature({ webAd, mobileAd }: { webAd?: PublicAdPlacement; mobileAd?: PublicAdPlacement }) {
+function AtmaenFeature({ webAd }: { webAd?: PublicAdPlacement }) {
   return (
     <section className="section atmaen-feature-section" id="atmaen"><div className="wrap"><div className="atmaen-feature-card"><div className="split-2 atmaen-feature-layout">
           <div><span className="eyebrow atmaen-feature-eyebrow">اطمّن على مغتربك</span><h2 className="atmaen-feature-title">لا تنتظر أخبار الوكالات والمراسلين وقت الأزمات الكبرى.. تابع المستجدات المعتمدة، وأرسل بلاغًا خاصًا للاطمئنان على مغتربك</h2>
           <div className="flex gap-8 mt-24 atmaen-feature-actions"><Link className="btn btn-primary" href="/atmaen">اطمن</Link><Link className="btn btn-ghost" href="/crisis">مركز الأزمة</Link></div>
         </div>
         <ConfiguredAd placement={webAd} className="atmaen-ad-slot atmaen-ad-slot--web" ratio="1424 / 745" />
-        <ConfiguredAd placement={mobileAd} className="atmaen-ad-slot atmaen-ad-slot--mobile" ratio="1424 / 745" />
       </div></div></div></section>
   );
 }
@@ -274,9 +276,11 @@ export default async function HomePage() {
           <DeskGrid stories={desks.mughtarib.slice(0, 6)} label={deskLabels.mughtarib} locale={locale} mobileVariant="uniform" />
         </div>
       </section>
-      <HomeAdPlacement placement={ad("mobile", "after-mughtarib")} className="home-ad-placement--mobile-only" />
+      <HomeAdPlacement placement={ad("mobile", "after-mughtarib")} ratio="1424 / 745" className="home-ad-placement--mobile-only home-ad-placement--wide" />
       <ServicesBand ads={webAds} />
-      <AtmaenFeature webAd={ad("web", "atmaen-ad")} mobileAd={ad("mobile", "atmaen-ad")} />
+      <HomeAdPlacement placement={ad("mobile", "after-services")} className="home-ad-placement--mobile-only" />
+      <AtmaenFeature webAd={ad("web", "atmaen-ad")} />
+      <HomeAdPlacement placement={ad("mobile", "atmaen-ad")} ratio="1424 / 745" className="home-ad-placement--mobile-only home-ad-placement--wide" />
 
       {/* الويب يحتفظ بمساحة الإعلان الجانبية؛ إعلانات الموبايل تظهر بعد السكشن. */}
       <section className="section on-surface">
@@ -295,12 +299,14 @@ export default async function HomePage() {
           </div>
         </div>
       </section>
+      <HomeAdPlacement placement={ad("mobile", "after-success")} className="home-ad-placement--mobile-only" />
       <section className="section tight on-surface">
         <div className="wrap">
           <Head label={deskLabels.egypt} slug="egypt" locale={locale} />
           <DeskGrid stories={desks.egypt.slice(0, 6)} label={deskLabels.egypt} locale={locale} mobileVariant="uniform" />
         </div>
       </section>
+      <HomeAdPlacement placement={ad("mobile", "after-egypt")} ratio="1424 / 745" className="home-ad-placement--mobile-only home-ad-placement--wide" />
 
       <HomeAdPlacement placement={ad("web", "editorial-top")} className="home-wide-ad home-wide-ad--web-only home-ad-placement--natural" naturalSize />
       <section className="section editorial-columns-section" aria-label="خط أحمر ومع مسؤول">
@@ -311,6 +317,7 @@ export default async function HomePage() {
           </div>
         </div>
       </section>
+      <HomeAdPlacement placement={ad("mobile", "after-editorial")} className="home-ad-placement--mobile-only" />
 
       <section className="on-ink section tight opinion-section" id="opinion">
         <div className="wrap">
@@ -332,6 +339,7 @@ export default async function HomePage() {
           ) : <EmptyDesk label={deskLabels.articles} />}
         </div>
       </section>
+      <HomeAdPlacement placement={ad("mobile", "after-opinion")} ratio="1424 / 745" className="home-ad-placement--mobile-only home-ad-placement--wide" />
 
       <section className="section on-surface opportunities-section">
         <div className="wrap">
@@ -359,6 +367,7 @@ export default async function HomePage() {
           </div>
         </div>
       </section>
+      <HomeAdPlacement placement={ad("mobile", "after-opportunities")} className="home-ad-placement--mobile-only" />
 
       <section className="section" id="second-gen">
         <div className="wrap">
@@ -366,10 +375,13 @@ export default async function HomePage() {
           <DeskGrid stories={desks.secondgen.slice(0, 4)} label={deskLabels.secondgen} columns={4} locale={locale} />
         </div>
       </section>
+      <HomeAdPlacement placement={ad("mobile", "after-secondgen")} ratio="1424 / 745" className="home-ad-placement--mobile-only home-ad-placement--wide" />
 
       <LammaSection lamma={desks.lamma} events={desks.events} topAd={ad("web", "lamma-top")} sideAd={ad("web", "lamma-events-square")} locale={locale} />
+      <HomeAdPlacement placement={ad("mobile", "after-lamma")} className="home-ad-placement--mobile-only" />
 
       <ConfiguredHomepageSections sections={homepageSections} desks={desks} locale={locale} />
+      <HomeAdPlacement placement={ad("mobile", "after-configured-sections")} ratio="1424 / 745" className="home-ad-placement--mobile-only home-ad-placement--wide" />
 
       <section className="section on-surface" id="city-alerts" style={{ paddingTop: 0 }}>
         <div className="wrap">
@@ -379,6 +391,7 @@ export default async function HomePage() {
           </div>
         </div>
       </section>
+      <HomeAdPlacement placement={ad("mobile", "after-city-alerts")} className="home-ad-placement--mobile-only" />
 
       <NewsRecirculation desks={desks} locale={locale} />
     </main>
