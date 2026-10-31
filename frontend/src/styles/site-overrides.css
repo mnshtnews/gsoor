@@ -578,7 +578,7 @@
 .configured-ad__image { position: relative; display: block; width: 100%; overflow: hidden; border-radius: 8px; background: #f2f4f7; }
 .configured-ad__image img { object-fit: contain; }
 .configured-ad:focus-within { outline: 3px solid var(--amber); outline-offset: 3px; }
-.header-ad-banner { flex: 0 1 min(52vw, 780px); width: min(52vw, 780px); margin-inline: auto; }
+.header-ad-banner { flex: 1 1 440px; width: 100%; min-width: 260px; max-width: 780px; margin-inline: 0; }
 .header-ad-banner .configured-ad__image { border-radius: 6px; background: transparent; }
 .header-ad-banner > a { border-radius: 6px; }
 @media (max-width: 860px) { .header-ad-banner { display: none; } }
@@ -649,11 +649,9 @@
   #heroSliderSection .hero-below { position: static; width: 100%; margin: 10px 0 0; padding: 0 2px; border: 0; border-radius: 0; background: transparent; box-shadow: none; }
   #heroSliderSection .hero-headline-stage { height: 63px; }
   #heroSliderSection .hero-below h2 { max-width: none; margin: 0; font-size: clamp(15px, 4vw, 18px); line-height: 1.45; }
-  #heroSliderSection .hero-nav { order: 3; display: flex; align-items: center; justify-content: space-between; gap: 10px; margin: 14px 0 0; }
-  #heroSliderSection .hero-nav:not(.has-multiple) { display: none; }
-  #heroSliderSection .hero-nav > .btn { min-height: 42px; padding: 8px 12px; white-space: nowrap; }
+  #heroSliderSection .hero-nav { display: none !important; }
   #heroSliderSection .hero-dots { display: none; }
-  #heroSliderSection .hero-mobile-count { display: inline-flex; align-items: center; justify-content: center; min-width: 64px; color: var(--text-mute); font-size: 13px; font-weight: 700; direction: ltr; }
+  #heroSliderSection .hero-mobile-count { display: none; }
   .hero-mobile-arrow {
     position: absolute;
     z-index: 5;
@@ -988,23 +986,26 @@ button.hero-main-button:focus-visible { outline: 2px solid var(--amber); outline
 }
 
 /* CMS site structure controls */
-.header-branding { display: flex; align-items: center; gap: clamp(12px, 2vw, 28px); min-width: 0; }
+.header-branding { display: flex; flex: 0 1 460px; align-items: center; gap: clamp(12px, 2vw, 28px); min-width: 0; }
 .header-branding .logo { flex: 0 0 auto; }
 .header-branding .logo-img { height: 128px; width: 145px; max-width: none; object-fit: contain; }
 .header-branding .logo-slogan { font-size: 13px; }
 .header-leadership {
   display: flex;
+  flex: 1 1 220px;
   flex-direction: column;
   align-items: center;
   gap: 18px;
-  padding-inline-start: 22px;
+  min-width: 0;
+  max-width: 300px;
+  padding-inline-start: clamp(8px, 1.2vw, 18px);
   border: 0;
   font-family: "Cairo", sans-serif;
-  white-space: nowrap;
+  white-space: normal;
 }
-.leadership-credit-group { display: flex; flex-direction: column; align-items: center; text-align: center; line-height: 1.4; }
+.leadership-credit-group { display: flex; max-width: 100%; min-width: 0; flex-direction: column; align-items: center; text-align: center; line-height: 1.4; }
 .leadership-credit-roles { display: flex; flex-direction: column; align-items: center; }
-.leadership-credit-role, .leadership-credit-roles span { color: #444; font-size: 15px; font-weight: 600; letter-spacing: 0; }
+.leadership-credit-role, .leadership-credit-roles span { max-width: 100%; color: #444; font-size: 15px; font-weight: 600; letter-spacing: 0; overflow-wrap: anywhere; }
 .leadership-credit-group strong { color: var(--text); font-size: 16px; font-weight: 800; margin-top: 1px; }
 .drawer-leadership { display: none; }
 .cms-leadership-fields { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: .8rem; }
@@ -1510,4 +1511,54 @@ body.crisis-mode-active .header-branding .header-demo-badge i { background:#fff;
   .header-branding .leadership-credit-roles span { font-size:9px; }
   .header-branding .leadership-credit-group strong { font-size:11px; }
   .header-branding .mobile-header-search-trigger { flex-basis:38px; width:38px; height:38px; min-width:38px; min-height:38px; }
+}
+
+/* Section pagination: clear, touch-friendly numbered controls on every locale. */
+.pagination--sections {
+  width: 100%;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin: 30px auto 0;
+  padding: 18px 12px;
+  border-radius: 8px;
+  background: #f4f5f7;
+  direction: ltr;
+  font-family: inherit;
+}
+.pagination--sections a {
+  display: inline-grid;
+  min-width: 36px;
+  min-height: 36px;
+  place-items: center;
+  padding: 0 8px;
+  border: 1px solid transparent;
+  border-radius: 7px;
+  color: #53647b;
+  font-size: 14px;
+  font-weight: 600;
+  line-height: 1;
+  text-decoration: none;
+  transition: color .16s ease, background-color .16s ease, border-color .16s ease;
+}
+.pagination--sections a:hover:not([aria-current="page"]) {
+  border-color: #d7e0ed;
+  background: #fff;
+  color: var(--blue);
+}
+.pagination--sections a[aria-current="page"] {
+  border-color: var(--amber);
+  background: var(--amber);
+  color: #fff;
+  font-weight: 800;
+}
+.pagination--sections a:focus-visible {
+  outline: 3px solid color-mix(in srgb, var(--blue) 35%, transparent);
+  outline-offset: 2px;
+}
+.pagination--sections > span[aria-hidden="true"] {
+  display: inline-grid;
+  min-width: 24px;
+  place-items: center;
+  color: var(--text-mute);
 }
