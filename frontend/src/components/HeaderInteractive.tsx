@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { TopbarClock } from "./TopbarClock";
@@ -9,6 +9,7 @@ import type { PublicAdPlacement, PublicSiteNavigationItem, PublicSocialLink } fr
 import { DEFAULT_PUBLIC_SOCIAL_LINKS, socialIconPath } from "@/lib/social-links";
 import { LocaleSelector } from "@/components/LocaleSelector";
 import type { SiteLocale } from "@/lib/site-copy";
+import { translateUi } from "@/lib/ui-translations";
 
 const DEFAULT_NAVIGATION: PublicSiteNavigationItem[] = [
   ["home", "الرئيسية", "/", "primary"], ["mughtarib", "أخبار المغتربين", "/category?cat=mughtarib", "primary"],
@@ -23,13 +24,13 @@ const DEFAULT_NAVIGATION: PublicSiteNavigationItem[] = [
 
 type Leadership = { entries: Array<{ id: string; title: string; name: string }>; logoAssetId?: string | null; logoUrl?: string | null; slogan?: string | null };
 
-function LeadershipCredits({ leadership, className = "header-leadership" }: { leadership?: Leadership; className?: string }) {
+function LeadershipCredits({ leadership, locale, className = "header-leadership" }: { leadership?: Leadership; locale: SiteLocale; className?: string }) {
   const entries = leadership?.entries.filter((entry) => entry.title.trim() || entry.name.trim()) ?? [];
   if (!entries.length) return null;
-  return <div className={className} aria-label="هيئة الإدارة والتحرير">
+  return <div className={className} aria-label={locale === "ar" ? "هيئة الإدارة والتحرير" : locale === "en" ? "Editorial leadership" : "Direction éditoriale"}>
     {entries.map((entry) => <div className="leadership-credit-group" key={entry.id}>
-      <span className="leadership-credit-role">{entry.id === "board-editor" && entry.title === "رئيس مجلس الإدارة ورئيس التحرير" ? <>رئيس مجلس الإدارة<br />رئيس التحرير</> : entry.title}</span>
-      {entry.name && <strong>{entry.name}</strong>}
+      <span className="leadership-credit-role">{entry.id === "board-editor" && entry.title === "رئيس مجلس الإدارة ورئيس التحرير" && locale === "ar" ? <>رئيس مجلس الإدارة<br />رئيس التحرير</> : localizedLeadershipValue(entry.title, locale)}</span>
+      {entry.name && <strong>{localizedLeadershipValue(entry.name, locale)}</strong>}
     </div>)}
   </div>;
 }
@@ -55,6 +56,63 @@ function localizedNavigationLabel(key: string, arabicLabel: string, locale: Site
     fr: { home: "Accueil", mughtarib: "Actualités de la diaspora", success: "Histoires de réussite", egypt: "Actualités d’Égypte", opportunities: "Opportunités d’investissement", official: "Parole officielle", red: "Ligne rouge", map: "Carte de la diaspora", events: "Événements", lamma: "Communauté", secondgen: "Deuxième génération", sports: "Sport", arts: "Arts", articles: "Opinions", fatwas: "Fatwas", videos: "Vidéos" },
   };
   return labels[locale][key] ?? arabicLabel;
+}
+
+function TickerMarquee({ headlines, locale }: { headlines: string[]; locale: SiteLocale }) {
+  const viewportRef = useRef<HTMLDivElement>(null);
+  const measureRef = useRef<HTMLDivElement>(null);
+  const [copiesPerSequence, setCopiesPerSequence] = useState(2);
+
+  useEffect(() => {
+    const viewport = viewportRef.current;
+    const measure = measureRef.current;
+    if (!viewport || !measure) return;
+    const updateCopies = () => {
+      const groupWidth = measure.getBoundingClientRect().width;
+      const viewportWidth = viewport.getBoundingClientRect().width;
+      if (groupWidth > 0 && viewportWidth > 0) {
+        // One half of the track must always cover the viewport; the second
+        // identical half then replaces it without exposing an empty tail.
+        setCopiesPerSequence(Math.max(1, Math.ceil(viewportWidth / groupWidth) + 1));
+      }
+    };
+    updateCopies();
+    const observer = new ResizeObserver(updateCopies);
+    observer.observe(viewport);
+    observer.observe(measure);
+    document.fonts?.ready.then(updateCopies).catch(() => undefined);
+    return () => observer.disconnect();
+  }, [headlines]);
+
+  const renderGroup = (sequence: number, copy: number) => (
+    <div className="ticker-group" key={`${sequence}-${copy}`} aria-hidden={sequence > 0 || copy > 0}>
+      {headlines.map((headline, index) => <span key={`${index}-${headline}`}>{headline}</span>)}
+    </div>
+  );
+
+  return <div className="ticker" ref={viewportRef} dir={locale === "ar" ? "rtl" : "ltr"}>
+    <div className="ticker-measure" aria-hidden="true" ref={measureRef}>
+      <div className="ticker-group">{headlines.map((headline, index) => <span key={`${index}-${headline}`}>{headline}</span>)}</div>
+    </div>
+    <div className="ticker-track">
+      {[0, 1].map((sequence) => <div className="ticker-sequence" key={sequence} aria-hidden={sequence === 1}>
+        {Array.from({ length: copiesPerSequence }, (_, copy) => renderGroup(sequence, copy))}
+      </div>)}
+    </div>
+  </div>;
+}
+
+const LEADERSHIP_COPY: Record<string, { en: string; fr: string }> = {
+  "رئيس مجلس الإدارة": { en: "Chairman of the Board", fr: "Président du conseil d’administration" },
+  "رئيس التحرير": { en: "Editor-in-Chief", fr: "Rédacteur en chef" },
+  "رئيس التحرير التنفيذي": { en: "Executive Editor", fr: "Rédacteur exécutif" },
+  "أحمد سليمان": { en: "Ahmed Suleiman", fr: "Ahmed Suleiman" },
+  "أشرف جبريل": { en: "Ashraf Gabrial", fr: "Ashraf Gabrial" },
+};
+function localizedLeadershipValue(value: string, locale: SiteLocale): string {
+  if (locale === "ar") return value;
+  if (value === "رئيس مجلس الإدارة ورئيس التحرير") return locale === "en" ? "Chairman of the Board & Editor-in-Chief" : "Président du conseil et rédacteur en chef";
+  return LEADERSHIP_COPY[value]?.[locale] ?? translateUi(locale, value);
 }
 export function HeaderInteractive({ tickerHeadlines, navbarAd, navigation, leadership, socialLinks = DEFAULT_PUBLIC_SOCIAL_LINKS, locale = "ar" }: { tickerHeadlines: string[]; navbarAd?: PublicAdPlacement; navigation?: PublicSiteNavigationItem[]; leadership?: Leadership; socialLinks?: PublicSocialLink[]; locale?: SiteLocale }) {
   const [drawerOpen, setDrawerOpen] = useState(false);
@@ -136,7 +194,6 @@ export function HeaderInteractive({ tickerHeadlines, navbarAd, navigation, leade
   // The demo repeats the ticker group 3-4x in the HTML itself for a
   // seamless CSS marquee loop — same technique, applied to real headlines
   // instead of the demo's fixed sample list.
-  const tickerGroups = tickerHeadlines.length > 0 ? [0, 1] : [];
   const visibleNavigation = (navigation?.length ? navigation : DEFAULT_NAVIGATION).filter((item) => item.isVisible).map((item) => ({ ...item, label: localizedNavigationLabel(item.key, item.label, locale) }));
   const primaryLinks = visibleNavigation.filter((item) => item.group === "primary").sort((a, b) => a.displayOrder - b.displayOrder);
   const moreLinks = visibleNavigation.filter((item) => item.group === "more").sort((a, b) => a.displayOrder - b.displayOrder);
@@ -178,11 +235,11 @@ export function HeaderInteractive({ tickerHeadlines, navbarAd, navigation, leade
 
           <div className="header-branding">
             <Link className="logo" href="/">
-              <Image className="logo-img" src={logoSrc} alt="جسور" width={1104} height={974} priority />
-              <span className="header-demo-badge"><i aria-hidden="true" />بث تجريبي</span>
-              <span className="logo-slogan">{leadership?.slogan?.trim() || "صوت المصريين في الخارج"}</span>
+              <Image className="logo-img" src={logoSrc} alt={locale === "ar" ? "جسور" : "Jusoor"} width={1104} height={974} priority />
+              <span className="header-demo-badge"><i aria-hidden="true" />{translateUi(locale, "بث تجريبي")}</span>
+              <span className="logo-slogan">{leadership?.slogan?.trim() ? localizedLeadershipValue(leadership.slogan.trim(), locale) : translateUi(locale, "صوت المصريين في الخارج")}</span>
             </Link>
-            <LeadershipCredits leadership={leadership} />
+            <LeadershipCredits leadership={leadership} locale={locale} />
             <button type="button" className="icon-btn mobile-header-search-trigger" data-open-search aria-label={text.search} onClick={() => { setDrawerOpen(false); setSearchOpen(true); }}>
               <svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" aria-hidden="true"><circle cx="11" cy="11" r="7.5" /><path d="m16.5 16.5 4 4" /></svg>
             </button>
@@ -199,20 +256,20 @@ export function HeaderInteractive({ tickerHeadlines, navbarAd, navigation, leade
         </div>
       </header>
 
-      <nav className="bluebarr">
+      <nav className="bluebarr" dir={locale === "ar" ? "rtl" : "ltr"}>
         <div className="nav-container">
           <div className="nav-brand-group">
             <button
               type="button"
               className="bluebarr-burger"
-              aria-label="فتح قائمة التنقل"
+              aria-label={text.openMenu}
               onClick={() => setDrawerOpen(true)}
             >
               <span></span><span></span><span></span>
             </button>
             <div className="nav-sticky-logo">
-              <Link href="/" aria-label="الرئيسية">
-                <Image src={logoSrc} alt="جسور" width={1104} height={974} />
+              <Link href="/" aria-label={localizedNavigationLabel("home", "الرئيسية", locale)}>
+                <Image src={logoSrc} alt={locale === "ar" ? "جسور" : "Jusoor"} width={1104} height={974} />
               </Link>
             </div>
 
@@ -252,19 +309,9 @@ export function HeaderInteractive({ tickerHeadlines, navbarAd, navigation, leade
         </div>
       </nav>
 
-      {tickerGroups.length > 0 && (
+      {tickerHeadlines.length > 0 && (
         <div className="bluebar">
-          <div className="ticker">
-            <div className="ticker-track">
-              {tickerGroups.map((groupIndex) => (
-                <div className="ticker-group" key={groupIndex}>
-                  {tickerHeadlines.map((headline, i) => (
-                    <span key={`${groupIndex}-${i}`}>{headline}</span>
-                  ))}
-                </div>
-              ))}
-            </div>
-          </div>
+          <TickerMarquee headlines={tickerHeadlines} locale={locale} />
         </div>
       )}
 
@@ -274,10 +321,10 @@ export function HeaderInteractive({ tickerHeadlines, navbarAd, navigation, leade
       >
         <div className="drawer">
           <div className="flex" style={{ justifyContent: "space-between", alignItems: "center", marginBottom: 20 }}>
-            <Image className="logo-img" src={logoSrc} alt="جسور" width={1104} height={974} />
+            <Image className="logo-img" src={logoSrc} alt={locale === "ar" ? "جسور" : "Jusoor"} width={1104} height={974} />
             <button type="button" className="drawer-close icon-btn" onClick={() => setDrawerOpen(false)}>✕</button>
           </div>
-          <LeadershipCredits leadership={leadership} className="drawer-leadership" />
+          <LeadershipCredits leadership={leadership} locale={locale} className="drawer-leadership" />
           <nav>
             {drawerLinks.map((link) => <Link key={link.key} href={link.href} onClick={() => setDrawerOpen(false)}>{link.label}</Link>)}
             {staffRoles.length > 0 ? <Link href="/cms" onClick={() => setDrawerOpen(false)}>{text.cms}</Link> : signedIn ? <Link href="/auth" onClick={() => setDrawerOpen(false)}>{text.profile}</Link> : <><Link href="/auth?tab=login" onClick={() => setDrawerOpen(false)}>{text.login}</Link><Link href="/auth?tab=signup" onClick={() => setDrawerOpen(false)}>{text.signup}</Link></>}
@@ -304,7 +351,7 @@ export function HeaderInteractive({ tickerHeadlines, navbarAd, navigation, leade
             {!suggestionsLoading && searchQuery.trim().length >= 2 && suggestions.map((item) => (
               <Link className="row" key={item.id} href={`/article/${item.id}/${encodeURIComponent(item.slug)}`} onClick={() => setSearchOpen(false)}>{item.title}</Link>
             ))}
-            {!suggestionsLoading && searchQuery.trim().length >= 2 && suggestions.length === 0 && <p className="row">لا توجد نتائج مطابقة حتى الآن.</p>}
+            {!suggestionsLoading && searchQuery.trim().length >= 2 && suggestions.length === 0 && <p className="row">{translateUi(locale, "لا توجد نتائج مطابقة حتى الآن.")}</p>}
             {searchQuery.trim().length >= 2 && <Link className="row" href={`/search?q=${encodeURIComponent(searchQuery.trim())}`} onClick={() => setSearchOpen(false)}>{text.allResults}</Link>}
           </div>
         </div>

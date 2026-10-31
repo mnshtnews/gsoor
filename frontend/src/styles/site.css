@@ -4161,7 +4161,6 @@ body.nav-returned .mainnav {
 
   display: flex;
   align-items: center;
-  direction: rtl;
 }
 
 /* زرار الهمبرغر الخاص بالـ bluebarr نفسه: مكانش ليه أي CSS خالص قبل
@@ -10567,3 +10566,55 @@ body.crisis-mode-active #heroSliderSection .hero-thumb.active {
 }
 
 .ui-localized-content { display: contents; }
+
+/* The ticker contains two equal, measured sequences. Animating by exactly one
+   sequence length keeps the next copy in place at the loop boundary. */
+.bluebar .ticker {
+  direction: inherit;
+}
+.bluebar .ticker-measure {
+  position: absolute;
+  inset-block-start: 0;
+  inset-inline-start: 0;
+  width: max-content;
+  height: 36px;
+  visibility: hidden;
+  pointer-events: none;
+}
+.bluebar .ticker-track {
+  display: flex;
+  align-items: center;
+  position: absolute;
+  inset-block-start: 0;
+  inset-inline-start: 0;
+  inset-inline-end: auto;
+  width: max-content;
+  height: 36px;
+  gap: 0;
+  animation: ticker-seamless var(--ticker-speed) linear infinite;
+}
+.bluebar .ticker-sequence {
+  display: flex;
+  flex: 0 0 auto;
+  width: max-content;
+  height: 36px;
+}
+.bluebar .ticker-group {
+  display: flex;
+  flex: 0 0 auto;
+  align-items: center;
+  width: max-content;
+  height: 36px;
+  gap: 20px;
+  padding-inline-end: 36px;
+  padding-right: 0;
+}
+.bluebarr[dir="ltr"] { direction: ltr; }
+.bluebarr[dir="rtl"] { direction: rtl; }
+@keyframes ticker-seamless {
+  from { transform: translate3d(0, 0, 0); }
+  to { transform: translate3d(-50%, 0, 0); }
+}
+@media (prefers-reduced-motion: reduce) {
+  .bluebar .ticker-track { animation: none; transform: none; }
+}

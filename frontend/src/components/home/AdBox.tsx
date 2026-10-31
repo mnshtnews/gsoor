@@ -3,6 +3,7 @@
 import { useEffect, useRef, useState } from "react";
 import Image from "next/image";
 import type { PublicAdPlacement } from "@/lib/news-api";
+import { useUiLocale } from "@/lib/use-ui-locale";
 
 /**
  * A standalone sponsored box (own frame, own entrance animation).
@@ -26,6 +27,7 @@ export function AdBox({ placement, className = "", ratio = "1 / 1", fill = false
   ratio?: string;
   fill?: boolean;
 }) {
+  const { t } = useUiLocale();
   const ref = useRef<HTMLElement>(null);
   const [seen, setSeen] = useState(false);
 
@@ -47,9 +49,9 @@ export function AdBox({ placement, className = "", ratio = "1 / 1", fill = false
   const flowHeight = ratioW > 0 && ratioH > 0 ? Math.round((1600 * ratioH) / ratioW) : 900;
   const classes = ["ad-box", fill ? "ad-box--fill" : "", seen ? "ad-box--in" : "ad-box--pending", className].filter(Boolean).join(" ");
   return (
-    <aside ref={ref} className={classes} aria-label="مساحة إعلانية">
-      <span className="ad-box__label">مساحة إعلانية</span>
-      <a className="ad-box__link" href={placement.targetUrl} target="_blank" rel="sponsored noopener noreferrer" aria-label={`${placement.altText} — زيارة موقع المعلن`}>
+    <aside ref={ref} className={classes} aria-label={t("مساحة إعلانية")}>
+      <span className="ad-box__label">{t("مساحة إعلانية")}</span>
+      <a className="ad-box__link" href={placement.targetUrl} target="_blank" rel="sponsored noopener noreferrer" aria-label={`${placement.altText} — ${t("زيارة موقع المعلن")}`}>
         <span className="ad-box__media" style={fill ? undefined : { aspectRatio: ratio }}>
           <Image className="ad-box__bg" src={placement.mediaUrl} alt="" aria-hidden="true" fill sizes="64px" unoptimized />
           {fill
