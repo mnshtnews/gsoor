@@ -10611,6 +10611,13 @@ body.crisis-mode-active #heroSliderSection .hero-thumb.active {
 }
 .bluebarr[dir="ltr"] { direction: ltr; }
 .bluebarr[dir="rtl"] { direction: rtl; }
+.bluebarr--fr .nav-container { gap: 14px; padding-inline: 18px; }
+.bluebarr--fr .nav-brand-group { gap: 14px; }
+.bluebarr--fr .nav-links { gap: clamp(8px, 1vw, 14px); }
+.bluebarr--fr .nav-link { font-size: .94rem; }
+.bluebarr--fr .nav-sticky-actions { gap: 8px; }
+.bluebarr--fr .auth-group { gap: 6px; }
+.bluebarr--fr .btn-nav { padding: 6px 10px; font-size: .82rem; }
 @keyframes ticker-seamless {
   from { transform: translate3d(0, 0, 0); }
   to { transform: translate3d(-50%, 0, 0); }

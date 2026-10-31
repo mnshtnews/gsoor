@@ -191,12 +191,13 @@ export function HeaderInteractive({ tickerHeadlines, navbarAd, navigation, leade
     return () => window.removeEventListener("keydown", onKeyDown);
   }, []);
 
-  // The demo repeats the ticker group 3-4x in the HTML itself for a
-  // seamless CSS marquee loop — same technique, applied to real headlines
-  // instead of the demo's fixed sample list.
   const visibleNavigation = (navigation?.length ? navigation : DEFAULT_NAVIGATION).filter((item) => item.isVisible).map((item) => ({ ...item, label: localizedNavigationLabel(item.key, item.label, locale) }));
-  const primaryLinks = visibleNavigation.filter((item) => item.group === "primary").sort((a, b) => a.displayOrder - b.displayOrder);
-  const moreLinks = visibleNavigation.filter((item) => item.group === "more").sort((a, b) => a.displayOrder - b.displayOrder);
+  // French labels are substantially longer than Arabic/English. Keep the
+  // highest-traffic destinations in the bar and move all remaining sections
+  // into Plus so account actions never get pushed off-screen.
+  const frenchPrimaryKeys = new Set(["home", "mughtarib", "egypt"]);
+  const primaryLinks = visibleNavigation.filter((item) => locale === "fr" ? frenchPrimaryKeys.has(item.key) : item.group === "primary").sort((a, b) => a.displayOrder - b.displayOrder);
+  const moreLinks = visibleNavigation.filter((item) => locale === "fr" ? !frenchPrimaryKeys.has(item.key) : item.group === "more").sort((a, b) => a.displayOrder - b.displayOrder);
   const drawerLinks = [...primaryLinks, ...moreLinks];
   const renderAccountLinks = (className: string) => <div className={`${className}${staffRoles.length > 0 || signedIn ? " auth-group--single" : ""}`}>
     {staffRoles.length > 0 ? <Link href="/cms" className="btn-nav btn-ghostt">{text.cms}</Link>
@@ -256,7 +257,7 @@ export function HeaderInteractive({ tickerHeadlines, navbarAd, navigation, leade
         </div>
       </header>
 
-      <nav className="bluebarr" dir={locale === "ar" ? "rtl" : "ltr"}>
+      <nav className={`bluebarr${locale === "fr" ? " bluebarr--fr" : ""}`} dir={locale === "ar" ? "rtl" : "ltr"}>
         <div className="nav-container">
           <div className="nav-brand-group">
             <button
