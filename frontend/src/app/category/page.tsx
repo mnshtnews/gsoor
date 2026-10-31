@@ -82,8 +82,7 @@ export default async function CategoryPage({ searchParams }: { searchParams: Sea
             </div>
           )}
           {result.totalPages > 1 && (
-            <nav className="pagination" aria-label={copy.pages}>
-              {page > 1 && <Link href={`/category?cat=${desk.slug}&page=${page - 1}`} rel="prev" aria-label={copy.previous}>‹</Link>}
+            <nav className="pagination pagination--sections" aria-label={copy.pages}>
               {Array.from({ length: result.totalPages }, (_, index) => index + 1)
                 .filter((number) => result.totalPages <= 7 || number === 1 || number === result.totalPages || Math.abs(number - page) <= 1)
                 .map((number, index, visible) => (
@@ -92,7 +91,6 @@ export default async function CategoryPage({ searchParams }: { searchParams: Sea
                     <Link href={`/category?cat=${desk.slug}&page=${number}`} aria-current={number === page ? "page" : undefined}>{number}</Link>
                   </span>
                 ))}
-              {page < result.totalPages && <Link href={`/category?cat=${desk.slug}&page=${page + 1}`} rel="next" aria-label={copy.next}>›</Link>}
             </nav>
           )}
         </div>
