@@ -15,11 +15,13 @@ export function StoryGridCard({ story, locale = "ar" }: { story: StorySummary; l
     ? story.cityNameAr ?? story.countryNameAr ?? null
     : story.cityNameEn ?? story.countryNameEn ?? story.cityNameAr ?? story.countryNameAr ?? null;
   const publishedLabel = formatArabicDate(story.publishedAtUtc, locale);
+  const isOpinion = story.presentationDesks?.includes("articles") ?? false;
+  const thumbnailUrl = isOpinion ? story.authorImageUrl || story.imageUrl : story.imageUrl;
 
   return (
     <Link href={`/article/${story.id}`} className="grid-card" aria-label={story.title}>
-      <div className={`thumb${story.imageUrl ? "" : " thumb-placeholder"}`} aria-hidden="true">
-        {story.imageUrl ? <Image src={story.imageUrl} alt="" width={900} height={600} unoptimized /> : <span>ج</span>}
+      <div className={`thumb${thumbnailUrl ? "" : " thumb-placeholder"}`} aria-hidden="true">
+        {thumbnailUrl ? <Image src={thumbnailUrl} alt="" width={900} height={600} unoptimized /> : <span>ج</span>}
       </div>
 
       <h3>{story.title}</h3>

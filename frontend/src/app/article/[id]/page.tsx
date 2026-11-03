@@ -137,11 +137,14 @@ export default async function ArticlePage({ params }: { params: Promise<{ id: st
   // the backend builds them from the title). Comparing the raw param with the stored slug made
   // EVERY Arabic article "non-canonical" -> permanentRedirect to the very same URL -> endless
   // redirect loop and a blank page. Decode before comparing.
-  if (!slug || safeDecode(slug).normalize("NFC") !== story.slug.normalize("NFC")) permanentRedirect(articleUrl(story));
+  // The canonical short route intentionally has no slug. Only redirect a
+  // supplied stale slug; treating a missing slug as invalid loops on /article/{id}.
+  if (slug && safeDecode(slug).normalize("NFC") !== story.slug.normalize("NFC")) permanentRedirect(articleUrl(story));
 
   const publishedLabel = formatLocalizedDate(story.publishedAtUtc, locale);
   const isOpinion = story.presentationDesks.includes("articles");
-  const heroImageUrl = isOpinion ? story.authorImageUrl : story.socialImageUrl;
+  const heroUsesAuthorPortrait = isOpinion && Boolean(story.authorImageUrl);
+  const heroImageUrl = isOpinion ? story.authorImageUrl || story.socialImageUrl : story.socialImageUrl;
   let articleBottomAd;
   try { articleBottomAd = (await getPublicAdPlacements("web")).find((placement) => placement.slotKey === "article-bottom"); } catch { articleBottomAd = undefined; }
   const readMinutes = estimateReadMinutes(htmlToPlainText(story.body));
@@ -247,10 +250,10 @@ export default async function ArticlePage({ params }: { params: Promise<{ id: st
         </div>
       </div>
 
-      {(heroImageUrl || !isOpinion) && <figure className={`article-hero-figure${isOpinion ? " article-hero-figure--opinion" : ""}`}>
+      {(heroImageUrl || !isOpinion) && <figure className={`article-hero-figure${heroUsesAuthorPortrait ? " article-hero-figure--opinion" : ""}`}>
         {heroImageUrl ? (
           // Opinion pieces use the author's portrait as a centered portrait, not a full-width cover.
-          <Image className={`article-hero-img${isOpinion ? " article-hero-img--opinion" : ""}`} src={heroImageUrl} alt={isOpinion && story.authorName ? `صورة الكاتب ${story.authorName}` : story.title} width={isOpinion ? 640 : 1200} height={isOpinion ? 760 : 760} unoptimized />
+          <Image className={`article-hero-img${heroUsesAuthorPortrait ? " article-hero-img--opinion" : ""}`} src={heroImageUrl} alt={heroUsesAuthorPortrait && story.authorName ? `صورة الكاتب ${story.authorName}` : story.title} width={heroUsesAuthorPortrait ? 640 : 1200} height={760} unoptimized />
         ) : <div className="article-hero-img wrap article-hero-placeholder" aria-hidden="true"><span>جسور</span></div>}
       </figure>}
 

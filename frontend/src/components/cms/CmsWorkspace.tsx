@@ -30,7 +30,8 @@ const GROUPS: NavGroup[] = [
     { label: "إدارة الإعلانات", href: "/cms/advertisements", roles: SENIOR },
   ] },
   { title: "إدارة المنصة", items: [
-    { label: "المستخدمون والصلاحيات", href: "/cms/users", roles: ["SystemAdmin", "EditorInChief"], permissions: ["Users.View", "Users.Create", "Users.ManageRoles"] },
+    { label: "المستخدمون", href: "/cms/users", roles: ["SystemAdmin", "EditorInChief"], permissions: ["Users.View", "Users.Create", "Users.ManageRoles"] },
+    { label: "أدوار فريق العمل", href: "/cms/roles", roles: ["SystemAdmin", "EditorInChief"], permissions: ["Users.View", "Users.Create", "Users.ManageRoles"] },
     { label: "دليل الدول والمدن", href: "/cms/geography", roles: ["EditorInChief"] },
       { label: "بيانات خريطة المهجر", href: "/cms/diaspora-map", roles: ["EditorInChief"] },
   ] },

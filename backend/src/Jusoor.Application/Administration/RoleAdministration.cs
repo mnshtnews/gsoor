@@ -52,7 +52,7 @@ public class ListNewsroomUsersQueryValidator : AbstractValidator<ListNewsroomUse
         RuleFor(x => x.Page).GreaterThanOrEqualTo(1);
         RuleFor(x => x.PageSize).InclusiveBetween(1, 50);
         RuleFor(x => x.Search).MaximumLength(100);
-        RuleFor(x => x.Group).Must(group => group is null or "administrators" or "staff");
+        RuleFor(x => x.Group).Must(group => group is null or "members" or "staff");
     }
 }
 

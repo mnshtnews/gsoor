@@ -1,4 +1,5 @@
 using Jusoor.Application.Common.Interfaces;
+using Jusoor.Domain.Enums;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 
@@ -58,14 +59,14 @@ public class IdentityService : IIdentityService
     {
         var query = _userManager.Users.AsNoTracking();
 
-        if (group is "administrators" or "staff")
+        if (group is "members" or "staff")
         {
-            var privilegedIds = new HashSet<string>(StringComparer.Ordinal);
-            foreach (var role in new[] { "SystemAdmin", "EditorInChief", "ManagingEditor" })
-                foreach (var user in await _userManager.GetUsersInRoleAsync(role)) privilegedIds.Add(user.Id);
-            query = group == "administrators"
-                ? query.Where(user => privilegedIds.Contains(user.Id))
-                : query.Where(user => !privilegedIds.Contains(user.Id));
+            var newsroomUserIds = new HashSet<string>(StringComparer.Ordinal);
+            foreach (var role in NewsroomRole.All)
+                foreach (var user in await _userManager.GetUsersInRoleAsync(role)) newsroomUserIds.Add(user.Id);
+            query = group == "staff"
+                ? query.Where(user => newsroomUserIds.Contains(user.Id))
+                : query.Where(user => !newsroomUserIds.Contains(user.Id));
         }
 
         if (!string.IsNullOrWhiteSpace(search))
