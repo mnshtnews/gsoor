@@ -48,7 +48,8 @@ public enum TransitionCheck
 ///                       module, D4); submit any draft; request revision; approve;
 ///                       publish InReview/Approved; unpublish.
 ///   Senior/Managing/EIC schedule/cancel publication of Approved articles only.
-///   EditorInChief       additionally publishes straight from Draft (direct publishing).
+///   SeniorEditor        additionally publishes straight from Draft, including OWN drafts (approved 2026-11-03).
+///   EditorInChief       publishes straight from Draft and remains exempt from ownership restrictions.
 ///   SystemAdmin         break-glass only: publish (from any state) and unpublish, no
 ///                       create/edit. Every transition is recorded with the actor's roles.
 ///
@@ -217,7 +218,15 @@ public static class EditorialArticleAccess
                     return TransitionCheck.Forbidden;
                 }
 
-                if (!roles.Contains(NewsroomRole.EditorInChief) && IsOwner(userId, article))
+                // SeniorEditor may directly publish their own Draft after the
+                // explicit product decision on 2026-11-03. Other own-item
+                // publish attempts still require the Editor-in-Chief or a
+                // different editor, preserving separation once an item enters review.
+                var seniorEditorPublishingOwnDraft = roles.Contains(NewsroomRole.SeniorEditor)
+                    && status == EditorialArticleStatus.Draft;
+                if (!roles.Contains(NewsroomRole.EditorInChief)
+                    && !seniorEditorPublishingOwnDraft
+                    && IsOwner(userId, article))
                 {
                     return TransitionCheck.Forbidden;
                 }
@@ -228,10 +237,13 @@ public static class EditorialArticleAccess
                 }
 
                 // Straight from Draft skips editorial review: Editor-in-Chief
-                // (direct publishing) and SystemAdmin (audited break-glass) only.
+                // and SeniorEditor (direct publishing), plus SystemAdmin
+                // (audited break-glass).
                 if (status == EditorialArticleStatus.Draft)
                 {
-                    return roles.Contains(NewsroomRole.EditorInChief) || admin
+                    return roles.Contains(NewsroomRole.SeniorEditor)
+                           || roles.Contains(NewsroomRole.EditorInChief)
+                           || admin
                         ? TransitionCheck.Allowed
                         : TransitionCheck.InvalidState;
                 }

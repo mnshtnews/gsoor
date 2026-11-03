@@ -129,7 +129,8 @@ public class EditorialArticleAccessTests
     [InlineData(EditorialAction.Publish, NewsroomRole.SeniorEditor, false, EditorialArticleStatus.Approved, TransitionCheck.Allowed)]
     [InlineData(EditorialAction.Publish, NewsroomRole.ManagingEditor, false, EditorialArticleStatus.Approved, TransitionCheck.Allowed)]
     [InlineData(EditorialAction.Publish, NewsroomRole.EditorInChief, false, EditorialArticleStatus.Approved, TransitionCheck.Allowed)]
-    [InlineData(EditorialAction.Publish, NewsroomRole.SeniorEditor, false, EditorialArticleStatus.Draft, TransitionCheck.InvalidState)]
+    [InlineData(EditorialAction.Publish, NewsroomRole.SeniorEditor, false, EditorialArticleStatus.Draft, TransitionCheck.Allowed)]
+    [InlineData(EditorialAction.Publish, NewsroomRole.SeniorEditor, true, EditorialArticleStatus.Draft, TransitionCheck.Allowed)]
     [InlineData(EditorialAction.Publish, NewsroomRole.ManagingEditor, false, EditorialArticleStatus.Draft, TransitionCheck.InvalidState)]
     [InlineData(EditorialAction.Publish, NewsroomRole.EditorInChief, false, EditorialArticleStatus.Draft, TransitionCheck.Allowed)]
     [InlineData(EditorialAction.Publish, NewsroomRole.SystemAdmin, false, EditorialArticleStatus.Draft, TransitionCheck.Allowed)]
@@ -169,6 +170,11 @@ public class EditorialArticleAccessTests
         EditorialArticleAccess.CheckTransition(action, R(NewsroomRole.ManagingEditor), Owner, InState(state))
             .Should().Be(TransitionCheck.Forbidden);
     }
+
+    [Fact]
+    public void Managing_editor_still_requires_review_for_their_own_draft()
+        => EditorialArticleAccess.CheckTransition(EditorialAction.Publish, R(NewsroomRole.ManagingEditor), Owner, InState(EditorialArticleStatus.Draft))
+            .Should().Be(TransitionCheck.InvalidState);
 
     [Theory]
     [InlineData(EditorialAction.Approve, EditorialArticleStatus.InReview)]

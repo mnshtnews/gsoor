@@ -455,7 +455,7 @@ export function workflowHints(roles: string[] | undefined, status: ArticleStatus
   switch (status) {
     case "Draft":
       if (has(CREATORS)) actions.push("submit");
-      if (!known || chief || admin) actions.push("publish"); // direct publishing / audited break-glass
+      if (!known || has(["SeniorEditor"]) || chief || admin) actions.push("publish"); // direct publishing / audited break-glass
       break;
     case "InReview":
       if (has(REVIEWERS)) actions.push("requestRevision");

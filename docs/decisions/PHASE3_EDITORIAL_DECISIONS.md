@@ -27,7 +27,7 @@ States: `Draft(1) → InReview(3) → Approved(4) → Published(2)`, or `Approve
 | Request revision | Approved | Senior, Managing, EIC (withdrawing an approval is a senior decision) |
 | Approve | InReview | Senior, Managing, EIC |
 | Publish | InReview, Approved | Senior, Managing, EIC, SystemAdmin (break-glass) |
-| Publish | **Draft** | **EIC and SystemAdmin only** (direct publishing / break-glass) |
+| Publish | **Draft** | **SeniorEditor and EIC** (direct publishing); SystemAdmin (audited break-glass) |
 | Unpublish (→ Draft) | Published | Senior, Managing, EIC, SystemAdmin (break-glass) |
 
 Edit rules: Reporter/AiEditor/CopyEditor edit their **own Drafts**; AiEditor/CopyEditor additionally edit **any InReview** article; Senior/Managing/EIC edit any article in any state (including Published — see Q4); SystemAdmin never edits content. A Reporter's submitted article is locked until revised or reviewed.
@@ -40,7 +40,7 @@ Audit: every successful transition appends an `EditorialArticleTransition` row (
 1. **SeniorEditor** publishes **any** InReview/Approved article (was: own items only). Also approves and unpublishes any.
 2. **CopyEditor / AiEditor** edit **InReview** articles only (was: edit any article in any state).
 3. **Reporter** edits own articles only while **Draft** (was: any state except Published).
-4. **Managing editor / Senior** can no longer publish a Draft directly; they go through review. EIC keeps direct publishing.
+4. **ManagingEditor** publishes Drafts only after review; **SeniorEditor** may publish Drafts directly, including their own (explicit user decision, 2026-11-03). EIC keeps direct publishing and remains exempt from ownership restrictions.
 5. **SystemAdmin** keeps publish/unpublish (from the earlier matrix) but, per D1 "no routine editorial intervention without audit logging", every such action is recorded with the actor's role snapshot. Still cannot create or edit.
 
 ## 3. Decisions for later slices (recorded now so they are not re-litigated)
@@ -55,7 +55,7 @@ Audit: every successful transition appends an `EditorialArticleTransition` row (
 
 | # | Question | Default used |
 |---|---|---|
-| Q1 | Four-eyes: may someone approve/publish an article they authored (Senior/Managing/EIC)? | **Allowed** (nothing invented). Recommended: forbid self-approval for Senior/Managing; EIC exempt. One-line change in `EditorialArticleAccess` when decided |
+| Q1 | Four-eyes: may someone approve/publish an article they authored (Senior/Managing/EIC)? | SeniorEditor may directly publish their own Draft per the 2026-11-03 update. Self-publish from InReview/Approved remains blocked for Senior/Managing; EIC is exempt. |
 | Q2 | Should SystemAdmin break-glass publish/unpublish require a written reason? | Not required; the role snapshot makes it identifiable |
 | Q3 | Should editing an **Approved** article send it back to InReview (so approval always matches the text)? | No automatic reset |
 | Q4 | Block editing **Published** articles until Slice 20 (revision history), or allow? | **Allowed** for Senior/Managing/EIC (the existing behaviour); not yet versioned |
@@ -74,6 +74,10 @@ Audit: every successful transition appends an `EditorialArticleTransition` row (
 | Q17 | Content-Security-Policy for the public site. The article page now renders server-sanitized HTML as markup (`dangerouslySetInnerHTML`); a CSP (no inline script, `script-src 'self'`) would make an XSS-sanitizer bypass far less harmful | **Not set** (the site sets no security headers today). Recommend scheduling it before launch; it is independent of Slice 21 |
 
 *Slice 20 notes:* a revision stores the content **as it read before** the edit (the current version is the article itself); corrections are append-only and cannot be withdrawn — a wrong one is answered by a newer one; SystemAdmin cannot issue corrections (D4: Senior, Managing, Editor-in-Chief only).
+
+### User decision — 2026-11-03
+
+SeniorEditor may publish any Draft directly, including a Draft they authored. This is a deliberate exception to the prior Draft-only-for-EIC rule and applies only to the `SeniorEditor` role. ManagingEditor continues through review for Drafts. SeniorEditor self-publishing after a Draft has entered review remains blocked; an Editor-in-Chief can publish their own article in any publishable state.
 
 
 ## 5.7 Slice 24 — scheduled publication handoff

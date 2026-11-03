@@ -398,7 +398,7 @@ public class EditorialArticle : AuditableEntity
     /// <summary>
     /// Any non-published state → Published. The domain only guarantees the
     /// article is not already live; WHICH roles may publish from WHICH state
-    /// (e.g. only the Editor-in-Chief straight from Draft) is a workflow
+    /// (e.g. SeniorEditor and Editor-in-Chief straight from Draft) is a workflow
     /// authorization rule and lives in the application layer.
     /// </summary>
     public void Publish(string publishedByUserId, DateTimeOffset nowUtc)

@@ -81,7 +81,8 @@ public class EditorialEndpointsTests : IClassFixture<JusoorApiFactory>
     /// <summary>
     /// The normal route to publication under decision D1: a Draft goes InReview
     /// first (the publisher submits it on the author's behalf), then is published.
-    /// Only the Editor-in-Chief and SystemAdmin may publish straight from Draft.
+    /// SeniorEditor and Editor-in-Chief may publish straight from Draft;
+    /// SystemAdmin retains audited break-glass publication.
     /// </summary>
     private static async Task<HttpResponseMessage> PublishViaReviewAsync(Actor publisher, Guid id)
     {
@@ -242,16 +243,19 @@ public class EditorialEndpointsTests : IClassFixture<JusoorApiFactory>
     // ---------------- SeniorEditor: reviews and publishes any article in the workflow ----------------
 
     [Fact]
-    public async Task Senior_editor_can_approve_and_publish_any_article_in_review_but_not_a_draft()
+    public async Task Senior_editor_can_directly_publish_drafts_including_their_own_and_publish_reviewed_articles()
     {
         var senior = await NewActorAsync(NewsroomRole.SeniorEditor);
         var reporter = await NewActorAsync(NewsroomRole.Reporter);
         var reviewedId = await CreateDraftAsync(reporter);
         var draftId = await CreateDraftAsync(reporter);
+        var ownDraftId = await CreateDraftAsync(senior);
         (await reporter.Client.PostAsync($"/api/v1/cms/articles/{reviewedId}/submit", null)).StatusCode.Should().Be(HttpStatusCode.OK);
 
         (await senior.Client.PostAsync($"/api/v1/cms/articles/{draftId}/publish", null))
-            .StatusCode.Should().Be(HttpStatusCode.Conflict);
+            .StatusCode.Should().Be(HttpStatusCode.OK);
+        (await senior.Client.PostAsync($"/api/v1/cms/articles/{ownDraftId}/publish", null))
+            .StatusCode.Should().Be(HttpStatusCode.OK);
         (await senior.Client.PostAsync($"/api/v1/cms/articles/{reviewedId}/approve", null))
             .StatusCode.Should().Be(HttpStatusCode.OK);
         (await senior.Client.PostAsync($"/api/v1/cms/articles/{reviewedId}/publish", null))
@@ -259,7 +263,8 @@ public class EditorialEndpointsTests : IClassFixture<JusoorApiFactory>
 
         var visitor = _factory.CreateClient();
         (await PublicFeedContainsAsync(visitor, reviewedId)).Should().BeTrue();
-        (await PublicFeedContainsAsync(visitor, draftId)).Should().BeFalse();
+        (await PublicFeedContainsAsync(visitor, draftId)).Should().BeTrue();
+        (await PublicFeedContainsAsync(visitor, ownDraftId)).Should().BeTrue();
     }
 
     [Fact]
