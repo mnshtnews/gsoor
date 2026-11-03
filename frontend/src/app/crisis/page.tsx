@@ -29,7 +29,7 @@ export default async function CrisisPage() {
         {locale !== "ar" && <p className="crisis-language-note">{t("رسالة الأزمة واردة باللغة العربية؛ يجب مراجعة ترجمتها التحريرية قبل عرضها بلغة أخرى.")}</p>}<h1 className="crisis-hero__title">{crisis.title}</h1>
         <p className="crisis-hero__summary">{crisis.summary}</p>
         {affectedCountries.length > 0 && <div className="crisis-country-list" aria-label={t("الدول المتأثرة")}>{affectedCountries.map((country) => <span key={country.id}>{locale === "ar" ? country.nameAr : country.nameEn}</span>)}</div>}
-        <p className="crisis-hero__meta">{t("تحديث جسور:")} {crisis.lastModifiedAtUtc ? new Intl.DateTimeFormat(locale === "ar" ? "ar-EG" : locale === "en" ? "en-GB" : "fr-FR", { dateStyle: "full", timeStyle: "short" }).format(new Date(crisis.lastModifiedAtUtc)) : t("آخر تحديث")}</p>
+        <p className="crisis-hero__meta">{t("تحديث جسور:")} {crisis.lastModifiedAtUtc ? new Intl.DateTimeFormat(locale === "ar" ? "ar-EG-u-nu-latn" : locale === "en" ? "en-GB" : "fr-FR", { dateStyle: "full", timeStyle: "short" }).format(new Date(crisis.lastModifiedAtUtc)) : t("آخر تحديث")}</p>
         <p className="crisis-hero__source">{t("المصدر:")} <a href={crisis.sourceUrl} target="_blank" rel="noopener noreferrer">{crisis.sourceName} <span aria-hidden="true">↗</span></a></p>
         <div className="crisis-hero__actions"><a className="primary" href="#crisis-guidance">{t("إرشادات المتابعة")}</a><Link className="ghost" href="/">{t("العودة إلى الرئيسية")}</Link></div>
       </div></section>

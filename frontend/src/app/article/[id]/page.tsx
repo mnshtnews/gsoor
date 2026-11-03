@@ -23,7 +23,7 @@ const ARTICLE_COPY = {
  en: { home: "Home", correction: "Editorial notice", retracted: "This story was withdrawn", returnHome: "Return to the homepage", archived: "Archive", published: "Published", minute: "minute read", minutes: "minutes read", sports: "Sports coverage", players: "Players", taxonomy: "Topics", moreAuthor: "More from this author", allAuthor: "All stories by", readAlso: "Read also", related: "Related stories", noRelated: "There are no more stories to read right now.", noTagMatches: "No published stories match this article’s topics yet.", sportsTypes: { EgyptianProfessionalsAbroad: "Egyptian professionals abroad", NaturalizedEgyptians: "Naturalized Egyptian players", EgyptianLeague: "Egyptian League", EgyptNationalTeam: "Egypt national team", General: "General sports" } },
  fr: { home: "Accueil", correction: "Avis éditorial", retracted: "Cet article a été retiré", returnHome: "Retour à l’accueil", archived: "Archives", published: "Publié le", minute: "minute de lecture", minutes: "minutes de lecture", sports: "Couverture sportive", players: "Joueurs", taxonomy: "Rubriques", moreAuthor: "Autres articles de cet auteur", allAuthor: "Tous les articles de", readAlso: "À lire aussi", related: "Articles liés", noRelated: "Aucun autre article à lire pour le moment.", noTagMatches: "Aucun article publié ne correspond encore aux mots-clés de cet article.", sportsTypes: { EgyptianProfessionalsAbroad: "Professionnels égyptiens à l’étranger", NaturalizedEgyptians: "Joueurs égyptiens naturalisés", EgyptianLeague: "Championnat égyptien", EgyptNationalTeam: "Équipe nationale d’Égypte", General: "Sport en général" } },
 } as const;
-function formatLocalizedDate(value: string | null | undefined, locale: SiteLocale) { if (!value) return ""; const languageTag = locale === "ar" ? "ar-EG" : locale === "fr" ? "fr-FR" : "en-GB"; return new Intl.DateTimeFormat(languageTag, { dateStyle: "long" }).format(new Date(value)); }
+function formatLocalizedDate(value: string | null | undefined, locale: SiteLocale) { if (!value) return ""; const languageTag = locale === "ar" ? "ar-EG-u-nu-latn" : locale === "fr" ? "fr-FR" : "en-GB"; return new Intl.DateTimeFormat(languageTag, { dateStyle: "long" }).format(new Date(value)); }
 
 // Always fresh: an unpublished article must stop resolving immediately.
 export const dynamic = "force-dynamic";
@@ -80,7 +80,9 @@ export async function generateMetadata({ params }: { params: Promise<{ id: strin
       siteName: SITE_NAME,
       title: article.socialTitle || title,
       description,
-      ...(article.socialImageUrl ? { images: [article.socialImageUrl] } : {}),
+      ...((article.presentationDesks.includes("articles") ? article.authorImageUrl : article.socialImageUrl)
+        ? { images: [article.presentationDesks.includes("articles") ? article.authorImageUrl! : article.socialImageUrl!] }
+        : {}),
       ...(canonical ? { url: canonical } : {}),
       publishedTime: toIsoDate(article.publishedAtUtc),
     },

@@ -3,6 +3,7 @@
 import { useEffect, useRef, useState, type ReactNode } from "react";
 import Image from "next/image";
 import { EditorContent, Node, useEditor, useEditorState } from "@tiptap/react";
+import { Mark, mergeAttributes } from "@tiptap/core";
 import StarterKit from "@tiptap/starter-kit";
 import { Table, TableCell, TableHeader, TableRow } from "@tiptap/extension-table";
 import { countWords, htmlToPlainText } from "@/lib/html";
@@ -12,6 +13,16 @@ import { useImageCropper } from "@/components/cms/ImageCropper";
 
 /** Mirrors EditorialArticle.BodyMaxLength on the API (characters of stored HTML). */
 export const BODY_HTML_MAX = 100_000;
+
+const FontColor = Mark.create({
+  name: "fontColor",
+  addAttributes() { return { color: { default: null, parseHTML: (element) => element.style.color || null } }; },
+  parseHTML() { return [{ tag: "span[style*='color']" }]; },
+  renderHTML({ HTMLAttributes }) {
+    const color = typeof HTMLAttributes.color === "string" && /^#[0-9a-f]{6}$/i.test(HTMLAttributes.color) ? HTMLAttributes.color : null;
+    return ["span", mergeAttributes(color ? { style: `color: ${color}` } : {}), 0];
+  },
+});
 
 /**
  * Slice 21, decision D2 — the CMS body editor (Tiptap / ProseMirror, RTL).
@@ -75,6 +86,7 @@ export function RichTextEditor({
           HTMLAttributes: { rel: "noopener noreferrer", target: null },
         },
       }),
+      FontColor,
       MediaFigure,
       MediaVideo,
       MediaEmbed,
@@ -262,6 +274,9 @@ export function RichTextEditor({
   return (
     <div className="rte">
       <div className="rte-toolbar" role="toolbar" aria-label="تنسيق النص" aria-controls={id}>
+        <label className="rte-color-control" title="لون الخط"><span>لون الخط</span><input type="color" aria-label="اختيار لون الخط" disabled={disabled} defaultValue="#17243a" onChange={(event) => editor.chain().focus().setMark("fontColor", { color: event.currentTarget.value }).run()} /></label>
+        <ToolButton label="إزالة لون الخط" active={false} disabled={disabled} onClick={() => editor.chain().focus().unsetMark("fontColor").run()}>×</ToolButton>
+        <span className="rte-sep" aria-hidden="true" />
         <ToolButton label="إدراج جدول بعناوين وعمودين" active={false} disabled={disabled || state.table} onClick={() => editor.chain().focus().insertTable({ rows: 3, cols: 2, withHeaderRow: true }).run()}>
           ▦
         </ToolButton>

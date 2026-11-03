@@ -36,9 +36,9 @@ namespace Jusoor.Infrastructure.Content;
 public sealed class EditorialHtmlSanitizer : IEditorialHtmlSanitizer
 {
     public static IReadOnlyCollection<string> AllowedTags { get; } =
-        new[] { "p", "br", "h2", "h3", "strong", "em", "u", "blockquote", "ul", "ol", "li", "a", "hr", "figure", "figcaption", "img", "video", "iframe", "table", "thead", "tbody", "tr", "th", "td" };
+        new[] { "p", "br", "h2", "h3", "strong", "em", "u", "span", "blockquote", "ul", "ol", "li", "a", "hr", "figure", "figcaption", "img", "video", "iframe", "table", "thead", "tbody", "tr", "th", "td" };
 
-    public static IReadOnlyCollection<string> AllowedAttributes { get; } = new[] { "href", "src", "alt", "title", "data-media-id", "data-provider", "sandbox", "allow", "allowfullscreen", "loading", "referrerpolicy", "controls", "preload" };
+    public static IReadOnlyCollection<string> AllowedAttributes { get; } = new[] { "href", "src", "alt", "title", "style", "data-media-id", "data-provider", "sandbox", "allow", "allowfullscreen", "loading", "referrerpolicy", "controls", "preload" };
 
     public static IReadOnlyCollection<string> AllowedSchemes { get; } = new[] { "http", "https", "mailto" };
 
@@ -60,6 +60,7 @@ public sealed class EditorialHtmlSanitizer : IEditorialHtmlSanitizer
         Replace(sanitizer.AllowedAttributes, AllowedAttributes);
         Replace(sanitizer.AllowedSchemes, AllowedSchemes);
         sanitizer.AllowedCssProperties.Clear();
+        sanitizer.AllowedCssProperties.Add("color");
         sanitizer.AllowedAtRules.Clear();
         sanitizer.AllowedClasses.Clear();
         sanitizer.AllowDataAttributes = false;
@@ -75,6 +76,7 @@ public sealed class EditorialHtmlSanitizer : IEditorialHtmlSanitizer
                     "img" => new[] { "src", "alt", "data-media-id" },
                     "video" => new[] { "src", "data-media-id", "controls", "preload" },
                     "iframe" => new[] { "src", "title", "data-provider", "sandbox", "allow", "allowfullscreen", "loading", "referrerpolicy" },
+                    "span" => new[] { "style" },
                     _ => Array.Empty<string>()
                 };
                 foreach (var attribute in element.Attributes.Select(attribute => attribute.Name).ToArray())
@@ -83,6 +85,15 @@ public sealed class EditorialHtmlSanitizer : IEditorialHtmlSanitizer
                     {
                         element.RemoveAttribute(attribute);
                     }
+                }
+                if (element.HasAttribute("style"))
+                {
+                    var style = element.GetAttribute("style") ?? string.Empty;
+                    var match = System.Text.RegularExpressions.Regex.Match(style, @"^\s*color\s*:\s*(#[0-9a-fA-F]{6})\s*;?\s*$", System.Text.RegularExpressions.RegexOptions.CultureInvariant);
+                    if (!string.Equals(element.LocalName, "span", StringComparison.OrdinalIgnoreCase) || !match.Success)
+                        element.RemoveAttribute("style");
+                    else
+                        element.SetAttribute("style", $"color: {match.Groups[1].Value.ToLowerInvariant()}");
                 }
             }
 

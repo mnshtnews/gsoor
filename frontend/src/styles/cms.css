@@ -395,3 +395,9 @@
 .cms-localized-content { display: contents; }
 
 .ui-localized-content { display: contents; }
+.cms-users-group-tabs { display: flex; gap: 8px; padding: 6px; margin-bottom: 18px; border-radius: 12px; background: #f1f4f8; }
+.cms-users-group-tabs button { flex: 1; min-height: 42px; border: 1px solid transparent; border-radius: 9px; background: transparent; color: #34445b; font: inherit; font-weight: 700; cursor: pointer; }
+.cms-users-group-tabs button.is-active { border-color: #d7e1ed; background: #fff; color: #1555b8; box-shadow: 0 1px 3px rgb(16 24 40 / 10%); }
+.rte-color-control { display: inline-flex; align-items: center; gap: 5px; padding: 0 7px; color: #34445b; font-size: 12px; }
+.rte-color-control input { width: 28px; height: 28px; padding: 2px; border: 1px solid #cbd5e1; border-radius: 6px; cursor: pointer; }
+@media (max-width: 560px) { .cms-users-group-tabs { flex-direction: column; } }

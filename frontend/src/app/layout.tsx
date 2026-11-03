@@ -9,7 +9,6 @@ import { WelcomeIntro } from "@/components/WelcomeIntro";
 import { getPublicCrisisMode, getPublicSiteStructure } from "@/lib/news-api";
 import { cookies } from "next/headers";
 import { parseLocale } from "@/lib/site-copy";
-import { CrisisSiteTheme } from "@/components/CrisisSiteTheme";
 import { UiLocaleProvider } from "@/lib/use-ui-locale";
 
 export const viewport: Viewport = { width: "device-width", initialScale: 1 };
@@ -60,9 +59,8 @@ export default async function RootLayout({
           rel="stylesheet"
         />
       </head>
-      <body>
+      <body className={crisis ? "crisis-mode-active" : undefined}>
         <UiLocaleProvider locale={locale}>
-          <CrisisSiteTheme active={Boolean(crisis)} />
           <SiteHeader />
           <CrisisStatusBar crisis={crisis} />
           {children}

@@ -219,7 +219,7 @@ public class RoleAdministrationTests
     public async Task List_should_return_users_for_chief_and_admin_and_null_for_others()
     {
         var identity = Substitute.For<IIdentityService>();
-        identity.ListUsersAsync(Arg.Any<string?>(), 1, 20, Arg.Any<CancellationToken>())
+        identity.ListUsersAsync(Arg.Any<string?>(), 1, 20, Arg.Any<CancellationToken>(), Arg.Any<string?>())
             .Returns(new NewsroomUserPage(new[] { User("a", NewsroomRole.Reporter) }, 1));
         var handler = new ListNewsroomUsersQueryHandler(identity);
 

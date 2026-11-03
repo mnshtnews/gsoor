@@ -9,7 +9,7 @@ export function formatArabicDate(iso: string | null, locale: SiteLocale = "ar"):
     return null;
   }
 
-  const languageTag = locale === "ar" ? "ar-EG" : locale === "fr" ? "fr-FR" : "en-GB";
+  const languageTag = locale === "ar" ? "ar-EG-u-nu-latn" : locale === "fr" ? "fr-FR" : "en-GB";
   return new Intl.DateTimeFormat(languageTag, {
     day: "numeric",
     month: "long",

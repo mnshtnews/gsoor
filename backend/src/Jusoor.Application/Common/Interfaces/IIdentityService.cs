@@ -16,7 +16,7 @@ public record NewsroomUserPage(IReadOnlyList<NewsroomUserInfo> Items, int TotalC
 public interface IIdentityService
 {
     /// <summary>Users (optionally filtered by email/display-name substring), newest first, with their roles.</summary>
-    Task<NewsroomUserPage> ListUsersAsync(string? search, int page, int pageSize, CancellationToken cancellationToken);
+    Task<NewsroomUserPage> ListUsersAsync(string? search, int page, int pageSize, CancellationToken cancellationToken, string? group = null);
 
     Task<NewsroomUserInfo?> FindUserAsync(string userId);
     Task<string?> GetDisplayNameAsync(string userId);

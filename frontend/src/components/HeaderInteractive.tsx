@@ -94,7 +94,7 @@ function TickerMarquee({ headlines, locale }: { headlines: string[]; locale: Sit
     <div className="ticker-measure" aria-hidden="true" ref={measureRef}>
       <div className="ticker-group">{headlines.map((headline, index) => <span key={`${index}-${headline}`}>{headline}</span>)}</div>
     </div>
-    <div className="ticker-track">
+    <div className={`ticker-track${locale === "ar" ? " ticker-track--rtl" : " ticker-track--ltr"}`}>
       {[0, 1].map((sequence) => <div className="ticker-sequence" key={sequence} aria-hidden={sequence === 1}>
         {Array.from({ length: copiesPerSequence }, (_, copy) => renderGroup(sequence, copy))}
       </div>)}
@@ -115,6 +115,7 @@ function localizedLeadershipValue(value: string, locale: SiteLocale): string {
   return LEADERSHIP_COPY[value]?.[locale] ?? translateUi(locale, value);
 }
 export function HeaderInteractive({ tickerHeadlines, navbarAd, navigation, leadership, socialLinks = DEFAULT_PUBLIC_SOCIAL_LINKS, locale = "ar" }: { tickerHeadlines: string[]; navbarAd?: PublicAdPlacement; navigation?: PublicSiteNavigationItem[]; leadership?: Leadership; socialLinks?: PublicSocialLink[]; locale?: SiteLocale }) {
+  const visibleTickerHeadlines = tickerHeadlines.filter((headline) => headline.trim().length > 0);
   const [drawerOpen, setDrawerOpen] = useState(false);
   const [searchOpen, setSearchOpen] = useState(false);
   const [searchQuery, setSearchQuery] = useState("");
@@ -310,9 +311,9 @@ export function HeaderInteractive({ tickerHeadlines, navbarAd, navigation, leade
         </div>
       </nav>
 
-      {tickerHeadlines.length > 0 && (
+      {visibleTickerHeadlines.length > 0 && (
         <div className="bluebar">
-          <TickerMarquee headlines={tickerHeadlines} locale={locale} />
+          <TickerMarquee headlines={visibleTickerHeadlines} locale={locale} />
         </div>
       )}
 
@@ -350,7 +351,7 @@ export function HeaderInteractive({ tickerHeadlines, navbarAd, navigation, leade
           <div className="search-suggest" aria-live="polite">
             {suggestionsLoading && <p className="row">{text.searching}</p>}
             {!suggestionsLoading && searchQuery.trim().length >= 2 && suggestions.map((item) => (
-              <Link className="row" key={item.id} href={`/article/${item.id}/${encodeURIComponent(item.slug)}`} onClick={() => setSearchOpen(false)}>{item.title}</Link>
+              <Link className="row" key={item.id} href={`/article/${item.id}`} onClick={() => setSearchOpen(false)}>{item.title}</Link>
             ))}
             {!suggestionsLoading && searchQuery.trim().length >= 2 && suggestions.length === 0 && <p className="row">{translateUi(locale, "لا توجد نتائج مطابقة حتى الآن.")}</p>}
             {searchQuery.trim().length >= 2 && <Link className="row" href={`/search?q=${encodeURIComponent(searchQuery.trim())}`} onClick={() => setSearchOpen(false)}>{text.allResults}</Link>}

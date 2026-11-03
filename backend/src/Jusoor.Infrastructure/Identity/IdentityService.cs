@@ -54,9 +54,19 @@ public class IdentityService : IIdentityService
     }
 
     public async Task<NewsroomUserPage> ListUsersAsync(
-        string? search, int page, int pageSize, CancellationToken cancellationToken)
+        string? search, int page, int pageSize, CancellationToken cancellationToken, string? group = null)
     {
         var query = _userManager.Users.AsNoTracking();
+
+        if (group is "administrators" or "staff")
+        {
+            var privilegedIds = new HashSet<string>(StringComparer.Ordinal);
+            foreach (var role in new[] { "SystemAdmin", "EditorInChief", "ManagingEditor" })
+                foreach (var user in await _userManager.GetUsersInRoleAsync(role)) privilegedIds.Add(user.Id);
+            query = group == "administrators"
+                ? query.Where(user => privilegedIds.Contains(user.Id))
+                : query.Where(user => !privilegedIds.Contains(user.Id));
+        }
 
         if (!string.IsNullOrWhiteSpace(search))
         {

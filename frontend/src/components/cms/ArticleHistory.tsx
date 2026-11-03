@@ -17,7 +17,7 @@ import {
 const NOTE_MAX = 2000;
 
 const when = (iso: string) =>
-  new Intl.DateTimeFormat("ar-EG", { dateStyle: "medium", timeStyle: "short" }).format(new Date(iso));
+  new Intl.DateTimeFormat("ar-EG-u-nu-latn", { dateStyle: "medium", timeStyle: "short" }).format(new Date(iso));
 
 const statusLabel = (value: string) => STATUS_META[value as ArticleStatus]?.label ?? value;
 

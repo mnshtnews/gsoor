@@ -42,7 +42,7 @@ public sealed record RoleChangeResult(RoleChangeOutcome Outcome, NewsroomUserInf
 // ---------- list ----------
 
 public sealed record ListNewsroomUsersQuery(
-    string? Search, int Page, int PageSize, IReadOnlyList<string> ActorRoles, IReadOnlyList<string>? ActorPermissions = null)
+    string? Search, int Page, int PageSize, IReadOnlyList<string> ActorRoles, IReadOnlyList<string>? ActorPermissions = null, string? Group = null)
     : IRequest<PagedResult<NewsroomUserInfo>?>;
 
 public class ListNewsroomUsersQueryValidator : AbstractValidator<ListNewsroomUsersQuery>
@@ -52,6 +52,7 @@ public class ListNewsroomUsersQueryValidator : AbstractValidator<ListNewsroomUse
         RuleFor(x => x.Page).GreaterThanOrEqualTo(1);
         RuleFor(x => x.PageSize).InclusiveBetween(1, 50);
         RuleFor(x => x.Search).MaximumLength(100);
+        RuleFor(x => x.Group).Must(group => group is null or "administrators" or "staff");
     }
 }
 
@@ -69,7 +70,7 @@ public class ListNewsroomUsersQueryHandler : IRequestHandler<ListNewsroomUsersQu
             return null;
         }
 
-        var page = await _identity.ListUsersAsync(request.Search, request.Page, request.PageSize, cancellationToken);
+        var page = await _identity.ListUsersAsync(request.Search, request.Page, request.PageSize, cancellationToken, request.Group);
         return new PagedResult<NewsroomUserInfo>(page.Items, request.Page, request.PageSize, page.TotalCount);
     }
 }

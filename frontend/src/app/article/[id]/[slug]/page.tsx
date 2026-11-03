@@ -1,8 +1,7 @@
-import ArticlePageById from "../page";
+import { permanentRedirect } from "next/navigation";
 
-export { dynamic, generateMetadata } from "../page";
-
-export default async function SluggedArticlePage({ params }: { params: Promise<{ id: string; slug: string }> }) {
-  const resolved = await params;
-  return ArticlePageById({ params: Promise.resolve(resolved) });
+/** Collapse existing long /article/{id}/{encoded-title} links onto the short canonical URL. */
+export default async function LegacyArticleSlugRoute({ params }: { params: Promise<{ id: string; slug: string }> }) {
+  const { id } = await params;
+  permanentRedirect(`/article/${encodeURIComponent(id)}`);
 }

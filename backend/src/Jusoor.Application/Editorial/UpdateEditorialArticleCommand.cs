@@ -111,7 +111,8 @@ public class UpdateEditorialArticleCommandHandler : IRequestHandler<UpdateEditor
             if (canonicalBody is null) return new EditorialArticleResult(EditorialOutcome.InvalidBody, null);
             body = canonicalBody;
         }
-        if (!EditorialSupport.IsBodyAcceptable(body))
+        if (!EditorialSupport.IsBodyAcceptable(body,
+            (request.FeaturedVideoMediaAssetId.HasValue || !string.IsNullOrWhiteSpace(request.FeaturedVideoEmbedUrl))))
         {
             return new EditorialArticleResult(EditorialOutcome.InvalidBody, null);
         }

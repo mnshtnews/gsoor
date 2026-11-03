@@ -54,11 +54,11 @@ public class RoleAssignmentsController : ControllerBase
     }
 
     [HttpGet]
-    public async Task<IActionResult> List([FromQuery] string? search, [FromQuery] int page, [FromQuery] int pageSize, CancellationToken cancellationToken)
+    public async Task<IActionResult> List([FromQuery] string? search, [FromQuery] int page, [FromQuery] int pageSize, [FromQuery] string? group, CancellationToken cancellationToken)
     {
         var actorId = _currentUser.UserId;
         var actorPermissions = actorId is null ? Array.Empty<string>() : await _permissions.GetForUserAsync(actorId, cancellationToken);
-        var result = await _mediator.Send(new ListNewsroomUsersQuery(search, page == 0 ? 1 : page, pageSize == 0 ? 20 : pageSize, _currentUser.Roles, actorPermissions), cancellationToken);
+        var result = await _mediator.Send(new ListNewsroomUsersQuery(search, page == 0 ? 1 : page, pageSize == 0 ? 20 : pageSize, _currentUser.Roles, actorPermissions, group), cancellationToken);
         if (result is null) return Forbid();
         var items = new List<object>(result.Items.Count);
         foreach (var user in result.Items)

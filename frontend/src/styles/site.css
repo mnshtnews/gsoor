@@ -2956,6 +2956,7 @@ footer {
   margin-bottom: 20px;
 }
 .article-body h2 {
+  color: #e77e18;
   font-size: 21px;
   margin: 30px 0 14px;
 }
@@ -10593,6 +10594,8 @@ body.crisis-mode-active #heroSliderSection .hero-thumb.active {
   gap: 0;
   animation: ticker-seamless var(--ticker-speed) linear infinite;
 }
+.bluebar .ticker-track--rtl { animation-direction: reverse; }
+.bluebar .ticker-track--ltr { animation-direction: normal; }
 .bluebar .ticker-sequence {
   display: flex;
   flex: 0 0 auto;

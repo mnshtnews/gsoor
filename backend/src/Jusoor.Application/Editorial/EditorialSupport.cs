@@ -56,8 +56,10 @@ internal static class EditorialSupport
     /// e.g. by adding rel="noopener noreferrer" to every link). Rejecting here
     /// returns a 400; letting the domain throw would surface as a 500.
     /// </summary>
-    public static bool IsBodyAcceptable(string sanitizedBody)
-        => sanitizedBody.Length <= EditorialArticle.BodyMaxLength && ArticleBodyContent.HasText(sanitizedBody);
+    public static bool IsBodyAcceptable(string sanitizedBody, bool allowVideoOnly = false)
+        => sanitizedBody.Length <= EditorialArticle.BodyMaxLength
+            && (ArticleBodyContent.HasText(sanitizedBody)
+                || (allowVideoOnly && Regex.IsMatch(sanitizedBody, "<(?:video|iframe)\\b", RegexOptions.IgnoreCase | RegexOptions.CultureInvariant)));
 
     public static async Task<bool> IsFeaturedVideoValidAsync(
         IApplicationDbContext context, string body, Guid? mediaAssetId, string? embedUrl, CancellationToken cancellationToken)

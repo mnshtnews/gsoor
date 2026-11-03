@@ -428,7 +428,7 @@ export function ArticleEditor({ articleId }: { articleId: string | null }) {
         <div className="cms-actions">
           {article && meta && <span className={`cms-badge ${meta.badge}`}>{meta.label}</span>}
           {article && isPublished && (
-            <Link className="cms-btn" href={`/article/${article.id}/${encodeURIComponent(article.slug ?? "")}`} target="_blank">
+            <Link className="cms-btn" href={`/article/${article.id}`} target="_blank">
               عرض على الموقع
             </Link>
           )}
@@ -653,7 +653,7 @@ export function ArticleEditor({ articleId }: { articleId: string | null }) {
 
       {article?.status === "Scheduled" && article.scheduledPublishAtUtc && (
         <p className="cms-msg" role="status">
-          موعد النشر: {new Intl.DateTimeFormat("ar-EG", { dateStyle: "full", timeStyle: "short" }).format(new Date(article.scheduledPublishAtUtc))}
+          موعد النشر: {new Intl.DateTimeFormat("ar-EG-u-nu-latn", { dateStyle: "full", timeStyle: "short" }).format(new Date(article.scheduledPublishAtUtc))}
         </p>
       )}
 

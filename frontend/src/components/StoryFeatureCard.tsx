@@ -18,7 +18,7 @@ export function StoryFeatureCard({ story }: { story: StorySummary }) {
   const publishedLabel = formatArabicDate(story.publishedAtUtc);
 
   return (
-    <Link href={story.slug ? `/article/${story.id}/${encodeURIComponent(story.slug)}` : `/article/${story.id}`} className="story-card" aria-label={story.title}>
+    <Link href={`/article/${story.id}`} className="story-card" aria-label={story.title}>
       <div className={`thumb${story.imageUrl ? "" : " thumb-placeholder"}`} aria-hidden="true">
         {story.imageUrl ? <Image src={story.imageUrl} alt="" width={1200} height={700} unoptimized /> : <span>ج</span>}
       </div>

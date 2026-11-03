@@ -5,7 +5,7 @@ import type { SiteLocale } from "@/lib/site-copy";
 
 function formatNow(locale: SiteLocale) {
   const now = new Date();
-  const languageTag = locale === "ar" ? "ar-EG" : locale === "fr" ? "fr-FR" : "en-GB";
+  const languageTag = locale === "ar" ? "ar-EG-u-nu-latn" : locale === "fr" ? "fr-FR" : "en-GB";
   return {
     date: new Intl.DateTimeFormat(languageTag, { weekday: "long", day: "numeric", month: "long", year: "numeric" }).format(now),
     time: new Intl.DateTimeFormat(languageTag, { hour: "2-digit", minute: "2-digit", second: "2-digit" }).format(now),

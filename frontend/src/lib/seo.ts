@@ -43,7 +43,9 @@ export function articleDescription(article: Pick<NewsDetail, "summary" | "body">
 }
 
 export function articleUrl(article: Pick<NewsDetail, "id" | "slug">): string {
-  return `/article/${article.id}/${encodeURIComponent(article.slug)}`;
+  // UUID is a stable unique key; omit long percent-encoded Arabic slugs from
+  // share URLs while keeping the descriptive title in page metadata/schema.
+  return `/article/${article.id}`;
 }
 
 export function buildOrganizationJsonLd(): JsonLdObject | null {

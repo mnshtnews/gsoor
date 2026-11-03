@@ -17,7 +17,7 @@ export function StoryGridCard({ story, locale = "ar" }: { story: StorySummary; l
   const publishedLabel = formatArabicDate(story.publishedAtUtc, locale);
 
   return (
-    <Link href={story.slug ? `/article/${story.id}/${encodeURIComponent(story.slug)}` : `/article/${story.id}`} className="grid-card" aria-label={story.title}>
+    <Link href={`/article/${story.id}`} className="grid-card" aria-label={story.title}>
       <div className={`thumb${story.imageUrl ? "" : " thumb-placeholder"}`} aria-hidden="true">
         {story.imageUrl ? <Image src={story.imageUrl} alt="" width={900} height={600} unoptimized /> : <span>ج</span>}
       </div>

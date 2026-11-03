@@ -187,11 +187,11 @@ export default function SiteStructurePage() {
         <button className="cms-btn danger" type="button" onClick={() => removeSocialLink(link.id)}>حذف</button>
       </div>)}</div>
     </section>
-    <section className="cms-card cms-welcome-intro-settings"><div className="cms-section-title"><div><h2>الفيديو التعريفي عند أول زيارة</h2><p className="cms-hint">ارفع فيديو MP4 أو WebM عبر مكتبة الوسائط الآمنة. يظهر للزائر مرة واحدة، ويمكنه إعادة تشغيله من صفحة «عن جسور» أو الفوتر.</p></div></div>
+    <section className="cms-card cms-welcome-intro-settings"><div className="cms-section-title"><div><h2>الفيديو التعريفي عند فتح الموقع</h2><p className="cms-hint">ارفع فيديو MP4 أو WebM عبر مكتبة الوسائط الآمنة. يظهر مرة واحدة في كل تبويب جديد، ولا يعاد تشغيله عند التنقل بين صفحات التبويب نفسه.</p></div></div>
       <label className="cms-field"><span>ملف الفيديو</span><input type="file" accept="video/mp4,video/webm" disabled={introUploadBusy} onChange={(event) => { void uploadIntroVideo(event.target.files?.[0]); event.currentTarget.value = ""; }} /></label>
       {introUploadBusy && <p className="cms-hint" role="status">جارٍ رفع الفيديو إلى مكتبة الوسائط…</p>}
       {structure.welcomeIntro.videoUrl && <div className="cms-welcome-intro-preview"><video controls preload="metadata" src={structure.welcomeIntro.videoUrl} /><div><strong>{structure.welcomeIntro.fileName || "الفيديو المختار"}</strong><button type="button" className="cms-btn danger" onClick={() => updateWelcomeIntro({ assetId: null, videoUrl: null, fileName: null, isEnabled: false })}>إزالة الفيديو</button></div></div>}
-      <label className="cms-social-visible"><input type="checkbox" checked={structure.welcomeIntro.isEnabled} disabled={!structure.welcomeIntro.assetId || introUploadBusy} onChange={(event) => updateWelcomeIntro({ isEnabled: event.target.checked })} /> تفعيل عرضه مرة واحدة للزائر الجديد</label>
+      <label className="cms-social-visible"><input type="checkbox" checked={structure.welcomeIntro.isEnabled} disabled={!structure.welcomeIntro.assetId || introUploadBusy} onChange={(event) => updateWelcomeIntro({ isEnabled: event.target.checked })} /> تفعيل عرضه مرة واحدة في كل تبويب جديد</label>
     </section>
     <section className="cms-card"><div className="cms-section-title"><div><h2>ترتيب روابط القائمة</h2><p className="cms-hint">اسحب ترتيب الروابط بالأسهم، واختر ظهور الرابط في الشريط أو قائمة «المزيد». الاختيارات نفسها تُستخدم في قائمة الموبايل.</p></div></div>
       {(["primary", "more"] as const).map((group) => <div className="cms-structure-group" key={group}><h3>{group === "primary" ? "روابط الشريط الرئيسي" : "روابط قائمة المزيد"}</h3><ol>{structure.navigation.filter((item) => item.group === group).sort((a, b) => a.displayOrder - b.displayOrder).map((item, index, items) => <li key={item.key} className={!item.isVisible ? "is-muted" : ""}>
@@ -210,7 +210,7 @@ export default function SiteStructurePage() {
           <div className="cms-structure-controls"><label><input type="checkbox" checked={section.isEnabled} onChange={(event) => updateSection(section.key, { isEnabled: event.target.checked })} /> مفعّل</label><label><input type="checkbox" checked={section.showOnWeb} onChange={(event) => updateSection(section.key, { showOnWeb: event.target.checked })} /> الويب</label><label><input type="checkbox" checked={section.showOnMobile} onChange={(event) => updateSection(section.key, { showOnMobile: event.target.checked })} /> الموبايل</label><button className="cms-btn" type="button" disabled={index === 0} onClick={() => moveSection(index, -1)}>↑</button><button className="cms-btn" type="button" disabled={index === structure.homepageSections.length - 1} onClick={() => moveSection(index, 1)}>↓</button><button className="cms-btn danger" type="button" onClick={() => removeSection(section.key)}>إزالة</button></div>
         </div><small className="cms-hint">المحتوى مأخوذ من desk «{PRESENTATION_DESKS.find((desk) => desk.slug === section.deskSlug)?.label}» · صفحة القسم: /category?cat={section.deskSlug}</small>
       </li>)}</ol>}
-      {structure.lastModifiedAtUtc && <p className="cms-hint">آخر حفظ: {new Intl.DateTimeFormat("ar-EG", { dateStyle: "medium", timeStyle: "short" }).format(new Date(structure.lastModifiedAtUtc))}</p>}
+      {structure.lastModifiedAtUtc && <p className="cms-hint">آخر حفظ: {new Intl.DateTimeFormat("ar-EG-u-nu-latn", { dateStyle: "medium", timeStyle: "short" }).format(new Date(structure.lastModifiedAtUtc))}</p>}
     </section>
   </div>}</LocalizedContent>;
 }

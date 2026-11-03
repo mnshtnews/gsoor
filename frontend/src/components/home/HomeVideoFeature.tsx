@@ -40,7 +40,7 @@ export function HomeVideoFeature({ videos }: { videos: PublishedVideo[] }) {
 
   if (!video) return null;
 
-  const href = `/article/${video.id}/${encodeURIComponent(video.slug)}`;
+  const href = `/article/${video.id}`;
   const modalItem: VideoModalItem = {
     title: video.title,
     videoUrl: video.videoUrl,

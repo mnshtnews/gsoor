@@ -215,7 +215,7 @@ export default function CmsDashboardPage() {
                   <Link href={`/cms/articles/${a.id}`}>{a.title}</Link>
                   {a.status === "Scheduled" && a.scheduledPublishAtUtc && (
                     <small className="cms-hint" style={{ display: "block" }}>
-                      موعد النشر: {new Intl.DateTimeFormat(locale === "ar" ? "ar-EG" : locale === "en" ? "en-GB" : "fr-FR", { dateStyle: "medium" }).format(new Date(a.scheduledPublishAtUtc))}
+                      موعد النشر: {new Intl.DateTimeFormat(locale === "ar" ? "ar-EG-u-nu-latn" : locale === "en" ? "en-GB" : "fr-FR", { dateStyle: "medium" }).format(new Date(a.scheduledPublishAtUtc))}
                     </small>
                   )}
                 </td>
@@ -224,7 +224,7 @@ export default function CmsDashboardPage() {
                     {t(STATUS_META[a.status]?.label ?? a.status)}
                   </span>
                 </td>
-                <td data-label={t("آخر تعديل")}>{new Intl.DateTimeFormat(locale === "ar" ? "ar-EG" : locale === "en" ? "en-GB" : "fr-FR", { dateStyle: "medium" }).format(new Date(a.lastModifiedAtUtc ?? a.createdAtUtc))}</td>
+                <td data-label={t("آخر تعديل")}>{new Intl.DateTimeFormat(locale === "ar" ? "ar-EG-u-nu-latn" : locale === "en" ? "en-GB" : "fr-FR", { dateStyle: "medium" }).format(new Date(a.lastModifiedAtUtc ?? a.createdAtUtc))}</td>
                 <td data-label={t("إجراءات")}>
                   <div className="cms-actions">
                     <Link className="cms-btn" href={`/cms/articles/${a.id}`}>

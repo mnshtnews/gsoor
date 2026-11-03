@@ -29,6 +29,7 @@ export default function CmsUsersPage() {
   const router = useRouter();
   const [data, setData] = useState<UsersPage | null>(null);
   const [page, setPage] = useState(1);
+  const [userGroup, setUserGroup] = useState<"administrators" | "staff">("staff");
   const [search, setSearch] = useState("");
   const [permissions, setPermissions] = useState<string[]>([]);
   const [roles, setRoles] = useState<string[]>([]);
@@ -49,14 +50,14 @@ export default function CmsUsersPage() {
       const session = await cms.session();
       if (!session.authenticated) { router.replace("/cms/login"); return; }
       setRoles(session.roles ?? []); setPermissions(session.permissions ?? []);
-      const query = new URLSearchParams({ page: String(page), pageSize: "20" });
+      const query = new URLSearchParams({ page: String(page), pageSize: "20", group: userGroup });
       if (search.trim()) query.set("search", search.trim());
       setData(await usersApi<UsersPage>(`?${query}`));
     } catch (e) {
       if (e instanceof CmsError && e.status === 401) router.replace("/cms/login");
       else setError(e instanceof Error ? e.message : "تعذر تحميل المستخدمين.");
     } finally { setLoading(false); }
-  }, [page, router, search]);
+  }, [page, router, search, userGroup]);
   useEffect(() => { const timer = window.setTimeout(() => void load(), search ? 250 : 0); return () => window.clearTimeout(timer); }, [load, search]);
 
   async function createUser(event: React.FormEvent<HTMLFormElement>) {
@@ -89,11 +90,15 @@ export default function CmsUsersPage() {
   }
 
   return <LocalizedContent>{<div className="cms-page-stack">
-    <section className="cms-page-heading"><div><span className="cms-eyebrow">إدارة المنصة</span><h1>المستخدمون والصلاحيات</h1><p>ابحث في الحسابات وأدر الأدوار والصلاحيات المباشرة بحسب صلاحيتك.</p></div><span className="cms-heading-icon" aria-hidden="true">♙</span></section>
+    <section className="cms-page-heading"><div><span className="cms-eyebrow">إدارة المنصة</span><h1>المستخدمون والصلاحيات</h1><p>افصل حسابات الإدارة والمسؤولين عن حسابات فريق التحرير لتسهيل إدارة الأدوار.</p></div><span className="cms-heading-icon" aria-hidden="true">♙</span></section>
     <section className="cms-card cms-users-card">
+      <div className="cms-users-group-tabs" role="tablist" aria-label="تصنيف الحسابات">
+        <button type="button" role="tab" aria-selected={userGroup === "administrators"} className={userGroup === "administrators" ? "is-active" : ""} onClick={() => { setPage(1); setUserGroup("administrators"); }}>الإدارة والمسؤولون</button>
+        <button type="button" role="tab" aria-selected={userGroup === "staff"} className={userGroup === "staff" ? "is-active" : ""} onClick={() => { setPage(1); setUserGroup("staff"); }}>فريق التحرير والمستخدمون</button>
+      </div>
       <div className="cms-users-toolbar"><label className="cms-news-search"><span aria-hidden="true">⌕</span><input type="search" maxLength={100} value={search} onChange={(event) => { setPage(1); setSearch(event.target.value); }} placeholder="ابحث بالاسم أو البريد الإلكتروني" aria-label="البحث عن مستخدم" /></label><span className="cms-hint" aria-live="polite">{loading ? "جارٍ التحميل…" : `${data?.totalCount ?? 0} حساب`}</span></div>
       {!canView && !loading && <div className="cms-msg error" role="alert">لا توجد لديك صلاحية عرض حسابات المستخدمين.</div>}
-      {canCreate && <form className="cms-card cms-create-newsroom-user" onSubmit={(event) => void createUser(event)}>
+      {canCreate && userGroup === "staff" && <form className="cms-card cms-create-newsroom-user" onSubmit={(event) => void createUser(event)}>
         <h2>إضافة موظف إلى هيئة التحرير</h2><p className="cms-hint">أنشئ الحساب بالدور المناسب. أنشئ كلمة مرور قوية وسلّمها للموظف عبر قناة آمنة. لا تظهر كلمة المرور بعد الحفظ.</p>
         <div className="cms-users-create-grid">
           <label className="cms-field"><span>اسم الموظف</span><input required maxLength={100} value={newUser.displayName} onChange={(event) => setNewUser({ ...newUser, displayName: event.target.value })} /></label>

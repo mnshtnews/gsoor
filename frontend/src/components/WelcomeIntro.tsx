@@ -3,33 +3,28 @@
 import { useCallback, useEffect, useRef, useState } from "react";
 import Image from "next/image";
 
-const INTRO_STORAGE_KEY = "jusoor_intro_seen_v2";
-
 export function WelcomeIntro({ enabled, videoUrl }: { enabled: boolean; videoUrl: string | null }) {
   const [open, setOpen] = useState(false);
   const [muted, setMuted] = useState(true);
   const videoRef = useRef<HTMLVideoElement>(null);
+  const shownForThisMount = useRef(false);
 
-  const showIntro = useCallback((remember: boolean) => {
+  const showIntro = useCallback(() => {
     if (!videoUrl) return;
-    if (remember) {
-      try { window.localStorage.setItem(INTRO_STORAGE_KEY, "1"); } catch { /* Keep site usable when storage is disabled. */ }
-    }
     setMuted(true);
     setOpen(true);
   }, [videoUrl]);
 
   useEffect(() => {
-    if (enabled && videoUrl) {
-      try {
-        if (window.localStorage.getItem(INTRO_STORAGE_KEY) !== "1") showIntro(true);
-      } catch { /* Do not force an intro if browser storage is unavailable. */ }
+    if (enabled && videoUrl && !shownForThisMount.current) {
+      shownForThisMount.current = true;
+      showIntro();
     }
     const replay = (event: MouseEvent) => {
       const target = event.target;
       if (target instanceof Element && target.closest("[data-replay-intro]")) {
         event.preventDefault();
-        showIntro(true);
+        showIntro();
       }
     };
     document.addEventListener("click", replay);

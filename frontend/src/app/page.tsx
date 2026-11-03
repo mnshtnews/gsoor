@@ -40,7 +40,7 @@ const deskLabels: Record<string, string> = {
 };
 
 function articleHref(story: StorySummary) {
-  return story.slug ? `/article/${story.id}/${encodeURIComponent(story.slug)}` : `/article/${story.id}`;
+  return `/article/${story.id}`;
 }
 
 function placeOf(story: StorySummary, locale: "ar" | "en" | "fr") {
@@ -169,7 +169,7 @@ function LammaSection({ lamma, events, topAd, sideAd, locale }: { lamma: StorySu
               <div className="events-widget">
                 {events.slice(0, 4).map((story) => (
                   <Link className="event-item" key={story.id} href={articleHref(story)}>
-                    <span className="event-date"><b>{story.publishedAtUtc ? new Intl.NumberFormat(locale === "ar" ? "ar-EG" : locale === "fr" ? "fr-FR" : "en-GB").format(new Date(story.publishedAtUtc).getDate()) : "—"}</b><span>{story.publishedAtUtc ? new Date(story.publishedAtUtc).toLocaleDateString(locale === "ar" ? "ar-EG" : locale === "fr" ? "fr-FR" : "en-GB", { month: "short" }) : ""}</span></span>
+                    <span className="event-date"><b>{story.publishedAtUtc ? new Intl.NumberFormat(locale === "ar" ? "ar-EG-u-nu-latn" : locale === "fr" ? "fr-FR" : "en-GB").format(new Date(story.publishedAtUtc).getDate()) : "—"}</b><span>{story.publishedAtUtc ? new Date(story.publishedAtUtc).toLocaleDateString(locale === "ar" ? "ar-EG-u-nu-latn" : locale === "fr" ? "fr-FR" : "en-GB", { month: "short" }) : ""}</span></span>
                     <span><h5>{story.title}</h5><span className="foot">{placeOf(story, locale)} · {formatArabicDate(story.publishedAtUtc, locale)}</span></span>
                   </Link>
                 ))}
@@ -254,7 +254,7 @@ export default async function HomePage() {
 
   // Only videos explicitly selected on their articles are returned by the videos API.
   const heroSlides = videos.map((video) => ({
-    id: video.id, title: video.title, excerpt: video.excerpt, href: `/article/${video.id}/${encodeURIComponent(video.slug)}`,
+    id: video.id, title: video.title, excerpt: video.excerpt, href: `/article/${video.id}`,
     imageUrl: video.thumbnailUrl, videoUrl: video.videoUrl, isEmbedded: video.isEmbedded, publishedAtUtc: video.publishedAtUtc,
   }));
 
