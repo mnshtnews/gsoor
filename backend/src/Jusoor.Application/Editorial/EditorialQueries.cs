@@ -61,8 +61,13 @@ public class ListEditorialArticlesQueryValidator : AbstractValidator<ListEditori
 public class ListEditorialArticlesQueryHandler : IRequestHandler<ListEditorialArticlesQuery, PagedResult<EditorialArticleSummaryDto>>
 {
     private readonly IApplicationDbContext _context;
+    private readonly IIdentityService? _identity;
 
-    public ListEditorialArticlesQueryHandler(IApplicationDbContext context) => _context = context;
+    public ListEditorialArticlesQueryHandler(IApplicationDbContext context, IIdentityService? identity = null)
+    {
+        _context = context;
+        _identity = identity;
+    }
 
     public async Task<PagedResult<EditorialArticleSummaryDto>> Handle(
         ListEditorialArticlesQuery request, CancellationToken cancellationToken)
@@ -100,11 +105,38 @@ public class ListEditorialArticlesQueryHandler : IRequestHandler<ListEditorialAr
             .Take(request.PageSize)
             .ToListAsync(cancellationToken);
 
+        var actorIds = rows
+            .SelectMany(article => new[] { article.PublishedByUserId, article.LastModifiedByUserId })
+            .Where(id => !string.IsNullOrWhiteSpace(id))
+            .Select(id => id!)
+            .Distinct(StringComparer.Ordinal)
+            .ToArray();
+        var displayNames = _identity is null
+            ? new Dictionary<string, string>()
+            : await _identity.GetDisplayNamesAsync(actorIds, cancellationToken);
+        var categoryIds = rows.Where(article => article.PrimaryCategoryId.HasValue)
+            .Select(article => article.PrimaryCategoryId!.Value).Distinct().ToArray();
+        var categories = categoryIds.Length == 0
+            ? new Dictionary<Guid, string>()
+            : await _context.EditorialCategories.AsNoTracking()
+                .Where(category => categoryIds.Contains(category.Id))
+                .ToDictionaryAsync(category => category.Id, category => category.NameAr, cancellationToken);
+
         var items = rows.Select(a => new EditorialArticleSummaryDto(
             a.Id, a.Title, a.Summary, a.Status.ToString(), a.OwnerUserId,
             a.CreatedAtUtc, a.LastModifiedAtUtc, a.PublishedAtUtc)
         {
-            ScheduledPublishAtUtc = a.ScheduledPublishAtUtc
+            ScheduledPublishAtUtc = a.ScheduledPublishAtUtc,
+            PublishedByName = a.PublishedByUserId is { } publisherId
+                ? displayNames.GetValueOrDefault(publisherId) ?? (publisherId == "system:scheduled-publisher" ? "النشر المجدول" : null)
+                : null,
+            LastModifiedByName = a.LastModifiedByUserId is { } modifierId
+                ? displayNames.GetValueOrDefault(modifierId) ?? (modifierId == "system:scheduled-publisher" ? "النشر المجدول" : null)
+                : null,
+            PrimaryCategoryNameAr = a.PrimaryCategoryId is { } categoryId ? categories.GetValueOrDefault(categoryId) : null,
+            PresentationDeskNames = a.PresentationDesks
+                .Select(desk => EditorialDesk.Catalog.GetValueOrDefault(desk, desk))
+                .ToArray()
         }).ToList();
 
         return new PagedResult<EditorialArticleSummaryDto>(items, request.Page, request.PageSize, totalCount);

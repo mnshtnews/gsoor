@@ -240,6 +240,12 @@ const UI_EXTRA: Record<string, Partial<Record<SiteLocale, string>>> = {
     "en": "Last updated",
     "fr": "Dernière modification"
   },
+  "نشره": { "en": "Published by", "fr": "Publié par" },
+  "وقت النشر": { "en": "Published at", "fr": "Date de publication" },
+  "آخر تعديل بواسطة": { "en": "Last edited by", "fr": "Dernière modification par" },
+  "القسم": { "en": "Section", "fr": "Rubrique" },
+  "موعد النشر": { "en": "Scheduled publication", "fr": "Publication programmée" },
+  "بتوقيت القاهرة": { "en": "Cairo time", "fr": "Heure du Caire" },
   "إجراءات": {
     "en": "Actions",
     "fr": "Actions"

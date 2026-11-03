@@ -111,6 +111,17 @@ public class IdentityService : IIdentityService
         return user?.DisplayName;
     }
 
+    public async Task<IReadOnlyDictionary<string, string>> GetDisplayNamesAsync(
+        IReadOnlyCollection<string> userIds, CancellationToken cancellationToken)
+    {
+        var ids = userIds.Where(id => !string.IsNullOrWhiteSpace(id)).Distinct().ToArray();
+        if (ids.Length == 0) return new Dictionary<string, string>();
+
+        return await _userManager.Users.AsNoTracking()
+            .Where(user => ids.Contains(user.Id))
+            .ToDictionaryAsync(user => user.Id, user => user.DisplayName, cancellationToken);
+    }
+
     public async Task<bool> AddToRoleAsync(string userId, string role)
     {
         var user = await _userManager.FindByIdAsync(userId);

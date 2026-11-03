@@ -71,6 +71,10 @@ public sealed record EditorialArticleSummaryDto(
     DateTimeOffset? PublishedAtUtc)
 {
     public DateTimeOffset? ScheduledPublishAtUtc { get; init; }
+    public string? PublishedByName { get; init; }
+    public string? LastModifiedByName { get; init; }
+    public string? PrimaryCategoryNameAr { get; init; }
+    public string[] PresentationDeskNames { get; init; } = Array.Empty<string>();
 }
 
 public sealed record PublicNewsTranslationSummaryDto(string Locale, string Title, string? Summary);

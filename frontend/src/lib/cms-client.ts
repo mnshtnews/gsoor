@@ -27,6 +27,10 @@ export interface CmsArticleSummary {
   lastModifiedAtUtc: string | null;
   publishedAtUtc: string | null;
   scheduledPublishAtUtc?: string | null;
+  publishedByName?: string | null;
+  lastModifiedByName?: string | null;
+  primaryCategoryNameAr?: string | null;
+  presentationDeskNames?: string[];
 }
 
 export interface CmsArticle extends CmsArticleSummary {

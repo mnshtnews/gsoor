@@ -20,6 +20,7 @@ public interface IIdentityService
 
     Task<NewsroomUserInfo?> FindUserAsync(string userId);
     Task<string?> GetDisplayNameAsync(string userId);
+    Task<IReadOnlyDictionary<string, string>> GetDisplayNamesAsync(IReadOnlyCollection<string> userIds, CancellationToken cancellationToken);
 
     /// <summary>Returns false if the user does not exist or the role could not be added.</summary>
     Task<bool> AddToRoleAsync(string userId, string role);

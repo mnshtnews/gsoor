@@ -10,13 +10,10 @@ import { useImageCropper } from "@/components/cms/ImageCropper";
 import { BODY_HTML_MAX, RichTextEditor } from "@/components/cms/RichTextEditor";
 import { cms, workflowHints, STATUS_META, CmsError, PRESENTATION_DESKS, type CmsArticle, type WorkflowAction } from "@/lib/cms-client";
 import { cmsMedia, type CmsMediaAsset } from "@/lib/cms-media-client";
+import { cairoDateTimeInput, cairoDateTimeToIso } from "@/lib/format";
 
 const TITLE_MAX = 300;
 const SUMMARY_MAX = 500;
-const localDateTimeInput = (date: Date) => {
-  const local = new Date(date.getTime() - date.getTimezoneOffset() * 60_000);
-  return local.toISOString().slice(0, 16);
-};
 const videoMediaIds = (html: string) => Array.from(
   html.matchAll(/<video\b[^>]*\bdata-media-id="([0-9a-f-]{36})"/gi),
   (match) => match[1],
@@ -36,7 +33,7 @@ export function ArticleEditor({ articleId }: { articleId: string | null }) {
   const [breakGlassAction, setBreakGlassAction] = useState<"publish" | "unpublish" | null>(null);
   const [breakGlassReason, setBreakGlassReason] = useState("");
   const [scheduleOpen, setScheduleOpen] = useState(false);
-  const [scheduleAt, setScheduleAt] = useState(() => localDateTimeInput(new Date(Date.now() + 10 * 60_000)));
+  const [scheduleAt, setScheduleAt] = useState(() => cairoDateTimeInput(new Date(Date.now() + 10 * 60_000)));
   const [scheduleReason, setScheduleReason] = useState("");
   const [publicNotice, setPublicNotice] = useState("");
   const [transitionReason, setTransitionReason] = useState("");
@@ -368,15 +365,15 @@ export function ArticleEditor({ articleId }: { articleId: string | null }) {
   const schedulePublication = () =>
     run(async () => {
       if (!article || !scheduleAt) return;
-      const when = new Date(scheduleAt);
-      if (Number.isNaN(when.getTime()) || when.getTime() <= Date.now()) {
+      const when = cairoDateTimeToIso(scheduleAt);
+      if (!when || Date.parse(when) <= Date.now()) {
         setError("اختر وقتًا مستقبليًا للنشر.");
         return;
       }
-      fill(await cms.schedule(article.id, when.toISOString(), scheduleReason.trim() || undefined));
+      fill(await cms.schedule(article.id, when, scheduleReason.trim() || undefined));
       setScheduleOpen(false);
       setScheduleReason("");
-      setNotice("تمت جدولة المقال. سيُنشر تلقائيًا في الموعد المحدد بتوقيتك المحلي.");
+      setNotice("تمت جدولة المقال. سيُنشر تلقائيًا في الموعد المحدد بتوقيت القاهرة.");
     });
 
   const cancelSchedule = () =>
@@ -653,24 +650,24 @@ export function ArticleEditor({ articleId }: { articleId: string | null }) {
 
       {article?.status === "Scheduled" && article.scheduledPublishAtUtc && (
         <p className="cms-msg" role="status">
-          موعد النشر: {new Intl.DateTimeFormat("ar-EG-u-nu-latn", { dateStyle: "full", timeStyle: "short" }).format(new Date(article.scheduledPublishAtUtc))}
+          موعد النشر: {new Intl.DateTimeFormat("ar-EG-u-nu-latn", { dateStyle: "full", timeStyle: "short", timeZone: "Africa/Cairo" }).format(new Date(article.scheduledPublishAtUtc))} بتوقيت القاهرة
         </p>
       )}
 
       {scheduleOpen && hints.includes("schedule") && (
         <section className="cms-revision" aria-labelledby="schedule-publication-title">
           <h2 id="schedule-publication-title">جدولة النشر</h2>
-          <p>لا يمكن جدولة المقال قبل اعتماده. يُعرض الموعد بتوقيت جهازك ويُحفظ بالتوقيت العالمي.</p>
+          <p>لا يمكن جدولة المقال قبل اعتماده. أدخل الموعد بتوقيت القاهرة، ويُحفظ داخليًا بالتوقيت العالمي.</p>
           <div className="cms-field">
             <label htmlFor="scheduled-publish-at">موعد النشر</label>
-            <input id="scheduled-publish-at" type="datetime-local" required min={localDateTimeInput(new Date(Date.now() + 60_000))} value={scheduleAt} onChange={(e) => setScheduleAt(e.target.value)} />
+            <input id="scheduled-publish-at" type="datetime-local" required min={cairoDateTimeInput(new Date(Date.now() + 60_000))} value={scheduleAt} onChange={(e) => setScheduleAt(e.target.value)} />
           </div>
           <div className="cms-field">
             <label htmlFor="scheduled-publish-reason">ملاحظة تحريرية (اختياري)</label>
             <textarea id="scheduled-publish-reason" rows={2} maxLength={1000} value={scheduleReason} onChange={(e) => setScheduleReason(e.target.value)} />
           </div>
           <div className="cms-actions">
-            <button className="cms-btn success" type="button" disabled={busy || !scheduleAt || new Date(scheduleAt).getTime() <= Date.now()} onClick={schedulePublication}>تأكيد الجدولة</button>
+            <button className="cms-btn success" type="button" disabled={busy || !scheduleAt || !cairoDateTimeToIso(scheduleAt) || Date.parse(cairoDateTimeToIso(scheduleAt) ?? "") <= Date.now()} onClick={schedulePublication}>تأكيد الجدولة</button>
             <button className="cms-btn" type="button" disabled={busy} onClick={() => setScheduleOpen(false)}>إلغاء</button>
           </div>
         </section>

@@ -265,6 +265,8 @@
 .cms-grant-role select { min-width: 0; flex: 1; padding: 8px 10px; border: 1px solid var(--line); border-radius: 8px; background: white; color: var(--text); font: inherit; font-size: .8rem; }
 .cms-grant-role .cms-btn { padding: 7px 11px; font-size: .79rem; }
 .cms-table-scroll { max-width: 100%; overflow-x: auto; }
+.cms-article-audit-table .cms-table { min-width: 1120px; }
+.cms-article-audit-table time { white-space: nowrap; font-variant-numeric: tabular-nums; }
 .cms-pager { display: flex; justify-content: center; align-items: center; gap: 16px; margin-top: 20px; color: #59677d; font-size: .84rem; }
 .cms-security-note { margin: 0 3px; padding: 11px 14px; border-inline-start: 3px solid #e77c1b; border-radius: 7px; background: #fff9f2; }
 .cms-section-title { display: flex; justify-content: space-between; align-items: flex-start; gap: 16px; margin-bottom: 18px; }

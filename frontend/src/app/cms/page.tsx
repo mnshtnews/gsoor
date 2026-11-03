@@ -15,7 +15,7 @@ import {
   type CmsSession,
   type WorkflowAction,
 } from "@/lib/cms-client";
-import { formatArabicDate } from "@/lib/format";
+import { formatCmsDateTime } from "@/lib/format";
 import { useUiLocale } from "@/lib/use-ui-locale";
 
 export default function CmsDashboardPage() {
@@ -197,12 +197,17 @@ export default function CmsDashboardPage() {
       ) : (
         <>
         <p className="cms-hint">{searchTerm.trim() ? `${totalCount} نتيجة بحث · الصفحة ${page} من ${totalPages}` : `${totalCount} مقالًا · الصفحة ${page} من ${totalPages}`}</p>
+        <div className="cms-table-scroll cms-article-audit-table">
         <table className="cms-table">
           <thead>
             <tr>
               <th>{t("العنوان" )}</th>
               <th>{t("الحالة" )}</th>
+              <th>{t("نشره")}</th>
+              <th>{t("وقت النشر")}</th>
+              <th>{t("آخر تعديل بواسطة")}</th>
               <th>{t("آخر تعديل" )}</th>
+              <th>{t("القسم")}</th>
               <th>{t("إجراءات" )}</th>
             </tr>
           </thead>
@@ -215,7 +220,7 @@ export default function CmsDashboardPage() {
                   <Link href={`/cms/articles/${a.id}`}>{a.title}</Link>
                   {a.status === "Scheduled" && a.scheduledPublishAtUtc && (
                     <small className="cms-hint" style={{ display: "block" }}>
-                      موعد النشر: {new Intl.DateTimeFormat(locale === "ar" ? "ar-EG-u-nu-latn" : locale === "en" ? "en-GB" : "fr-FR", { dateStyle: "medium" }).format(new Date(a.scheduledPublishAtUtc))}
+                      {t("موعد النشر")}: {formatCmsDateTime(a.scheduledPublishAtUtc, locale)} ({t("بتوقيت القاهرة")})
                     </small>
                   )}
                 </td>
@@ -224,7 +229,11 @@ export default function CmsDashboardPage() {
                     {t(STATUS_META[a.status]?.label ?? a.status)}
                   </span>
                 </td>
-                <td data-label={t("آخر تعديل")}>{new Intl.DateTimeFormat(locale === "ar" ? "ar-EG-u-nu-latn" : locale === "en" ? "en-GB" : "fr-FR", { dateStyle: "medium" }).format(new Date(a.lastModifiedAtUtc ?? a.createdAtUtc))}</td>
+                <td data-label={t("نشره")}>{a.publishedByName ?? "—"}</td>
+                <td data-label={t("وقت النشر")}><time dateTime={a.publishedAtUtc ?? undefined}>{formatCmsDateTime(a.publishedAtUtc, locale) ?? "—"}</time></td>
+                <td data-label={t("آخر تعديل بواسطة")}>{a.lastModifiedByName ?? "—"}</td>
+                <td data-label={t("آخر تعديل")}><time dateTime={a.lastModifiedAtUtc ?? a.createdAtUtc}>{formatCmsDateTime(a.lastModifiedAtUtc ?? a.createdAtUtc, locale)}</time></td>
+                <td data-label={t("القسم")}>{a.presentationDeskNames?.length ? a.presentationDeskNames.map((desk) => t(desk)).join("، ") : a.primaryCategoryNameAr ?? "—"}</td>
                 <td data-label={t("إجراءات")}>
                   <div className="cms-actions">
                     <Link className="cms-btn" href={`/cms/articles/${a.id}`}>
@@ -247,6 +256,7 @@ export default function CmsDashboardPage() {
             })}
           </tbody>
         </table>
+        </div>
         <div className="cms-actions" style={{ justifyContent: "center", marginTop: 18 }}>
           <button className="cms-btn" type="button" disabled={loading || page <= 1} onClick={() => setPage((current) => Math.max(1, current - 1))}>{t("السابق" )}</button>
           <span className="cms-hint">{page} / {totalPages}</span>
