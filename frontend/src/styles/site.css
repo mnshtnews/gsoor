@@ -10587,8 +10587,11 @@ body.crisis-mode-active #heroSliderSection .hero-thumb.active {
   align-items: center;
   position: absolute;
   inset-block-start: 0;
-  inset-inline-start: 0;
-  inset-inline-end: auto;
+  /* Keep the animation origin physical-left in every locale. The RTL
+     animation reverses the transform; anchoring to logical-start (right in
+     Arabic) would add the track's full width to the negative translation. */
+  left: 0;
+  right: auto;
   width: max-content;
   height: 36px;
   gap: 0;
