@@ -16,6 +16,7 @@ export function formatArabicDate(iso: string | null, locale: SiteLocale = "ar"):
     year: "numeric",
     hour: "numeric",
     minute: "2-digit",
+    timeZone: "Africa/Cairo",
   }).format(new Date(iso));
 }
 
