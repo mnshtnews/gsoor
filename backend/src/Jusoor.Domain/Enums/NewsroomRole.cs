@@ -27,4 +27,37 @@ public static class NewsroomRole
         ManagingEditor, EditorInChief, FactChecker, SeoEditor,
         CrisisEditor, SystemAdmin
     };
+
+    /// <summary>
+    /// Seniority used for the "nobody sees a rank above their own" rule. Higher = more senior.
+    /// Accounts without any newsroom role (website members) rank 0. Equal ranks can see each other.
+    /// </summary>
+    public static int RankOf(string? role) => role switch
+    {
+        SystemAdmin => 100,
+        EditorInChief => 90,
+        ManagingEditor => 80,
+        SeniorEditor => 70,
+        CrisisEditor => 60,
+        SeoEditor => 50,
+        FactChecker => 50,
+        CopyEditor => 40,
+        AiEditor => 40,
+        Researcher => 30,
+        Reporter => 20,
+        _ => 0
+    };
+
+    /// <summary>The highest rank among the given roles (0 when the list is empty).</summary>
+    public static int HighestRank(IEnumerable<string>? roles)
+    {
+        var highest = 0;
+        if (roles is null) return highest;
+        foreach (var role in roles)
+        {
+            var rank = RankOf(role);
+            if (rank > highest) highest = rank;
+        }
+        return highest;
+    }
 }

@@ -1565,3 +1565,56 @@ body.crisis-mode-active .header-branding .header-demo-badge i { background:#fff;
   place-items: center;
   color: var(--text-mute);
 }
+
+/* LTR locales (EN/FR): the "Live test" badge sits on the right of the logo instead of the left */
+html[dir="ltr"] .header-branding .header-demo-badge { left:auto; right:-38px; transform-origin:left center; animation-name:demo-badge-emerge-ltr; }
+@keyframes demo-badge-emerge-ltr { from { opacity:0; clip-path:inset(0 52% 0 0); transform:translateX(-14px) scale(.96); } to { opacity:1; clip-path:inset(0); transform:translateX(0) scale(1); } }
+@media (max-width: 760px) { html[dir="ltr"] .header-branding .header-demo-badge { left:auto; right:-38px; } }
+@media (prefers-reduced-motion: reduce) { html[dir="ltr"] .header-branding .header-demo-badge { animation:none; } }
+.leadership-credit-role .leadership-credit-line { display:block; }
+
+/* ==========================================================================
+   Article page (Nov 2026)
+   - the text column is exactly as wide as the hero image, with inner padding
+   - keywords use the Final Demo's .tag-pill with an entrance + hover animation
+   - "most read" sidebar next to the related stories (Final Demo layout)
+   ========================================================================== */
+.article-page { --article-pad: clamp(18px, 4.5vw, 56px); }
+.article-page .article-main-wrap { box-sizing: border-box; width: 100%; max-width: 960px; padding-inline: var(--article-pad); }
+.article-page .article-main-wrap .article-body { width: 100%; max-width: none; }
+.article-page .article-main-wrap .article-tags { max-width: none; margin: 4px 0 30px; padding: 0; }
+
+.article-page .article-tags { display: flex; flex-wrap: wrap; gap: 10px; }
+.article-page .article-tags .tag-pill {
+  display: inline-flex; align-items: center; min-height: 34px; padding: 6px 16px;
+  border: 1px solid var(--line); border-radius: 999px;
+  background: var(--paper); color: var(--text-mute);
+  font-size: 12.5px; font-weight: 700; line-height: 1.3; text-decoration: none;
+  transition: background-color .22s ease, border-color .22s ease, color .22s ease, transform .22s cubic-bezier(.2,.75,.25,1), box-shadow .22s ease;
+  animation: article-tag-rise .55s cubic-bezier(.2,.75,.25,1) both;
+  animation-delay: calc(.12s + var(--tag-i, 0) * 70ms);
+}
+.article-page .article-tags a.tag-pill:hover,
+.article-page .article-tags a.tag-pill:focus-visible {
+  border-color: var(--amber); background: var(--amber); color: #fff;
+  transform: translateY(-2px); box-shadow: 0 8px 18px rgba(224, 122, 31, .28); outline: none;
+}
+.article-page .article-tags a.tag-pill:focus-visible { box-shadow: 0 0 0 3px rgba(224, 122, 31, .35); }
+.article-page .article-tags a.tag-pill:active { transform: translateY(0) scale(.97); }
+@keyframes article-tag-rise { from { opacity: 0; transform: translateY(10px) scale(.94); } to { opacity: 1; transform: none; } }
+
+.article-page .article-related-split { grid-template-columns: minmax(0, 1fr) 340px; gap: 32px; align-items: start; }
+.article-page .article-related-main .article-related__grid { grid-template-columns: repeat(auto-fill, minmax(190px, 1fr)); }
+.article-page .article-most-read { position: sticky; top: 84px; }
+.article-page .article-most-read .rank-list .item { transition: transform .2s ease; }
+.article-page .article-most-read .rank-list .item:hover { transform: translateX(-3px); }
+.article-page .article-most-read .rank-list .item:hover h5 { color: var(--blue); }
+html[dir="ltr"] .article-page .article-most-read .rank-list .item:hover { transform: translateX(3px); }
+@media (max-width: 860px) {
+  .article-page .article-related-split { grid-template-columns: 1fr; }
+  .article-page .article-most-read { position: static; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .article-page .article-tags .tag-pill { animation: none; transition: none; }
+  .article-page .article-most-read .rank-list .item { transition: none; }
+}

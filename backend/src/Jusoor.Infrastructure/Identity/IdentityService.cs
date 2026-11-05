@@ -55,9 +55,18 @@ public class IdentityService : IIdentityService
     }
 
     public async Task<NewsroomUserPage> ListUsersAsync(
-        string? search, int page, int pageSize, CancellationToken cancellationToken, string? group = null)
+        string? search, int page, int pageSize, CancellationToken cancellationToken, string? group = null, int? maxVisibleRank = null)
     {
         var query = _userManager.Users.AsNoTracking();
+
+        if (maxVisibleRank is int visibleRank)
+        {
+            // Hide every account that holds a role ranked above the caller's own highest role.
+            var hiddenUserIds = new HashSet<string>(StringComparer.Ordinal);
+            foreach (var role in NewsroomRole.All.Where(role => NewsroomRole.RankOf(role) > visibleRank))
+                foreach (var user in await _userManager.GetUsersInRoleAsync(role)) hiddenUserIds.Add(user.Id);
+            if (hiddenUserIds.Count > 0) query = query.Where(user => !hiddenUserIds.Contains(user.Id));
+        }
 
         if (group is "members" or "staff")
         {

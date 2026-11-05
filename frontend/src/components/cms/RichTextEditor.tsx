@@ -10,6 +10,7 @@ import { countWords, htmlToPlainText } from "@/lib/html";
 import { estimateReadMinutes } from "@/lib/format";
 import { cmsMedia, type CmsMediaAsset } from "@/lib/cms-media-client";
 import { useImageCropper } from "@/components/cms/ImageCropper";
+import { ColorPalettePicker } from "@/components/cms/ColorPalettePicker";
 
 /** Mirrors EditorialArticle.BodyMaxLength on the API (characters of stored HTML). */
 export const BODY_HTML_MAX = 100_000;
@@ -136,6 +137,7 @@ export function RichTextEditor({
 
       const text = htmlToPlainText(e.isEmpty ? "" : e.getHTML());
       return {
+        fontColor: (e.getAttributes("fontColor").color as string | null | undefined) ?? null,
         bold: e.isActive("bold"),
         italic: e.isActive("italic"),
         underline: e.isActive("underline"),
@@ -274,8 +276,12 @@ export function RichTextEditor({
   return (
     <div className="rte">
       <div className="rte-toolbar" role="toolbar" aria-label="تنسيق النص" aria-controls={id}>
-        <label className="rte-color-control" title="لون الخط"><span>لون الخط</span><input type="color" aria-label="اختيار لون الخط" disabled={disabled} defaultValue="#17243a" onChange={(event) => editor.chain().focus().setMark("fontColor", { color: event.currentTarget.value }).run()} /></label>
-        <ToolButton label="إزالة لون الخط" active={false} disabled={disabled} onClick={() => editor.chain().focus().unsetMark("fontColor").run()}>×</ToolButton>
+        <ColorPalettePicker
+          value={state.fontColor}
+          disabled={disabled}
+          onPick={(hex) => editor.chain().focus().setMark("fontColor", { color: hex }).run()}
+          onClear={() => editor.chain().focus().unsetMark("fontColor").run()}
+        />
         <span className="rte-sep" aria-hidden="true" />
         <ToolButton label="إدراج جدول بعناوين وعمودين" active={false} disabled={disabled || state.table} onClick={() => editor.chain().focus().insertTable({ rows: 3, cols: 2, withHeaderRow: true }).run()}>
           ▦

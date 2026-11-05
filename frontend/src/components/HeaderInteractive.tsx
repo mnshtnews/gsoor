@@ -29,7 +29,7 @@ function LeadershipCredits({ leadership, locale, className = "header-leadership"
   if (!entries.length) return null;
   return <div className={className} aria-label={locale === "ar" ? "هيئة الإدارة والتحرير" : locale === "en" ? "Editorial leadership" : "Direction éditoriale"}>
     {entries.map((entry) => <div className="leadership-credit-group" key={entry.id}>
-      <span className="leadership-credit-role">{entry.id === "board-editor" && entry.title === "رئيس مجلس الإدارة ورئيس التحرير" && locale === "ar" ? <>رئيس مجلس الإدارة<br />رئيس التحرير</> : localizedLeadershipValue(entry.title, locale)}</span>
+      <span className="leadership-credit-role">{leadershipTitleLines(entry.title, locale).map((line, index) => <span key={index} className="leadership-credit-line">{line}</span>)}</span>
       {entry.name && <strong>{localizedLeadershipValue(entry.name, locale)}</strong>}
     </div>)}
   </div>;
@@ -109,9 +109,13 @@ const LEADERSHIP_COPY: Record<string, { en: string; fr: string }> = {
   "أحمد سليمان": { en: "Ahmed Suleiman", fr: "Ahmed Suleiman" },
   "أشرف جبريل": { en: "Ashraf Gabrial", fr: "Ashraf Gabrial" },
 };
+/** "Chairman of the Board & Editor-in-Chief" is shown as two stacked lines, never joined with "&". */
+function leadershipTitleLines(title: string, locale: SiteLocale): string[] {
+  const parts = title === "رئيس مجلس الإدارة ورئيس التحرير" ? ["رئيس مجلس الإدارة", "رئيس التحرير"] : title.split(/\s*(?:&|＆)\s*/i).filter(Boolean);
+  return (parts.length ? parts : [title]).map((part) => localizedLeadershipValue(part.trim(), locale));
+}
 function localizedLeadershipValue(value: string, locale: SiteLocale): string {
   if (locale === "ar") return value;
-  if (value === "رئيس مجلس الإدارة ورئيس التحرير") return locale === "en" ? "Chairman of the Board & Editor-in-Chief" : "Président du conseil et rédacteur en chef";
   return LEADERSHIP_COPY[value]?.[locale] ?? translateUi(locale, value);
 }
 export function HeaderInteractive({ tickerHeadlines, navbarAd, navigation, leadership, socialLinks = DEFAULT_PUBLIC_SOCIAL_LINKS, locale = "ar" }: { tickerHeadlines: string[]; navbarAd?: PublicAdPlacement; navigation?: PublicSiteNavigationItem[]; leadership?: Leadership; socialLinks?: PublicSocialLink[]; locale?: SiteLocale }) {

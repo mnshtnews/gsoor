@@ -16,7 +16,9 @@ public record NewsroomUserPage(IReadOnlyList<NewsroomUserInfo> Items, int TotalC
 public interface IIdentityService
 {
     /// <summary>Users (optionally filtered by email/display-name substring), newest first, with their roles.</summary>
-    Task<NewsroomUserPage> ListUsersAsync(string? search, int page, int pageSize, CancellationToken cancellationToken, string? group = null);
+    /// <param name="maxVisibleRank">When set, accounts whose highest newsroom rank is above it are excluded
+    /// (see <c>NewsroomRole.RankOf</c>) — a role can never list users more senior than itself.</param>
+    Task<NewsroomUserPage> ListUsersAsync(string? search, int page, int pageSize, CancellationToken cancellationToken, string? group = null, int? maxVisibleRank = null);
 
     Task<NewsroomUserInfo?> FindUserAsync(string userId);
     Task<string?> GetDisplayNameAsync(string userId);

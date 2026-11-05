@@ -70,7 +70,11 @@ public class ListNewsroomUsersQueryHandler : IRequestHandler<ListNewsroomUsersQu
             return null;
         }
 
-        var page = await _identity.ListUsersAsync(request.Search, request.Page, request.PageSize, cancellationToken, request.Group);
+        // Rank rule: the list never includes accounts more senior than the caller (EditorInChief cannot
+        // see SystemAdmin; ManagingEditor cannot see SystemAdmin or EditorInChief; and so on).
+        var page = await _identity.ListUsersAsync(
+            request.Search, request.Page, request.PageSize, cancellationToken, request.Group,
+            NewsroomRole.HighestRank(request.ActorRoles));
         return new PagedResult<NewsroomUserInfo>(page.Items, request.Page, request.PageSize, page.TotalCount);
     }
 }
@@ -139,7 +143,7 @@ public class GrantRoleCommandHandler : IRequestHandler<GrantRoleCommand, RoleCha
         }
 
         var user = await _identity.FindUserAsync(request.TargetUserId);
-        if (user is null)
+        if (user is null || NewsroomRole.HighestRank(user.Roles) > NewsroomRole.HighestRank(request.ActorRoles))
         {
             return new RoleChangeResult(RoleChangeOutcome.NotFound, null);
         }
@@ -199,7 +203,7 @@ public class RevokeRoleCommandHandler : IRequestHandler<RevokeRoleCommand, RoleC
         }
 
         var user = await _identity.FindUserAsync(request.TargetUserId);
-        if (user is null)
+        if (user is null || NewsroomRole.HighestRank(user.Roles) > NewsroomRole.HighestRank(request.ActorRoles))
         {
             return new RoleChangeResult(RoleChangeOutcome.NotFound, null);
         }

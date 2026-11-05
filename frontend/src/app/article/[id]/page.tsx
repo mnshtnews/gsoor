@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import type { CSSProperties } from "react";
 import { notFound, permanentRedirect } from "next/navigation";
 import Link from "next/link";
 import Image from "next/image";
@@ -15,13 +16,16 @@ import { ArticleReadingProgress } from "@/components/ArticleReadingProgress";
 import { ConfiguredAd } from "@/components/home/ConfiguredAd";
 
 import { ArticleStaffToolbar } from "@/components/ArticleStaffToolbar";
+import { ArticleViewTracker } from "@/components/ArticleViewTracker";
+import { getMostReadIds } from "@/lib/server/article-views";
+import type { StorySummary } from "@/lib/stories-api";
 import { cookies } from "next/headers";
 import { parseLocale, type SiteLocale } from "@/lib/site-copy";
 
 const ARTICLE_COPY = {
- ar: { home: "الرئيسية", correction: "إشعار تحريري", retracted: "سُحب هذا الخبر", returnHome: "العودة إلى الصفحة الرئيسية", archived: "أرشيف", published: "نُشر في", minute: "دقيقة قراءة", minutes: "دقائق قراءة", sports: "التغطية الرياضية", players: "اللاعبون", taxonomy: "التصنيفات", moreAuthor: "المزيد من الكاتب", allAuthor: "كل مقالات", readAlso: "اقرأ أيضًا", related: "أخبار متعلقة", noRelated: "لا توجد مواد إضافية للقراءة حاليًا.", noTagMatches: "لا توجد أخبار متعلقة حاليًا.", sportsTypes: { EgyptianProfessionalsAbroad: "محترفون مصريون بالخارج", NaturalizedEgyptians: "لاعبون مصريون مجنسون", EgyptianLeague: "الدوري المصري", EgyptNationalTeam: "المنتخب المصري", General: "رياضة عامة" } },
- en: { home: "Home", correction: "Editorial notice", retracted: "This story was withdrawn", returnHome: "Return to the homepage", archived: "Archive", published: "Published", minute: "minute read", minutes: "minutes read", sports: "Sports coverage", players: "Players", taxonomy: "Topics", moreAuthor: "More from this author", allAuthor: "All stories by", readAlso: "Read also", related: "Related stories", noRelated: "There are no more stories to read right now.", noTagMatches: "No published stories match this article’s topics yet.", sportsTypes: { EgyptianProfessionalsAbroad: "Egyptian professionals abroad", NaturalizedEgyptians: "Naturalized Egyptian players", EgyptianLeague: "Egyptian League", EgyptNationalTeam: "Egypt national team", General: "General sports" } },
- fr: { home: "Accueil", correction: "Avis éditorial", retracted: "Cet article a été retiré", returnHome: "Retour à l’accueil", archived: "Archives", published: "Publié le", minute: "minute de lecture", minutes: "minutes de lecture", sports: "Couverture sportive", players: "Joueurs", taxonomy: "Rubriques", moreAuthor: "Autres articles de cet auteur", allAuthor: "Tous les articles de", readAlso: "À lire aussi", related: "Articles liés", noRelated: "Aucun autre article à lire pour le moment.", noTagMatches: "Aucun article publié ne correspond encore aux mots-clés de cet article.", sportsTypes: { EgyptianProfessionalsAbroad: "Professionnels égyptiens à l’étranger", NaturalizedEgyptians: "Joueurs égyptiens naturalisés", EgyptianLeague: "Championnat égyptien", EgyptNationalTeam: "Équipe nationale d’Égypte", General: "Sport en général" } },
+ ar: { home: "الرئيسية", correction: "إشعار تحريري", retracted: "سُحب هذا الخبر", returnHome: "العودة إلى الصفحة الرئيسية", archived: "أرشيف", published: "نُشر في", minute: "دقيقة قراءة", minutes: "دقائق قراءة", sports: "التغطية الرياضية", players: "اللاعبون", taxonomy: "التصنيفات", moreAuthor: "المزيد من الكاتب", allAuthor: "كل مقالات", readAlso: "اقرأ أيضًا", mostRead: "الأكثر قراءة", related: "أخبار متعلقة", noRelated: "لا توجد مواد إضافية للقراءة حاليًا.", noTagMatches: "لا توجد أخبار متعلقة حاليًا.", sportsTypes: { EgyptianProfessionalsAbroad: "محترفون مصريون بالخارج", NaturalizedEgyptians: "لاعبون مصريون مجنسون", EgyptianLeague: "الدوري المصري", EgyptNationalTeam: "المنتخب المصري", General: "رياضة عامة" } },
+ en: { home: "Home", correction: "Editorial notice", retracted: "This story was withdrawn", returnHome: "Return to the homepage", archived: "Archive", published: "Published", minute: "minute read", minutes: "minutes read", sports: "Sports coverage", players: "Players", taxonomy: "Topics", moreAuthor: "More from this author", allAuthor: "All stories by", readAlso: "Read also", mostRead: "Most read", related: "Related stories", noRelated: "There are no more stories to read right now.", noTagMatches: "No published stories match this article’s topics yet.", sportsTypes: { EgyptianProfessionalsAbroad: "Egyptian professionals abroad", NaturalizedEgyptians: "Naturalized Egyptian players", EgyptianLeague: "Egyptian League", EgyptNationalTeam: "Egypt national team", General: "General sports" } },
+ fr: { home: "Accueil", correction: "Avis éditorial", retracted: "Cet article a été retiré", returnHome: "Retour à l’accueil", archived: "Archives", published: "Publié le", minute: "minute de lecture", minutes: "minutes de lecture", sports: "Couverture sportive", players: "Joueurs", taxonomy: "Rubriques", moreAuthor: "Autres articles de cet auteur", allAuthor: "Tous les articles de", readAlso: "À lire aussi", mostRead: "Les plus lus", related: "Articles liés", noRelated: "Aucun autre article à lire pour le moment.", noTagMatches: "Aucun article publié ne correspond encore aux mots-clés de cet article.", sportsTypes: { EgyptianProfessionalsAbroad: "Professionnels égyptiens à l’étranger", NaturalizedEgyptians: "Joueurs égyptiens naturalisés", EgyptianLeague: "Championnat égyptien", EgyptNationalTeam: "Équipe nationale d’Égypte", General: "Sport en général" } },
 } as const;
 function formatLocalizedDate(value: string | null | undefined, locale: SiteLocale) { if (!value) return ""; const languageTag = locale === "ar" ? "ar-EG-u-nu-latn" : locale === "fr" ? "fr-FR" : "en-GB"; return new Intl.DateTimeFormat(languageTag, { dateStyle: "long", timeStyle: "short", timeZone: "Africa/Cairo" }).format(new Date(value)); }
 
@@ -171,6 +175,18 @@ export default async function ArticlePage({ params }: { params: Promise<{ id: st
     .filter((item) => item.id !== story.id && !sectionStoryIds.has(item.id)
       && (item.secondaryTags ?? []).some((tag) => ownTags.has(normalizeTag(tag))))
     .map((item) => [item.id, item])).values()].slice(0, 3);
+  // "Most read": ranked by the site's own read counter (last 7 days); topped up with the newest stories until the counter has data.
+  let mostRead: StorySummary[] = [];
+  try {
+    const [rankedIds, pool] = await Promise.all([getMostReadIds(8, 7, story.id), getPublishedNews(1, 40)]);
+    const byId = new Map(pool.items.map((item) => [item.id.toLowerCase(), item]));
+    mostRead = rankedIds.map((id) => byId.get(id)).filter((item): item is StorySummary => Boolean(item));
+    for (const item of pool.items) {
+      if (mostRead.length >= 5) break;
+      if (item.id !== story.id && !mostRead.some((picked) => picked.id === item.id)) mostRead.push(item);
+    }
+    mostRead = mostRead.slice(0, 5);
+  } catch { mostRead = []; }
   const authorHref = story.authorName ? `/author?name=${encodeURIComponent(story.authorName)}` : null;
   const deskLabels: Record<string, Record<SiteLocale, string>> = {
     mughtarib: { ar: "أخبار المغتربين", en: "Diaspora news", fr: "Actualités de la diaspora" }, success: { ar: "قصة نجاح", en: "Success stories", fr: "Histoires de réussite" }, egypt: { ar: "أخبار مصر", en: "Egypt news", fr: "Actualités d’Égypte" }, opportunities: { ar: "فرص استثمارية", en: "Investment opportunities", fr: "Opportunités d’investissement" },
@@ -181,6 +197,7 @@ export default async function ArticlePage({ params }: { params: Promise<{ id: st
   return (
     <main id="main" className="article-page">
       <ArticleReadingProgress />
+      <ArticleViewTracker articleId={story.id} />
       <JsonLd data={buildArticleJsonLd(story)} />
       <JsonLd
         data={buildBreadcrumbJsonLd([
@@ -257,7 +274,7 @@ export default async function ArticlePage({ params }: { params: Promise<{ id: st
         ) : <div className="article-hero-img wrap article-hero-placeholder" aria-hidden="true"><span>جسور</span></div>}
       </figure>}
 
-      <div className="wrap">
+      <div className="wrap article-main-wrap">
         <CorrectionsBox corrections={story.corrections.filter((c) => c.isMajor)} major locale={locale} />
         {story.presentationDesks.includes("sports") && (story.sportsCoverageType || story.sportsPlayerNames.length > 0 || story.sportsTeamName || story.sportsCompetitionName || story.sportsCountryName) && <aside className="article-sports-facts" aria-label={copy.sports}>
           <strong>{copy.sports}</strong>
@@ -270,12 +287,11 @@ export default async function ArticlePage({ params }: { params: Promise<{ id: st
             it as markup is safe only because of that server-side boundary — never feed this
             element anything that did not come from the API's `body` field. */}
         <article className="article-body" lang={story.contentLocale} dir={story.contentLocale === "ar" ? "rtl" : "ltr"} dangerouslySetInnerHTML={{ __html: story.body }} />
-        {(story.primaryCategoryNameAr || story.secondaryTags.length > 0 || story.presentationDesks.length > 0) && <nav className="article-taxonomy" aria-label={copy.taxonomy}>
-          {story.primaryCategoryNameAr && <span className="article-taxonomy__label">{copy.taxonomy}</span>}
-          {story.primaryCategoryNameAr && <span className="article-taxonomy__tag">{story.primaryCategoryNameAr}</span>}
-          {story.secondaryTags.map((tag) => <Link className="article-taxonomy__tag" href={`/search?q=${encodeURIComponent(tag)}`} key={tag}>{tag}</Link>)}
-          {story.presentationDesks.filter((desk) => deskLabels[desk]?.[locale]).map((desk) => <Link className="article-taxonomy__tag is-desk" href={`/category?cat=${encodeURIComponent(desk)}`} key={desk}>{deskLabels[desk][locale]}</Link>)}
-        </nav>}
+        {(story.primaryCategoryNameAr || story.secondaryTags.length > 0 || story.presentationDesks.length > 0) && <div className="article-tags" role="list" aria-label={copy.taxonomy}>
+          {story.primaryCategoryNameAr && <span className="tag-pill" role="listitem" style={{ "--tag-i": 0 } as CSSProperties}>{story.primaryCategoryNameAr}</span>}
+          {story.secondaryTags.map((tag, index) => <Link className="tag-pill" role="listitem" href={`/search?q=${encodeURIComponent(tag)}`} key={tag} style={{ "--tag-i": index + 1 } as CSSProperties}>{tag}</Link>)}
+          {story.presentationDesks.filter((desk) => deskLabels[desk]?.[locale]).map((desk, index) => <Link className="tag-pill is-desk" role="listitem" href={`/category?cat=${encodeURIComponent(desk)}`} key={desk} style={{ "--tag-i": story.secondaryTags.length + index + 1 } as CSSProperties}>{deskLabels[desk][locale]}</Link>)}
+        </div>}
         <CorrectionsBox corrections={story.corrections.filter((c) => !c.isMajor)} locale={locale} />
       </div>
       {moreFromAuthor.length > 0 && <section className="section tight on-surface article-author-more" aria-labelledby="article-author-more-heading">
@@ -285,14 +301,6 @@ export default async function ArticlePage({ params }: { params: Promise<{ id: st
         </div>
       </section>}
       {articleBottomAd && <section className="article-bottom-ad wrap" aria-label="مساحة إعلانية"><ConfiguredAd placement={articleBottomAd} ratio="4 / 1" /></section>}
-      <section className="section tight on-surface article-related" aria-labelledby="article-read-also-heading">
-        <div className="wrap article-related__inner">
-          <div className="section-head"><h2 id="article-read-also-heading">{copy.readAlso}</h2></div>
-          {readAlsoStories.length > 0
-            ? <div className="six-grid article-related__grid">{readAlsoStories.map((related) => <StoryGridCard key={related.id} story={related} locale={locale} />)}</div>
-            : <p className="article-related__empty">{copy.noRelated}</p>}
-        </div>
-      </section>
       {story.secondaryTags.length > 0 && <section className="section tight on-surface article-tag-related" aria-labelledby="article-tag-related-heading">
         <div className="wrap article-related__inner">
           <div className="section-head"><h2 id="article-tag-related-heading">{copy.related}</h2></div>
@@ -301,6 +309,27 @@ export default async function ArticlePage({ params }: { params: Promise<{ id: st
             : <p className="article-related__empty">{copy.noTagMatches}</p>}
         </div>
       </section>}
+      <section className="section on-surface article-related article-related--with-rank" aria-labelledby="article-read-also-heading">
+        <div className="wrap article-related__inner">
+          <div className="split-2 article-related-split">
+            <div className="article-related-main">
+              <div className="section-head"><h2 id="article-read-also-heading"><span className="eyebrow">{copy.readAlso}</span></h2></div>
+              {readAlsoStories.length > 0
+                ? <div className="six-grid article-related__grid">{readAlsoStories.map((related) => <StoryGridCard key={related.id} story={related} locale={locale} />)}</div>
+                : <p className="article-related__empty">{copy.noRelated}</p>}
+            </div>
+            {mostRead.length > 0 && <aside className="article-most-read" aria-labelledby="article-most-read-heading">
+              <div className="section-head"><h2 id="article-most-read-heading" style={{ fontSize: 14 }}>{copy.mostRead}</h2></div>
+              <div className="rank-list">
+                {mostRead.map((item, index) => <Link className={`item home-rank-item${index < 3 ? " top" : ""}`} href={articleUrl({ id: item.id, slug: item.slug ?? "" })} key={item.id}>
+                  <span className="rank">{String(index + 1).padStart(2, "0")}</span>
+                  <div><h5>{item.title}</h5></div>
+                </Link>)}
+              </div>
+            </aside>}
+          </div>
+        </div>
+      </section>
     </main>
   );
 }

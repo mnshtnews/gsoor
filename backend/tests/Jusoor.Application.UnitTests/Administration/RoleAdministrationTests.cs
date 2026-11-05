@@ -2,6 +2,7 @@ using FluentAssertions;
 using Jusoor.Application.Administration;
 using Jusoor.Application.Common.Interfaces;
 using Jusoor.Application.UnitTests.TestSupport;
+using Jusoor.Domain.Entities;
 using Jusoor.Domain.Enums;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging.Abstractions;
@@ -219,7 +220,7 @@ public class RoleAdministrationTests
     public async Task List_should_return_users_for_chief_and_admin_and_null_for_others()
     {
         var identity = Substitute.For<IIdentityService>();
-        identity.ListUsersAsync(Arg.Any<string?>(), 1, 20, Arg.Any<CancellationToken>(), Arg.Any<string?>())
+        identity.ListUsersAsync(Arg.Any<string?>(), 1, 20, Arg.Any<CancellationToken>(), Arg.Any<string?>(), Arg.Any<int?>())
             .Returns(new NewsroomUserPage(new[] { User("a", NewsroomRole.Reporter) }, 1));
         var handler = new ListNewsroomUsersQueryHandler(identity);
 
@@ -227,5 +228,61 @@ public class RoleAdministrationTests
         (await handler.Handle(new ListNewsroomUsersQuery(null, 1, 20, Admin), default)).Should().NotBeNull();
         (await handler.Handle(new ListNewsroomUsersQuery(null, 1, 20, Managing), default)).Should().BeNull();
         (await handler.Handle(new ListNewsroomUsersQuery(null, 1, 20, Array.Empty<string>()), default)).Should().BeNull();
+    }
+
+    // ---------- rank rule: nobody sees a rank above their own ----------
+
+    [Theory]
+    [InlineData(NewsroomRole.SystemAdmin, 100)]
+    [InlineData(NewsroomRole.EditorInChief, 90)]
+    [InlineData(NewsroomRole.ManagingEditor, 80)]
+    public async Task List_should_limit_visibility_to_the_callers_own_rank(string role, int expectedRank)
+    {
+        var identity = Substitute.For<IIdentityService>();
+        identity.ListUsersAsync(Arg.Any<string?>(), 1, 20, Arg.Any<CancellationToken>(), Arg.Any<string?>(), Arg.Any<int?>())
+            .Returns(new NewsroomUserPage(Array.Empty<NewsroomUserInfo>(), 0));
+        var handler = new ListNewsroomUsersQueryHandler(identity);
+
+        await handler.Handle(new ListNewsroomUsersQuery(null, 1, 20, new[] { role }, new[] { AdministrationPermissions.ViewUsers }), default);
+
+        await identity.Received(1).ListUsersAsync(
+            Arg.Any<string?>(), 1, 20, Arg.Any<CancellationToken>(), Arg.Any<string?>(), expectedRank);
+    }
+
+    [Fact]
+    public async Task Grant_should_report_not_found_for_a_user_ranked_above_the_actor()
+    {
+        await using var ctx = TestApplicationDbContext.CreateNew();
+        var identity = Identity(User("boss", NewsroomRole.EditorInChief));
+
+        var result = await GrantHandler(identity, ctx).Handle(
+            new GrantRoleCommand("boss", NewsroomRole.Reporter, "m-1", Managing, new[] { AdministrationPermissions.ManageRoles }), default);
+
+        result.Outcome.Should().Be(RoleChangeOutcome.NotFound);
+        await identity.DidNotReceive().AddToRoleAsync(Arg.Any<string>(), Arg.Any<string>());
+    }
+
+    [Fact]
+    public async Task Revoke_should_report_not_found_for_a_user_ranked_above_the_actor()
+    {
+        await using var ctx = TestApplicationDbContext.CreateNew();
+        var identity = Identity(User("boss", NewsroomRole.SystemAdmin, NewsroomRole.Reporter));
+
+        var result = await RevokeHandler(identity, ctx).Handle(
+            new RevokeRoleCommand("boss", NewsroomRole.Reporter, "m-1", Managing, new[] { AdministrationPermissions.ManageRoles }), default);
+
+        result.Outcome.Should().Be(RoleChangeOutcome.NotFound);
+        await identity.DidNotReceive().RemoveFromRoleAsync(Arg.Any<string>(), Arg.Any<string>());
+    }
+
+    [Fact]
+    public void Rank_order_is_admin_chief_managing_senior_then_the_rest()
+    {
+        NewsroomRole.RankOf(NewsroomRole.SystemAdmin).Should().BeGreaterThan(NewsroomRole.RankOf(NewsroomRole.EditorInChief));
+        NewsroomRole.RankOf(NewsroomRole.EditorInChief).Should().BeGreaterThan(NewsroomRole.RankOf(NewsroomRole.ManagingEditor));
+        NewsroomRole.RankOf(NewsroomRole.ManagingEditor).Should().BeGreaterThan(NewsroomRole.RankOf(NewsroomRole.SeniorEditor));
+        NewsroomRole.RankOf(NewsroomRole.Reporter).Should().BeGreaterThan(NewsroomRole.RankOf(null));
+        NewsroomRole.HighestRank(new[] { NewsroomRole.Reporter, NewsroomRole.EditorInChief }).Should().Be(90);
+        NewsroomRole.HighestRank(Array.Empty<string>()).Should().Be(0);
     }
 }
