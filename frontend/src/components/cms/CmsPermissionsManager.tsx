@@ -94,23 +94,39 @@ export default function CmsPermissionsManager() {
     setLoadingUsers(true);
     setErrorMessage(null);
     try {
-      const res = await fetch("/cms-api/admin-users?group=staff&page=1&pageSize=100", {
+      const firstRes = await fetch("/cms-api/admin-users?group=staff&page=1&pageSize=50", {
+        credentials: "same-origin",
         cache: "no-store",
       });
-      if (!res.ok) {
-        throw new CmsError("تعذر تحميل قائمة أعضاء هيئة التحرير.", res.status);
+      if (!firstRes.ok) {
+        const errData = (await firstRes.json().catch(() => ({}))) as { message?: string; errors?: Record<string, string[]> };
+        const detail = errData.message || (errData.errors ? Object.values(errData.errors).flat().join(" ") : "");
+        throw new CmsError(detail ? `تعذر تحميل قائمة أعضاء هيئة التحرير: ${detail}` : "تعذر تحميل قائمة أعضاء هيئة التحرير.", firstRes.status);
       }
-      const data = (await res.json()) as UsersApiResponse;
-      setUsers(data.items || []);
-      if (data.items.length > 0 && !selectedUserId) {
-        setSelectedUserId(data.items[0].id);
+      const firstData = (await firstRes.json()) as UsersApiResponse & { totalPages?: number };
+      let allItems = firstData.items || [];
+      if (firstData.totalPages && firstData.totalPages > 1) {
+        for (let p = 2; p <= firstData.totalPages; p++) {
+          const nextRes = await fetch(`/cms-api/admin-users?group=staff&page=${p}&pageSize=50`, {
+            credentials: "same-origin",
+            cache: "no-store",
+          });
+          if (nextRes.ok) {
+            const nextData = (await nextRes.json()) as UsersApiResponse;
+            allItems = allItems.concat(nextData.items || []);
+          }
+        }
+      }
+      setUsers(allItems);
+      if (allItems.length > 0) {
+        setSelectedUserId((current) => (current && allItems.some((u) => u.id === current) ? current : allItems[0].id));
       }
     } catch (err) {
       setErrorMessage(err instanceof Error ? err.message : "تعذر الاتصال بالخادم لتحميل المستخدمين.");
     } finally {
       setLoadingUsers(false);
     }
-  }, [selectedUserId]);
+  }, []);
 
   useEffect(() => {
     if (isSystemAdmin) {
@@ -134,6 +150,7 @@ export default function CmsPermissionsManager() {
       setSuccessMessage(null);
       try {
         const res = await fetch(`/cms-api/permissions?userId=${encodeURIComponent(selectedUserId)}`, {
+          credentials: "same-origin",
           cache: "no-store",
         });
         if (!res.ok) throw new Error("تعذر تحميل استثناءات الصلاحيات للمستخدم المحدد.");
@@ -232,6 +249,7 @@ export default function CmsPermissionsManager() {
       }
       const res = await fetch("/cms-api/permissions", {
         method: "POST",
+        credentials: "same-origin",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
           userId: selectedUserId,

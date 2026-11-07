@@ -247,9 +247,29 @@ public class EditorialHtmlSanitizerTests
     public void The_allow_list_should_be_exactly_what_the_editor_can_produce()
     {
         EditorialHtmlSanitizer.AllowedTags.Should().BeEquivalentTo(
-            "p", "br", "h2", "h3", "strong", "em", "u", "blockquote", "ul", "ol", "li", "a", "hr", "figure", "figcaption", "img", "video", "iframe", "table", "thead", "tbody", "tr", "th", "td");
-        EditorialHtmlSanitizer.AllowedAttributes.Should().BeEquivalentTo("href", "src", "alt", "title", "data-media-id", "data-provider", "sandbox", "allow", "allowfullscreen", "loading", "referrerpolicy", "controls", "preload");
+            "p", "br", "h2", "h3", "strong", "em", "u", "span", "blockquote", "ul", "ol", "li", "a", "hr", "figure", "figcaption", "img", "video", "iframe", "table", "thead", "tbody", "tr", "th", "td");
+        EditorialHtmlSanitizer.AllowedAttributes.Should().BeEquivalentTo("href", "src", "alt", "title", "style", "data-media-id", "data-provider", "sandbox", "allow", "allowfullscreen", "loading", "referrerpolicy", "controls", "preload");
         EditorialHtmlSanitizer.AllowedSchemes.Should().BeEquivalentTo("http", "https", "mailto");
+    }
+
+    [Theory]
+    [InlineData("<p><span style=\"color: #c0392b\">نص</span></p>", "<p><span style=\"color: #c0392b\">نص</span></p>")]
+    [InlineData("<p><span style=\"color: #C0392B;\">نص</span></p>", "<p><span style=\"color: #c0392b\">نص</span></p>")]
+    [InlineData("<p><span style=\"color: rgb(192, 57, 43)\">نص</span></p>", "<p><span style=\"color: #c0392b\">نص</span></p>")]
+    [InlineData("<p><span style=\"color: rgba(192, 57, 43, 1)\">نص</span></p>", "<p><span style=\"color: #c0392b\">نص</span></p>")]
+    [InlineData("<p><span style=\"color: #c00\">نص</span></p>", "<p><span style=\"color: #cc0000\">نص</span></p>")]
+    public void Font_color_on_span_is_allowed_and_normalized(string input, string expected)
+    {
+        Sut.Sanitize(input).Should().Be(expected);
+    }
+
+    [Theory]
+    [InlineData("<p style=\"color: #c0392b\">نص</p>", "<p>نص</p>")]
+    [InlineData("<p><span style=\"color: red; background: url(evil)\">نص</span></p>", "<p><span>نص</span></p>")]
+    [InlineData("<p><span style=\"font-size: 20px\">نص</span></p>", "<p><span>نص</span></p>")]
+    public void Disallowed_styles_and_tags_are_stripped(string input, string expected)
+    {
+        Sut.Sanitize(input).Should().Be(expected);
     }
 
     [Fact]

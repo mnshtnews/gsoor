@@ -15,12 +15,39 @@ import { ColorPalettePicker } from "@/components/cms/ColorPalettePicker";
 /** Mirrors EditorialArticle.BodyMaxLength on the API (characters of stored HTML). */
 export const BODY_HTML_MAX = 100_000;
 
+function normalizeColor(color: string | null | undefined): string | null {
+  if (!color) return null;
+  const trimmed = color.trim();
+  if (/^#[0-9a-f]{6}$/i.test(trimmed)) return trimmed.toLowerCase();
+  const match3 = /^#([0-9a-f])([0-9a-f])([0-9a-f])$/i.exec(trimmed);
+  if (match3) {
+    return `#${match3[1]}${match3[1]}${match3[2]}${match3[2]}${match3[3]}${match3[3]}`.toLowerCase();
+  }
+  const rgbMatch = /^rgba?\(\s*(\d{1,3})\s*,\s*(\d{1,3})\s*,\s*(\d{1,3})(?:\s*,\s*[\d.]+\s*)?\)$/i.exec(trimmed);
+  if (rgbMatch) {
+    const r = Math.min(255, Math.max(0, parseInt(rgbMatch[1], 10)));
+    const g = Math.min(255, Math.max(0, parseInt(rgbMatch[2], 10)));
+    const b = Math.min(255, Math.max(0, parseInt(rgbMatch[3], 10)));
+    return `#${r.toString(16).padStart(2, "0")}${g.toString(16).padStart(2, "0")}${b.toString(16).padStart(2, "0")}`.toLowerCase();
+  }
+  return null;
+}
+
 const FontColor = Mark.create({
   name: "fontColor",
-  addAttributes() { return { color: { default: null, parseHTML: (element) => element.style.color || null } }; },
-  parseHTML() { return [{ tag: "span[style*='color']" }]; },
+  addAttributes() {
+    return {
+      color: {
+        default: null,
+        parseHTML: (element) => normalizeColor(element.style.color),
+      },
+    };
+  },
+  parseHTML() {
+    return [{ tag: "span[style*='color']" }];
+  },
   renderHTML({ HTMLAttributes }) {
-    const color = typeof HTMLAttributes.color === "string" && /^#[0-9a-f]{6}$/i.test(HTMLAttributes.color) ? HTMLAttributes.color : null;
+    const color = normalizeColor(typeof HTMLAttributes.color === "string" ? HTMLAttributes.color : null);
     return ["span", mergeAttributes(color ? { style: `color: ${color}` } : {}), 0];
   },
 });

@@ -88,12 +88,15 @@ public sealed class EditorialHtmlSanitizer : IEditorialHtmlSanitizer
                 }
                 if (element.HasAttribute("style"))
                 {
-                    var style = element.GetAttribute("style") ?? string.Empty;
-                    var match = System.Text.RegularExpressions.Regex.Match(style, @"^\s*color\s*:\s*(#[0-9a-fA-F]{6})\s*;?\s*$", System.Text.RegularExpressions.RegexOptions.CultureInvariant);
-                    if (!string.Equals(element.LocalName, "span", StringComparison.OrdinalIgnoreCase) || !match.Success)
-                        element.RemoveAttribute("style");
+                    if (string.Equals(element.LocalName, "span", StringComparison.OrdinalIgnoreCase)
+                        && TryNormalizeColor(element.GetAttribute("style"), out var normalizedStyle))
+                    {
+                        element.SetAttribute("style", normalizedStyle);
+                    }
                     else
-                        element.SetAttribute("style", $"color: {match.Groups[1].Value.ToLowerInvariant()}");
+                    {
+                        element.RemoveAttribute("style");
+                    }
                 }
             }
 
@@ -164,6 +167,50 @@ public sealed class EditorialHtmlSanitizer : IEditorialHtmlSanitizer
         };
 
         return sanitizer;
+    }
+
+    private static bool TryNormalizeColor(string? style, out string normalizedStyle)
+    {
+        normalizedStyle = string.Empty;
+        if (string.IsNullOrWhiteSpace(style)) return false;
+
+        var hexMatch = System.Text.RegularExpressions.Regex.Match(
+            style,
+            @"^\s*color\s*:\s*(#[0-9a-fA-F]{6})\s*;?\s*$",
+            System.Text.RegularExpressions.RegexOptions.CultureInvariant);
+        if (hexMatch.Success)
+        {
+            normalizedStyle = $"color: {hexMatch.Groups[1].Value.ToLowerInvariant()}";
+            return true;
+        }
+
+        var shortHexMatch = System.Text.RegularExpressions.Regex.Match(
+            style,
+            @"^\s*color\s*:\s*#([0-9a-fA-F])([0-9a-fA-F])([0-9a-fA-F])\s*;?\s*$",
+            System.Text.RegularExpressions.RegexOptions.CultureInvariant);
+        if (shortHexMatch.Success)
+        {
+            var r = shortHexMatch.Groups[1].Value;
+            var g = shortHexMatch.Groups[2].Value;
+            var b = shortHexMatch.Groups[3].Value;
+            normalizedStyle = $"color: #{r}{r}{g}{g}{b}{b}".ToLowerInvariant();
+            return true;
+        }
+
+        var rgbMatch = System.Text.RegularExpressions.Regex.Match(
+            style,
+            @"^\s*color\s*:\s*rgba?\(\s*(\d{1,3})\s*,\s*(\d{1,3})\s*,\s*(\d{1,3})(?:\s*,\s*(?:1|0|0?\.\d+)\s*)?\)\s*;?\s*$",
+            System.Text.RegularExpressions.RegexOptions.CultureInvariant | System.Text.RegularExpressions.RegexOptions.IgnoreCase);
+        if (rgbMatch.Success
+            && int.TryParse(rgbMatch.Groups[1].Value, out var cr) && cr >= 0 && cr <= 255
+            && int.TryParse(rgbMatch.Groups[2].Value, out var cg) && cg >= 0 && cg <= 255
+            && int.TryParse(rgbMatch.Groups[3].Value, out var cb) && cb >= 0 && cb <= 255)
+        {
+            normalizedStyle = $"color: #{cr:x2}{cg:x2}{cb:x2}";
+            return true;
+        }
+
+        return false;
     }
 
     private static void Replace(ISet<string> target, IEnumerable<string> values)
