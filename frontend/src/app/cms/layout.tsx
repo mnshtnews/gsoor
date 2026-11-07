@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import CmsWorkspace from "@/components/cms/CmsWorkspace";
 import "@/styles/cms.css";
+import "@/styles/cms-permissions.css";
 
 export const metadata: Metadata = {
   title: "لوحة التحرير — جسور",

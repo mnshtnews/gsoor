@@ -32,6 +32,7 @@ const GROUPS: NavGroup[] = [
   { title: "إدارة المنصة", items: [
     { label: "المستخدمون", href: "/cms/users", roles: ["SystemAdmin", "EditorInChief"], permissions: ["Users.View", "Users.Create", "Users.ManageRoles"] },
     { label: "أدوار فريق العمل", href: "/cms/roles", roles: ["SystemAdmin", "EditorInChief"], permissions: ["Users.View", "Users.Create", "Users.ManageRoles"] },
+    { label: "صلاحيات المسؤولين", href: "/cms/permissions", roles: ["SystemAdmin"] },
     { label: "دليل الدول والمدن", href: "/cms/geography", roles: ["EditorInChief"] },
       { label: "بيانات خريطة المهجر", href: "/cms/diaspora-map", roles: ["EditorInChief"] },
   ] },
